@@ -25,28 +25,8 @@
         }
     </style>
 
-    <div id="main">
-        fullscreen canvas ends up here
-    </div>
+    <div id="main"></div>
 
-    <!-- 
-        This will be deleted, but just so you can see how the canvas
-        shows up. 
-    -->
-    
-    <script src="two.min.js"></script>
-    <script>
-
-        const two = new Two
-        ({
-            fullscreen: true,
-            type: Two.Types.canvas
-        });
-
-        const main = document.getElementById('main');
-        two.appendTo(main);
-        const canvas = main.getElementsByTagName('canvas')[0];
-
-    </script>
+    <script src="scripts/require.js" data-main="scripts/main"></script>
 </body>
 </html>
