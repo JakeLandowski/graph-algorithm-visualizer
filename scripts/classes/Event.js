@@ -8,6 +8,8 @@
 
 define(function()
 {
+    console.log('Event Class loaded');
+
     const Event = function(sender)
     {
         this.sender = sender;
@@ -23,9 +25,9 @@ define(function()
 
         notify(args)
         {
-            this.listeners.forEach(function(v, i)
+            this.listeners.forEach(function(listener)
             { 
-                this.listeners[i](this.sender, args);
+                listener(this.sender, args);
             });
         }
     };

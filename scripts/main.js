@@ -6,9 +6,11 @@
  *  App entry point.
  */
 
- requirejs(['classes/Engine'], function(Engine)
+ requirejs(['classes/Engine', 'classes/graph/Graph'], function(Engine, Graph)
  {
-     console.log('Engine loaded');
-
-     
+    let graph = new Graph(Engine);
+    // graph.addVertex('hi');
+    // graph.addVertex('yo');
+    // graph.addEdge('hi', 'yo');
+    // graph.showGraphData();
  });

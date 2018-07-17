@@ -8,6 +8,8 @@
 
 define(['two'], function(Two)
 {
+    console.log('Engine loaded');
+    
     let two = new Two
     ({
         fullscreen: true,
