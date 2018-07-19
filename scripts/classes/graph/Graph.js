@@ -7,20 +7,83 @@
  *  to handle rendering and data logic.
  */
 
- define(['classes/graph/GraphModel', 'classes/graph/GraphView'], function(GraphModel, GraphView)
+ define(['classes/graph/GraphModel', 
+         'classes/graph/GraphView',
+         'two'], function(GraphModel, GraphView, Two)
  {
     console.log('Graph Class loaded');
 
-    const Graph = function(engine)
+    const Graph = function(twoConfig={})
     {
-        this.engine = engine;
+        this.two = new Two
+        ({
+            fullscreen: twoConfig.fullscreen || false,
+            type:       twoConfig.type       || Two.Types.canvas,
+            width:      twoConfig.width      || 100,
+            height:     twoConfig.height     || 100
+        });
+
         this.config = Object.create(null); // non-inheriting object
+        this.initConfig();
         this.model = new GraphModel();
-        this.view  = new GraphView(this.model, this.engine.two);
+        this.view  = new GraphView(this.model, this.two);
     };
 
     Graph.prototype = 
     {
+//====================== Setters ===========================//
+        set vertexSize(size)
+        {
+            this.config.vertexSize = size < 1 ? 1 : size;
+        },
+
+        set vertexOutlineSize(size)
+        {
+            this.config.vertexOutlineSize = size < 1 ? 1 : size;
+        },
+
+        set edgeWidth(width)
+        {
+            this.config.edgeWidth = width < 1 ? 1 : width;
+        },
+
+//====================== Getters ===========================//
+        get vertexSize()
+        {
+            return this.config.vertexSize;
+        },
+
+        get vertexOutlineSize()
+        {
+            return this.config.vertexOutlineSize;
+        },
+
+        get edgeWidth()
+        {
+            return this.config.edgeWidth;
+        },
+        
+//====================== Methods ===========================//
+        start()
+        {
+            this.two.play();
+        },
+
+        appendTo(container)
+        {
+            this.container = container;
+            this.two.appendTo(container);
+            this.canvas = container.getElementsByTagName('canvas')[0];
+        },
+
+        // set config defaults
+        initConfig()
+        {
+            this.config.vertexSize =  12;
+            this.config.vertexOutlineSize =  3;
+            this.config.edgeWidth = 1;
+        },
+
         addVertex(data)
         {
             this.model.addVertex(data);
@@ -31,6 +94,7 @@
             this.model.addEdge(to, from);
         },
 
+        // Just for testing
         showGraphData()
         {
             console.log('Adjacency List:');

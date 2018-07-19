@@ -15,7 +15,6 @@
         this.adjList = Object.create(null); // non-inheriting object
         this.onVertexAdded = new Event(this);
         this.onEdgeAdded = new Event(this);
-        // this.onSet = new Event(this);
     };
 
     GraphModel.prototype = 
@@ -23,7 +22,10 @@
         addVertex(data)
         {
             if(!this.adjList[data]) 
+            {
                 this.adjList[data] = [];
+                this.onVertexAdded.notify({ data: data });
+            }
         },
 
         addEdge(to, from)
@@ -40,14 +42,9 @@
             {
                 list[to].push(from);
                 list[from].push(to);
+                this.onEdgeAdded.notify({ to: to, from: from });
             }
-        },
-
-        // set(data)
-        // {
-        //     this.data = data;
-        //     this.onSet.notify({ data: data });
-        // }
+        }
     };
 
     return GraphModel;

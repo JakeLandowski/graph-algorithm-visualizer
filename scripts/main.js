@@ -6,11 +6,21 @@
  *  App entry point.
  */
 
- requirejs(['classes/Engine', 'classes/graph/Graph'], function(Engine, Graph)
+ requirejs(['classes/graph/Graph'], function(Graph)
  {
-    let graph = new Graph(Engine);
-    // graph.addVertex('hi');
-    // graph.addVertex('yo');
-    // graph.addEdge('hi', 'yo');
-    // graph.showGraphData();
+    // create Graph
+    // configure graph
+    // append to div
+    // initialize events in graph (internal)
+    // start graph loop
+
+    // maintain html ui here, create an object for it
+    // attach new graph as main graph, hooking up to the ui
+
+    const graph = new Graph({
+        fullscreen: true
+    });
+
+    graph.appendTo(document.getElementById('main'));
+    graph.start();
  });
