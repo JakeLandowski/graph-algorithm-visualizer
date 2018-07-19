@@ -26,11 +26,29 @@
         this.config = Object.create(null); // non-inheriting object
         this.initConfig();
         this.model = new GraphModel();
-        this.view  = new GraphView(this.model, this.two);
+        this.view  = new GraphView(this.model, this.two, this.config);
+        this.initHandlers();
     };
 
     Graph.prototype = 
     {
+//====================== Initialization ===========================//
+        initConfig()
+        {
+            this.config.vertexSize =  12;
+            this.config.vertexOutlineSize =  3;
+            this.config.edgeWidth = 1;
+        },
+
+        initHandlers()
+        {
+            this.view.onClickEvent.attach(function(_, params)
+            {
+                console.log(params);
+                this.model.addVertex("test", params.x, params.y);
+            }.bind(this));
+        },
+
 //====================== Setters ===========================//
         set vertexSize(size)
         {
@@ -62,7 +80,7 @@
         {
             return this.config.edgeWidth;
         },
-        
+
 //====================== Methods ===========================//
         start()
         {
@@ -74,14 +92,7 @@
             this.container = container;
             this.two.appendTo(container);
             this.canvas = container.getElementsByTagName('canvas')[0];
-        },
-
-        // set config defaults
-        initConfig()
-        {
-            this.config.vertexSize =  12;
-            this.config.vertexOutlineSize =  3;
-            this.config.edgeWidth = 1;
+            this.canvas.onclick = this.view.createOnClickHandler();
         },
 
         addVertex(data)

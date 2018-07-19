@@ -17,10 +17,10 @@
     // maintain html ui here, create an object for it
     // attach new graph as main graph, hooking up to the ui
 
-    const graph = new Graph({
-        fullscreen: true
-    });
+    const graph = new Graph({ fullscreen: true });
 
     graph.appendTo(document.getElementById('main'));
     graph.start();
+
+    graph.addVertex('hi');
  });

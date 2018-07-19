@@ -10,8 +10,9 @@ define(['classes/Event'], function(Event)
 {
     console.log('GraphView Class loaded');
 
-    const GraphView = function(model, two)
+    const GraphView = function(model, two, config)
     {
+        this.config = config;
         this.two = two;
         this.model = model; // attach events to the model
         // create events here that Graph class (controller) will reference
@@ -23,7 +24,16 @@ define(['classes/Event'], function(Event)
         this.edgeGroup = this.two.makeGroup();
         this.edgeRenderingGroup = this.two.makeGroup();
 
-        this.init();
+        this.graphGroup = this.two.makeGroup();
+        this.graphGroup.add(this.vertexGroup, this.vertexRenderingGroup,
+                            this.edgeGroup,   this.edgeRenderingGroup);
+
+        this.vertexMap = Object.create(null);
+        this.edgeMap   = Object.create(null);
+
+        this.onClickEvent = new Event(this);
+
+        this.initHandlers();
         
         // this.model.onSet.attach(function()
         // {
@@ -38,20 +48,40 @@ define(['classes/Event'], function(Event)
 
     GraphView.prototype = 
     {
-        init()
+        initHandlers()
         {
+            this.canvas =
             this.model.onVertexAdded.attach(function(_, params)
             {
-                // vertex data
-                // params.data;
-            });
+                // Create new vertex shape and store it
+                let vertex = this.two.makeCircle(params.x, params.y, this.config.vertexSize);
+                vertex.fill = "#9911ff";
+                vertex.linewidth = this.config.vertexOutlineSize;
+
+                this.vertexMap[params.data] = vertex;
+            }.bind(this));
 
             this.model.onEdgeAdded.attach(function(_, params)
             {
-                // edge to and from data
-                // params.to;
-                // params.from;
-            });
+                // Create new edge line and store it
+                let edge = this.two.makeLine(0, 0, 200, 200);
+                edge.stroke = "black";
+                edge.linewidth = this.config.edgeWidth;
+
+                this.edgeMap[ [params.to, params.from] ] = edge;
+            }.bind(this));
+        },
+
+        createOnClickHandler(event)
+        {
+            let onClickEvent = this.onClickEvent;
+
+            return function(event)
+            {
+                // this is canvas being clicked
+                // delegate from here
+                onClickEvent.notify({x: event.offsetX, y: event.offsetY});
+            };
         }
     };
 

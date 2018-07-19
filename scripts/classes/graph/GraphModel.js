@@ -19,12 +19,18 @@
 
     GraphModel.prototype = 
     {
-        addVertex(data)
+        addVertex(data, x, y)
         {
             if(!this.adjList[data]) 
             {
-                this.adjList[data] = [];
-                this.onVertexAdded.notify({ data: data });
+                this.adjList[data] = 
+                {
+                    data: data,
+                    neighbors: [],
+                    x: x,
+                    y: y
+                };
+                this.onVertexAdded.notify({ data: data, x: x, y: y });
             }
         },
 
@@ -40,8 +46,8 @@
                 throw 'Tried to create edge from a non-existent vertex.';
             else
             {
-                list[to].push(from);
-                list[from].push(to);
+                list[to].neighors.push(from);
+                list[from].neighors.push(to);
                 this.onEdgeAdded.notify({ to: to, from: from });
             }
         }
