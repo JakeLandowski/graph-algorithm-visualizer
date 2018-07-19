@@ -31,7 +31,7 @@ define(['classes/Event'], function(Event)
         this.vertexMap = Object.create(null);
         this.edgeMap   = Object.create(null);
 
-        this.onClickEvent = new Event(this);
+        this.onCanvasClicked = new Event(this);
 
         this.initHandlers();
         
@@ -74,13 +74,13 @@ define(['classes/Event'], function(Event)
 
         createOnClickHandler(event)
         {
-            let onClickEvent = this.onClickEvent;
+            let onCanvasClicked = this.onCanvasClicked;
 
             return function(event)
             {
                 // this is canvas being clicked
                 // delegate from here
-                onClickEvent.notify({x: event.offsetX, y: event.offsetY});
+                onCanvasClicked.notify({x: event.offsetX, y: event.offsetY});
             };
         }
     };

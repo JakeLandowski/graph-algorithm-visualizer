@@ -49,7 +49,7 @@
 
         initHandlers()
         {
-            this.view.onClickEvent.attach(function(_, params)
+            this.view.onCanvasClicked.attach(function(_, params)
             {
                 console.log(params);
                 if(this.symbolCounter < this.symbols.length)
@@ -74,22 +74,6 @@
             this.config.edgeWidth = width < 1 ? 1 : width;
         },
 
-//====================== Getters ===========================//
-        get vertexSize()
-        {
-            return this.config.vertexSize;
-        },
-
-        get vertexOutlineSize()
-        {
-            return this.config.vertexOutlineSize;
-        },
-
-        get edgeWidth()
-        {
-            return this.config.edgeWidth;
-        },
-
 //====================== Methods ===========================//
         start()
         {
@@ -108,16 +92,6 @@
             this.canvas = container.getElementsByTagName('canvas')[0];
             this.canvas.addEventListener('click', this.view.createOnClickHandler());
         },
-
-        // addVertex(data)
-        // {
-        //     this.model.addVertex(data);
-        // },
-
-        // addEdge(to, from)
-        // {
-        //     this.model.addEdge(to, from);
-        // },
 
         // Just for testing
         showGraphData()
