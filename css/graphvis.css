@@ -1,0 +1,99 @@
+#main
+{
+    position: absolute;
+    top: 0; bottom: 0; right: 0; left: 0;
+    background-color: #dddddd;
+    z-index: -1;
+}
+
+#title {
+    width: 50%;
+    left: 5%;
+    position: absolute;
+}
+
+/* New Graph Button */
+#createnewbtn {
+    background-color: #2d71b6;
+    position: absolute;
+    color: white;
+    width: 200px;
+    height: 50px;
+    top: 15%;
+    left: 5%;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+}
+
+/* Dropdown Button */
+.premadebtn {
+    background-color: #2d71b6;
+    color: white;
+    width: 200px;
+    height: 50px;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.premade {
+    left: 5%;
+    top: 25%;
+    position: absolute;
+    z-index: 1;
+    display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.premade-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+/* Links inside the dropdown */
+.premade-content a {
+    color: black;
+    width: 200px;
+    line-height: 100px;
+    height: 100px;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+}
+
+/* Change color of dropdown links on hover */
+.premade-content a:hover {background-color: #ddd;}
+
+/* Show the dropdown menu on hover */
+.premade:hover .premade-content {display: block;}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.premade:hover .premade {background-color: #3e8e41;}
+
+/* Media Buttons CSS */
+.button.play {
+    border-style: solid;
+    box-sizing: border-box;
+    width: 74px;
+    height: 74px;
+    border-width: 37px 0px 37px 74px;
+    border-color: transparent transparent transparent #202020;
+}
+
+.mediabuttons {
+    position: absolute;
+    left: 42%;
+    top: 85%;
+}
+
+.mediabutton {
+    background: none;
+    border: none;
+    padding-right: 20px;
+}

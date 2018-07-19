@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Graph Algorithm Visualizer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/graphvis.css">
 </head>
 <body>
 
@@ -16,15 +18,24 @@
         for you to get started with.
     -->
 
-    <style>
-        #main
-        {
-            position: absolute;
-            top: 0; bottom: 0; right: 0; left: 0;
-            background-color: #aaa;
-        }
-    </style>
+    <h1 id="title">Graph Visualizer</h1>
+    <button id="createnewbtn">New Graph</button>
+    <div class="premade">
+        <button class="premadebtn">Preset Graphs</button>
+        <div class="premade-content">
+            <a href="#">Directed ></a>
+            <a href="#">Undirected ></a>
+            <a href="#">Acyclic ></a>
+        </div>
+    </div>
 
+    <div class="mediabuttons">
+        <button class="mediabutton fa fa-angle-double-left" style="font-size:48px;"></button>
+        <button class="mediabutton fa fa-angle-left" style="font-size:48px;"></button>
+        <button class="mediabutton fa fa-play" style="font-size:48px;"></button>
+        <button class="mediabutton fa fa-angle-right" style="font-size:48px;"></button>
+        <button class="mediabutton fa fa-angle-double-right" style="font-size:48px;"></button>
+    </div>
     <div id="main"></div>
 
     <script src="scripts/require.js" data-main="scripts/main"></script>
