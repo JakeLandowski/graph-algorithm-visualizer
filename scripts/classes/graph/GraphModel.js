@@ -14,7 +14,8 @@
     {
         this.adjList = Object.create(null); // non-inheriting object
         this.onVertexAdded = new Event(this);
-        this.onEdgeAdded = new Event(this);
+        this.onEdgeAdded   = new Event(this);
+        this.onVertexMoved = new Event(this);
     };
 
     GraphModel.prototype = 
@@ -49,6 +50,16 @@
                 list[to].neighors.push(from);
                 list[from].neighors.push(to);
                 this.onEdgeAdded.notify({ to: to, from: from });
+            }
+        },
+
+        setVertexPosition(data, x, y)
+        {
+            if(this.adjList[data] !== undefined)
+            {
+                this.adjList[data].x = x;
+                this.adjList[data].y = y;
+                this.onVertexMoved.notify({ data: data, x: x, y: y });
             }
         }
     };

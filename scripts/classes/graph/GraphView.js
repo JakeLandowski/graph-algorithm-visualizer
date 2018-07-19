@@ -31,7 +31,10 @@ define(['classes/Event'], function(Event)
         this.vertexMap = Object.create(null);
         this.edgeMap   = Object.create(null);
 
-        this.onCanvasClicked = new Event(this);
+        this.onCanvasClicked   = new Event(this);
+        this.onCanvasMouseDown = new Event(this);
+        this.onCanvasMouseUp   = new Event(this);
+        this.onCanvasMouseMove = new Event(this);
 
         this.initHandlers();
         
@@ -50,17 +53,20 @@ define(['classes/Event'], function(Event)
     {
         initHandlers()
         {
-            this.canvas =
+            // Vertex Added
             this.model.onVertexAdded.attach(function(_, params)
             {
                 // Create new vertex shape and store it
                 let vertex = this.two.makeCircle(params.x, params.y, this.config.vertexSize);
                 vertex.fill = "#9911ff";
                 vertex.linewidth = this.config.vertexOutlineSize;
+                this.vertexGroup.add(vertex);
 
                 this.vertexMap[params.data] = vertex;
+
             }.bind(this));
 
+            // Edge Added
             this.model.onEdgeAdded.attach(function(_, params)
             {
                 // Create new edge line and store it
@@ -69,6 +75,15 @@ define(['classes/Event'], function(Event)
                 edge.linewidth = this.config.edgeWidth;
 
                 this.edgeMap[ [params.to, params.from] ] = edge;
+            
+            }.bind(this));
+
+            // Vertex Moved
+            this.model.onVertexMoved.attach(function(_, params)
+            {
+                this.vertexMap[params.data].translate.x = params.x;
+                this.vertexMap[params.data].translate.y = params.y;
+
             }.bind(this));
         },
 
@@ -78,11 +93,39 @@ define(['classes/Event'], function(Event)
 
             return function(event)
             {
-                // this is canvas being clicked
-                // delegate from here
                 onCanvasClicked.notify({x: event.offsetX, y: event.offsetY});
             };
-        }
+        },
+
+        createOnMouseDownHandler(event)
+        {
+            let onCanvasMouseDown = this.onCanvasMouseDown;
+
+            return function(event)
+            {
+                onCanvasMouseDown.notify({x: event.offsetX, y: event.offsetY});
+            };
+        },
+
+        createOnMouseUpHandler(event)
+        {
+            let onCanvasMouseUp = this.onCanvasMouseUp;
+
+            return function(event)
+            {
+                onCanvasMouseUp.notify({x: event.offsetX, y: event.offsetY});
+            };
+        },
+
+        createOnMouseMoveHandler(event)
+        {
+            let onCanvasMouseMove = this.onCanvasMouseMove;
+
+            return function(event)
+            {
+                onCanvasMouseMove.notify({x: event.offsetX, y: event.offsetY});
+            };
+        },
     };
 
     return GraphView;
