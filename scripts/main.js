@@ -21,6 +21,4 @@
 
     graph.appendTo(document.getElementById('main'));
     graph.start();
-
-    graph.addVertex('hi');
  });

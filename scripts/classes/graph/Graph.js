@@ -9,7 +9,8 @@
 
  define(['classes/graph/GraphModel', 
          'classes/graph/GraphView',
-         'two'], function(GraphModel, GraphView, Two)
+         'two'], 
+         function(GraphModel, GraphView, Two)
  {
     console.log('Graph Class loaded');
 
@@ -28,6 +29,12 @@
         this.model = new GraphModel();
         this.view  = new GraphView(this.model, this.two, this.config);
         this.initHandlers();
+        this.symbols = ['A', 'B', 'C', 'D', 'E', 
+                        'F', 'G', 'H', 'I', 'J', 
+                        'K', 'L', 'M', 'N', 'O', 
+                        'P', 'Q', 'R', 'S', 'T', 
+                        'U', 'V', 'W', 'X', 'Y', 'Z'];
+        this.symbolCounter = 0;
     };
 
     Graph.prototype = 
@@ -45,7 +52,9 @@
             this.view.onClickEvent.attach(function(_, params)
             {
                 console.log(params);
-                this.model.addVertex("test", params.x, params.y);
+                if(this.symbolCounter < this.symbols.length)
+                    this.model.addVertex(this.symbols[this.symbolCounter++], params.x, params.y);
+
             }.bind(this));
         },
 
@@ -87,23 +96,28 @@
             this.two.play();
         },
 
+        render()
+        {
+            this.two.update();
+        },
+
         appendTo(container)
         {
             this.container = container;
             this.two.appendTo(container);
             this.canvas = container.getElementsByTagName('canvas')[0];
-            this.canvas.onclick = this.view.createOnClickHandler();
+            this.canvas.addEventListener('click', this.view.createOnClickHandler());
         },
 
-        addVertex(data)
-        {
-            this.model.addVertex(data);
-        },
+        // addVertex(data)
+        // {
+        //     this.model.addVertex(data);
+        // },
 
-        addEdge(to, from)
-        {
-            this.model.addEdge(to, from);
-        },
+        // addEdge(to, from)
+        // {
+        //     this.model.addEdge(to, from);
+        // },
 
         // Just for testing
         showGraphData()
