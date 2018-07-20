@@ -17,8 +17,17 @@
     // maintain html ui here, create an object for it
     // attach new graph as main graph, hooking up to the ui
 
-    const graph = new Graph({ fullscreen: true });
+    let graph = new Graph({ fullscreen: true });
 
     graph.appendTo(document.getElementById('main'));
     graph.start();
+
+    document.getElementById("createnewbtn").onclick = function() {clearCanvas()};
+
+     function clearCanvas() {
+         document.getElementById("main").innerHTML = "";
+         graph = new Graph({ fullscreen: true });
+         graph.appendTo(document.getElementById('main'));
+         graph.start();
+     }
  });
