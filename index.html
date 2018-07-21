@@ -10,18 +10,9 @@
     <link rel="stylesheet" href="css/graphvis.css">
 </head>
 <body>
-
-    <!-- 
-        The way it works: Two.js appends a fullscreen canvas inside of
-        #main div on runtime, this spans the entire window.
-        I put this styling here just to make the #main div snap into
-        full screen as well so you can style around it. This is just 
-        for you to get started with.
-    -->
-
     <h1 id="title">Graph Visualizer</h1>
-    <button id="createnewbtn">New Graph</button>
-    <div class="premade">
+    <button id="createnewbtn" class="ui-component">New Graph</button>
+    <div class="premade ui-component">
         <button class="premadebtn">Preset Graphs</button>
         <div class="premade-content">
             <a href="#">Directed ></a>
@@ -30,13 +21,23 @@
         </div>
     </div>
 
-    <div class="mediabuttons">
+    <div class="mediabuttons ui-component">
         <button class="mediabutton fa fa-angle-double-left" style="font-size:48px;"></button>
         <button class="mediabutton fa fa-angle-left" style="font-size:48px;"></button>
         <button class="mediabutton fa fa-play" style="font-size:48px;"></button>
         <button class="mediabutton fa fa-angle-right" style="font-size:48px;"></button>
         <button class="mediabutton fa fa-angle-double-right" style="font-size:48px;"></button>
     </div>
+
+    <h2 id="toolslabel" class="ui-component">Tools Yo</h2>
+    <ul class="tools ui-component">
+        <li><button class="toolsbtn">Add/Remove Vertex</button></li>
+        <li><button class="toolsbtn">Add/Remove Edge</button></li>
+        <li><button class="toolsbtn">Add/Edit Edge Weight</button></li>
+        <li><button class="toolsbtn">Move Vertex</button></li>
+    </ul>
+
+    <button id="hide-ui">Hide UI</button>
     <div id="main"></div>
 
     <script src="scripts/require.js" data-main="scripts/main"></script>
