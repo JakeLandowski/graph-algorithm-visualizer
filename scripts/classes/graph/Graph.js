@@ -27,7 +27,7 @@
         this.config = Object.create(null); // non-inheriting object
         this.initConfig();
         
-        this.model = new GraphModel();
+        this.model = new GraphModel(this.two.width, this.two.height);
         this.view  = new GraphView(this.model, this.two, this.config);
         this.initHandlers();
         
@@ -41,6 +41,7 @@
 
     Graph.prototype = 
     {
+
 //====================== Initialization ===========================//
         initConfig()
         {
@@ -64,6 +65,7 @@
             this.view.onCanvasMouseDown.attach(function(_, params)
             {
                 console.log('mouse down');
+                console.log(this.model.spacialIndex.cell(params.x, params.y));
 
             }.bind(this));
 

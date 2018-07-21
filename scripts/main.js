@@ -30,4 +30,6 @@
          graph.appendTo(document.getElementById('main'));
          graph.start();
      }
+
+     console.log(graph);
  });
