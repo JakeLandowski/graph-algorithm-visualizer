@@ -19,8 +19,8 @@
     color: white;
     width: 200px;
     height: 50px;
-    top: 15%;
     left: 5%;
+    top: 15%;
     padding: 16px;
     font-size: 16px;
     border: none;
@@ -96,4 +96,50 @@
     background: none;
     border: none;
     padding-right: 20px;
+    outline: none;
+}
+
+.mediabutton:focus {
+    color: #2d71b6;
+}
+
+#hide-ui {
+    position: absolute;
+    background: #2d71b6;
+    top: 10%;
+    height: 25px;
+    border: none;
+    color: white;
+    width: 200px;
+    left: 5%;
+}
+
+#toolslabel {
+    right: 5%;
+    top: 10%;
+    position: absolute;
+}
+
+.tools {
+    right: 5%;
+    top: 15%;
+    position: absolute;
+    z-index: 1;
+    display: inline-block;
+    list-style: none;
+}
+
+/* Dropdown Button */
+.toolsbtn {
+    background-color: #2d71b6;
+    color: white;
+    width: 200px;
+    height: 50px;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+}
+
+li {
+    padding-bottom: 20px;
 }
