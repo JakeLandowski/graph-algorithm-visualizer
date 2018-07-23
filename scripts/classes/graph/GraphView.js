@@ -18,16 +18,39 @@ define(['classes/Event'], function(Event)
         this.model = model; // attach events to the model
         // create events here that Graph class (controller) will reference
         // Graph class will then trigger data changes in model from user events 
+        
+// DEBUG
+if(window.DEBUG_MODE)
+{
+    let spacialIndexGridGroup = this.two.makeGroup();
+    
+    for(let x = 0; x < this.model.cellRatio; x++)
+    {
+        for(let y = 0; y < this.model.cellRatio; y++)
+        {
+            let width = this.model.cellWidth;
+            let height = this.model.cellHeight;
+            let centerX = x * width + width / 2;
+            let centerY = y * height + height / 2; 
+            let rect = two.makeRectangle(centerX, centerY, width, height);
+            spacialIndexGridGroup.add(rect);
+            spacialIndexGridGroup.add(two.makeText('' + x + y, centerX - width / 3 - 10, centerY - height / 3 - 10));
+        }   
+    }
+}
+// DEBUG
 
-        this.vertexGroup = this.two.makeGroup();
-        this.vertexRenderingGroup = this.two.makeGroup();
 
         this.edgeGroup = this.two.makeGroup();
         this.edgeRenderingGroup = this.two.makeGroup();
+        
+        this.vertexGroup = this.two.makeGroup();
+        this.vertexRenderingGroup = this.two.makeGroup();
 
         this.graphGroup = this.two.makeGroup();
         this.graphGroup.add(this.vertexGroup, this.vertexRenderingGroup,
                             this.edgeGroup,   this.edgeRenderingGroup);
+        
 
         this.vertexMap = Object.create(null);
         this.edgeMap   = Object.create(null);
@@ -38,17 +61,8 @@ define(['classes/Event'], function(Event)
         this.onCanvasMouseMove = new Event(this);
 
         this.initHandlers();
-        
-        // this.model.onSet.attach(function()
-        // {
-        //     this.show();
-        // });
 
-        // this.element.addEventListener('change', function(event)
-        // {
-        //     this.onChanged.notify(event.target.value);
-        // });
-    };
+    }; // end constructor
 
     GraphView.prototype = 
     {

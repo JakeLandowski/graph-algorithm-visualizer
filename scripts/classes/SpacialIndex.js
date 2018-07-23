@@ -33,7 +33,24 @@ define(function()
         add(entity, x, y)
         {
             let cellsAdded = {};
-            this.cell(x, y).push(entity);
+
+            entity.spacialBounds.forEach(function(point)
+            {
+                let id = this.cellId(point.x, point.y);
+                
+                if(!cellsAdded[id])
+                {
+                    cellsAdded[id] = true;
+                    this.cell(point.x, point.y).push(entity);
+                }
+
+            }.bind(this));
+
+            // for(let i = 0; i > entity.spacialBounds; i++)
+            // {
+            //     let point = entity.spacialBounds[i];
+                
+            // }
         },
 
         remove(entity)
@@ -55,8 +72,23 @@ define(function()
         cell(x, y)
         {
             // this will fail for the point at the max width, max height fyi
-            return this.index[Math.floor(x / this.cellWidth)][Math.floor(y / this.cellHeight)];
+            return this.index[this.cellRow(x)][this.cellCol(y)];
         },
+
+        cellId(x, y)
+        {
+            return '' + this.cellRow(x) + this.cellCol(y);
+        },
+
+        cellRow(x)
+        {
+            return Math.floor(x / this.cellWidth);
+        },
+
+        cellCol(y)
+        {
+            return Math.floor(y / this.cellHeight);
+        }
     };
 
     return SpacialIndex;

@@ -37,14 +37,18 @@
             if(!this.adjList[data]) 
             {
                 let radius = (this.config.vertexSize / 2) + this.config.vertexOutlineSize;
+                let left  = {x: x - radius, y: y};
+                let right = {x: x + radius, y: y};
+                let top   = {x: x, y: y - radius};
+                let bot   = {x: x, y: y + radius};
+                
                 let vertex =
                 {
                     data: data,
                     neighbors: [],
                     x: x,
                     y: y,
-                    // 4 points left, right, top, bottom of circle
-                    spacialBounds: [x - radius, x + radius, y - radius, y + radius]
+                    spacialBounds: [left, right, top, bot]
                 };
 
                 this.adjList[data] = vertex;
