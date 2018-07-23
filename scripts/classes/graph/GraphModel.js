@@ -40,7 +40,8 @@
                 let left  = {x: x - radius, y: y};
                 let right = {x: x + radius, y: y};
                 let top   = {x: x, y: y - radius};
-                let bot   = {x: x, y: y + radius};
+                let bot   = {x: x, y: y + radius}; 
+                let ul    = {x: x, y: y + radius};
                 
                 let vertex =
                 {
