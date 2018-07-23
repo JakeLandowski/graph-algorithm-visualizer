@@ -6,20 +6,24 @@
  *  Represents the data structure for the Graph class..
  */
 
- define(['classes/Event'], function(Event)
+ define(['classes/Event', 'classes/SpacialIndex'], function(Event, SpacialIndex)
  {
     console.log('GraphModel Class loaded');
 
-    const GraphModel = function(width, height)
+    const GraphModel = function(width, height, config)
     {
+        // Shape size/styling information
+        this.config = config;
+
+        // SpacialIndex needed information
         this.cellRatio  = 5;
         this.width      = width;
         this.cellWidth  = this.width / this.cellRatio;
         this.height     = height;
         this.cellHeight = this.height / this.cellRatio;
-        this.adjList    = Object.create(null); // non-inheriting object
-        
-        this.initSpacialIndex();
+
+        this.adjList      = Object.create(null); // non-inheriting object
+        this.spacialIndex = new SpacialIndex(this.cellWidth, this.cellHeight, this.cellRatio);
 
         this.onVertexAdded = new Event(this);
         this.onEdgeAdded   = new Event(this);
@@ -28,61 +32,19 @@
 
     GraphModel.prototype = 
     {
-        initSpacialIndex()
-        {
-            let cellWidth  = this.cellWidth;
-            let cellHeight = this.cellHeight;
-            let cellRatio  = this.cellRatio;
-
-            this.spacialIndex = 
-            {
-                index: new Array(cellRatio),
-                
-                add(entity, x, y)
-                {
-                    this.cell(x, y).push(entity);
-                },
-
-                remove(entity)
-                {
-                    this.cell(entity.x, entity.y).filter(function(ent)
-                    {
-                        return ent.data === entity.data;
-                    });
-                },
-
-                update(entity, x, y)
-                {
-                    this.remove(entity);
-                    this.add(entity, x, y);
-                },
-
-                cell(x, y)
-                {
-                    return this.index[Math.floor(x / cellWidth)][Math.floor(y / cellHeight)];
-                }
-            };
-
-            for(let i = 0; i < this.cellRatio; i++)
-            {
-                this.spacialIndex.index[i] = new Array(this.cellRatio);
-                for(let j = 0; j < this.cellRatio; j++)
-                {
-                    this.spacialIndex.index[i][j] = [];
-                }
-            }
-        },
-
         addVertex(data, x, y)
         {
             if(!this.adjList[data]) 
             {
+                let radius = (this.config.vertexSize / 2) + this.config.vertexOutlineSize;
                 let vertex =
                 {
                     data: data,
                     neighbors: [],
                     x: x,
-                    y: y
+                    y: y,
+                    // 4 points left, right, top, bottom of circle
+                    spacialBounds: [x - radius, x + radius, y - radius, y + radius]
                 };
 
                 this.adjList[data] = vertex;
@@ -93,6 +55,7 @@
 
         addEdge(to, from)
         {
+            // need to create an edge object in model that contains to/from pointers
             const list = this.adjList;
 
             if(list[to] === undefined && list[from] === undefined) 

@@ -12,6 +12,7 @@ define(['classes/Event'], function(Event)
 
     const GraphView = function(model, two, config)
     {
+        // Shape size/styling information
         this.config = config;
         this.two = two;
         this.model = model; // attach events to the model

@@ -27,7 +27,7 @@
         this.config = Object.create(null); // non-inheriting object
         this.initConfig();
         
-        this.model = new GraphModel(this.two.width, this.two.height);
+        this.model = new GraphModel(this.two.width, this.two.height, this.config);
         this.view  = new GraphView(this.model, this.two, this.config);
         this.initHandlers();
         
@@ -65,7 +65,7 @@
             this.view.onCanvasMouseDown.attach(function(_, params)
             {
                 console.log('mouse down');
-                console.log(this.model.spacialIndex.cell(params.x, params.y));
+                console.log(this.model.spacialIndex.cell(params.x, params.y)); 
 
             }.bind(this));
 
@@ -138,7 +138,6 @@
             }
             console.log(']');
         }
-        // methods
     };
 
     return Graph;
