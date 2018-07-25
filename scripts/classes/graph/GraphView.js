@@ -73,7 +73,7 @@ if(window.DEBUG_MODE)
             {
                 // Create new vertex shape and store it
                 let vertex = this.two.makeCircle(params.x, params.y, this.config.vertexSize);
-                vertex.fill = "#9911ff";
+                vertex.fill = " #ff9a00";
                 vertex.linewidth = this.config.vertexOutlineSize;
                 this.vertexGroup.add(vertex);
 
