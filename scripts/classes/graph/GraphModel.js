@@ -25,36 +25,45 @@
         this.adjList      = Object.create(null); // non-inheriting object
         this.spacialIndex = new SpacialIndex(this.cellWidth, this.cellHeight, this.cellRatio);
 
-        this.onVertexAdded = new Event(this);
-        this.onEdgeAdded   = new Event(this);
-        this.onVertexMoved = new Event(this);
+        this.onVertexAdded   = new Event(this);
+        this.onVertexRemoved = new Event(this);
+        this.onEdgeAdded     = new Event(this);
+        this.onVertexMoved   = new Event(this);
     };
 
     GraphModel.prototype = 
     {
+        vertexId: 0,
+
         addVertex(data, x, y)
         {
             if(!this.adjList[data]) 
             {
-                let radius = (this.config.vertexSize / 2) + this.config.vertexOutlineSize;
-                let left  = {x: x - radius, y: y};
-                let right = {x: x + radius, y: y};
-                let top   = {x: x, y: y - radius};
-                let bot   = {x: x, y: y + radius}; 
-                let ul    = {x: x, y: y + radius};
-                
+                let radius = this.config.vertexSize + this.config.vertexOutlineSize;
+
                 let vertex =
                 {
+                    id: 'vertex' + this.vertexId++,
                     data: data,
                     neighbors: [],
                     x: x,
                     y: y,
-                    spacialBounds: [left, right, top, bot]
+                    upperLeft:  {x: x - radius, y: y - radius},
+                    lowerRight: {x: x + radius, y: y + radius}
                 };
 
                 this.adjList[data] = vertex;
-                this.spacialIndex.add(vertex, x, y);
+                this.spacialIndex.add(vertex);
                 this.onVertexAdded.notify({ data: data, x: x, y: y });
+            }
+        },
+
+        removeVertex(data)
+        {
+            if(this.adjList[data])
+            {
+                let vertex = this.adjList[data];
+                this.onVertexRemoved.notify({ vertex: vertex });
             }
         },
 

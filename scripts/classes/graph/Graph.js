@@ -45,8 +45,8 @@
 //====================== Initialization ===========================//
         initConfig()
         {
-            this.config.vertexSize =  12;
-            this.config.vertexOutlineSize =  3;
+            this.config.vertexSize = 50;
+            this.config.vertexOutlineSize = 3;
             this.config.edgeWidth = 1;
         },
 
@@ -65,7 +65,7 @@
             this.view.onCanvasMouseDown.attach(function(_, params)
             {
                 console.log('mouse down');
-                console.log(this.model.spacialIndex.cell(params.x, params.y)); 
+                console.log(this.model.spacialIndex); 
 
             }.bind(this));
 

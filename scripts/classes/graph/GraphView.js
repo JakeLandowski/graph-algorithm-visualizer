@@ -73,11 +73,18 @@ if(window.DEBUG_MODE)
             {
                 // Create new vertex shape and store it
                 let vertex = this.two.makeCircle(params.x, params.y, this.config.vertexSize);
-                vertex.fill = " #ff9a00";
+                vertex.fill = "#ff9a00";
                 vertex.linewidth = this.config.vertexOutlineSize;
                 this.vertexGroup.add(vertex);
 
                 this.vertexMap[params.data] = vertex;
+
+            }.bind(this));
+
+            // Vertex Removed
+            this.model.onVertexRemoved.attach(function(_, params)
+            {
+                console.log('removed a vertex : ' + params);
 
             }.bind(this));
 

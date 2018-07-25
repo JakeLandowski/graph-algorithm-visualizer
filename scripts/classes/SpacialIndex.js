@@ -23,44 +23,53 @@ define(function()
             this.index[i] = new Array(cellRatio);
             for(let j = 0; j < cellRatio; j++)
             {
-                this.index[i][j] = [];
+                this.index[i][j] = Object.create(null);
             }
         }
     };
 
     SpacialIndex.prototype = 
     {
-        add(entity, x, y)
+        add(entity)
         {
-            let cellsAdded = {};
+            let startX = this.cellRow(entity.upperLeft.x);
+            let startY = this.cellCol(entity.upperLeft.y);
+            let endX   = this.cellRow(entity.lowerRight.x);
+            let endY   = this.cellCol(entity.lowerRight.y);
 
-            entity.spacialBounds.forEach(function(point)
+            // For removing from cells later
+            if(!entity.cells) entity.cells = [];
+            
+            for(let x = startX; x <= endX; x++)
             {
-                let id = this.cellId(point.x, point.y);
-                
-                if(!cellsAdded[id])
+                for(let y = startY; y <= endY; y++)
                 {
-                    cellsAdded[id] = true;
-                    this.cell(point.x, point.y).push(entity);
-                }
-
-            }.bind(this));
-
-            // for(let i = 0; i > entity.spacialBounds; i++)
-            // {
-            //     let point = entity.spacialBounds[i];
-                
-            // }
+                    let cell = this.cellFromIndex(x, y); 
+                    
+                    if(cell) 
+                    {
+                        cell[entity.id] = entity;
+                        entity.cells.push(cell);
+                    }
+                }   
+            }
         },
 
         remove(entity)
         {
-            // need to use entity's size and find the cells its in based on that
-
-            this.cell(entity.x, entity.y).filter(function(ent)
+            if(entity.cells)
             {
-                return ent.data === entity.data;
-            });
+                entity.cells.forEach(function(cell)
+                {   
+                    if(cell[entity.id])
+                    {
+                        delete cell[entity.id];
+                    }
+
+                }.bind(this));
+
+                entity.cells = [];
+            }
         },
 
         update(entity, x, y)
@@ -69,10 +78,34 @@ define(function()
             this.add(entity, x, y);
         },
 
+        getEntity(x, y)
+        {
+            let cell = this.cell(x, y);
+
+            for(let entityId in cell)
+            {
+                let entity     = cell[entiyId];
+                let upperLeft  = entity.upperLeft;
+                let lowerRight = entity.lowerRight;
+                
+                // calculate point in rectangle here
+                if(x > upperLeft.x && x < lowerRight.x &&
+                   y > upperLeft.y && y < lowerRight.y)
+                {
+                    return entity;
+                }
+            } 
+        },
+
         cell(x, y)
         {
             // this will fail for the point at the max width, max height fyi
             return this.index[this.cellRow(x)][this.cellCol(y)];
+        },
+
+        cellFromIndex(x, y)
+        {
+            return x >= this.cellRatio || y >= this.cellRatio ? undefined : this.index[x][y];
         },
 
         cellId(x, y)
