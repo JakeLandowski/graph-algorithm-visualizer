@@ -17,10 +17,7 @@
 
         // SpacialIndex needed information
         this.cellRatio  = 5;
-        this.width      = width;
-        this.cellWidth  = this.width / this.cellRatio;
-        this.height     = height;
-        this.cellHeight = this.height / this.cellRatio;
+        this.setDimensions(width, height);
 
         this.adjList      = Object.create(null); // non-inheriting object
         this.spacialIndex = new SpacialIndex(this.cellWidth, this.cellHeight, this.cellRatio);
@@ -94,6 +91,24 @@
                 this.adjList[data].y = y;
                 this.onVertexMoved.notify({ data: data, x: x, y: y });
             }
+        },
+
+        resize(width, height)
+        {
+            this.setDimensions(width, height);
+            this.spacialIndex = new SpacialIndex(width, height, this.cellRatio);
+            for(let vertexKey in this.adjList)
+            {
+                this.spacialIndex.add(this.adjList[vertexKey]);
+            }
+        },
+
+        setDimensions(width, height)
+        {
+            this.width      = width;
+            this.cellWidth  = this.width / this.cellRatio;
+            this.height     = height;
+            this.cellHeight = this.height / this.cellRatio;
         }
     };
 

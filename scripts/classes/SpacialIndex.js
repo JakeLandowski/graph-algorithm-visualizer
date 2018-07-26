@@ -15,21 +15,26 @@ define(function()
         this.cellWidth  = cellWidth;
         this.cellHeight = cellHeight;
         this.cellRatio  = cellRatio;
-        this.index      = new Array(cellRatio);
-
-        // Create 2D Grid of empty arrays
-        for(let i = 0; i < cellRatio; i++)
-        {
-            this.index[i] = new Array(cellRatio);
-            for(let j = 0; j < cellRatio; j++)
-            {
-                this.index[i][j] = Object.create(null);
-            }
-        }
+        this.initIndex();
     };
 
     SpacialIndex.prototype = 
     {
+        initIndex()
+        {
+            this.index = new Array(this.cellRatio);
+
+            // Create 2D Grid of empty arrays
+            for(let i = 0; i < this.cellRatio; i++)
+            {
+                this.index[i] = new Array(this.cellRatio);
+                for(let j = 0; j < this.cellRatio; j++)
+                {
+                    this.index[i][j] = Object.create(null);
+                }
+            }
+        },
+
         add(entity)
         {
             let startX = this.cellRow(entity.upperLeft.x);

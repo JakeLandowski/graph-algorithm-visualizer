@@ -18,28 +18,14 @@ define(['classes/Event'], function(Event)
         this.model = model; // attach events to the model
         // create events here that Graph class (controller) will reference
         // Graph class will then trigger data changes in model from user events 
-        
-// DEBUG
-if(window.DEBUG_MODE)
-{
-    let spacialIndexGridGroup = this.two.makeGroup();
-    
-    for(let x = 0; x < this.model.cellRatio; x++)
-    {
-        for(let y = 0; y < this.model.cellRatio; y++)
-        {
-            let width = this.model.cellWidth;
-            let height = this.model.cellHeight;
-            let centerX = x * width + width / 2;
-            let centerY = y * height + height / 2; 
-            let rect = two.makeRectangle(centerX, centerY, width, height);
-            spacialIndexGridGroup.add(rect);
-            spacialIndexGridGroup.add(two.makeText('' + x + y, centerX - width / 3 - 10, centerY - height / 3 - 10));
-        }   
-    }
-}
-// DEBUG
 
+//======== DEBUG =============/
+if(window.DEBUG_MODE) 
+{
+    this.spacialIndexGridGroup = this.two.makeGroup();
+    this.drawSpacialIndex();
+}
+//======== DEBUG =============/
 
         this.edgeGroup = this.two.makeGroup();
         this.edgeRenderingGroup = this.two.makeGroup();
@@ -148,6 +134,43 @@ if(window.DEBUG_MODE)
                 onCanvasMouseMove.notify({x: event.offsetX, y: event.offsetY});
             };
         },
+
+//======== DEBUG =============/
+drawSpacialIndex()
+{
+    if(window.DEBUG_MODE)
+    {
+        let group = this.spacialIndexGridGroup;
+        let two = this.two;
+        
+        // weird way to actually delete shapes
+        group.children.forEach(function(shape)
+        {
+            shape.remove();
+        });
+        group.children = [];
+
+        console.log(group.children);
+        
+        for(let x = 0; x < this.model.cellRatio; x++)
+        {
+            for(let y = 0; y < this.model.cellRatio; y++)
+            {
+                let width = this.model.cellWidth;
+                let height = this.model.cellHeight;
+                let centerX = x * width + width / 2;
+                let centerY = y * height + height / 2; 
+                let rect = this.two.makeRectangle(centerX, centerY, width, height);
+                rect.noFill();
+                group.add(rect);
+                group.add(this.two.makeText('' + x + y, centerX - width / 3 - 10, centerY - height / 3 - 10));
+            }   
+        }
+    }
+}
+//======== DEBUG =============/
+ 
+
     };
 
     return GraphView;

@@ -117,6 +117,36 @@
             this.two.appendTo(container);
             this.canvas = container.getElementsByTagName('canvas')[0];
             this.initCanvasHandlers();
+            this.initResize();
+        },
+
+        initResize()
+        {
+            // Prevents callback on resize except for last resize trigger
+            function stagger(callback)
+            {
+                let timer;
+
+                return function(event)
+                {
+                    if(timer) clearTimeout(timer);
+                    timer = setTimeout(callback, 400, event);
+                };
+            }
+
+            window.addEventListener('resize', stagger(function(event)
+            {
+                event.preventDefault();
+                this.model.resize(this.two.width, this.two.height);
+
+//======== DEBUG =============/
+if(window.DEBUG_MODE)
+{
+    this.view.drawSpacialIndex();
+}
+//======== DEBUG =============/
+
+            }.bind(this)));
         },
         
         initCanvasHandlers()
