@@ -8,16 +8,18 @@
     <link rel="icon" href="favicon.ico">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="css/graphvis.css">
+    <link href="https://fonts.googleapis.com/css?family=Exo+2" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 </head>
 <body>
     <h1 id="title">Graph Visualizer</h1>
-    <button id="createnewbtn" class="ui-component">New Graph</button>
+    <button id="createnewbtn" class="future ui-component">New Graph</button>
     <div class="premade ui-component">
-        <button class="premadebtn">Preset Graphs</button>
-        <div class="premade-content">
-            <a href="#">Directed ></a>
-            <a href="#">Undirected ></a>
-            <a href="#">Acyclic ></a>
+        <button class="future premadebtn">Preset Graphs</button>
+        <div class="future premade-content">
+            <a href="#" class="future">Directed</a>
+            <a href="#" class="future">Undirected</a>
+            <a href="#" class="future">Acyclic</a>
         </div>
     </div>
 
@@ -29,15 +31,17 @@
         <button class="mediabutton fa fa-angle-double-right" style="font-size:48px;"></button>
     </div>
 
-    <h2 id="toolslabel" class="ui-component">Tools Yo</h2>
+    <div id="toolslabel" class="ui-component">
+        <i class="material-icons" style="font-size:48px;color:#ff9a00">device_hub</i>
+    </div>
     <ul class="tools ui-component">
-        <li><button class="toolsbtn">Add/Remove Vertex</button></li>
-        <li><button class="toolsbtn">Add/Remove Edge</button></li>
-        <li><button class="toolsbtn">Add/Edit Edge Weight</button></li>
-        <li><button class="toolsbtn">Move Vertex</button></li>
+        <li><button class="future toolsbtn">Add/Remove Vertex</button></li>
+        <li><button class="future toolsbtn">Add/Remove Edge</button></li>
+        <li><button class="future toolsbtn">Add/Edit Edge Weight</button></li>
+        <li><button class="future toolsbtn">Move Vertex</button></li>
     </ul>
 
-    <button id="hide-ui">Hide UI</button>
+    <button id="hide-ui" class="future">Hide UI</button>
     <div id="main"></div>
 
     <script src="scripts/require.js" data-main="scripts/main"></script>
