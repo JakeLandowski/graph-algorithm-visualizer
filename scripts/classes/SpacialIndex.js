@@ -129,7 +129,7 @@ define(function()
          */
         cellFromIndex(x, y)
         {
-            return x >= this.cellRatio || y >= this.cellRatio ? undefined : this.index[x][y];
+            return x >= this.cellRatio || y >= this.cellRatio || x < 0 || y < 0 ? undefined : this.index[x][y];
         },
 
         /**

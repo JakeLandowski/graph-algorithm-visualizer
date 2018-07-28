@@ -71,7 +71,6 @@
                 else if(this.symbols.length > 0)
                 {   
                     this.model.addVertex(this.getSymbol(), params.x, params.y);
-                    console.log('added vertex');
                 }
 
             }.bind(this));
@@ -84,11 +83,13 @@
 
                 if(vertex)
                 {
-                    console.log('found vertex');
+                    let offsetX = vertex.x - params.x;
+                    let offsetY = vertex.y - params.y;
+
                     function stickVertexToCursor(_, point)
                     {
                         // Mostly visual move
-                        this.model.softMoveVertex(vertex, point.x, point.y);
+                        this.model.softMoveVertex(vertex, point.x + offsetX, point.y + offsetY);
                     }
 
                     function releaseVertexFromCursor(_, point)
@@ -96,7 +97,8 @@
                         // Final movement, updates spatial information
                         this.view.onCanvasMouseDrag.detach('stickVertexToCursor');
                         this.view.onCanvasMouseUp.detach('releaseVertexFromCursor');
-                        this.model.hardMoveVertex(vertex, point.x, point.y);
+                        this.model.hardMoveVertex(vertex, point.x + offsetX, point.y + offsetY);
+                        this.showGraphData();
                     }
 
                     this.view.onCanvasMouseDrag.attach('stickVertexToCursor', stickVertexToCursor.bind(this));
@@ -177,7 +179,8 @@ showGraphData()
     console.log('[\n');
     for(let data in this.model.adjList)
     {
-        console.log('\t' + data + ' => [' + this.model.adjList[data] + '],');
+        let vertex = this.model.adjList[data];
+        console.log('\t' + data + ' => [' + vertex.x + ', ' + vertex.y + ', ' + vertex.id + '],');
     }
     console.log(']');
 }

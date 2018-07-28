@@ -12,16 +12,15 @@ define(function()
 
    const Vertex = function(data, x, y)
    {
-        this.id = 'vertex' + this.vertexId++,
+        this.id = 'vertex' + Vertex.vertexId++,
         this.data = data,
         this.neighbors = Object.create(null),
         this.setPoints(x, y);
    };
 
+   Vertex.vertexId = 0;
    Vertex.prototype = 
    {
-       vertexId: 0, // static variable
-
        setPoints(x, y)
        {
             let radius = this.config.vertexSize + this.config.vertexOutlineSize;
