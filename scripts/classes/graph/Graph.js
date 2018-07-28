@@ -7,11 +7,11 @@
  *  to handle rendering and data logic.
  */
 
- define(['classes/graph/GraphModel', 
-         'classes/graph/GraphView',
-         'two'], 
-         function(GraphModel, GraphView, Two)
- {
+define(['classes/graph/GraphModel', 
+        'classes/graph/GraphView',
+        'two'], 
+        function(GraphModel, GraphView, Two)
+{
     console.log('Graph Class loaded');
 
     const Graph = function(twoConfig={})
@@ -98,20 +98,18 @@
                         this.view.onCanvasMouseDrag.detach('stickVertexToCursor');
                         this.view.onCanvasMouseUp.detach('releaseVertexFromCursor');
                         this.model.hardMoveVertex(vertex, point.x + offsetX, point.y + offsetY);
-                        this.showGraphData();
                     }
 
                     this.view.onCanvasMouseDrag.attach('stickVertexToCursor', stickVertexToCursor.bind(this));
                     this.view.onCanvasMouseUp.attach('releaseVertexFromCursor', releaseVertexFromCursor.bind(this));
                 }
-                else console.log('didnt find vertex');
 
             }.bind(this));
 
             // On Mouse Up
             this.view.onCanvasMouseUp.attach('onCanvasMouseUp', function(_, params)
             {
-                
+
             }.bind(this));
 
             // On Mouse Move

@@ -52,6 +52,7 @@ if(window.DEBUG_MODE)
         this.mouseDown  = false;
         this.mouseMoveTimer = 0;
         this.mouseMoveDelay = 10;
+        this.mouseMoveResetDelay = 200;
 
         this.initHandlers();
 
@@ -182,7 +183,7 @@ if(window.DEBUG_MODE)
                 event.preventDefault();
                 this.mouseMoveTimer = 0;
             
-            }.bind(this), 200));
+            }.bind(this), this.mouseMoveResetDelay));
         },
 
         initResize()
