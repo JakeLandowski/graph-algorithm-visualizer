@@ -31,23 +31,34 @@ define(function()
 
         notify(args)
         {
-            if(this.enabled)
+            if(this.canNotify)
             {
-                for(let listener in this.listeners)
+                if(this.enabled)
                 {
-                    this.listeners[listener](this.sender, args);
+                    for(let listener in this.listeners)
+                    {
+                        this.listeners[listener](this.sender, args);
+                    }
                 }
             }
+            else this.canNotify = true;
         },
 
         disable()
         {
+            console.log('disabled');
             this.enabled = false;
         },
 
         enable()
         {
+            console.log('enabled');
             this.enabled = true;
+        },
+
+        stopNextNotify()
+        {
+            this.canNotify = false;
         }
     };
 
