@@ -92,9 +92,9 @@
             }
         },
 
-        setVertexPosition(data, x, y)
+        moveVertex(data, x, y)
         {
-            if(this.adjList[data] !== undefined)
+            if(this.adjList[data])
             {
                 this.adjList[data].x = x;
                 this.adjList[data].y = y;

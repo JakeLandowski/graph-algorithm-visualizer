@@ -98,43 +98,6 @@
             }.bind(this));
         },
 
-        initResize()
-        {
-            // Prevents callback on resize except for last resize trigger
-            function stagger(callback)
-            {
-                let timer;
-
-                return function(event)
-                {
-                    if(timer) clearTimeout(timer);
-                    timer = setTimeout(callback, 400, event);
-                };
-            }
-
-            window.addEventListener('resize', stagger(function(event)
-            {
-                event.preventDefault();
-                this.model.resize(this.two.width, this.two.height);
-
-//======== DEBUG =============/
-if(window.DEBUG_MODE)
-{
-    this.view.drawSpacialIndex();
-}
-//======== DEBUG =============/
-
-            }.bind(this)));
-        },
-        
-        initCanvasHandlers()
-        {
-            this.canvas.addEventListener('click',     this.view.createOnClickHandler());
-            this.canvas.addEventListener('mousedown', this.view.createOnMouseDownHandler());
-            this.canvas.addEventListener('mouseup',   this.view.createOnMouseUpHandler());
-            this.canvas.addEventListener('mousemove', this.view.createOnMouseMoveHandler());
-        },
-
 //====================== Setters ===========================//
         set vertexSize(size)
         {
@@ -164,11 +127,7 @@ if(window.DEBUG_MODE)
 
         appendTo(container)
         {
-            this.container = container;
-            this.two.appendTo(container);
-            this.canvas = container.getElementsByTagName('canvas')[0];
-            this.initCanvasHandlers();
-            this.initResize();
+            this.view.appendTo(container);
         },
 
         getSymbol()
@@ -184,17 +143,20 @@ if(window.DEBUG_MODE)
             delete this.usedSymbols[symbol];
         },
 
-        // Just for testing
-        showGraphData()
-        {
-            console.log('Adjacency List:');
-            console.log('[\n');
-            for(let data in this.model.adjList)
-            {
-                console.log('\t' + data + ' => [' + this.model.adjList[data] + '],');
-            }
-            console.log(']');
-        }
+//======== DEBUG =============/
+showGraphData()
+{
+    console.log('Adjacency List:');
+    console.log('[\n');
+    for(let data in this.model.adjList)
+    {
+        console.log('\t' + data + ' => [' + this.model.adjList[data] + '],');
+    }
+    console.log(']');
+}
+//======== DEBUG =============/
+
+
     };
 
     return Graph;

@@ -38,6 +38,7 @@ if(window.DEBUG_MODE)
                             this.edgeGroup,   this.edgeRenderingGroup);
         
 
+        // For mapping data in model to their view shape equivalent
         this.vertexMap = Object.create(null);
         this.edgeMap   = Object.create(null);
 
@@ -49,9 +50,11 @@ if(window.DEBUG_MODE)
         this.initHandlers();
 
     }; // end constructor
-
+    
     GraphView.prototype = 
     {
+
+//========= Model Listeners ===========//
         initHandlers()
         {
             // Vertex Added
@@ -68,10 +71,11 @@ if(window.DEBUG_MODE)
                 this.vertexMap[params.data] = 
                 {
                     circle: vertex,
-                    text: text
+                    text:   text
                 }
 
             }.bind(this));
+
 
             // Vertex Removed
             this.model.onVertexRemoved.attach(function(_, params)
@@ -100,54 +104,81 @@ if(window.DEBUG_MODE)
             // Vertex Moved
             this.model.onVertexMoved.attach(function(_, params)
             {
-                this.vertexMap[params.data].translate.x = params.x;
-                this.vertexMap[params.data].translate.y = params.y;
+                this.vertexMap[params.data].circle.translation.set(params.x, params.y);
+                this.vertexMap[params.data].text.translation.set(params.x, params.y);
 
             }.bind(this));
         },
 
-        createOnClickHandler(event)
-        {
-            let onCanvasClicked = this.onCanvasClicked;
+//========= Event Handlers ===========//
 
-            return function(event)
-            {
-                event.preventDefault();
-                onCanvasClicked.notify({x: event.offsetX, y: event.offsetY});
-            };
+        appendTo(container)
+        {
+            this.container = container;
+            this.two.appendTo(container);
+            this.canvas = container.getElementsByTagName('canvas')[0];
+            this.initCanvasHandlers();
+            this.initResize();
         },
 
-        createOnMouseDownHandler(event)
+        initCanvasHandlers()
         {
-            let onCanvasMouseDown = this.onCanvasMouseDown;
-
-            return function(event)
+            this.canvas.addEventListener('click', function(event)
             {
                 event.preventDefault();
-                onCanvasMouseDown.notify({x: event.offsetX, y: event.offsetY});
-            };
+                this.onCanvasClicked.notify({x: event.offsetX, y: event.offsetY});
+            
+            }.bind(this));
+
+            this.canvas.addEventListener('mousedown', function(event)
+            {
+                event.preventDefault();
+                this.onCanvasMouseDown.notify({x: event.offsetX, y: event.offsetY});
+            
+            }.bind(this));
+
+            this.canvas.addEventListener('mouseup', function(event)
+            {
+                event.preventDefault();
+                this.onCanvasMouseUp.notify({x: event.offsetX, y: event.offsetY});
+            
+            }.bind(this));
+
+            this.canvas.addEventListener('mousemove', function(event)
+            {
+                event.preventDefault();
+                this.onCanvasMouseMove.notify({x: event.offsetX, y: event.offsetY});
+            
+            }.bind(this));
         },
 
-        createOnMouseUpHandler(event)
+        initResize()
         {
-            let onCanvasMouseUp = this.onCanvasMouseUp;
+            // Prevents callback on resize except for last resize trigger
+            function stagger(callback)
+            {
+                let timer;
 
-            return function(event)
+                return function(event)
+                {
+                    if(timer) clearTimeout(timer);
+                    timer = setTimeout(callback, 400, event);
+                };
+            }
+
+            window.addEventListener('resize', stagger(function(event)
             {
                 event.preventDefault();
-                onCanvasMouseUp.notify({x: event.offsetX, y: event.offsetY});
-            };
-        },
+                this.model.resize(this.two.width, this.two.height);
 
-        createOnMouseMoveHandler(event)
-        {
-            let onCanvasMouseMove = this.onCanvasMouseMove;
+//======== DEBUG =============/
+if(window.DEBUG_MODE)
+{
+    this.drawSpacialIndex();
+}
+//======== DEBUG =============/
 
-            return function(event)
-            {
-                event.preventDefault();
-                onCanvasMouseMove.notify({x: event.offsetX, y: event.offsetY});
-            };
+            }.bind(this)));
         },
 
 //======== DEBUG =============/
