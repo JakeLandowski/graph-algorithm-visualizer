@@ -23,28 +23,31 @@
             width:      twoConfig.width      || 100,
             height:     twoConfig.height     || 100
         });
-
-        this.config = Object.create(null); // non-inheriting object
+        
         this.initConfig();
-        
         this.model = new GraphModel(this.two.width, this.two.height, this.config);
-        this.view  = new GraphView(this.model, this.two, this.config);
+        this.view  = new GraphView(this.model,      this.two,        this.config);
         this.initHandlers();
-        
-        this.symbols = ['A', 'B', 'C', 'D', 'E', 
-                        'F', 'G', 'H', 'I', 'J', 
-                        'K', 'L', 'M', 'N', 'O', 
-                        'P', 'Q', 'R', 'S', 'T', 
-                        'U', 'V', 'W', 'X', 'Y', 'Z'];
-        this.symbolCounter = 0;
+        this.initSymbols();
     };
 
     Graph.prototype = 
     {
 
 //====================== Initialization ===========================//
+        initSymbols()
+        {
+            this.symbols = ['Z', 'Y', 'X', 'W', 'V', 'U', 
+                            'T', 'S', 'R', 'Q', 'P', 'O', 
+                            'N', 'M', 'L', 'K', 'J', 'I', 
+                            'H', 'G', 'F', 'E', 'D', 'C', 
+                            'B', 'A'];
+            this.usedSymbols = Object.create(null);
+        },
+
         initConfig()
         {
+            this.config = Object.create(null); // non-inheriting object
             this.config.vertexSize = 50;
             this.config.vertexOutlineSize = 0;
             this.config.edgeWidth = 1;
@@ -62,11 +65,12 @@
                 if(vertex)
                 {
                     this.model.removeVertex(vertex);
+                    this.returnSymbol(vertex.data);
                     console.log('removed vertex ' + vertex.id + ': ' + vertex.x + ', ' + vertex.y);
                 }
-                else if(this.symbolCounter < this.symbols.length)
-                {
-                    this.model.addVertex(this.symbols[this.symbolCounter++], params.x, params.y);
+                else if(this.symbols.length > 0)
+                {   
+                    this.model.addVertex(this.getSymbol(), params.x, params.y);
                     console.log('added vertex');
                 }
 
@@ -92,6 +96,43 @@
                 console.log('mouse move');
 
             }.bind(this));
+        },
+
+        initResize()
+        {
+            // Prevents callback on resize except for last resize trigger
+            function stagger(callback)
+            {
+                let timer;
+
+                return function(event)
+                {
+                    if(timer) clearTimeout(timer);
+                    timer = setTimeout(callback, 400, event);
+                };
+            }
+
+            window.addEventListener('resize', stagger(function(event)
+            {
+                event.preventDefault();
+                this.model.resize(this.two.width, this.two.height);
+
+//======== DEBUG =============/
+if(window.DEBUG_MODE)
+{
+    this.view.drawSpacialIndex();
+}
+//======== DEBUG =============/
+
+            }.bind(this)));
+        },
+        
+        initCanvasHandlers()
+        {
+            this.canvas.addEventListener('click',     this.view.createOnClickHandler());
+            this.canvas.addEventListener('mousedown', this.view.createOnMouseDownHandler());
+            this.canvas.addEventListener('mouseup',   this.view.createOnMouseUpHandler());
+            this.canvas.addEventListener('mousemove', this.view.createOnMouseMoveHandler());
         },
 
 //====================== Setters ===========================//
@@ -130,41 +171,17 @@
             this.initResize();
         },
 
-        initResize()
+        getSymbol()
         {
-            // Prevents callback on resize except for last resize trigger
-            function stagger(callback)
-            {
-                let timer;
-
-                return function(event)
-                {
-                    if(timer) clearTimeout(timer);
-                    timer = setTimeout(callback, 400, event);
-                };
-            }
-
-            window.addEventListener('resize', stagger(function(event)
-            {
-                event.preventDefault();
-                this.model.resize(this.two.width, this.two.height);
-
-//======== DEBUG =============/
-if(window.DEBUG_MODE)
-{
-    this.view.drawSpacialIndex();
-}
-//======== DEBUG =============/
-
-            }.bind(this)));
+            let symbol = this.symbols.pop();
+            this.usedSymbols[symbol] = symbol;
+            return symbol;  
         },
-        
-        initCanvasHandlers()
+
+        returnSymbol(symbol)
         {
-            this.canvas.addEventListener('click',     this.view.createOnClickHandler());
-            this.canvas.addEventListener('mousedown', this.view.createOnMouseDownHandler());
-            this.canvas.addEventListener('mouseup',   this.view.createOnMouseUpHandler());
-            this.canvas.addEventListener('mousemove', this.view.createOnMouseMoveHandler());
+            this.symbols.push(symbol);
+            delete this.usedSymbols[symbol];
         },
 
         // Just for testing

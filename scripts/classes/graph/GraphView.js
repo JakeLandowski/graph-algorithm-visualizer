@@ -61,18 +61,26 @@ if(window.DEBUG_MODE)
                 let vertex = this.two.makeCircle(params.x, params.y, this.config.vertexSize);
                 vertex.fill = "#ff9a00";
                 vertex.linewidth = this.config.vertexOutlineSize;
-                this.vertexGroup.add(vertex);
 
-                this.vertexMap[params.data] = vertex;
+                let text = this.two.makeText(params.data, params.x, params.y);
+                this.vertexGroup.add(vertex, text);
+
+                this.vertexMap[params.data] = 
+                {
+                    circle: vertex,
+                    text: text
+                }
 
             }.bind(this));
 
             // Vertex Removed
             this.model.onVertexRemoved.attach(function(_, params)
             {
-                let vertexShape = this.vertexMap[params.data];
-                this.vertexGroup.remove(vertexShape);
-                vertexShape.remove();
+                let circle = this.vertexMap[params.data].circle;
+                let text   = this.vertexMap[params.data].text;
+                this.vertexGroup.remove(circle, text);
+                circle.remove();
+                text.remove();
                 delete this.vertexMap[params.data];
 
             }.bind(this));
@@ -104,6 +112,7 @@ if(window.DEBUG_MODE)
 
             return function(event)
             {
+                event.preventDefault();
                 onCanvasClicked.notify({x: event.offsetX, y: event.offsetY});
             };
         },
@@ -114,6 +123,7 @@ if(window.DEBUG_MODE)
 
             return function(event)
             {
+                event.preventDefault();
                 onCanvasMouseDown.notify({x: event.offsetX, y: event.offsetY});
             };
         },
@@ -124,6 +134,7 @@ if(window.DEBUG_MODE)
 
             return function(event)
             {
+                event.preventDefault();
                 onCanvasMouseUp.notify({x: event.offsetX, y: event.offsetY});
             };
         },
@@ -134,6 +145,7 @@ if(window.DEBUG_MODE)
 
             return function(event)
             {
+                event.preventDefault();
                 onCanvasMouseMove.notify({x: event.offsetX, y: event.offsetY});
             };
         },
