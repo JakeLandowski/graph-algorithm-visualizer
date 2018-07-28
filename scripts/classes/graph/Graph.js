@@ -56,7 +56,7 @@
         initHandlers()
         {
             // On Click
-            this.view.onCanvasClicked.attach(function(_, params)
+            this.view.onCanvasClicked.attach('onCanvasClicked', function(_, params)
             {
                 // see if clicked on vertex here using model
                 // if clicked on vertex tell model to delete
@@ -77,21 +77,21 @@
             }.bind(this));
 
             // On Mouse Down
-            this.view.onCanvasMouseDown.attach(function(_, params)
+            this.view.onCanvasMouseDown.attach('onCanvasMouseDown', function(_, params)
             {
                 console.log('mouse down');
 
             }.bind(this));
 
             // On Mouse Up
-            this.view.onCanvasMouseUp.attach(function(_, params)
+            this.view.onCanvasMouseUp.attach('onCanvasMouseUp', function(_, params)
             {
                 console.log('mouse up');
 
             }.bind(this));
 
             // On Mouse Move
-            this.view.onCanvasMouseMove.attach(function(_, params)
+            this.view.onCanvasMouseMove.attach('onCanvasMouseMove', function(_, params)
             {
                 console.log('mouse move');
 

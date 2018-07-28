@@ -6,7 +6,7 @@
  *  Represents the rendering logic for the Graph class.
  */
 
-define(['classes/Event'], function(Event)
+define(['classes/Event', 'utils/Util'], function(Event, Util)
 {
     console.log('GraphView Class loaded');
 
@@ -58,7 +58,7 @@ if(window.DEBUG_MODE)
         initHandlers()
         {
             // Vertex Added
-            this.model.onVertexAdded.attach(function(_, params)
+            this.model.onVertexAdded.attach('createVertex', function(_, params)
             {
                 // Create new vertex shape and store it
                 let vertex = this.two.makeCircle(params.x, params.y, this.config.vertexSize);
@@ -78,7 +78,7 @@ if(window.DEBUG_MODE)
 
 
             // Vertex Removed
-            this.model.onVertexRemoved.attach(function(_, params)
+            this.model.onVertexRemoved.attach('deleteVertex', function(_, params)
             {
                 let circle = this.vertexMap[params.data].circle;
                 let text   = this.vertexMap[params.data].text;
@@ -90,7 +90,7 @@ if(window.DEBUG_MODE)
             }.bind(this));
 
             // Edge Added
-            this.model.onEdgeAdded.attach(function(_, params)
+            this.model.onEdgeAdded.attach('createEdge', function(_, params)
             {
                 // Create new edge line and store it
                 let edge = this.two.makeLine(0, 0, 200, 200);
@@ -102,10 +102,10 @@ if(window.DEBUG_MODE)
             }.bind(this));
 
             // Vertex Moved
-            this.model.onVertexMoved.attach(function(_, params)
+            this.onCanvasMouseMove.attach('moveVertex', function(_, params)
             {
-                this.vertexMap[params.data].circle.translation.set(params.x, params.y);
-                this.vertexMap[params.data].text.translation.set(params.x, params.y);
+                // this.vertexMap[params.data].circle.translation.set(params.x, params.y);
+                // this.vertexMap[params.data].text.translation.set(params.x, params.y);
 
             }.bind(this));
         },
@@ -154,19 +154,7 @@ if(window.DEBUG_MODE)
 
         initResize()
         {
-            // Prevents callback on resize except for last resize trigger
-            function stagger(callback)
-            {
-                let timer;
-
-                return function(event)
-                {
-                    if(timer) clearTimeout(timer);
-                    timer = setTimeout(callback, 400, event);
-                };
-            }
-
-            window.addEventListener('resize', stagger(function(event)
+            window.addEventListener('resize', Util.stagger(function(event)
             {
                 event.preventDefault();
                 this.model.resize(this.two.width, this.two.height);
@@ -178,7 +166,7 @@ if(window.DEBUG_MODE)
 }
 //======== DEBUG =============/
 
-            }.bind(this)));
+            }.bind(this), 400));
         },
 
 //======== DEBUG =============/

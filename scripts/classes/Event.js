@@ -13,22 +13,27 @@ define(function()
     const Event = function(sender)
     {
         this.sender = sender;
-        this.listeners = [];
+        this.listeners = Object.create(null);
     };
 
     Event.prototype = 
     {
-        attach(listener)
+        attach(name, listener)
         {
-            this.listeners.push(listener);
+            this.listeners[name] = listener;
+        },
+
+        detach(name)
+        {
+            delete this.listeners[name];
         },
 
         notify(args)
         {
-            this.listeners.forEach(function(listener)
-            { 
-                listener(this.sender, args);
-            });
+            for(let listener in this.listeners)
+            {
+                this.listeners[listener](this.sender, args);
+            }
         }
     };
 

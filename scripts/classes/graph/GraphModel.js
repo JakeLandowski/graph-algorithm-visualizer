@@ -26,7 +26,8 @@
         this.onVertexAdded   = new Event(this);
         this.onVertexRemoved = new Event(this);
         this.onEdgeAdded     = new Event(this);
-        this.onVertexMoved   = new Event(this);
+        // may not need model to handle this
+        // this.onVertexMoved   = new Event(this);
     };
 
     GraphModel.prototype = 
@@ -98,7 +99,7 @@
             {
                 this.adjList[data].x = x;
                 this.adjList[data].y = y;
-                this.onVertexMoved.notify({ data: data, x: x, y: y });
+                // this.onVertexMoved.notify({ data: data, x: x, y: y });
             }
         },
 
