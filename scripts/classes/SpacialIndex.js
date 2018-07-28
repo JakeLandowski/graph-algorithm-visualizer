@@ -20,6 +20,9 @@ define(function()
 
     SpacialIndex.prototype = 
     {
+        /**
+         *  Create the 2D Array representing the Grid of cell objects. 
+         */
         initIndex()
         {
             this.index = new Array(this.cellRatio);
@@ -35,6 +38,11 @@ define(function()
             }
         },
 
+        /**
+         *  Register the entity in this spacialIndex, registers to each
+         *  cell it lies on. Requires the rectangle shape to have an 
+         *  upperLeft/lowerRight bound set.  
+         */
         add(entity)
         {
             let startX = this.cellRow(entity.upperLeft.x);
@@ -60,16 +68,16 @@ define(function()
             }
         },
 
+        /**
+         *  Unregister the entity in this SpacialIndex 
+         */
         remove(entity)
         {
             if(entity.cells)
             {
                 entity.cells.forEach(function(cell)
                 {   
-                    if(cell[entity.id])
-                    {
-                        delete cell[entity.id];
-                    }
+                    if(cell[entity.id]) delete cell[entity.id];
 
                 }.bind(this));
 
@@ -77,12 +85,18 @@ define(function()
             }
         },
 
+        /**
+         *  Update the location of the entity in this SpacialIndex 
+         */
         update(entity, x, y)
         {
             this.remove(entity);
             this.add(entity, x, y);
         },
 
+        /**
+         *  See if this x/y touched a shape, if so return it, else return null
+         */
         getEntity(x, y)
         {
             let cell = this.cell(x, y);
@@ -99,7 +113,9 @@ define(function()
                 {
                     return entity;
                 }
-            } 
+            }
+            
+            return null;
         },
 
         cell(x, y)
@@ -108,21 +124,33 @@ define(function()
             return this.index[this.cellRow(x)][this.cellCol(y)];
         },
 
+        /**
+         *  Get the cell located at x/y point given. Hashed 
+         */
         cellFromIndex(x, y)
         {
             return x >= this.cellRatio || y >= this.cellRatio ? undefined : this.index[x][y];
         },
 
+        /**
+         *  Get a string id of the cell index at x/y 
+         */
         cellId(x, y)
         {
             return '' + this.cellRow(x) + this.cellCol(y);
         },
 
+        /**
+         *  Hash an x coordinate to a cell index 
+         */
         cellRow(x)
         {
             return Math.floor(x / this.cellWidth);
         },
 
+        /**
+         *  Hash an y coordinate to a cell index 
+         */
         cellCol(y)
         {
             return Math.floor(y / this.cellHeight);
