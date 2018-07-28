@@ -14,6 +14,7 @@ define(function()
     {
         this.sender = sender;
         this.listeners = Object.create(null);
+        this.enable();
     };
 
     Event.prototype = 
@@ -25,15 +26,28 @@ define(function()
 
         detach(name)
         {
-            delete this.listeners[name];
+            if(this.listeners[name]) delete this.listeners[name];
         },
 
         notify(args)
         {
-            for(let listener in this.listeners)
+            if(this.enabled)
             {
-                this.listeners[listener](this.sender, args);
+                for(let listener in this.listeners)
+                {
+                    this.listeners[listener](this.sender, args);
+                }
             }
+        },
+
+        disable()
+        {
+            this.enabled = false;
+        },
+
+        enable()
+        {
+            this.enabled = true;
         }
     };
 
