@@ -26,8 +26,7 @@
         this.onVertexAdded   = new Event(this);
         this.onVertexRemoved = new Event(this);
         this.onEdgeAdded     = new Event(this);
-        // may not need model to handle this
-        // this.onVertexMoved   = new Event(this);
+        this.onVertexMoved   = new Event(this);
     };
 
     GraphModel.prototype = 
@@ -93,13 +92,22 @@
             }
         },
 
-        moveVertex(data, x, y)
+        softMoveVertex(data, x, y)
         {
             if(this.adjList[data])
             {
                 this.adjList[data].x = x;
                 this.adjList[data].y = y;
-                // this.onVertexMoved.notify({ data: data, x: x, y: y });
+                this.onVertexMoved.notify({ data: data, x: x, y: y });
+            }
+        },
+
+        hardMoveVertex(data, x, y)
+        {
+            if(this.adjList[data])
+            {
+                this.softMoveVertex(data, x, y);
+                
             }
         },
 

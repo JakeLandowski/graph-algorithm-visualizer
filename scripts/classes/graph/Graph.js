@@ -80,6 +80,28 @@
             this.view.onCanvasMouseDown.attach('onCanvasMouseDown', function(_, params)
             {
                 console.log('mouse down');
+                // locate vertex at location
+                let vertex = this.model.vertexAt(params.x, params.y);
+
+                if(vertex)
+                {
+                    function stickVertexToCursor(_, point)
+                    {
+                        // Mostly visual move
+                        this.model.softMoveVertex(vertex.data, point.x, point.y);
+                    }
+
+                    function releaseVertexFromCursor(_, point)
+                    {
+                        // Final movement, updates spatial information
+                        this.view.onCanvasMouseMove.detach('stickVertexToCursor');
+                        this.view.onCanvasMouseUp.detach('releaseVertexFromCursor');
+                        this.model.hardMoveVertex(vertex.data, point.x, point.y);
+                    }
+
+                    this.view.onCanvasMouseDrag.attach('stickVertexToCursor', stickVertexToCursor.bind(this));
+                    this.view.onCanvasMouseUp.attach('releaseVertexFromCursor', releaseVertexFromCursor.bind(this));
+                }
 
             }.bind(this));
 
@@ -94,6 +116,13 @@
             this.view.onCanvasMouseMove.attach('onCanvasMouseMove', function(_, params)
             {
                 console.log('mouse move');
+
+            }.bind(this));
+
+            // On Mouse Drag
+            this.view.onCanvasMouseDrag.attach('onCanvasMouseDrag', function(_, params)
+            {
+                console.log('mouse drag');
 
             }.bind(this));
         },

@@ -46,6 +46,10 @@ if(window.DEBUG_MODE)
         this.onCanvasMouseDown = new Event(this);
         this.onCanvasMouseUp   = new Event(this);
         this.onCanvasMouseMove = new Event(this);
+        this.onCanvasMouseDrag = new Event(this);
+
+        this.mouseMoved = false;
+        this.mouseDown  = false;
 
         this.initHandlers();
 
@@ -100,14 +104,6 @@ if(window.DEBUG_MODE)
                 this.edgeMap[ [params.to, params.from] ] = edge;
             
             }.bind(this));
-
-            // Vertex Moved
-            this.onCanvasMouseMove.attach('moveVertex', function(_, params)
-            {
-                // this.vertexMap[params.data].circle.translation.set(params.x, params.y);
-                // this.vertexMap[params.data].text.translation.set(params.x, params.y);
-
-            }.bind(this));
         },
 
 //========= Event Handlers ===========//
@@ -123,16 +119,19 @@ if(window.DEBUG_MODE)
 
         initCanvasHandlers()
         {
-            this.canvas.addEventListener('click', function(event)
-            {
-                event.preventDefault();
-                this.onCanvasClicked.notify({x: event.offsetX, y: event.offsetY});
+            // MAY NEVER NEED AGAIN BAKED INTO MOUSEUP
+            // this.canvas.addEventListener('click', function(event)
+            // {
+            //     event.preventDefault();
+            //     this.onCanvasClicked.notify({x: event.offsetX, y: event.offsetY});
             
-            }.bind(this));
+            // }.bind(this));
 
             this.canvas.addEventListener('mousedown', function(event)
             {
                 event.preventDefault();
+                this.mouseMoved = false;
+                this.mouseDown  = true;
                 this.onCanvasMouseDown.notify({x: event.offsetX, y: event.offsetY});
             
             }.bind(this));
@@ -141,13 +140,22 @@ if(window.DEBUG_MODE)
             {
                 event.preventDefault();
                 this.onCanvasMouseUp.notify({x: event.offsetX, y: event.offsetY});
+                this.mouseDown = false;
+                
+                if(!this.mouseMoved)
+                    this.onCanvasClicked.notify({x: event.offsetX, y: event.offsetY});
             
             }.bind(this));
 
             this.canvas.addEventListener('mousemove', function(event)
             {
                 event.preventDefault();
-                this.onCanvasMouseMove.notify({x: event.offsetX, y: event.offsetY});
+                this.mouseMoved = true;
+                
+                if(this.mouseDown)
+                    this.onCanvasMouseDrag.notify({x: event.offsetX, y: event.offsetY});
+                else
+                    this.onCanvasMouseMove.notify({x: event.offsetX, y: event.offsetY});
             
             }.bind(this));
         },

@@ -15,6 +15,7 @@ define(function()
         this.sender = sender;
         this.listeners = Object.create(null);
         this.enable();
+        this.canNotify = true;
     };
 
     Event.prototype = 
