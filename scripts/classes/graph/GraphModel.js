@@ -20,7 +20,8 @@
         this.setDimensions(width, height);
 
         this.adjList      = Object.create(null); // non-inheriting object
-        this.spacialIndex = new SpacialIndex(this.cellWidth, this.cellHeight, this.cellRatio);
+        this.vertexSpacialIndex = new SpacialIndex(this.cellWidth, this.cellHeight, this.cellRatio);
+        this.vertexId = 0;
 
         this.onVertexAdded   = new Event(this);
         this.onVertexRemoved = new Event(this);
@@ -30,8 +31,6 @@
 
     GraphModel.prototype = 
     {
-        vertexId: 0,
-
         addVertex(data, x, y)
         {
             if(!this.adjList[data]) 
@@ -42,7 +41,7 @@
                 {
                     id: 'vertex' + this.vertexId++,
                     data: data,
-                    neighbors: [],
+                    neighbors: Object.create(null),
                     x: x,
                     y: y,
                     upperLeft:  {x: x - radius, y: y - radius},
@@ -50,20 +49,29 @@
                 };
 
                 this.adjList[data] = vertex;
-                this.spacialIndex.add(vertex);
+                this.vertexSpacialIndex.add(vertex);
                 this.onVertexAdded.notify({ data: data, x: x, y: y });
             }
         },
 
-        removeVertex(data)
+        removeVertex(vertex)
         {
+            let data = vertex.data;
+
             if(this.adjList[data])
             {
-                let vertex = this.adjList[data];
-                this.onVertexRemoved.notify({ vertex: vertex });
+                let removed = this.adjList[data];
+                delete this.adjList[data];
+
+                this.vertexSpacialIndex.remove(vertex);
+
+                // NEED TO CLEANUP EDGE REFERENCES LATER
+
+                this.onVertexRemoved.notify({ data: data });
             }
         },
 
+        // NEEDS REWORK FOR EDGE OBJECTS AND SUCH
         addEdge(to, from)
         {
             // need to create an edge object in model that contains to/from pointers
@@ -77,8 +85,9 @@
                 throw 'Tried to create edge from a non-existent vertex.';
             else
             {
-                list[to].neighors.push(from);
-                list[from].neighors.push(to);
+                // need to have key reference object not key again
+                list[to].neighors[from] = from;
+                list[from].neighors[to] = to;
                 this.onEdgeAdded.notify({ to: to, from: from });
             }
         },
@@ -96,10 +105,10 @@
         resize(width, height)
         {
             this.setDimensions(width, height);
-            this.spacialIndex = new SpacialIndex(width, height, this.cellRatio);
+            this.vertexSpacialIndex = new SpacialIndex(width, height, this.cellRatio);
             for(let vertexKey in this.adjList)
             {
-                this.spacialIndex.add(this.adjList[vertexKey]);
+                this.vertexSpacialIndex.add(this.adjList[vertexKey]);
             }
         },
 
@@ -109,6 +118,11 @@
             this.cellWidth  = this.width / this.cellRatio;
             this.height     = height;
             this.cellHeight = this.height / this.cellRatio;
+        },
+
+        vertexAt(x, y)
+        {
+            return this.vertexSpacialIndex.getEntity(x, y);
         }
     };
 

@@ -46,7 +46,7 @@
         initConfig()
         {
             this.config.vertexSize = 50;
-            this.config.vertexOutlineSize = 3;
+            this.config.vertexOutlineSize = 0;
             this.config.edgeWidth = 1;
         },
 
@@ -55,9 +55,20 @@
             // On Click
             this.view.onCanvasClicked.attach(function(_, params)
             {
-                console.log(params);
-                if(this.symbolCounter < this.symbols.length)
+                // see if clicked on vertex here using model
+                // if clicked on vertex tell model to delete
+                let vertex = this.model.vertexAt(params.x, params.y);
+
+                if(vertex)
+                {
+                    this.model.removeVertex(vertex);
+                    console.log('removed vertex ' + vertex.id + ': ' + vertex.x + ', ' + vertex.y);
+                }
+                else if(this.symbolCounter < this.symbols.length)
+                {
                     this.model.addVertex(this.symbols[this.symbolCounter++], params.x, params.y);
+                    console.log('added vertex');
+                }
 
             }.bind(this));
 
@@ -65,7 +76,6 @@
             this.view.onCanvasMouseDown.attach(function(_, params)
             {
                 console.log('mouse down');
-                console.log(this.model.spacialIndex); 
 
             }.bind(this));
 

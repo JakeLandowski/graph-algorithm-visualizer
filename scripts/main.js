@@ -17,7 +17,7 @@
     // maintain html ui here, create an object for it
     // attach new graph as main graph, hooking up to the ui
 
-    window.DEBUG_MODE = false;
+    window.DEBUG_MODE = true;
 
     let graph = new Graph({ fullscreen: true });
 

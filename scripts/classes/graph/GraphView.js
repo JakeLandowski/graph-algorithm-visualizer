@@ -70,7 +70,10 @@ if(window.DEBUG_MODE)
             // Vertex Removed
             this.model.onVertexRemoved.attach(function(_, params)
             {
-                console.log('removed a vertex : ' + params);
+                let vertexShape = this.vertexMap[params.data];
+                this.vertexGroup.remove(vertexShape);
+                vertexShape.remove();
+                delete this.vertexMap[params.data];
 
             }.bind(this));
 
@@ -150,8 +153,6 @@ drawSpacialIndex()
         });
         group.children = [];
 
-        console.log(group.children);
-        
         for(let x = 0; x < this.model.cellRatio; x++)
         {
             for(let y = 0; y < this.model.cellRatio; y++)
@@ -162,8 +163,11 @@ drawSpacialIndex()
                 let centerY = y * height + height / 2; 
                 let rect = this.two.makeRectangle(centerX, centerY, width, height);
                 rect.noFill();
+                rect.stroke = '#fff';
                 group.add(rect);
-                group.add(this.two.makeText('' + x + y, centerX - width / 3 - 10, centerY - height / 3 - 10));
+                let text = this.two.makeText('' + x + y, centerX - width / 3 - 10, centerY - height / 3 - 10);
+                text.stroke = '#fff'; 
+                group.add(text);
             }   
         }
     }

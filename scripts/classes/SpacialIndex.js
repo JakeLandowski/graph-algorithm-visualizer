@@ -103,7 +103,7 @@ define(function()
 
             for(let entityId in cell)
             {
-                let entity     = cell[entiyId];
+                let entity     = cell[entityId];
                 let upperLeft  = entity.upperLeft;
                 let lowerRight = entity.lowerRight;
                 
