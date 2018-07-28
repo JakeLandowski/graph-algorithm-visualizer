@@ -79,12 +79,12 @@
             // On Mouse Down
             this.view.onCanvasMouseDown.attach('onCanvasMouseDown', function(_, params)
             {
-                console.log('mouse down');
                 // locate vertex at location
                 let vertex = this.model.vertexAt(params.x, params.y);
 
                 if(vertex)
                 {
+                    console.log('found vertex');
                     function stickVertexToCursor(_, point)
                     {
                         // Mostly visual move
@@ -94,7 +94,7 @@
                     function releaseVertexFromCursor(_, point)
                     {
                         // Final movement, updates spatial information
-                        this.view.onCanvasMouseMove.detach('stickVertexToCursor');
+                        this.view.onCanvasMouseDrag.detach('stickVertexToCursor');
                         this.view.onCanvasMouseUp.detach('releaseVertexFromCursor');
                         this.model.hardMoveVertex(vertex, point.x, point.y);
                     }
@@ -102,27 +102,25 @@
                     this.view.onCanvasMouseDrag.attach('stickVertexToCursor', stickVertexToCursor.bind(this));
                     this.view.onCanvasMouseUp.attach('releaseVertexFromCursor', releaseVertexFromCursor.bind(this));
                 }
+                else console.log('didnt find vertex');
 
             }.bind(this));
 
             // On Mouse Up
             this.view.onCanvasMouseUp.attach('onCanvasMouseUp', function(_, params)
             {
-                console.log('mouse up');
 
             }.bind(this));
 
             // On Mouse Move
             this.view.onCanvasMouseMove.attach('onCanvasMouseMove', function(_, params)
             {
-                console.log('mouse move');
 
             }.bind(this));
 
             // On Mouse Drag
             this.view.onCanvasMouseDrag.attach('onCanvasMouseDrag', function(_, params)
             {
-                console.log('mouse drag');
 
             }.bind(this));
         },

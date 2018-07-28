@@ -85,13 +85,12 @@ function(Event, Vertex, SpacialIndex)
 
         softMoveVertex(vertex, x, y)
         {
-            vertex.x = x;
-            vertex.y = y;
             this.onVertexMoved.notify({ data: vertex.data, x: x, y: y });
         },
 
         hardMoveVertex(vertex, x, y)
         {
+            vertex.setPoints(x, y);
             this.vertexSpacialIndex.update(vertex, x, y);
             this.softMoveVertex(vertex, x, y);
         },
