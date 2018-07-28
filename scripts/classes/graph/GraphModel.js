@@ -6,14 +6,16 @@
  *  Represents the data structure for the Graph class..
  */
 
- define(['classes/Event', 'classes/SpacialIndex'], function(Event, SpacialIndex)
- {
+define(['classes/Event', 'classes/graph/Vertex', 'classes/SpacialIndex'], 
+function(Event, Vertex, SpacialIndex)
+{
     console.log('GraphModel Class loaded');
 
     const GraphModel = function(width, height, config)
     {
         // Shape size/styling information
         this.config = config;
+        Vertex.prototype.config = config;
 
         // SpacialIndex needed information
         this.cellRatio  = 5;
@@ -35,18 +37,7 @@
         {
             if(!this.adjList[data]) 
             {
-                let radius = this.config.vertexSize + this.config.vertexOutlineSize;
-
-                let vertex =
-                {
-                    id: 'vertex' + this.vertexId++,
-                    data: data,
-                    neighbors: Object.create(null),
-                    x: x,
-                    y: y,
-                    upperLeft:  {x: x - radius, y: y - radius},
-                    lowerRight: {x: x + radius, y: y + radius}
-                };
+                let vertex = new Vertex(data, x, y);
 
                 this.adjList[data] = vertex;
                 this.vertexSpacialIndex.add(vertex);
@@ -92,23 +83,17 @@
             }
         },
 
-        softMoveVertex(data, x, y)
+        softMoveVertex(vertex, x, y)
         {
-            if(this.adjList[data])
-            {
-                this.adjList[data].x = x;
-                this.adjList[data].y = y;
-                this.onVertexMoved.notify({ data: data, x: x, y: y });
-            }
+            vertex.x = x;
+            vertex.y = y;
+            this.onVertexMoved.notify({ data: vertex.data, x: x, y: y });
         },
 
-        hardMoveVertex(data, x, y)
+        hardMoveVertex(vertex, x, y)
         {
-            if(this.adjList[data])
-            {
-                this.softMoveVertex(data, x, y);
-                
-            }
+            this.vertexSpacialIndex.update(vertex, x, y);
+            this.softMoveVertex(vertex, x, y);
         },
 
         resize(width, height)

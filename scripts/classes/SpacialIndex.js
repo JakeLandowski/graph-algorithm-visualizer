@@ -45,6 +45,9 @@ define(function()
          */
         add(entity)
         {
+            console.log('add before');
+            console.log(Object.assign({}, entity));
+
             let startX = this.cellRow(entity.upperLeft.x);
             let startY = this.cellCol(entity.upperLeft.y);
             let endX   = this.cellRow(entity.lowerRight.x);
@@ -66,6 +69,9 @@ define(function()
                     }
                 }   
             }
+
+            console.log('add after');
+            console.log(Object.assign({}, entity));
         },
 
         /**
@@ -73,6 +79,9 @@ define(function()
          */
         remove(entity)
         {
+            console.log('remove before');
+            console.log(Object.assign({}, entity));
+
             if(entity.cells)
             {
                 entity.cells.forEach(function(cell)
@@ -83,6 +92,9 @@ define(function()
 
                 entity.cells = [];
             }
+
+            console.log('remove after');
+            console.log(Object.assign({}, entity));
         },
 
         /**

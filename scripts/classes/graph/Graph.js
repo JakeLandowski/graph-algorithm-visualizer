@@ -88,7 +88,7 @@
                     function stickVertexToCursor(_, point)
                     {
                         // Mostly visual move
-                        this.model.softMoveVertex(vertex.data, point.x, point.y);
+                        this.model.softMoveVertex(vertex, point.x, point.y);
                     }
 
                     function releaseVertexFromCursor(_, point)
@@ -96,7 +96,7 @@
                         // Final movement, updates spatial information
                         this.view.onCanvasMouseMove.detach('stickVertexToCursor');
                         this.view.onCanvasMouseUp.detach('releaseVertexFromCursor');
-                        this.model.hardMoveVertex(vertex.data, point.x, point.y);
+                        this.model.hardMoveVertex(vertex, point.x, point.y);
                     }
 
                     this.view.onCanvasMouseDrag.attach('stickVertexToCursor', stickVertexToCursor.bind(this));

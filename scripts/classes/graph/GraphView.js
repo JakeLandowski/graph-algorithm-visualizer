@@ -80,16 +80,29 @@ if(window.DEBUG_MODE)
 
             }.bind(this));
 
-
             // Vertex Removed
             this.model.onVertexRemoved.attach('deleteVertex', function(_, params)
             {
-                let circle = this.vertexMap[params.data].circle;
-                let text   = this.vertexMap[params.data].text;
-                this.vertexGroup.remove(circle, text);
-                circle.remove();
-                text.remove();
-                delete this.vertexMap[params.data];
+                if(this.vertexMap[params.data])
+                {
+                    let circle = this.vertexMap[params.data].circle;
+                    let text   = this.vertexMap[params.data].text;
+                    this.vertexGroup.remove(circle, text);
+                    circle.remove();
+                    text.remove();
+                    delete this.vertexMap[params.data];
+                }
+
+            }.bind(this));
+
+            // Vertex Moved
+            this.model.onVertexMoved.attach('moveVertex', function(_, params)
+            {
+                if(this.vertexMap[params.data])
+                {
+                    this.vertexMap[params.data].circle.translation.set(params.x, params.y);
+                    this.vertexMap[params.data].text.translation.set(params.x, params.y);
+                }
 
             }.bind(this));
 
