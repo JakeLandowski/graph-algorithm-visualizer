@@ -167,15 +167,13 @@ if(window.DEBUG_MODE)
                 event.preventDefault();
                 if(this.mouseMoveTimer > this.mouseMoveDelay)
                 {
-                    console.log('mouse moved');
                     this.mouseMoved = true;
-
-                    if(this.mouseDown)
-                        this.onCanvasMouseDrag.notify({x: event.offsetX, y: event.offsetY});
-    
                     this.onCanvasMouseMove.notify({x: event.offsetX, y: event.offsetY});
                 }
                 else this.mouseMoveTimer++;
+
+                if(this.mouseDown)
+                        this.onCanvasMouseDrag.notify({x: event.offsetX, y: event.offsetY});
             
             }.bind(this));
 
@@ -184,7 +182,7 @@ if(window.DEBUG_MODE)
                 event.preventDefault();
                 this.mouseMoveTimer = 0;
             
-            }.bind(this), 50));
+            }.bind(this), 200));
         },
 
         initResize()
