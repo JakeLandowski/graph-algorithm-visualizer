@@ -47,13 +47,11 @@ define(function()
 
         disable()
         {
-            console.log('disabled');
             this.enabled = false;
         },
 
         enable()
         {
-            console.log('enabled');
             this.enabled = true;
         },
 

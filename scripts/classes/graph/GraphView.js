@@ -50,6 +50,8 @@ if(window.DEBUG_MODE)
 
         this.mouseMoved = false;
         this.mouseDown  = false;
+        this.mouseMoveTimer = 0;
+        this.mouseMoveDelay = 10;
 
         this.initHandlers();
 
@@ -142,7 +144,7 @@ if(window.DEBUG_MODE)
 
             this.canvas.addEventListener('mousedown', function(event)
             {
-                event.preventDefault();
+                event.preventDefault(); 
                 this.mouseMoved = false;
                 this.mouseDown  = true;
                 this.onCanvasMouseDown.notify({x: event.offsetX, y: event.offsetY});
@@ -163,14 +165,26 @@ if(window.DEBUG_MODE)
             this.canvas.addEventListener('mousemove', function(event)
             {
                 event.preventDefault();
-                this.mouseMoved = true;
-                
-                if(this.mouseDown)
-                    this.onCanvasMouseDrag.notify({x: event.offsetX, y: event.offsetY});
-                else
+                if(this.mouseMoveTimer > this.mouseMoveDelay)
+                {
+                    console.log('mouse moved');
+                    this.mouseMoved = true;
+
+                    if(this.mouseDown)
+                        this.onCanvasMouseDrag.notify({x: event.offsetX, y: event.offsetY});
+    
                     this.onCanvasMouseMove.notify({x: event.offsetX, y: event.offsetY});
+                }
+                else this.mouseMoveTimer++;
             
             }.bind(this));
+
+            this.canvas.addEventListener('mousemove', Util.stagger(function(event)
+            {
+                event.preventDefault();
+                this.mouseMoveTimer = 0;
+            
+            }.bind(this), 50));
         },
 
         initResize()

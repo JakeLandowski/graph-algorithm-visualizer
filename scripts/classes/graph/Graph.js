@@ -111,7 +111,7 @@
             // On Mouse Up
             this.view.onCanvasMouseUp.attach('onCanvasMouseUp', function(_, params)
             {
-
+                
             }.bind(this));
 
             // On Mouse Move
