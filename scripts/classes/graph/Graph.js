@@ -99,7 +99,7 @@ define(['classes/graph/GraphModel',
                         },
                         undo: 'addVertex'
                     });
-                    // this.model.removeVertex(vertex);
+
                     this.returnSymbol(vertex.data);
                 }
                 else if(this.symbols.length > 0)
@@ -115,7 +115,6 @@ define(['classes/graph/GraphModel',
                         },
                         undo: 'removeVertex'
                     });
-                    // this.model.addVertex(this.getSymbol(), params.x, params.y);
                 }
 
             }.bind(this));
@@ -149,6 +148,18 @@ define(['classes/graph/GraphModel',
                     this.view.onCanvasMouseDrag.attach('stickVertexToCursor', stickVertexToCursor.bind(this));
                     this.view.onCanvasMouseUp.attach('releaseVertexFromCursor', releaseVertexFromCursor.bind(this));
                 }
+
+            }.bind(this));
+        },
+
+        edgeMode()
+        {
+            this.clearMouseEvents();
+
+            this.view.onCanvasClicked.attach('onCanvasClicked', function(_, params)
+            {
+                this.mouseEventsLogged.push('onCanvasClicked');
+                
 
             }.bind(this));
         },
