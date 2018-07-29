@@ -50,7 +50,7 @@ define(['classes/graph/GraphModel',
         initConfig()
         {
             this.config = Object.create(null); // non-inheriting object
-            this.config.vertexSize = 50;
+            this.config.vertexSize = 25;
             this.config.vertexOutlineSize = 0;
             this.config.edgeWidth = 1;
         },
