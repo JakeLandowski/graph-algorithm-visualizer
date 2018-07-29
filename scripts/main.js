@@ -6,7 +6,7 @@
  *  App entry point.
  */
 
- requirejs(['classes/graph/Graph'], function(Graph)
+ requirejs(['classes/graph/Graph', 'ui-animations/animations'], function(Graph, Animations)
  {
     // create Graph
     // configure graph
@@ -18,6 +18,8 @@
     // attach new graph as main graph, hooking up to the ui
 
     window.DEBUG_MODE = true;
+
+    Animations.start();
 
     let graph = new Graph({ fullscreen: true });
 
