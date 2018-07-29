@@ -93,7 +93,7 @@ define(['classes/graph/GraphModel',
                         type: 'removeVertex',
                         data: 
                         {
-                            symbol: this.getSymbol(),
+                            symbol: vertex.data,
                             x: params.x,
                             y: params.y   
                         },
@@ -174,6 +174,11 @@ define(['classes/graph/GraphModel',
         {
             this.two.play();
             this.vertexMode();
+        },
+
+        undo()
+        {
+            this.model.undo();
         },
 
         render()
