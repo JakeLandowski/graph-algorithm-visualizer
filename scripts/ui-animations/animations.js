@@ -1,4 +1,4 @@
-define(['ui-aniations/anime'], function(Anime)
+define(['ui-animations/anime'], function(Anime)
 {
     return {
         start()
