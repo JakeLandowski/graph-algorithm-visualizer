@@ -49,7 +49,7 @@ function(Event, Vertex, SpacialIndex, CommandLog)
         undo()
         {
             let command = this.userCommands.undo();
-            if(this[command.undo])
+            if(command && this[command.undo])
                 this[command.undo](command.data);
         },
 

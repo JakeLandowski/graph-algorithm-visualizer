@@ -79,9 +79,9 @@ define(['classes/graph/GraphModel',
         {
             this.clearMouseEvents();
 
-            this.view.onCanvasClicked.attach('onCanvasClicked', function(_, params)
+            this.view.onCanvasClicked.attach('clickVertex', function(_, params)
             {
-                this.mouseEventsLogged.push('onCanvasClicked');
+                this.mouseEventsLogged.push('clickVertex');
                 // see if clicked on vertex here using model
                 // if clicked on vertex tell model to delete
                 let vertex = this.model.vertexAt(params.x, params.y);
@@ -119,9 +119,9 @@ define(['classes/graph/GraphModel',
 
             }.bind(this));
 
-            this.view.onCanvasMouseDown.attach('onCanvasMouseDown', function(_, params)
+            this.view.onCanvasMouseDown.attach('dragVertex', function(_, params)
             {
-                this.mouseEventsLogged.push('onCanvasMouseDown');
+                this.mouseEventsLogged.push('dragVertex');
 
                 // locate vertex at location
                 let vertex = this.model.vertexAt(params.x, params.y);
@@ -156,10 +156,37 @@ define(['classes/graph/GraphModel',
         {
             this.clearMouseEvents();
 
-            this.view.onCanvasClicked.attach('onCanvasClicked', function(_, params)
+            this.view.onCanvasClicked.attach('createEdge', function(_, params)
             {
-                this.mouseEventsLogged.push('onCanvasClicked');
+                this.mouseEventsLogged.push('createEdge');
                 
+                let vertex = this.model.vertexAt(params.x, params.y);
+
+                if(vertex)
+                {
+                    if(this.vertexSelected)
+                    {
+                        graph.dispatch
+                        ({
+                            type: 'addEdge',
+                            data: 
+                            {
+                                
+                            },
+                            undo: 'removeEdge'
+                        });
+                    }
+                    else
+                    {
+                        // highlight vertex
+                        // stick line to cursor from vertex
+                        this.vertexSelected = true;
+                    }
+                }
+                else if(this.vertexSelected)
+                {
+                    this.vertexSelected = false;
+                }
 
             }.bind(this));
         },
