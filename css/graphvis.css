@@ -164,12 +164,3 @@ li {
             -5px 0 20px #ff9a00,
             5px 0 20px #ff9a00;
 }
-
-.anim, .anim svg {
-    position: relative;
-    width: 100%;
-    height: 100%;
-}
-.anim path {
-    stroke-width: 2;
-}
