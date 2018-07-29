@@ -34,26 +34,4 @@
          graph.appendTo(document.getElementById('main'));
          graph.start();
      }
-
-     document.getElementById("hide-ui").onclick = function() {hideUI()};
-
-     function hideUI() {
-         let components = document.getElementsByClassName("ui-component");
-
-         if(document.getElementById("hide-ui").innerHTML === "Hide UI") {
-             for(let i = 0; i < components.length; i++)
-             {
-                 components[i].style.display = "none";
-             }
-             document.getElementById("hide-ui").innerHTML = "Show UI";
-         } else {
-             for(let i = 0; i < components.length; i++)
-             {
-                 components[i].style.display = "block";
-             }
-             document.getElementById("hide-ui").innerHTML = "Hide UI";
-         }
-
-
-     }
  });
