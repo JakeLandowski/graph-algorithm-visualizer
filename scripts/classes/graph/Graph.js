@@ -29,6 +29,8 @@ define(['classes/graph/GraphModel',
         this.view  = new GraphView(this.model,      this.two,        this.config);
         // this.initHandlers();
         this.initSymbols();
+
+        this.mouseEventsLogged = [];
     };
 
     Graph.prototype = 
@@ -75,26 +77,53 @@ define(['classes/graph/GraphModel',
 
         vertexMode()
         {
+            this.clearMouseEvents();
+
             this.view.onCanvasClicked.attach('onCanvasClicked', function(_, params)
             {
+                this.mouseEventsLogged.push('onCanvasClicked');
                 // see if clicked on vertex here using model
                 // if clicked on vertex tell model to delete
                 let vertex = this.model.vertexAt(params.x, params.y);
 
                 if(vertex)
                 {
-                    this.model.removeVertex(vertex);
+                    this.model.dispatch
+                    ({
+                        type: 'removeVertex',
+                        data: 
+                        {
+                            symbol: this.getSymbol(),
+                            x: params.x,
+                            y: params.y   
+                        },
+                        undo: 'addVertex'
+                    });
+                    // this.model.removeVertex(vertex);
                     this.returnSymbol(vertex.data);
                 }
                 else if(this.symbols.length > 0)
                 {   
-                    this.model.addVertex(this.getSymbol(), params.x, params.y);
+                    this.model.dispatch
+                    ({
+                        type: 'addVertex',
+                        data: 
+                        {
+                            symbol: this.getSymbol(),
+                            x: params.x,
+                            y: params.y   
+                        },
+                        undo: 'removeVertex'
+                    });
+                    // this.model.addVertex(this.getSymbol(), params.x, params.y);
                 }
 
             }.bind(this));
 
             this.view.onCanvasMouseDown.attach('onCanvasMouseDown', function(_, params)
             {
+                this.mouseEventsLogged.push('onCanvasMouseDown');
+
                 // locate vertex at location
                 let vertex = this.model.vertexAt(params.x, params.y);
 
@@ -144,6 +173,7 @@ define(['classes/graph/GraphModel',
         start()
         {
             this.two.play();
+            this.vertexMode();
         },
 
         render()
@@ -167,6 +197,19 @@ define(['classes/graph/GraphModel',
         {
             this.symbols.push(symbol);
             delete this.usedSymbols[symbol];
+        },
+
+        clearMouseEvents()
+        {
+            let view = this.view;
+            this.mouseEventsLogged.forEach(function(eventName)
+            {
+                view.onCanvasClicked.detach(eventName);
+                view.onCanvasMouseMove.detach(eventName);
+                view.onCanvasMouseDrag.detach(eventName);
+                view.onCanvasMouseDown.detach(eventName);
+                view.onCanvasMouseUp.detach(eventName);
+            });
         },
 
 //======== DEBUG =============/

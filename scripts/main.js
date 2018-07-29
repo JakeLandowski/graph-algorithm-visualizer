@@ -26,7 +26,8 @@
     graph.appendTo(document.getElementById('main'));
     graph.start();
 
-    document.getElementById("createnewbtn").onclick = function() {clearCanvas()};
+    document.getElementById("createnewbtn").addEventListener('click', function() { clearCanvas(); });
+    document.getElementById('undo').addEventListener('click', function() { graph.undo(); });
 
      function clearCanvas() {
          document.getElementById("main").innerHTML = "";

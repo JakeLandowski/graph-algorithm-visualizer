@@ -6,8 +6,8 @@
  *  Represents the data structure for the Graph class..
  */
 
-define(['classes/Event', 'classes/graph/Vertex', 'classes/SpacialIndex'], 
-function(Event, Vertex, SpacialIndex)
+define(['classes/Event', 'classes/graph/Vertex', 'classes/SpacialIndex', 'classes/CommandLog'], 
+function(Event, Vertex, SpacialIndex, CommandLog)
 {
     console.log('GraphModel Class loaded');
 
@@ -29,12 +29,39 @@ function(Event, Vertex, SpacialIndex)
         this.onVertexRemoved = new Event(this);
         this.onEdgeAdded     = new Event(this);
         this.onVertexMoved   = new Event(this);
+
+        this.userCommands = new CommandLog();
     };
 
     GraphModel.prototype = 
     {
-        addVertex(data, x, y)
+        dispatch(command)
         {
+            if(this[command.type])
+            {
+                this[command.type](command.data);
+            }
+            else throw 'Tried to run non-existant command ' + command.type;
+
+            this.userCommands.record(command);
+        },
+
+        undo()
+        {
+            let command = this.userCommands.undo();
+            if(this[command.undo])
+                this[command.undo](command.data);
+        },
+
+        addVertex(args={})
+        {
+            if(args.symbol === undefined || args.x === undefined || args.y === undefined)
+                throw 'Missing arguments for addVertex command';
+
+            let data = args.symbol;
+            let x = args.x;
+            let y = args.y;
+
             if(!this.adjList[data]) 
             {
                 let vertex = new Vertex(data, x, y);
@@ -45,16 +72,19 @@ function(Event, Vertex, SpacialIndex)
             }
         },
 
-        removeVertex(vertex)
+        removeVertex(args={})
         {
-            let data = vertex.data;
+            if(args.symbol === undefined)
+                throw 'Missing arguments for removeVertex command';
+
+            let data = args.symbol;
 
             if(this.adjList[data])
             {
                 let removed = this.adjList[data];
+                this.vertexSpacialIndex.remove(removed);
                 delete this.adjList[data];
 
-                this.vertexSpacialIndex.remove(vertex);
 
                 // NEED TO CLEANUP EDGE REFERENCES LATER
 
