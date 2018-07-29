@@ -27,7 +27,7 @@ define(['classes/graph/GraphModel',
         this.initConfig();
         this.model = new GraphModel(this.two.width, this.two.height, this.config);
         this.view  = new GraphView(this.model,      this.two,        this.config);
-        this.initHandlers();
+        // this.initHandlers();
         this.initSymbols();
     };
 
@@ -53,9 +53,28 @@ define(['classes/graph/GraphModel',
             this.config.edgeWidth = 1;
         },
 
-        initHandlers()
+        // initHandlers()
+        // {
+        //     this.view.onCanvasMouseUp.attach('onCanvasMouseUp', function(_, params)
+        //     {
+
+        //     }.bind(this));
+
+        //     this.view.onCanvasMouseMove.attach('onCanvasMouseMove', function(_, params)
+        //     {
+
+        //     }.bind(this));
+
+        //     this.view.onCanvasMouseDrag.attach('onCanvasMouseDrag', function(_, params)
+        //     {
+
+        //     }.bind(this));
+        // },
+
+//====================== UI Hooks ===========================//
+
+        vertexMode()
         {
-            // On Click
             this.view.onCanvasClicked.attach('onCanvasClicked', function(_, params)
             {
                 // see if clicked on vertex here using model
@@ -66,7 +85,6 @@ define(['classes/graph/GraphModel',
                 {
                     this.model.removeVertex(vertex);
                     this.returnSymbol(vertex.data);
-                    console.log('removed vertex ' + vertex.id + ': ' + vertex.x + ', ' + vertex.y);
                 }
                 else if(this.symbols.length > 0)
                 {   
@@ -75,7 +93,6 @@ define(['classes/graph/GraphModel',
 
             }.bind(this));
 
-            // On Mouse Down
             this.view.onCanvasMouseDown.attach('onCanvasMouseDown', function(_, params)
             {
                 // locate vertex at location
@@ -103,24 +120,6 @@ define(['classes/graph/GraphModel',
                     this.view.onCanvasMouseDrag.attach('stickVertexToCursor', stickVertexToCursor.bind(this));
                     this.view.onCanvasMouseUp.attach('releaseVertexFromCursor', releaseVertexFromCursor.bind(this));
                 }
-
-            }.bind(this));
-
-            // On Mouse Up
-            this.view.onCanvasMouseUp.attach('onCanvasMouseUp', function(_, params)
-            {
-
-            }.bind(this));
-
-            // On Mouse Move
-            this.view.onCanvasMouseMove.attach('onCanvasMouseMove', function(_, params)
-            {
-
-            }.bind(this));
-
-            // On Mouse Drag
-            this.view.onCanvasMouseDrag.attach('onCanvasMouseDrag', function(_, params)
-            {
 
             }.bind(this));
         },
