@@ -13,7 +13,10 @@
 </head>
 <body>
     <h1 id="title">Graph Visualizer</h1>
-    <button id="createnewbtn" class="future ui-component">New Graph</button>
+    <svg id="createnewbtn" class="future ui-component" width="200" height="0">
+        <rect width="200" height="0">Create New</rect>
+        <text x="25" y="35" font-family="Verdana" font-size="24" fill="blue">Create New</text>
+    </svg>
     <div class="premade ui-component">
         <button class="future premadebtn">Preset Graphs</button>
         <div class="future premade-content">
@@ -41,7 +44,10 @@
         <li><button class="future toolsbtn">Move Vertex</button></li>
     </ul>
 
-    <button id="hide-ui" class="future">Hide UI</button>
+    <svg id="hide-ui" class="future" width="200" height="0">
+        <rect width="200" height="0">Create New</rect>
+        <text x="25" y="19" font-family="Verdana" font-size="18" fill="blue">Hide UI</text>
+    </svg>
 
     <div id="main"></div>
 
