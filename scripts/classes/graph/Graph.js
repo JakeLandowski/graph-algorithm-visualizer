@@ -28,7 +28,7 @@ define(['classes/graph/GraphModel',
         {
             vertexSize:        config.vertexSize        || 25,
             vertexOutlineSize: config.vertexOutlineSize || 3,
-            edgeWidth:         config.edgeWidth         || 1
+            edgeWidth:         config.edgeWidth         || 5
         };
 
         this.model = new GraphModel(this.two.width, this.two.height, this.config);
@@ -76,12 +76,11 @@ define(['classes/graph/GraphModel',
                         {
                             symbol: vertex.data,
                             x: params.x,
-                            y: params.y   
+                            y: params.y,
+                            returnSymbol: this.returnSymbol.bind(this)
                         },
-                        undo: 'addVertex'
+                        undo: 'addVertex',
                     });
-
-                    this.returnSymbol(vertex.data);
                 }
                 else if(this.symbols.length > 0) // ADD
                 {   
@@ -92,7 +91,8 @@ define(['classes/graph/GraphModel',
                         {
                             symbol: this.getSymbol(),
                             x: params.x,
-                            y: params.y   
+                            y: params.y,
+                            returnSymbol: this.returnSymbol.bind(this)   
                         },
                         undo: 'removeVertex'
                     });
@@ -250,6 +250,7 @@ define(['classes/graph/GraphModel',
         {
             this.symbols.push(symbol);
             delete this.usedSymbols[symbol];
+            console.log('returned');
         },
 
         clearMouseEvents()

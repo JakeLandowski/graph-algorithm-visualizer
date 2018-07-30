@@ -6,8 +6,8 @@
  *  Represents the data structure for the Graph class..
  */
 
-define(['classes/Event', 'classes/graph/Vertex', 'classes/SpacialIndex', 'classes/CommandLog'], 
-function(Event, Vertex, SpacialIndex, CommandLog)
+define(['classes/Event', 'classes/graph/Vertex', 'classes/graph/Edge', 'classes/SpacialIndex', 'classes/CommandLog'], 
+function(Event, Vertex, Edge, SpacialIndex, CommandLog)
 {
     console.log('GraphModel Class loaded');
 
@@ -22,6 +22,8 @@ function(Event, Vertex, SpacialIndex, CommandLog)
         this.setDimensions(width, height);
 
         this.adjList      = Object.create(null); // non-inheriting object
+        this.edgeMap      = Object.create(null); 
+        this.edgeSpacialIndex   = new SpacialIndex(this.cellWidth, this.cellHeight, this.cellRatio);
         this.vertexSpacialIndex = new SpacialIndex(this.cellWidth, this.cellHeight, this.cellRatio);
         this.vertexId = 0;
 
@@ -36,7 +38,7 @@ function(Event, Vertex, SpacialIndex, CommandLog)
         this.onTrackingEdgeMoved   = new Event(this);
         
         this.onEdgeAdded           = new Event(this);
-
+ 
         this.userCommands = new CommandLog();
     };
 
@@ -92,6 +94,7 @@ function(Event, Vertex, SpacialIndex, CommandLog)
                 this.vertexSpacialIndex.remove(removed);
                 delete this.adjList[data];
 
+                if(args.returnSymbol) args.returnSymbol(data);
 
                 // NEED TO CLEANUP EDGE REFERENCES LATER
 
@@ -100,25 +103,32 @@ function(Event, Vertex, SpacialIndex, CommandLog)
         },
 
         // NEEDS REWORK FOR EDGE OBJECTS AND SUCH
-        addEdge(to, from)
+        addEdge(args={})
         {
-            console.log('add edge called');
-            // need to create an edge object in model that contains to/from pointers
-            // const list = this.adjList;
+            const to   = args.to;
+            const from = args.from;
 
-            // if(list[to] === undefined && list[from] === undefined) 
-            //     throw 'Tried to create edge for 2 non-existent vertices.';
-            // else if(list[to] === undefined) 
-            //     throw 'Tried to create edge to a non-existent vertex.';
-            // else if(list[from] === undefined) 
-            //     throw 'Tried to create edge from a non-existent vertex.';
-            // else
-            // {
-            //     // need to have key reference object not key again
-            //     list[to].neighors[from] = from;
-            //     list[from].neighors[to] = to;
-            //     this.onEdgeAdded.notify({ to: to, from: from });
-            // }
+            if(to === undefined || from === undefined)
+                throw 'Missing arguments for addEdge command';
+            else if(this.adjList[to.data] === undefined || this.adjList[from.data] === undefined)
+                throw 'Missing vertices in adjList for addEdge command';
+            else
+            {
+                this.adjList[to.data].neighbors[from.data] = from.data;
+                this.adjList[from.data].neighbors[to.data] = to.data;
+                
+                let edge = new Edge(args.to, args.from);
+                this.edgeMap[ [to.data, from.data] ] = edge;
+                this.edgeSpacialIndex.add(edge);
+                
+                this.onEdgeAdded.notify
+                ({ 
+                    to:        to.data, 
+                    from:      from.data,
+                    toPoint:   { x: from.x, y: from.y },
+                    fromPoint: { x: to.x,   y: to.y   }    
+                });
+            }
         },
 
         softMoveVertex(vertex, x, y)

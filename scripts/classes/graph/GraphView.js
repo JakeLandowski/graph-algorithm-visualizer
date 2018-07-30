@@ -172,7 +172,8 @@ if(window.DEBUG_MODE)
             this.model.onEdgeAdded.attach('createEdge', function(_, params)
             {
                 // Create new edge line and store it
-                let edge = this.two.makeLine(0, 0, 200, 200);
+                let edge = this.two.makeLine(params.fromPoint.x, params.fromPoint.y, 
+                                             params.toPoint.x,   params.toPoint.y);
                 edge.stroke = "black";
                 edge.linewidth = this.config.edgeWidth;
 
@@ -195,14 +196,6 @@ if(window.DEBUG_MODE)
 
         initCanvasHandlers()
         {
-            // MAY NEVER NEED AGAIN BAKED INTO MOUSEUP
-            // this.canvas.addEventListener('click', function(event)
-            // {
-            //     event.preventDefault();
-            //     this.onCanvasMouseClick.notify({x: event.offsetX, y: event.offsetY});
-            
-            // }.bind(this));
-
             this.canvas.addEventListener('mousedown', function(event)
             {
                 event.preventDefault(); 
@@ -238,6 +231,7 @@ if(window.DEBUG_MODE)
             
             }.bind(this));
 
+            // Adds a small delay before triggering a mouse move event
             this.canvas.addEventListener('mousemove', Util.stagger(function(event)
             {
                 event.preventDefault();
