@@ -34,14 +34,30 @@
         <button class="mediabutton fa fa-angle-double-right" style="font-size:48px;"></button>
     </div>
 
-    <div id="toolslabel" class="ui-component">
-        <i class="material-icons" style="font-size:48px;color:#ff9a00">device_hub</i>
+    <div class="ui-component">
+        <i id="hide-tools" class="material-icons" style="font-size:48px;color:#ff9a00">device_hub</i>
     </div>
     <ul class="tools ui-component">
-        <li><button class="future toolsbtn">Add/Remove Vertex</button></li>
-        <li><button class="future toolsbtn">Add/Remove Edge</button></li>
-        <li><button class="future toolsbtn">Add/Edit Edge Weight</button></li>
-        <li><button id="undo" class="future toolsbtn">Undo</button></li>
+        <li>
+            <svg class="future toolsbtn" width="200" height="0">
+                <rect width="200" height="0">Create New</rect>
+                <text x="25" y="19" font-family="Exo 2" font-size="18" fill="#ff9a00">Add/Remove Vertex</text>
+            </svg>
+        </li>
+        <li><svg class="future toolsbtn" width="200" height="0">
+            <rect width="200" height="0">Create New</rect>
+            <text x="25" y="19" font-family="Exo 2" font-size="18" fill="#ff9a00">Add/Remove Edge</text>
+        </svg>
+        </li>
+        <li><svg class="future toolsbtn" width="200" height="0">
+            <rect width="200" height="0">Create New</rect>
+            <text x="25" y="19" font-family="Exo 2" font-size="18" fill="#ff9a00">Add/Edit Edge Weight</text>
+        </svg></li>
+        <li>
+        <svg id="undo" class="future toolsbtn" width="200" height="0">
+            <rect width="200" height="0">Create New</rect>
+            <text x="25" y="19" font-family="Exo 2" font-size="18" fill="#ff9a00">Undo</text>
+        </svg></li>
     </ul>
 
     <svg id="hide-ui" class="future" width="200" height="0">

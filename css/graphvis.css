@@ -1,3 +1,7 @@
+html, body {
+    overflow-x: hidden;
+}
+
 #main
 {
     position: absolute;
@@ -103,26 +107,31 @@
     left: -200px;
 }
 
-#toolslabel {
+#hide-tools {
     right: 5%;
     top: 10%;
     position: absolute;
     color:  #ff9a00;
+    border-left: 2px solid #ff9a00;
+    padding-left: 5px;
+}
+
+#hide-tools:hover {
+    background-color: #262626;
+    cursor: pointer;
+
 }
 
 .tools {
-    right: 5%;
+    right: -240px;
     top: 15%;
     position: absolute;
     z-index: 1;
-    display: inline-block;
     list-style: none;
 }
 
 /* Dropdown Button */
 .toolsbtn {
-    width: 200px;
-    height: 50px;
     padding: 16px;
     font-size: 16px;
 }

@@ -178,7 +178,7 @@ define(['classes/graph/GraphModel',
 
             function stickEdgeToCursor(_, point)
             {
-                
+
             }
 
             function releaseEdgeFromCursor(_, point)
