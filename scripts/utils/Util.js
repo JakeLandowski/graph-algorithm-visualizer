@@ -36,6 +36,22 @@ define(function()
                 if(timer) clearTimeout(timer);
                 timer = setTimeout(callback, delay, event);
             };
+        },
+
+        /**
+         *  Get {x, y} position of a given line, 
+         *  true for starting point
+         *  false for ending point.
+         * 
+         *  @param line 
+         *  @param start true if wanting position for starting point
+         */
+        linePosition(line, start=true)
+        {
+            return {
+                x: line.vertices[start ? 0 : 1].x + line.translation.x,
+                y: line.vertices[start ? 0 : 1].y + line.translation.y
+            };
         }
 
     }; // end module
