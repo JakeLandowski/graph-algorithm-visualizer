@@ -27,15 +27,16 @@ if(window.DEBUG_MODE)
 }
 //======== DEBUG =============/
 
+
         this.edgeGroup = this.two.makeGroup();
         this.edgeRenderingGroup = this.two.makeGroup();
-        
+
         this.vertexGroup = this.two.makeGroup();
         this.vertexRenderingGroup = this.two.makeGroup();
 
         this.graphGroup = this.two.makeGroup();
-        this.graphGroup.add(this.vertexGroup, this.vertexRenderingGroup,
-                            this.edgeGroup,   this.edgeRenderingGroup);
+        this.graphGroup.add(this.edgeGroup,   this.edgeRenderingGroup,
+                            this.vertexGroup, this.vertexRenderingGroup,);
         
 
         // For mapping data in model to their view shape equivalent
@@ -174,8 +175,9 @@ if(window.DEBUG_MODE)
                 // Create new edge line and store it
                 let edge = this.two.makeLine(params.fromPoint.x, params.fromPoint.y, 
                                              params.toPoint.x,   params.toPoint.y);
-                edge.stroke = "black";
+                edge.stroke = "rgb(255, 255, 100)";
                 edge.linewidth = this.config.edgeWidth;
+                this.edgeGroup.add(edge);
 
                 this.edgeMap[ [params.to, params.from] ] = edge;
             
