@@ -25,12 +25,17 @@ function(Event, Vertex, SpacialIndex, CommandLog)
         this.vertexSpacialIndex = new SpacialIndex(this.cellWidth, this.cellHeight, this.cellRatio);
         this.vertexId = 0;
 
-        this.onVertexAdded      = new Event(this);
-        this.onVertexRemoved    = new Event(this);
-        this.onVertexMoved      = new Event(this);
-        this.onVertexSelected   = new Event(this);
-        this.onVertexDeselected = new Event(this);
-        this.onEdgeAdded        = new Event(this);
+        this.onVertexAdded         = new Event(this);
+        this.onVertexRemoved       = new Event(this);
+        this.onVertexMoved         = new Event(this);
+        this.onVertexSelected      = new Event(this);
+        this.onVertexDeselected    = new Event(this);
+
+        this.onTrackingEdgeAdded   = new Event(this);
+        this.onTrackingEdgeRemoved = new Event(this);
+        this.onTrackingEdgeMoved   = new Event(this);
+        
+        this.onEdgeAdded           = new Event(this);
 
         this.userCommands = new CommandLog();
     };
@@ -97,22 +102,23 @@ function(Event, Vertex, SpacialIndex, CommandLog)
         // NEEDS REWORK FOR EDGE OBJECTS AND SUCH
         addEdge(to, from)
         {
+            console.log('add edge called');
             // need to create an edge object in model that contains to/from pointers
-            const list = this.adjList;
+            // const list = this.adjList;
 
-            if(list[to] === undefined && list[from] === undefined) 
-                throw 'Tried to create edge for 2 non-existent vertices.';
-            else if(list[to] === undefined) 
-                throw 'Tried to create edge to a non-existent vertex.';
-            else if(list[from] === undefined) 
-                throw 'Tried to create edge from a non-existent vertex.';
-            else
-            {
-                // need to have key reference object not key again
-                list[to].neighors[from] = from;
-                list[from].neighors[to] = to;
-                this.onEdgeAdded.notify({ to: to, from: from });
-            }
+            // if(list[to] === undefined && list[from] === undefined) 
+            //     throw 'Tried to create edge for 2 non-existent vertices.';
+            // else if(list[to] === undefined) 
+            //     throw 'Tried to create edge to a non-existent vertex.';
+            // else if(list[from] === undefined) 
+            //     throw 'Tried to create edge from a non-existent vertex.';
+            // else
+            // {
+            //     // need to have key reference object not key again
+            //     list[to].neighors[from] = from;
+            //     list[from].neighors[to] = to;
+            //     this.onEdgeAdded.notify({ to: to, from: from });
+            // }
         },
 
         softMoveVertex(vertex, x, y)
@@ -140,9 +146,37 @@ function(Event, Vertex, SpacialIndex, CommandLog)
             this.selectedVertex = null;
         },
 
-        edgeSelectedVertexToCursor()
+        addTrackingEdge(x, y)
         {
+            // MAY NOT NEED THIS OBJECT
+            this.trackingEdge = 
+            {
+                x: x,
+                y: y
+            };
 
+            this.onTrackingEdgeAdded.notify
+            ({ 
+                start: { x: this.selectedVertex.x, y: this.selectedVertex.y },
+                end:   { x: x, y: y }, 
+            });
+        },
+
+        updateTrackingEdge(x, y)
+        {
+            // MAY NOT NEED THIS OBJECT
+            this.trackingEdge.x = x;
+            this.trackingEdge.y = y;
+
+            this.onTrackingEdgeMoved.notify({ x: x, y: y });
+        },
+
+        releaseTrackingEdge()
+        {
+            // MAY NOT NEED THIS OBJECT
+            this.trackingEdge = null;
+
+            this.onTrackingEdgeRemoved.notify({});
         },
 
         resize(width, height)

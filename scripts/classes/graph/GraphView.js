@@ -42,11 +42,11 @@ if(window.DEBUG_MODE)
         this.vertexMap = Object.create(null);
         this.edgeMap   = Object.create(null);
 
-        this.onCanvasClicked   = new Event(this);
-        this.onCanvasMouseDown = new Event(this);
-        this.onCanvasMouseUp   = new Event(this);
-        this.onCanvasMouseMove = new Event(this);
-        this.onCanvasMouseDrag = new Event(this);
+        this.onCanvasMouseClick = new Event(this);
+        this.onCanvasMouseDown  = new Event(this);
+        this.onCanvasMouseUp    = new Event(this);
+        this.onCanvasMouseMove  = new Event(this);
+        this.onCanvasMouseDrag  = new Event(this);
 
         this.mouseMoved = false;
         this.mouseDown  = false;
@@ -61,15 +61,19 @@ if(window.DEBUG_MODE)
     GraphView.prototype = 
     {
 
-//========= Model Listeners ===========//
         initHandlers()
         {
+
+//========= Vertex Listeners ===========//
+
             // Vertex Added
             this.model.onVertexAdded.attach('createVertex', function(_, params)
             {
                 // Create new vertex shape and store it
                 let vertex = this.two.makeCircle(params.x, params.y, this.config.vertexSize);
-                vertex.fill = "#ff9a00";
+                vertex.fill = '#ff9a00';
+                vertex.stroke = '#dd6900';
+
                 vertex.linewidth = this.config.vertexOutlineSize;
 
                 let text = this.two.makeText(params.data, params.x, params.y);
@@ -109,6 +113,61 @@ if(window.DEBUG_MODE)
 
             }.bind(this));
 
+            // Vertex Selected
+            this.model.onVertexSelected.attach('selectVertex', function(_, params)
+            {
+                if(this.vertexMap[params.data])
+                {
+                    this.vertexMap[params.data].circle.stroke = '#fffc55';
+                }
+            
+            }.bind(this));
+
+            // Vertex Deselected
+            this.model.onVertexDeselected.attach('deselectVertex', function(_, params)
+            {
+                if(this.vertexMap[params.data])
+                {
+                    this.vertexMap[params.data].circle.stroke = '#dd6900';
+                }                 
+
+            }.bind(this));
+
+//========= Edge Listeners ===========//
+
+            // Tracking Edge Added
+            this.model.onTrackingEdgeAdded.attach('trackingEdgeAdded', function(_, params)
+            {
+                let start = params.start;
+                let end   = params.end;
+
+                this.trackingEdge = this.two.makeLine(start.x, start.y, end.x, end.y);
+                this.trackingEdge.stroke = 'rgba(255, 255, 100, 0.5)';
+                this.trackingEdge.linewidth = this.config.edgeWidth;
+                this.edgeGroup.add(this.trackingEdge);
+
+            }.bind(this));
+
+            // Tracking Edge Moved
+            this.model.onTrackingEdgeMoved.attach('trackingEdgeMoved', function(_, params)
+            {
+                let edge = this.trackingEdge;
+                let end = Util.linePosition(edge);
+
+                edge.vertices[1].x = params.x - end.x;
+                edge.vertices[1].y = params.y - end.y;
+
+            }.bind(this));
+
+            // Tracking Edge Removed
+            this.model.onTrackingEdgeRemoved.attach('trackingEdgeRemoved', function(_, params)
+            {
+                this.edgeGroup.remove(this.trackingEdge);
+                this.trackingEdge.remove()
+                delete this.trackingEdge;                                
+
+            }.bind(this));
+
             // Edge Added
             this.model.onEdgeAdded.attach('createEdge', function(_, params)
             {
@@ -120,6 +179,7 @@ if(window.DEBUG_MODE)
                 this.edgeMap[ [params.to, params.from] ] = edge;
             
             }.bind(this));
+
         },
 
 //========= Event Handlers ===========//
@@ -139,7 +199,7 @@ if(window.DEBUG_MODE)
             // this.canvas.addEventListener('click', function(event)
             // {
             //     event.preventDefault();
-            //     this.onCanvasClicked.notify({x: event.offsetX, y: event.offsetY});
+            //     this.onCanvasMouseClick.notify({x: event.offsetX, y: event.offsetY});
             
             // }.bind(this));
 
@@ -159,7 +219,7 @@ if(window.DEBUG_MODE)
                 this.mouseDown = false;
                 
                 if(!this.mouseMoved)
-                    this.onCanvasClicked.notify({x: event.offsetX, y: event.offsetY});
+                    this.onCanvasMouseClick.notify({x: event.offsetX, y: event.offsetY});
             
             }.bind(this));
 

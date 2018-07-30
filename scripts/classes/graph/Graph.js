@@ -27,7 +27,7 @@ define(['classes/graph/GraphModel',
         this.config = 
         {
             vertexSize:        config.vertexSize        || 25,
-            vertexOutlineSize: config.vertexOutlineSize || 0,
+            vertexOutlineSize: config.vertexOutlineSize || 3,
             edgeWidth:         config.edgeWidth         || 1
         };
 
@@ -59,7 +59,7 @@ define(['classes/graph/GraphModel',
         {
             this.clearMouseEvents();
 
-            this.view.onCanvasClicked.attach('clickVertex', function(_, params)
+            this.view.onCanvasMouseClick.attach('clickVertex', function(_, params)
             {
                 this.mouseEventsLogged.push('clickVertex');
 
@@ -137,34 +137,41 @@ define(['classes/graph/GraphModel',
         {
             this.clearMouseEvents();
 
-            this.view.onCanvasClicked.attach('createEdge', function(_, params)
+            this.view.onCanvasMouseClick.attach('createEdge', function(_, params)
             {
                 this.mouseEventsLogged.push('createEdge');
                 
-                let vertex = this.model.vertexAt(params.x, params.y);
+                let vertex   = this.model.vertexAt(params.x, params.y);
+                let selected = this.model.selectedVertex; 
 
                 if(vertex)
                 {
-                    if(this.model.selectedVertex)
+                    if(selected)
                     {
-                        this.model.dispatch
-                        ({
-                            type: 'addEdge',
-                            data: 
-                            {
-                                to: vertex,
-                                from: this.model.selectedVertex, 
-                            },
-                            undo: 'removeEdge'
-                        });
+                        // If select same vertex twice
+                        if(selected.data !== vertex.data)
+                        {
+                            this.model.dispatch
+                            ({
+                                type: 'addEdge',
+                                data: 
+                                {
+                                    to: vertex,
+                                    from: selected, 
+                                },
+                                undo: 'removeEdge'
+                            });
+                        }
+
+                        this.model.deselectVertex();
                     }
                     else
                     {
                         this.model.selectVertex(vertex);
-                        this.edgeSelectedVertexToCursor();
+                        this.trackEdgeToCursor(params.x, params.y);
                     }
                 }
-                else if(this.model.selectedVertex)
+                else if(selected)
                 {
                     this.model.deselectVertex();
                 }
@@ -172,19 +179,20 @@ define(['classes/graph/GraphModel',
             }.bind(this));
         },
 
-        edgeSelectedVertexToCursor()
+        trackEdgeToCursor(x, y)
         {
-            this.model.edgeSelectedVertexToCursor();
+            this.model.addTrackingEdge(x, y);
 
             function stickEdgeToCursor(_, point)
             {
-
+                this.model.updateTrackingEdge(point.x, point.y);
             }
 
             function releaseEdgeFromCursor(_, point)
             {
                 this.view.onCanvasMouseMove.detach('stickEdgeToCursor');
                 this.view.onCanvasMouseClick.detach('releaseEdgeFromCursor');
+                this.model.releaseTrackingEdge();
             }
 
             this.view.onCanvasMouseMove.attach('stickEdgeToCursor', stickEdgeToCursor.bind(this));
@@ -249,7 +257,7 @@ define(['classes/graph/GraphModel',
             let view = this.view;
             this.mouseEventsLogged.forEach(function(eventName)
             {
-                view.onCanvasClicked.detach(eventName);
+                view.onCanvasMouseClick.detach(eventName);
                 view.onCanvasMouseMove.detach(eventName);
                 view.onCanvasMouseDrag.detach(eventName);
                 view.onCanvasMouseDown.detach(eventName);

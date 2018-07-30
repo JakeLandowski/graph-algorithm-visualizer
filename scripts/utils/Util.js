@@ -40,17 +40,17 @@ define(function()
 
         /**
          *  Get {x, y} position of a given line, 
-         *  true for starting point
-         *  false for ending point.
+         *  true for ending point
+         *  false for starting point.
          * 
          *  @param line 
-         *  @param start true if wanting position for starting point
+         *  @param end true if wanting position for ending point
          */
-        linePosition(line, start=true)
+        linePosition(line, end=true)
         {
             return {
-                x: line.vertices[start ? 0 : 1].x + line.translation.x,
-                y: line.vertices[start ? 0 : 1].y + line.translation.y
+                x: line.vertices[end ? 0 : 1].x + line.translation.x,
+                y: line.vertices[end ? 0 : 1].y + line.translation.y
             };
         }
 
