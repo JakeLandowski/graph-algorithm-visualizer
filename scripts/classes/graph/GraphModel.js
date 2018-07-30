@@ -25,10 +25,12 @@ function(Event, Vertex, SpacialIndex, CommandLog)
         this.vertexSpacialIndex = new SpacialIndex(this.cellWidth, this.cellHeight, this.cellRatio);
         this.vertexId = 0;
 
-        this.onVertexAdded   = new Event(this);
-        this.onVertexRemoved = new Event(this);
-        this.onEdgeAdded     = new Event(this);
-        this.onVertexMoved   = new Event(this);
+        this.onVertexAdded      = new Event(this);
+        this.onVertexRemoved    = new Event(this);
+        this.onVertexMoved      = new Event(this);
+        this.onVertexSelected   = new Event(this);
+        this.onVertexDeselected = new Event(this);
+        this.onEdgeAdded        = new Event(this);
 
         this.userCommands = new CommandLog();
     };
@@ -123,6 +125,24 @@ function(Event, Vertex, SpacialIndex, CommandLog)
             vertex.setPoints(x, y);
             this.vertexSpacialIndex.update(vertex, x, y);
             this.softMoveVertex(vertex, x, y);
+        },
+
+        selectVertex(vertex)
+        {
+            this.selectedVertex = vertex;
+            this.onVertexSelected.notify({ data: vertex.data, x: vertex.x, y: vertex.y });
+        },
+
+        deselectVertex()
+        {
+            let vertex = this.selectedVertex;
+            this.onVertexDeselected.notify({ data: vertex.data, x: vertex.x, y: vertex.y });
+            this.selectedVertex = null;
+        },
+
+        edgeSelectedVertexToCursor()
+        {
+
         },
 
         resize(width, height)
