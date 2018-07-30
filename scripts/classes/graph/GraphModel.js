@@ -38,6 +38,7 @@ function(Event, Vertex, Edge, SpacialIndex, CommandLog)
         this.onTrackingEdgeMoved   = new Event(this);
         
         this.onEdgeAdded           = new Event(this);
+        this.onEdgeRemoved         = new Event(this);
  
         this.userCommands = new CommandLog();
     };
@@ -117,7 +118,7 @@ function(Event, Vertex, Edge, SpacialIndex, CommandLog)
                 this.adjList[to.data].neighbors[from.data] = from.data;
                 this.adjList[from.data].neighbors[to.data] = to.data;
                 
-                let edge = new Edge(args.to, args.from);
+                let edge = new Edge(args.to, args.from, this.config.edgeBoxSize);
                 this.edgeMap[ [to.data, from.data] ] = edge;
                 this.edgeSpacialIndex.add(edge);
                 
@@ -125,9 +126,42 @@ function(Event, Vertex, Edge, SpacialIndex, CommandLog)
                 ({ 
                     to:        to.data, 
                     from:      from.data,
-                    toPoint:   { x: from.x, y: from.y },
-                    fromPoint: { x: to.x,   y: to.y   }    
+                    toPoint:   { x: to.x,   y: to.y   },
+                    fromPoint: { x: from.x, y: from.y },
+                    center:    { x: edge.x, y: edge.y }    
                 });
+            }
+        },
+
+        removeEdge(args={})
+        {
+            const to   = args.to;
+            const from = args.from;
+
+            if(to === undefined || from === undefined)
+                throw 'Missing arguments for removeEdge command';
+            else if(this.adjList[to.data] === undefined || this.adjList[from.data] === undefined)
+                throw 'Missing vertices in adjList for removeEdge command';
+            else
+            {
+                let edge = this.edgeMap[ [to.data, from.data] ];
+                
+                if(edge === undefined)
+                    throw 'edge was not found for removeEdge';
+                else
+                {
+                    this.edgeSpacialIndex.remove(edge);
+                    delete this.edgeMap[ [edge.toVertex.data, edge.fromVertex.data] ];
+        
+                    this.onEdgeRemoved.notify
+                    ({ 
+                        to:        to.data, 
+                        from:      from.data,
+                        toPoint:   { x: to.x,   y: to.y   },
+                        fromPoint: { x: from.x, y: from.y },
+                        center:    { x: edge.x, y: edge.y }    
+                    });
+                }
             }
         },
 
@@ -210,6 +244,11 @@ function(Event, Vertex, Edge, SpacialIndex, CommandLog)
         vertexAt(x, y)
         {
             return this.vertexSpacialIndex.getEntity(x, y);
+        },
+
+        edgeAt(x, y)
+        {
+            return this.edgeSpacialIndex.getEntity(x, y);
         }
     };
 

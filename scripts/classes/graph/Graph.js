@@ -28,7 +28,8 @@ define(['classes/graph/GraphModel',
         {
             vertexSize:        config.vertexSize        || 25,
             vertexOutlineSize: config.vertexOutlineSize || 3,
-            edgeWidth:         config.edgeWidth         || 5
+            edgeWidth:         config.edgeWidth         || 5,
+            edgeBoxSize:       config.edgeBoxSize       || 50
         };
 
         this.model = new GraphModel(this.two.width, this.two.height, this.config);
@@ -174,6 +175,24 @@ define(['classes/graph/GraphModel',
                 else if(selected)
                 {
                     this.model.deselectVertex();
+                }
+                else
+                {
+                    let edge = this.model.edgeAt(params.x, params.y);
+                    
+                    if(edge)
+                    {
+                        this.model.dispatch
+                        ({
+                            type: 'removeEdge',
+                            data: 
+                            {
+                                to: edge.toVertex,
+                                from: edge.fromVertex, 
+                            },
+                            undo: 'addEdge'
+                        });
+                    }
                 }
 
             }.bind(this));

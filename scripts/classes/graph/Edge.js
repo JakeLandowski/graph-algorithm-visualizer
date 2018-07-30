@@ -10,10 +10,10 @@ define(function()
 {
    console.log('Edge Class loaded');
 
-   const Edge = function(toVertex, fromVertex)
+   const Edge = function(toVertex, fromVertex, boxSize)
    {
         this.id         = 'Edge' + Edge.edgeId++,
-        this.boxSize    = 25;
+        this.boxSize    = boxSize;
         this.x          = (toVertex.x + fromVertex.x) / 2;
         this.y          = (toVertex.y + fromVertex.y) / 2; 
         this.toVertex   = toVertex;

@@ -71,8 +71,8 @@ if(window.DEBUG_MODE)
             this.model.onVertexAdded.attach('createVertex', function(_, params)
             {
                 // Create new vertex shape and store it
-                let vertex = this.two.makeCircle(params.x, params.y, this.config.vertexSize);
-                vertex.fill = '#ff9a00';
+                let vertex    = this.two.makeCircle(params.x, params.y, this.config.vertexSize);
+                vertex.fill   = '#ff9a00';
                 vertex.stroke = '#dd6900';
 
                 vertex.linewidth = this.config.vertexOutlineSize;
@@ -172,15 +172,34 @@ if(window.DEBUG_MODE)
             // Edge Added
             this.model.onEdgeAdded.attach('createEdge', function(_, params)
             {
-                // Create new edge line and store it
-                let edge = this.two.makeLine(params.fromPoint.x, params.fromPoint.y, 
-                                             params.toPoint.x,   params.toPoint.y);
-                edge.stroke = "rgb(255, 255, 100)";
-                edge.linewidth = this.config.edgeWidth;
-                this.edgeGroup.add(edge);
+                let edge = 
+                {
+                    line: this.two.makeLine(params.fromPoint.x, params.fromPoint.y, 
+                                            params.toPoint.x,   params.toPoint.y),
 
+                    box: this.two.makeRectangle(params.center.x, params.center.y, 
+                                                this.config.edgeBoxSize, this.config.edgeBoxSize)
+                };
+
+                edge.line.stroke = "rgb(255, 255, 100)";
+                edge.line.linewidth = this.config.edgeWidth;
+
+                edge.box.fill = 'rgb(255, 255, 100)';
+                
+                this.edgeGroup.add(edge.line, edge.box);
                 this.edgeMap[ [params.to, params.from] ] = edge;
             
+            }.bind(this));
+
+            // Edge Removed
+            this.model.onEdgeRemoved.attach('removeEdge', function(_, params)
+            {                
+                let edge = this.edgeMap[ [params.to, params.from] ];
+                this.edgeGroup.remove(edge.line, edge.box);
+                edge.line.remove();
+                edge.box.remove();
+                delete this.edgeMap[ [params.to, params.from] ];
+
             }.bind(this));
 
         },
