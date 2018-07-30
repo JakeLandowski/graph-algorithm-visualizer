@@ -79,9 +79,9 @@ define(['classes/graph/GraphModel',
         {
             this.clearMouseEvents();
 
-            this.view.onCanvasClicked.attach('onCanvasClicked', function(_, params)
+            this.view.onCanvasClicked.attach('clickVertex', function(_, params)
             {
-                this.mouseEventsLogged.push('onCanvasClicked');
+                this.mouseEventsLogged.push('clickVertex');
                 // see if clicked on vertex here using model
                 // if clicked on vertex tell model to delete
                 let vertex = this.model.vertexAt(params.x, params.y);
@@ -93,13 +93,13 @@ define(['classes/graph/GraphModel',
                         type: 'removeVertex',
                         data: 
                         {
-                            symbol: this.getSymbol(),
+                            symbol: vertex.data,
                             x: params.x,
                             y: params.y   
                         },
                         undo: 'addVertex'
                     });
-                    // this.model.removeVertex(vertex);
+
                     this.returnSymbol(vertex.data);
                 }
                 else if(this.symbols.length > 0)
@@ -115,14 +115,13 @@ define(['classes/graph/GraphModel',
                         },
                         undo: 'removeVertex'
                     });
-                    // this.model.addVertex(this.getSymbol(), params.x, params.y);
                 }
 
             }.bind(this));
 
-            this.view.onCanvasMouseDown.attach('onCanvasMouseDown', function(_, params)
+            this.view.onCanvasMouseDown.attach('dragVertex', function(_, params)
             {
-                this.mouseEventsLogged.push('onCanvasMouseDown');
+                this.mouseEventsLogged.push('dragVertex');
 
                 // locate vertex at location
                 let vertex = this.model.vertexAt(params.x, params.y);
@@ -153,6 +152,45 @@ define(['classes/graph/GraphModel',
             }.bind(this));
         },
 
+        edgeMode()
+        {
+            this.clearMouseEvents();
+
+            this.view.onCanvasClicked.attach('createEdge', function(_, params)
+            {
+                this.mouseEventsLogged.push('createEdge');
+                
+                let vertex = this.model.vertexAt(params.x, params.y);
+
+                if(vertex)
+                {
+                    if(this.vertexSelected)
+                    {
+                        graph.dispatch
+                        ({
+                            type: 'addEdge',
+                            data: 
+                            {
+                                
+                            },
+                            undo: 'removeEdge'
+                        });
+                    }
+                    else
+                    {
+                        // highlight vertex
+                        // stick line to cursor from vertex
+                        this.vertexSelected = true;
+                    }
+                }
+                else if(this.vertexSelected)
+                {
+                    this.vertexSelected = false;
+                }
+
+            }.bind(this));
+        },
+
 //====================== Setters ===========================//
         set vertexSize(size)
         {
@@ -174,6 +212,11 @@ define(['classes/graph/GraphModel',
         {
             this.two.play();
             this.vertexMode();
+        },
+
+        undo()
+        {
+            this.model.undo();
         },
 
         render()
