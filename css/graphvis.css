@@ -12,7 +12,8 @@ html, body {
 
 #title {
     width: 50%;
-    top: -4%;
+    top: -3.2%;
+    left: 75px;
     position: absolute;
     font-family: 'Exo 2', sans-serif;
     font-size: 50px;
@@ -53,19 +54,19 @@ html, body {
 
 #hide-ui {
     position: absolute;
-    top: 10%;
+    top: 11%;
     left: -250px;
     width: 200px;
 }
 
 #hide-tools {
-    right: 5%;
+    right: 1%;
     top: 10%;
     position: absolute;
     color:  #ff9a00;
-    border-left: 2px solid #ff9a00;
     padding-left: 5px;
     cursor: pointer;
+    z-index: 2;
 }
 
 .tools {

@@ -63,32 +63,53 @@ define(['ui-animations/anime'], function(Anime)
                         duration: 1000,
                         direction: 'reverse',
                     });
+
+                    tools.forEach(function (element) {
+                        generateUI(element,240,200,25,delay);
+                        delay = delay + 100;
+                    });
+                    openTools = false;
+
+                    if(graphText.style.display = 'none') {
+                        graphText.style.display = 'block';
+                    }
+
+                    if(algorithmText.style.display = 'none') {
+                        algorithmText.style.display = 'block';
+                    }
                 } else {
+                    delay = 0;
                     menu.forEach(function(element) {
                         generateUI(element,200,200,50,delay);
                         delay = delay + 100;
                     });
                     text.innerHTML = "Hide UI";
                     drawLine('alternate',1000);
+
+                    tools.forEach(function (element) {
+                        generateUI(element,-240,200,25,delay);
+                        delay = delay + 100;
+                    });
+                    openTools = true;
                 }
             }));
 
             graphs.addEventListener('click',function () {
-                if(graphText.style.display !== 'none') {
-                    enlargeOption(graphs,3,350,325);
+                if(graphText.style.display !== 'none' && algorithmText.style.display !== 'none') {
+                    enlargeOption(graphs,3,350,400,1000);
                     graphText.style.display = 'none';
                 } else {
-                    enlargeOption(graphs,1,200,0);
+                    enlargeOption(graphs,1,200,0,200);
                     graphText.style.display = 'block';
                 }
             });
 
             algorithms.addEventListener('click',function () {
-                if(algorithmText.style.display !== 'none') {
-                    enlargeOption(algorithms,3,350,250);
+                if(algorithmText.style.display !== 'none' && graphText.style.display !== 'none') {
+                    enlargeOption(algorithms,3,250,325,1000);
                     document.getElementById('algorithm-text').style.display = 'none';
                 } else {
-                    enlargeOption(algorithms,1,200,0);
+                    enlargeOption(algorithms,1,200,0,200);
                     document.getElementById('algorithm-text').style.display = 'block';
                 }
             });
@@ -117,17 +138,27 @@ define(['ui-animations/anime'], function(Anime)
                 })
             }
 
-            function enlargeOption(target, scale, moveX, moveY) {
+            function enlargeOption(target, scale, moveX, moveY, width) {
                 let enlarge = Anime({
                     translateX: moveX,
                     translateY: moveY,
                     targets: target,
+                    width: width,
                     duration: 250,
                     scale: scale,
                     loop: false,
                     easing: 'easeInOutQuart'
                 });
             }
+
+            let rotateLogo = Anime({
+                targets: '#logo',
+                rotate: '1turn',
+                loop: true,
+                duration: 5000,
+                delay: 1000,
+                easing: 'easeInOutSine'
+            })
         }
     };
 });
