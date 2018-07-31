@@ -149,9 +149,13 @@ define(['classes/graph/GraphModel',
                 {
                     if(selected)
                     {
-                        // If select same vertex twice
-                        if(selected.data !== vertex.data)
+                        // If not the same vertex
+                        // and edge doesnt exist
+                        // create edge
+                        if(selected.data !== vertex.data && 
+                           !this.model.edgeExists(vertex.data, selected.data))
                         {
+                            console.log('edge creating: ' + [vertex.data, selected.data]);
                             this.model.dispatch
                             ({
                                 type: 'addEdge',

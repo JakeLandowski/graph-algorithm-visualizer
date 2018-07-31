@@ -39,6 +39,7 @@ function(Event, Vertex, Edge, SpacialIndex, CommandLog)
         
         this.onEdgeAdded           = new Event(this);
         this.onEdgeRemoved         = new Event(this);
+        this.onEdgePointMoved      = new Event(this);
  
         this.userCommands = new CommandLog();
     };
@@ -113,7 +114,7 @@ function(Event, Vertex, Edge, SpacialIndex, CommandLog)
                 throw 'Missing arguments for addEdge command';
             else if(this.adjList[to.data] === undefined || this.adjList[from.data] === undefined)
                 throw 'Missing vertices in adjList for addEdge command';
-            else
+            else if(!this.edgeExists(to.data, from.data))
             {
                 this.adjList[to.data].neighbors[from.data] = from.data;
                 this.adjList[from.data].neighbors[to.data] = to.data;
@@ -168,12 +169,33 @@ function(Event, Vertex, Edge, SpacialIndex, CommandLog)
         softMoveVertex(vertex, x, y)
         {
             this.onVertexMoved.notify({ data: vertex.data, x: x, y: y });
+            
+            vertex.forEachEdge(function(edge)
+            {
+                let pointMoved = edge.toVertex.data === vertex.data ? 'to' : 'from';
+
+                this.onEdgePointMoved.notify
+                ({ 
+                    pointMoved: pointMoved, 
+                    x: x, 
+                    y: y,
+                    center: edge.centerIfNewPoint(pointMoved, x, y) 
+                });
+
+            }.bind(this));
         },
 
         hardMoveVertex(vertex, x, y)
         {
             vertex.setPoints(x, y);
             this.vertexSpacialIndex.update(vertex, x, y);
+
+            vertex.forEachEdge(function(edge)
+            {
+
+
+            }.bind(this));
+
             this.softMoveVertex(vertex, x, y);
         },
 
@@ -249,6 +271,11 @@ function(Event, Vertex, Edge, SpacialIndex, CommandLog)
         edgeAt(x, y)
         {
             return this.edgeSpacialIndex.getEntity(x, y);
+        },
+
+        edgeExists(to, from)
+        {
+            return this.edgeMap[ [to, from] ] ? true : false;
         }
     };
 
