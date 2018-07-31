@@ -156,7 +156,7 @@ li {
 .future:hover {
     cursor: pointer;
     display: inline-block;
-    vertical-align: middle;
+    /* vertical-align: middle; */
     -webkit-transform: perspective(1px) translateZ(0);
     transform: perspective(1px) translateZ(0);
     position: relative;
