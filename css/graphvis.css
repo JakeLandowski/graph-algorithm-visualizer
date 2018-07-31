@@ -19,55 +19,6 @@ html, body {
     color: #ff9a00;
 }
 
-/* New Graph Button */
-#createnewbtn {
-
-    position: absolute;
-    left: -200px;
-    top: 15%;
-    font-size: 16px;
-}
-
-/* Dropdown Button */
-.premadebtn {
-    width: 50px;
-    height: 12.5px;
-    padding: 16px;
-    font-size: 16px;
-    border: none;
-}
-
-/* The container <div> - needed to position the dropdown content */
-.premade {
-    left: -200px;
-    top: 25%;
-    position: absolute;
-    z-index: 1;
-    display: inline-block;
-}
-
-/* Dropdown Content (Hidden by Default) */
-.premade-content {
-    display: none;
-    position: absolute;
-    min-width: 160px;
-    z-index: 1;
-}
-
-/* Links inside the dropdown */
-.premade-content a {
-    width: 200px;
-    line-height: 100px;
-    height: 100px;
-    text-align: center;
-    text-decoration: none;
-    display: block;
-}
-
-
-/* Show the dropdown menu on hover */
-.premade:hover .premade-content {display: block;}
-
 
 /* Media Buttons CSS */
 .button.play {
@@ -103,7 +54,8 @@ html, body {
 #hide-ui {
     position: absolute;
     top: 10%;
-    left: -200px;
+    left: -250px;
+    width: 200px;
 }
 
 #hide-tools {
@@ -128,6 +80,15 @@ html, body {
     z-index: 1;
     list-style: none;
 }
+
+.menu {
+    left: -250px;
+    top: 15%;
+    position: absolute;
+    z-index: 1;
+    list-style: none;
+}
+
 
 /* Dropdown Button */
 .toolsbtn {
@@ -157,9 +118,6 @@ li {
     cursor: pointer;
     display: inline-block;
     vertical-align: middle;
-    -webkit-transform: perspective(1px) translateZ(0);
-    transform: perspective(1px) translateZ(0);
-    position: relative;
     overflow: hidden;
     background-color:rgba(0, 0, 0, 0.8);
     box-shadow:

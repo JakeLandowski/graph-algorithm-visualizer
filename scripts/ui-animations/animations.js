@@ -4,16 +4,26 @@ define(['ui-animations/anime'], function(Anime)
         start()
         {
             //Sets specific buttons as variables, set default delay at 0.
-            let createNew = document.querySelector('#createnewbtn');
+            let menu = document.querySelectorAll('.menubtn');
             let hideUI = document.querySelector('#hide-ui');
             let hideTools = document.querySelector('#hide-tools');
             let tools = document.querySelectorAll('.toolsbtn');
             let delay = 0;
             let openTools = true;
 
-            generateUI(hideUI,200,200,25,0);
-            generateUI(createNew,200,200,50,100);
+
+            generateUI(hideUI,240,200,25,0);
             drawLine('alternate',1000);
+            tools.forEach(function (element) {
+                generateUI(element,-235,200,25,delay);
+                delay = delay + 50;
+            });
+
+            menu.forEach(function (element) {
+                generateUI(element,200,200,50,delay);
+                delay = delay + 100;
+            });
+
 
             function drawLine(direction,duration) {
                 let lineDrawing = Anime({
@@ -38,13 +48,7 @@ define(['ui-animations/anime'], function(Anime)
                 })
             }
 
-
-            tools.forEach(function (element) {
-                generateUI(element,-240,200,25,delay);
-                delay = delay + 100;
-            });
-
-
+            //Hide/Show tools menu
             hideTools.addEventListener('click',(function() {
                 delay = 0;
                 if(openTools) {
@@ -60,14 +64,17 @@ define(['ui-animations/anime'], function(Anime)
                         delay = delay + 100;
                     });
                 }
-
             }));
 
-
+            //Hide/Show UI menu
             hideUI.addEventListener('click', (function () {
+                delay = 0;
                 let text = document.getElementById("hide");
                 if(text.innerHTML === "Hide UI") {
-                    generateUI(createNew,-200,0,0,0);
+                    menu.forEach(function(element) {
+                        generateUI(element,-225,0,0,delay);
+                        delay = delay + 100;
+                    });
                     text.innerHTML = "Show UI";
                     let lineDrawing = Anime({
                         targets: '#lineDrawing .lines path',
@@ -77,7 +84,10 @@ define(['ui-animations/anime'], function(Anime)
                         direction: 'reverse',
                     });
                 } else {
-                    generateUI(createNew,200,200,50,0);
+                    menu.forEach(function(element) {
+                        generateUI(element,200,200,50,delay);
+                        delay = delay + 100;
+                    });
                     text.innerHTML = "Hide UI";
                     drawLine('alternate',1000);
                 }
