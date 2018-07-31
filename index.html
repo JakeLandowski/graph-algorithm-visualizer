@@ -17,6 +17,18 @@
         <rect width="200" height="0">Create New</rect>
         <text x="25" y="35" font-family="Exo 2" font-size="24" fill="#ff9a00">Create New</text>
     </svg>
+    <div id="lineDrawing">
+        <svg class="shadow" height="250">
+            <defs>
+                <filter id="f1" x="0" y="0">
+                    <feGaussianBlur stdDeviation="15" />
+                </filter>
+            </defs>
+            <g fill="none" fill-rule="evenodd" stroke="currentColor" stroke-width="1" class="lines">
+                <path id="ui-line" d="M0 75 L225 75 L225 500" style="stroke:#ff9a00;stroke-width:2"/>
+            </g>
+        </svg>
+    </div>
     <div class="premade ui-component">
         <button class="future premadebtn">Preset Graphs</button>
         <div class="future premade-content">
@@ -34,8 +46,8 @@
         <button class="mediabutton fa fa-angle-double-right" style="font-size:48px;"></button>
     </div>
 
-    <div class="ui-component">
-        <i id="hide-tools" class="material-icons" style="font-size:48px;color:#ff9a00">device_hub</i>
+    <div class="ui-component" id="hide-tools-icon">
+        <i id="hide-tools" class="material-icons ui-component" style="font-size:48px;color:#ff9a00">device_hub</i>
     </div>
     <ul class="tools ui-component">
         <li>
@@ -60,7 +72,7 @@
         </svg></li>
     </ul>
 
-    <svg id="hide-ui" class="future" width="200" height="0">
+    <svg id="hide-ui" class="future ui-component" width="200" height="0">
         <rect width="200" height="0">Create New</rect>
         <text id="hide" x="25" y="19" font-family="Exo 2" font-size="18" fill="#ff9a00">Hide UI</text>
     </svg>
