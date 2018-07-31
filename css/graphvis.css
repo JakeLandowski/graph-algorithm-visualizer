@@ -117,7 +117,9 @@ li {
 .future:hover {
     cursor: pointer;
     display: inline-block;
-    vertical-align: middle;
+    -webkit-transform: perspective(1px) translateZ(0);
+    transform: perspective(1px) translateZ(0);
+    position: relative;
     overflow: hidden;
     background-color:rgba(0, 0, 0, 0.8);
     box-shadow:
