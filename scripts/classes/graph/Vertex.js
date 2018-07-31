@@ -33,7 +33,9 @@ define(function()
         forEachEdge(action, edgeMap)
         {
             for(let neighbor in this.neighbors)
-                action(edgeMap[ [this.neighbors[neighbor], this.data] ]);
+            {
+                action(edgeMap[ [this.data, neighbor] ]);
+            }
         }
     };
 

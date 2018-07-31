@@ -187,18 +187,18 @@ if(window.DEBUG_MODE)
                 edge.box.fill = 'rgb(255, 255, 100)';
                 
                 this.edgeGroup.add(edge.line, edge.box);
-                this.edgeMap[ [params.to, params.from] ] = edge;
+                this.edgeMap[ [params.from, params.to] ] = edge;
             
             }.bind(this));
 
             // Edge Removed
             this.model.onEdgeRemoved.attach('removeEdge', function(_, params)
             {                
-                let edge = this.edgeMap[ [params.to, params.from] ];
+                let edge = this.edgeMap[ [params.from, params.to] ];
                 this.edgeGroup.remove(edge.line, edge.box);
                 edge.line.remove();
                 edge.box.remove();
-                delete this.edgeMap[ [params.to, params.from] ];
+                delete this.edgeMap[ [params.from, params.to] ];
 
             }.bind(this));
 

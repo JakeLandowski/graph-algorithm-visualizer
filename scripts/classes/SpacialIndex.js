@@ -88,10 +88,10 @@ define(function()
         /**
          *  Update the location of the entity in this SpacialIndex 
          */
-        update(entity, x, y)
+        update(entity)
         {
             this.remove(entity);
-            this.add(entity, x, y);
+            this.add(entity);
         },
 
         /**

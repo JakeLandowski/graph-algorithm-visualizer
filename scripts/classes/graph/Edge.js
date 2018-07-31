@@ -10,35 +10,42 @@ define(function()
 {
    console.log('Edge Class loaded');
 
-   const Edge = function(toVertex, fromVertex, boxSize)
+   const Edge = function(from, to, boxSize, adjList)
    {
-        this.id         = 'Edge' + Edge.edgeId++,
-        this.toVertex   = toVertex;
-        this.fromVertex = fromVertex;
-        
-        // HitBox Coordinates
-        this.boxSize    = boxSize;
-        this.x          = (toVertex.x + fromVertex.x) / 2;
-        this.y          = (toVertex.y + fromVertex.y) / 2; 
-        this.upperLeft  = { x: this.x - this.boxSize/2, y: this.y - this.boxSize/2 };
-        this.lowerRight = { x: this.x + this.boxSize/2, y: this.y + this.boxSize/2 };
+        this.adjList = adjList;
+        this.from = from;
+        this.to   = to;
+        this.id   = '' + from + ',' + to,
+        this.boxSize = boxSize;
+        this.setPoints();
    };
 
-    Edge.edgeId = 0;
     Edge.prototype = 
     {
-        centerIfNewPoint(which, x, y)
+        setPoints()
         {
-            if(which !== 'to' || which !== 'from')
-                throw 'Invalid vertex option in Edge.centerIfNewPoint()';
-                
-            let vertex = which === 'to' ? this.toVertex : this.fromVertex;
+            let fromVertex = this.adjList[this.from];
+            let toVertex   = this.adjList[this.to];
 
-            return { 
-                x: (x + vertex.x) / 2,
-                y: (y + vertex.y) / 2 
-            };
-        }
+            // HitBox Coordinates
+            this.x          = (fromVertex.x + toVertex.x) / 2;
+            this.y          = (fromVertex.y + toVertex.y) / 2; 
+            this.upperLeft  = { x: this.x - this.boxSize/2, y: this.y - this.boxSize/2 };
+            this.lowerRight = { x: this.x + this.boxSize/2, y: this.y + this.boxSize/2 };
+        },
+
+        // centerIfNewPoint(which, x, y)
+        // {
+        //     if(which !== 'to' || which !== 'from')
+        //         throw 'Invalid vertex option in Edge.centerIfNewPoint()';
+
+        //     let vertex = which === 'to' ? this.to : this.from;
+
+        //     return { 
+        //         x: (x + vertex.x) / 2,
+        //         y: (y + vertex.y) / 2 
+        //     };
+        // }
     };
 
    return Edge;

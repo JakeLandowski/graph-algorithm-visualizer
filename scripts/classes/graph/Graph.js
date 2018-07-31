@@ -116,7 +116,7 @@ define(['classes/graph/GraphModel',
                     function stickVertexToCursor(_, point)
                     {
                         // Mostly visual move
-                        this.model.softMoveVertex(vertex, point.x + offsetX, point.y + offsetY);
+                        this.model.moveVertex(vertex, point.x + offsetX, point.y + offsetY);
                     }
 
                     function releaseVertexFromCursor(_, point)
@@ -124,7 +124,7 @@ define(['classes/graph/GraphModel',
                         // Final movement, updates spatial information
                         this.view.onCanvasMouseDrag.detach('stickVertexToCursor');
                         this.view.onCanvasMouseUp.detach('releaseVertexFromCursor');
-                        this.model.hardMoveVertex(vertex, point.x + offsetX, point.y + offsetY);
+                        this.model.updateVertexSpatial(vertex, point.x + offsetX, point.y + offsetY);
                     }
 
                     this.view.onCanvasMouseDrag.attach('stickVertexToCursor', stickVertexToCursor.bind(this));
@@ -155,14 +155,13 @@ define(['classes/graph/GraphModel',
                         if(selected.data !== vertex.data && 
                            !this.model.edgeExists(vertex.data, selected.data))
                         {
-                            console.log('edge creating: ' + [vertex.data, selected.data]);
                             this.model.dispatch
                             ({
                                 type: 'addEdge',
                                 data: 
                                 {
-                                    to: vertex,
-                                    from: selected, 
+                                    from: selected.data, 
+                                    to: vertex.data,
                                 },
                                 undo: 'removeEdge'
                             });
@@ -191,8 +190,8 @@ define(['classes/graph/GraphModel',
                             type: 'removeEdge',
                             data: 
                             {
-                                to: edge.toVertex,
-                                from: edge.fromVertex, 
+                                from: edge.from, 
+                                to: edge.to,
                             },
                             undo: 'addEdge'
                         });
