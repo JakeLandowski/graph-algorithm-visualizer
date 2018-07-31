@@ -35,7 +35,6 @@
     const undoBtn       = document.getElementById('undo');
 
     createNewBtn.addEventListener('click', function() { clearCanvas(); });
-
     addVertexBtn.addEventListener('click', function() { graph.vertexMode(); });
     addEdgeBtn.addEventListener('click',   function() { graph.edgeMode();   });
     undoBtn.addEventListener('click',      function() { graph.undo();       });
