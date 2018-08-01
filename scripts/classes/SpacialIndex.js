@@ -9,8 +9,6 @@
 'use strict';
 define(function()
 {
-    console.log('GraphModel Class loaded');
-
     const SpacialIndex = function(cellWidth, cellHeight, cellRatio)
     {
         this.cellWidth  = cellWidth;

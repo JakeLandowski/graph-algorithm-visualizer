@@ -10,8 +10,6 @@
 define(['classes/Event', 'classes/graph/Vertex', 'classes/graph/Edge', 'classes/SpacialIndex', 'classes/CommandLog'], 
 function(Event, Vertex, Edge, SpacialIndex, CommandLog)
 {
-    console.log('GraphModel Class loaded');
-
     const GraphModel = function(width, height, config)
     {
         // Shape size/styling information
@@ -57,10 +55,10 @@ function(Event, Vertex, Edge, SpacialIndex, CommandLog)
             if(this[command.type])
             {
                 this[command.type](command.data);
+                this.userCommands.record(command);
             }
             else throw 'Tried to run non-existant command ' + command.type;
 
-            this.userCommands.record(command);
         },
 
         undo()
@@ -97,13 +95,16 @@ function(Event, Vertex, Edge, SpacialIndex, CommandLog)
             const neighbors = args.neighbors;
 
             if(!this.adjList[data]) // prevent duplicates 
-            { 
+            {
                 const vertex = new Vertex(data, x, y);
                 this.adjList[data] = vertex;
                 this.vertexSpacialIndex.add(vertex);
                 this.onVertexAdded.notify({ data: data, x: x, y: y });
 
-                // for(const )
+                for(const neighbor in neighbors)
+                {
+                    this.addEdge({ from: data, to: neighbor });
+                }
             }
         },
 
@@ -119,7 +120,6 @@ function(Event, Vertex, Edge, SpacialIndex, CommandLog)
                 // Clean up edges
                 removed.forEachEdge(function(edge)
                 {
-                    console.log(edge);
                     this.removeEdge
                     ({
                         from: edge.from,
@@ -158,7 +158,7 @@ function(Event, Vertex, Edge, SpacialIndex, CommandLog)
                 fromVertex.neighbors[to] = to;
                 if(this.undirected) 
                     toVertex.neighbors[from] = from;
-                
+
                 const edge = new Edge(args.from, args.to, this.config.edgeBoxSize, this.adjList);
                 
                 // Store Edge Objects In Map

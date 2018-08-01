@@ -9,8 +9,6 @@
 'use strict';
 define(['classes/Event', 'utils/Util'], function(Event, Util)
 {
-    console.log('GraphView Class loaded');
-
     const GraphView = function(model, two, config)
     {
         // Shape size/styling information

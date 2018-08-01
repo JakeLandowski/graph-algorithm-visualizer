@@ -9,8 +9,6 @@
 'use strict';
 define(function()
 {
-    console.log('Vertex Class loaded');
-
     const Vertex = function(data, x, y)
     {
         this.id = 'vertex' + Vertex.vertexId++,

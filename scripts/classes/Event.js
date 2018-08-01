@@ -9,8 +9,6 @@
 'use strict';
 define(function()
 {
-    console.log('Event Class loaded');
-
     const Event = function(sender)
     {
         this.sender = sender;

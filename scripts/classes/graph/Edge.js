@@ -9,8 +9,6 @@
 'use strict';
 define(function()
 {
-   console.log('Edge Class loaded');
-
    const Edge = function(from, to, boxSize)
    {
         this.from = from;

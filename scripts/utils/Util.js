@@ -53,6 +53,16 @@ define(function()
                 x: line.vertices[end ? 0 : 1].x + line.translation.x,
                 y: line.vertices[end ? 0 : 1].y + line.translation.y
             };
+        },
+
+        /**
+         *  Creates a copy of an object
+         * 
+         *  @param object to copy 
+         */
+        copy(object)
+        {
+            return Object.assign({}, object);
         }
 
     }; // end module

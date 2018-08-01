@@ -10,11 +10,9 @@
 'use strict';
 define(['classes/graph/GraphModel', 
         'classes/graph/GraphView',
-        'two'], 
-        function(GraphModel, GraphView, Two)
+        'two', 'utils/Util'], 
+        function(GraphModel, GraphView, Two, Util)
 {
-    console.log('Graph Class loaded');
-
     const Graph = function(config={})
     {
         this.two = new Two
@@ -82,7 +80,7 @@ define(['classes/graph/GraphModel',
                             symbol: vertex.data,
                             x: params.x,
                             y: params.y,
-                            neighbors: vertex.neighbors, // necessary for command log and undos
+                            neighbors: Util.copy(vertex.neighbors), // necessary for command log and undos
                             returnSymbol: this.returnSymbol.bind(this)
                         },
                         undo: 'addVertex',

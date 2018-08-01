@@ -9,8 +9,6 @@
 'use strict';
 define(function()
 {
-    console.log('CommandLog Class loaded');
-
     const CommandLog = function()
     {
         this.log = [];
