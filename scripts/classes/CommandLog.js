@@ -12,7 +12,8 @@ define(function()
 
     const CommandLog = function()
     {
-        this.log  = [];
+        this.log = [];
+        this.undoHistory = [];
 
     }; // end constructor
     
@@ -23,9 +24,16 @@ define(function()
             this.log.push(command);
         },
 
-        undo()
+        undo() 
         {
-            return this.log.pop();
+            let command = this.log.pop();
+            if(command) this.undoHistory.push(command);
+            return command;
+        },
+        
+        redo()
+        {
+            return this.undoHistory.pop();
         }
     };
 

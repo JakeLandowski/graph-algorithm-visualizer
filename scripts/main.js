@@ -6,6 +6,7 @@
  *  App entry point.
  */
 
+'use strict';
  requirejs(['classes/graph/Graph', 'ui-animations/animations'], function(Graph, Animations)
  {
     // create Graph

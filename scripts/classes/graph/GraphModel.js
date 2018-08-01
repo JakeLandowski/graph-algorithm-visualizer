@@ -22,10 +22,12 @@ function(Event, Vertex, Edge, SpacialIndex, CommandLog)
         this.setDimensions(width, height);
 
         this.adjList      = Object.create(null); // non-inheriting object
-        this.edgeMap      = Object.create(null); 
+        this.edgeMap      = Object.create(null);
+        Edge.adjList      = this.adjList; // Edge Class Static Reference
+        Vertex.edgeMap    = this.edgeMap; // Vertex Class Static Reference
+        
         this.edgeSpacialIndex   = new SpacialIndex(this.cellWidth, this.cellHeight, this.cellRatio);
         this.vertexSpacialIndex = new SpacialIndex(this.cellWidth, this.cellHeight, this.cellRatio);
-        this.vertexId = 0;
 
         this.onVertexAdded         = new Event(this);
         this.onVertexRemoved       = new Event(this);
@@ -46,6 +48,9 @@ function(Event, Vertex, Edge, SpacialIndex, CommandLog)
 
     GraphModel.prototype = 
     {
+
+//====================== Command Handling ===========================//
+
         dispatch(command)
         {
             if(this[command.type])
@@ -64,50 +69,63 @@ function(Event, Vertex, Edge, SpacialIndex, CommandLog)
                 this[command.undo](command.data);
         },
 
+        redo()
+        {
+            let command = this.userCommands.redo();
+            if(command) this.dispatch(command);
+        },
+
+        assertArgs(args, props, error)
+        {
+            props.forEach(function(prop)
+            {
+                if(args[prop] === undefined)
+                    throw error;
+            });
+        },
+
+//====================== Commands ===========================//
+        
         addVertex(args={})
         {
-            if(args.symbol === undefined || args.x === undefined || args.y === undefined)
-                throw 'Missing arguments for addVertex command';
+            this.assertArgs(args, ['symbol', 'x', 'y', 'neighbors'], 'Missing arguments for addVertex command');
 
-            let data = args.symbol;
-            let x = args.x;
-            let y = args.y;
+            const data      = args.symbol;
+            const x         = args.x;
+            const y         = args.y;
+            const neighbors = args.neighbors;
 
-            if(!this.adjList[data]) 
-            {
+            if(!this.adjList[data]) // prevent duplicates 
+            { 
                 let vertex = new Vertex(data, x, y);
-
                 this.adjList[data] = vertex;
                 this.vertexSpacialIndex.add(vertex);
                 this.onVertexAdded.notify({ data: data, x: x, y: y });
+
+                
             }
         },
 
         removeVertex(args={})
         {
-            if(args.symbol === undefined)
-                throw 'Missing arguments for removeVertex command';
+            this.assertArgs(args, ['symbol'], 'Missing arguments for removeVertex command');
 
-            let data = args.symbol;
-            let removed = this.adjList[data];
+            const data    = args.symbol;
+            const removed = this.adjList[data];
 
             if(removed)
             {
                 // Clean up edges
                 removed.forEachEdge(function(edge)
                 {
-                    this.dispatch
+                    console.log(edge);
+                    this.removeEdge
                     ({
-                        type: 'removeEdge',
-                        data: 
-                        {
-                            from: edge.fromVertex, 
-                            to: edge.toVertex,
-                        },
-                        undo: 'addEdge'
+                        from: edge.from,
+                        to:   edge.to
                     });
 
-                }.bind(this), this.edgeMap);
+                }.bind(this));
 
                 this.vertexSpacialIndex.remove(removed);
                 delete this.adjList[data];
@@ -121,63 +139,82 @@ function(Event, Vertex, Edge, SpacialIndex, CommandLog)
         // NEEDS REWORK FOR EDGE OBJECTS AND SUCH
         addEdge(args={})
         {
+            this.assertArgs(args, ['from', 'to'], 'Missing arguments for addEdge command');
+            this.assertArgs(this.adjList, [args.from, args.to], 
+                            'Missing vertices in adjList for addEdge command');
+
             const from = args.from;
             const to   = args.to;
+            // thank you discrete math!
+            const edgeDoesntExist = !this.edgeExists(from, to) && (this.undirected ? !this.edgeExists(to, from) : true);  
 
-            if(from === undefined || to === undefined)
-                throw 'Missing arguments for addEdge command';
-            else if(this.adjList[from.data] === undefined || this.adjList[to.data] === undefined)
-                throw 'Missing vertices in adjList for addEdge command';
-            else if(!this.edgeExists(from.data, to.data))
+            if(edgeDoesntExist)
             {
-                this.adjList[from.data].neighbors[to.data] = to.data;
-                // this.adjList[to.data].neighbors[from.data] = from.data;
+                let fromVertex = this.adjList[from];
+                let toVertex   = this.adjList[to];  
                 
-                let edge = new Edge(args.from.data, args.to.data, this.config.edgeBoxSize, this.adjList);
-                this.edgeMap[ [from.data, to.data] ] = edge;
+                // Adjecency List Reference For Edge
+                fromVertex.neighbors[to] = to;
+                if(this.undirected) 
+                    toVertex.neighbors[from] = from;
+                
+                let edge = new Edge(args.from, args.to, this.config.edgeBoxSize, this.adjList);
+                
+                // Store Edge Objects In Map
+                this.edgeMap[ [from, to] ] = edge;
+                if(this.undirected)
+                    this.edgeMap[ [to, from] ] = edge;
+                
+                // Spacial Indexing The Edge
                 this.edgeSpacialIndex.add(edge);
                 
                 this.onEdgeAdded.notify
                 ({ 
-                    from:      from.data,
-                    to:        to.data, 
-                    fromPoint: { x: from.x, y: from.y },
-                    toPoint:   { x: to.x,   y: to.y   },
-                    center:    { x: edge.x, y: edge.y }    
+                    from:      from,
+                    to:        to, 
+                    fromPoint: { x: fromVertex.x, y: fromVertex.y },
+                    toPoint:   { x: toVertex.x,   y: toVertex.y   },
+                    center:    { x: edge.x,       y: edge.y       }    
                 });
             }
         },
 
         removeEdge(args={})
         {
+            this.assertArgs(args, ['from', 'to'], 'Missing arguments for removeEdge command');
+            this.assertArgs(this.adjList, [args.from, args.to], 
+                            'Missing vertices in adjList for removeEdge command');
+            this.assertArgs(this.edgeMap, [ [args.from, args.to] ], 'edge was not found for removeEdge');
+
             const from = args.from;
             const to   = args.to;
 
-            if(from === undefined || to === undefined)
-                throw 'Missing arguments for removeEdge command';
-            else if(this.adjList[from] === undefined || this.adjList[to] === undefined)
-                throw 'Missing vertices in adjList for removeEdge command';
-            else
-            {
-                let edge = this.edgeMap[ [from, to] ];
-                
-                if(edge === undefined)
-                    throw 'edge was not found for removeEdge';
-                else
-                {
-                    this.edgeSpacialIndex.remove(edge);
-                    delete this.edgeMap[ [edge.fromVertex.data, edge.toVertex.data] ];
-        
-                    this.onEdgeRemoved.notify
-                    ({ 
-                        from:      from.data,
-                        to:        to.data, 
-                        fromPoint: { x: from.x, y: from.y },
-                        toPoint:   { x: to.x,   y: to.y   },
-                        center:    { x: edge.x, y: edge.y }    
-                    });
-                }
-            }
+            let edge = this.edgeMap[ [from, to] ];
+            
+            // Clean Up Spacial Index
+            this.edgeSpacialIndex.remove(edge);
+
+            // Delete Edge Object Reference
+            delete this.edgeMap[ [edge.from, edge.to] ];
+            if(this.undirected) 
+                delete this.edgeMap[ [edge.to, edge.from] ];
+
+            let fromVertex = this.adjList[from];
+            let toVertex   = this.adjList[to];
+
+            // Delete Neighbor References
+            delete fromVertex.neighbors[toVertex.data];
+            if(this.undirected)
+                delete toVertex.neighbors[fromVertex.data];
+
+            this.onEdgeRemoved.notify
+            ({ 
+                from:      from,
+                to:        to, 
+                fromPoint: { x: fromVertex.x, y: fromVertex.y },
+                toPoint:   { x: toVertex.x,   y: toVertex.y   },
+                center:    { x: edge.x,       y: edge.y       }    
+            });
         },
 
         moveVertex(vertex, x, y)
@@ -187,32 +224,32 @@ function(Event, Vertex, Edge, SpacialIndex, CommandLog)
             this.onVertexMoved.notify({ data: vertex.data, x: x, y: y });
             
             // Update Vertex's Edge Positions
-            vertex.forEachEdge(function(edge)
-            {
-                edge.setPoints();
+            // vertex.forEachEdge(function(edge)
+            // {
+            //     edge.setPoints();
 
-                let pointMoved = edge.toVertex.data === vertex.data ? 'to' : 'from';
+            //     let pointMoved = edge.toVertex.data === vertex.data ? 'to' : 'from';
 
-                this.onEdgePointMoved.notify
-                ({ 
-                    pointMoved: pointMoved, 
-                    x: x, 
-                    y: y,
-                    center: { x: edge.x, y: edge.y } 
-                });
+            //     this.onEdgePointMoved.notify
+            //     ({ 
+            //         pointMoved: pointMoved, 
+            //         x: x, 
+            //         y: y,
+            //         center: { x: edge.x, y: edge.y } 
+            //     });
 
-            }.bind(this), this.edgeMap);
+            // }.bind(this));
         },
 
         updateVertexSpatial(vertex, x, y)
         {
             this.vertexSpacialIndex.update(vertex);
 
-            vertex.forEachEdge(function(edge)
-            {
-                this.edgeSpacialIndex.update(edge);
+            // vertex.forEachEdge(function(edge)
+            // {
+            //     this.edgeSpacialIndex.update(edge);
 
-            }.bind(this), this.edgeMap);
+            // }.bind(this));
 
             this.moveVertex(vertex, x, y);
         },

@@ -26,6 +26,7 @@ define(['classes/graph/GraphModel',
 
         this.config = 
         {
+            undirected:        config.undirected        || true,
             vertexSize:        config.vertexSize        || 25,
             vertexOutlineSize: config.vertexOutlineSize || 3,
             edgeWidth:         config.edgeWidth         || 5,
@@ -33,7 +34,9 @@ define(['classes/graph/GraphModel',
         };
 
         this.model = new GraphModel(this.two.width, this.two.height, this.config);
-        this.view  = new GraphView(this.model,      this.two,        this.config);
+        this.model.undirected = this.config.undirected;
+
+        this.view  = new GraphView(this.model, this.two, this.config);
         this.initSymbols();
 
         this.mouseEventsLogged = [];
@@ -54,7 +57,7 @@ define(['classes/graph/GraphModel',
             this.usedSymbols = Object.create(null);
         },
 
-//====================== UI Hooks ===========================//
+//====================== Graph Interaction Modes ===========================//
 
         vertexMode()
         {
@@ -78,6 +81,7 @@ define(['classes/graph/GraphModel',
                             symbol: vertex.data,
                             x: params.x,
                             y: params.y,
+                            neighbors: vertex.neighbors, // necessary for command log and undos
                             returnSymbol: this.returnSymbol.bind(this)
                         },
                         undo: 'addVertex',
@@ -93,6 +97,7 @@ define(['classes/graph/GraphModel',
                             symbol: this.getSymbol(),
                             x: params.x,
                             y: params.y,
+                            neighbors: Object.create(null), // necessary for command log and undos
                             returnSymbol: this.returnSymbol.bind(this)   
                         },
                         undo: 'removeVertex'
@@ -161,7 +166,7 @@ define(['classes/graph/GraphModel',
                                 data: 
                                 {
                                     from: selected.data, 
-                                    to: vertex.data,
+                                    to:   vertex.data,
                                 },
                                 undo: 'removeEdge'
                             });
@@ -191,7 +196,7 @@ define(['classes/graph/GraphModel',
                             data: 
                             {
                                 from: edge.from, 
-                                to: edge.to,
+                                to:   edge.to,
                             },
                             undo: 'addEdge'
                         });

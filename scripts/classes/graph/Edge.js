@@ -10,22 +10,21 @@ define(function()
 {
    console.log('Edge Class loaded');
 
-   const Edge = function(from, to, boxSize, adjList)
+   const Edge = function(from, to, boxSize)
    {
-        this.adjList = adjList;
         this.from = from;
         this.to   = to;
         this.id   = '' + from + ',' + to,
         this.boxSize = boxSize;
         this.setPoints();
    };
-
+ 
     Edge.prototype = 
     {
         setPoints()
         {
-            let fromVertex = this.adjList[this.from];
-            let toVertex   = this.adjList[this.to];
+            let fromVertex = Edge.adjList[this.from];
+            let toVertex   = Edge.adjList[this.to];
 
             // HitBox Coordinates
             this.x          = (fromVertex.x + toVertex.x) / 2;

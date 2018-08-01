@@ -30,11 +30,11 @@ define(function()
             this.lowerRight = {x: x + radius, y: y + radius};
         },
 
-        forEachEdge(action, edgeMap)
+        forEachEdge(action)
         {
             for(let neighbor in this.neighbors)
             {
-                action(edgeMap[ [this.data, neighbor] ]);
+                action(Vertex.edgeMap[ [this.data, neighbor] ]);
             }
         }
     };
