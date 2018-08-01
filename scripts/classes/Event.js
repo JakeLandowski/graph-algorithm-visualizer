@@ -37,7 +37,7 @@ define(function()
             {
                 if(this.enabled)
                 {
-                    for(let listener in this.listeners)
+                    for(const listener in this.listeners)
                     {
                         this.listeners[listener](this.sender, args);
                     }

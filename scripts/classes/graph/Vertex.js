@@ -24,7 +24,7 @@ define(function()
     {
         setPoints(x, y)
         {
-            let radius = this.config.vertexSize + this.config.vertexOutlineSize;
+            const radius = this.config.vertexSize + this.config.vertexOutlineSize;
             this.x = x;
             this.y = y;
             this.upperLeft  = {x: x - radius, y: y - radius};
@@ -33,7 +33,7 @@ define(function()
 
         forEachEdge(action)
         {
-            for(let neighbor in this.neighbors)
+            for(const neighbor in this.neighbors)
             {
                 action(Vertex.edgeMap[ [this.data, neighbor] ]);
             }

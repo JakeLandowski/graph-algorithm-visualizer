@@ -46,19 +46,21 @@ define(function()
          */
         add(entity)
         {
-            let startX = this.cellRow(entity.upperLeft.x);
-            let startY = this.cellCol(entity.upperLeft.y);
-            let endX   = this.cellRow(entity.lowerRight.x);
-            let endY   = this.cellCol(entity.lowerRight.y);
+            const startX = this.cellRow(entity.upperLeft.x);
+            const startY = this.cellCol(entity.upperLeft.y);
+            const endX   = this.cellRow(entity.lowerRight.x);
+            const endY   = this.cellCol(entity.lowerRight.y);
 
             // For removing from cells later
             if(!entity.cells) entity.cells = [];
+
+            let cell;
             
             for(let x = startX; x <= endX; x++)
             {
                 for(let y = startY; y <= endY; y++)
                 {
-                    let cell = this.cellFromIndex(x, y); 
+                    cell = this.cellFromIndex(x, y); 
                     
                     if(cell) 
                     {
@@ -100,13 +102,15 @@ define(function()
          */
         getEntity(x, y)
         {
-            let cell = this.cell(x, y);
+            const cell = this.cell(x, y);
 
-            for(let entityId in cell)
+            let entity, upperLeft, lowerRight;
+
+            for(const entityId in cell)
             {
-                let entity     = cell[entityId];
-                let upperLeft  = entity.upperLeft;
-                let lowerRight = entity.lowerRight;
+                entity     = cell[entityId];
+                upperLeft  = entity.upperLeft;
+                lowerRight = entity.lowerRight;
                 
                 // calculate point in rectangle here
                 if(x > upperLeft.x && x < lowerRight.x &&

@@ -27,7 +27,7 @@ define(function()
 
         undo() 
         {
-            let command = this.log.pop();
+            const command = this.log.pop();
             if(command) this.undoHistory.push(command);
             return command;
         },

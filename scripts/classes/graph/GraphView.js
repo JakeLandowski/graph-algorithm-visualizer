@@ -72,13 +72,13 @@ if(window.DEBUG_MODE)
             this.model.onVertexAdded.attach('createVertex', function(_, params)
             {
                 // Create new vertex shape and store it
-                let vertex    = this.two.makeCircle(params.x, params.y, this.config.vertexSize);
+                const vertex    = this.two.makeCircle(params.x, params.y, this.config.vertexSize);
                 vertex.fill   = '#ff9a00';
                 vertex.stroke = '#dd6900';
 
                 vertex.linewidth = this.config.vertexOutlineSize;
 
-                let text = this.two.makeText(params.data, params.x, params.y);
+                const text = this.two.makeText(params.data, params.x, params.y);
                 this.vertexGroup.add(vertex, text);
 
                 this.vertexMap[params.data] = 
@@ -94,8 +94,8 @@ if(window.DEBUG_MODE)
             {
                 if(this.vertexMap[params.data])
                 {
-                    let circle = this.vertexMap[params.data].circle;
-                    let text   = this.vertexMap[params.data].text;
+                    const circle = this.vertexMap[params.data].circle;
+                    const text   = this.vertexMap[params.data].text;
                     this.vertexGroup.remove(circle, text);
                     circle.remove();
                     text.remove();
@@ -140,8 +140,8 @@ if(window.DEBUG_MODE)
             // Tracking Edge Added
             this.model.onTrackingEdgeAdded.attach('trackingEdgeAdded', function(_, params)
             {
-                let start = params.start;
-                let end   = params.end;
+                const start = params.start;
+                const end   = params.end;
 
                 this.trackingEdge = this.two.makeLine(start.x, start.y, end.x, end.y);
                 this.trackingEdge.stroke = 'rgba(255, 255, 100, 0.5)';
@@ -153,8 +153,8 @@ if(window.DEBUG_MODE)
             // Tracking Edge Moved
             this.model.onTrackingEdgeMoved.attach('trackingEdgeMoved', function(_, params)
             {
-                let edge = this.trackingEdge;
-                let end = Util.linePosition(edge);
+                const edge = this.trackingEdge;
+                const end = Util.linePosition(edge);
 
                 edge.vertices[1].x = params.x - end.x;
                 edge.vertices[1].y = params.y - end.y;
@@ -173,7 +173,7 @@ if(window.DEBUG_MODE)
             // Edge Added
             this.model.onEdgeAdded.attach('createEdge', function(_, params)
             {
-                let edge = 
+                const edge = 
                 {
                     line: this.two.makeLine(params.fromPoint.x, params.fromPoint.y, 
                                             params.toPoint.x,   params.toPoint.y),
@@ -195,7 +195,7 @@ if(window.DEBUG_MODE)
             // Edge Removed
             this.model.onEdgeRemoved.attach('removeEdge', function(_, params)
             {                
-                let edge = this.edgeMap[ [params.from, params.to] ];
+                const edge = this.edgeMap[ [params.from, params.to] ];
                 this.edgeGroup.remove(edge.line, edge.box);
                 edge.line.remove();
                 edge.box.remove();
@@ -284,8 +284,8 @@ drawSpacialIndex()
 {
     if(window.DEBUG_MODE)
     {
-        let group = this.spacialIndexGridGroup;
-        let two = this.two;
+        const group = this.spacialIndexGridGroup;
+        const two = this.two;
         
         // weird way to actually delete shapes
         group.children.forEach(function(shape)
@@ -294,19 +294,20 @@ drawSpacialIndex()
         });
         group.children = [];
 
+        let width, height, centerX, centerY, rect, text;
         for(let x = 0; x < this.model.cellRatio; x++)
         {
             for(let y = 0; y < this.model.cellRatio; y++)
             {
-                let width = this.model.cellWidth;
-                let height = this.model.cellHeight;
-                let centerX = x * width + width / 2;
-                let centerY = y * height + height / 2; 
-                let rect = this.two.makeRectangle(centerX, centerY, width, height);
+                width = this.model.cellWidth;
+                height = this.model.cellHeight;
+                centerX = x * width + width / 2;
+                centerY = y * height + height / 2; 
+                rect = this.two.makeRectangle(centerX, centerY, width, height);
                 rect.noFill();
                 rect.stroke = '#fff';
                 group.add(rect);
-                let text = this.two.makeText('' + x + y, centerX - width / 3 - 10, centerY - height / 3 - 10);
+                text = this.two.makeText('' + x + y, centerX - width / 3 - 10, centerY - height / 3 - 10);
                 text.stroke = '#fff'; 
                 group.add(text);
             }   

@@ -70,7 +70,7 @@ define(['classes/graph/GraphModel',
 
                 // see if clicked on vertex here using model
                 // if clicked on vertex tell model to delete
-                let vertex = this.model.vertexAt(params.x, params.y);
+                const vertex = this.model.vertexAt(params.x, params.y);
 
                 if(vertex) // REMOVE
                 {
@@ -112,12 +112,12 @@ define(['classes/graph/GraphModel',
                 this.mouseEventsLogged.push('dragVertex');
 
                 // locate vertex at location
-                let vertex = this.model.vertexAt(params.x, params.y);
+                const vertex = this.model.vertexAt(params.x, params.y);
 
                 if(vertex)
                 {
-                    let offsetX = vertex.x - params.x;
-                    let offsetY = vertex.y - params.y;
+                    const offsetX = vertex.x - params.x;
+                    const offsetY = vertex.y - params.y;
 
                     function stickVertexToCursor(_, point)
                     {
@@ -148,8 +148,8 @@ define(['classes/graph/GraphModel',
             {
                 this.mouseEventsLogged.push('createEdge');
                 
-                let vertex   = this.model.vertexAt(params.x, params.y);
-                let selected = this.model.selectedVertex; 
+                const vertex   = this.model.vertexAt(params.x, params.y);
+                const selected = this.model.selectedVertex; 
 
                 if(vertex)
                 {
@@ -187,7 +187,7 @@ define(['classes/graph/GraphModel',
                 }
                 else
                 {
-                    let edge = this.model.edgeAt(params.x, params.y);
+                    const edge = this.model.edgeAt(params.x, params.y);
                     
                     if(edge)
                     {
@@ -269,7 +269,7 @@ define(['classes/graph/GraphModel',
 
         getSymbol()
         {
-            let symbol = this.symbols.pop();
+            const symbol = this.symbols.pop();
             this.usedSymbols[symbol] = symbol;
             return symbol;  
         },
@@ -282,7 +282,7 @@ define(['classes/graph/GraphModel',
 
         clearMouseEvents()
         {
-            let view = this.view;
+            const view = this.view;
             this.mouseEventsLogged.forEach(function(eventName)
             {
                 view.onCanvasMouseClick.detach(eventName);
@@ -292,22 +292,6 @@ define(['classes/graph/GraphModel',
                 view.onCanvasMouseUp.detach(eventName);
             });
         },
-
-//======== DEBUG =============/
-showGraphData()
-{
-    console.log('Adjacency List:');
-    console.log('[\n');
-    for(let data in this.model.adjList)
-    {
-        let vertex = this.model.adjList[data];
-        console.log('\t' + data + ' => [' + vertex.x + ', ' + vertex.y + ', ' + vertex.id + '],');
-    }
-    console.log(']');
-}
-//======== DEBUG =============/
-
-
     };
 
     return Graph;
