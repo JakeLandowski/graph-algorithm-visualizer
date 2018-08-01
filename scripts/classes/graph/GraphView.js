@@ -60,7 +60,6 @@ if(window.DEBUG_MODE)
     
     GraphView.prototype = 
     {
-
         initHandlers()
         {
 

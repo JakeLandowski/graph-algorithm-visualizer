@@ -58,7 +58,6 @@ function(Event, Vertex, Edge, SpacialIndex, CommandLog)
                 this.userCommands.record(command);
             }
             else throw 'Tried to run non-existant command ' + command.type;
-
         },
 
         undo()
@@ -137,7 +136,6 @@ function(Event, Vertex, Edge, SpacialIndex, CommandLog)
             }
         },
 
-        // NEEDS REWORK FOR EDGE OBJECTS AND SUCH
         addEdge(args={})
         {
             this.assertArgs(args, ['from', 'to'], 'Missing arguments for addEdge command');
@@ -189,7 +187,7 @@ function(Event, Vertex, Edge, SpacialIndex, CommandLog)
 
             const from = args.from;
             const to   = args.to;
-
+            
             const edge = this.edgeMap[ [from, to] ];
             
             // Clean Up Spacial Index
