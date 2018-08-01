@@ -6,6 +6,7 @@
  *  Represents the rendering logic for the Graph class.
  */
 
+'use strict';
 define(function()
 {
     console.log('CommandLog Class loaded');

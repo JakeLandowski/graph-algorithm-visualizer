@@ -1,3 +1,12 @@
+/**
+ *  @author Ryan Marlow
+ *  7/28/18
+ *  animation.js
+ * 
+ *  Code for animation the UI
+ */
+
+'use strict';
 define(['ui-animations/anime'], function(Anime)
 {
     return {

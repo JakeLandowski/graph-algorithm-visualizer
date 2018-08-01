@@ -7,6 +7,7 @@
  *  to handle rendering and data logic.
  */
 
+'use strict';
 define(['classes/graph/GraphModel', 
         'classes/graph/GraphView',
         'two'], 
@@ -277,7 +278,6 @@ define(['classes/graph/GraphModel',
         {
             this.symbols.push(symbol);
             delete this.usedSymbols[symbol];
-            console.log('returned');
         },
 
         clearMouseEvents()

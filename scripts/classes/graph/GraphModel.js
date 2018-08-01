@@ -6,6 +6,7 @@
  *  Represents the data structure for the Graph class..
  */
 
+'use strict';
 define(['classes/Event', 'classes/graph/Vertex', 'classes/graph/Edge', 'classes/SpacialIndex', 'classes/CommandLog'], 
 function(Event, Vertex, Edge, SpacialIndex, CommandLog)
 {

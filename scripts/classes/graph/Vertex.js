@@ -6,6 +6,7 @@
  *  Represents the data structure for the Vertex class..
  */
 
+'use strict';
 define(function()
 {
     console.log('Vertex Class loaded');

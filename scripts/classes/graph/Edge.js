@@ -6,6 +6,7 @@
  *  Represents the data structure for the Edge class..
  */
 
+'use strict';
 define(function()
 {
    console.log('Edge Class loaded');

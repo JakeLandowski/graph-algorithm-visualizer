@@ -6,6 +6,7 @@
  *  Represents the rendering logic for the Graph class.
  */
 
+'use strict';
 define(['classes/Event', 'utils/Util'], function(Event, Util)
 {
     console.log('GraphView Class loaded');

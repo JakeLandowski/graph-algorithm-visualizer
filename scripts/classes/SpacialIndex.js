@@ -6,6 +6,7 @@
  *  App entry point.
  */
 
+'use strict';
 define(function()
 {
     console.log('GraphModel Class loaded');

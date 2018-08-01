@@ -6,6 +6,7 @@
  *  Contains rand(), stagger()
  */
 
+'use strict';
 define(function()
 {
     return {

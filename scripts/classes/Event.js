@@ -6,6 +6,7 @@
  *  For creating custom events to be used by Model.js and View.js
  */
 
+'use strict';
 define(function()
 {
     console.log('Event Class loaded');
