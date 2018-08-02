@@ -33,7 +33,6 @@ define(['classes/graph/GraphModel',
         };
 
         this.model = new GraphModel(this.two.width, this.two.height, this.config);
-        this.model.undirected = this.config.undirected;
 
         this.view  = new GraphView(this.model, this.two, this.config);
         this.initSymbols();

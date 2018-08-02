@@ -1,9 +1,12 @@
 /**
  *  @author Jake Landowski
- *  7/16/18
- *  main.js
+ *  7/22/18
+ *  SpacialIndex.js
  * 
- *  App entry point.
+ *  2D Matrix Spatial Hash for click detection on shapes.
+ *  Interface REQUIRES Objects given to have properties:
+ *      upperLeft:  {x, y},
+ *      lowerRIght: {x, y}
  */
 
 'use strict';

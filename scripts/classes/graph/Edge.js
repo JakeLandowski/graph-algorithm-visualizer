@@ -22,8 +22,8 @@ define(function()
     {
         setPoints()
         {
-            const fromVertex = Edge.adjList[this.from];
-            const toVertex   = Edge.adjList[this.to];
+            const fromVertex = Edge.adjList.getVertex(this.from);
+            const toVertex   = Edge.adjList.getVertex(this.to);
 
             // HitBox Coordinates
             this.x          = (fromVertex.x + toVertex.x) / 2;

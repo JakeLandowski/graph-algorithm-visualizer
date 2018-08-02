@@ -18,6 +18,12 @@ define(function()
 
     AdjacencyList.prototype = 
     {
+        vertexExists(symbol)
+        {
+            const vertex = this.vertexMap[symbol];
+            return vertex !== undefined && vertex !== null;
+        },
+
         insertVertex(symbol, vertex)
         {
             this.vertexMap[symbol] = vertex;
@@ -28,27 +34,15 @@ define(function()
             return this.vertexMap[symbol];
         },
 
-        deleteVertex(symbolOrVertex)
-        {
-            const symbol = symbolOrVertex instanceof Vertex
-            const removing = this.vertexMap[symbol];
-
-            if(removing)
-            {
-                delete this.vertexMap[symbol];
-
-                removing.forEachEdge(function(edge)
-                {
-                    this.removeEdge({ from: edge.from, to: edge.to});
-
-                }.bind(this));
-            }
+        deleteVertex(symbol)
+        { 
+            delete this.vertexMap[symbol];
         },
 
         insertEdge(from, to, edge)
         {
-            this.vertexMap[from] = to;
-            this.vertexMap[to]   = from;
+            this.vertexMap[from].neighbors[to] = to;
+            this.vertexMap[to].neighbors[from] = from;
 
             this.edgeMap[ [from, to] ] = edge;
             if(this.undirected) 
@@ -60,15 +54,27 @@ define(function()
             return this.edgeMap[ [from, to] ];
         },
 
-        deleteEdge()
-        {
-
+        /**
+         *  Deletes all references being used to represent
+         *  this edge. Both undirected and directed edges
+         *  are referenced by both vertices in the adjacency
+         *  list, while only the from->to pair is used as the
+         *  key for the edge object in the edgeMap.  
+         * 
+         *  @param from data value of the from vertex 
+         *  @param to   data value of the to vertex
+         */
+        deleteEdge(from, to)
+        { 
+            delete this.edgeMap[ [from, to] ];
+            delete this.vertexMap[from].neighbors[to];
+            delete this.vertexMap[to].neighbors[from];
         },
 
-        // Fucky one
-        edgeExists()
+        edgeExists(from, to)
         {
-
+            const edge = this.edgeMap[ [from, to] ];
+            return edge !== undefined && edge !== null;
         }
     };
 

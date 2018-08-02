@@ -7,23 +7,23 @@
  */
 
 'use strict';
-define(['classes/Event', 'classes/graph/Vertex', 'classes/graph/Edge', 'classes/SpacialIndex', 'classes/CommandLog'], 
-function(Event, Vertex, Edge, SpacialIndex, CommandLog)
+define(['classes/Event', 'classes/graph/AdjacencyList', 
+        'classes/graph/Vertex', 'classes/graph/Edge', 
+        'classes/SpacialIndex', 'classes/CommandLog'], 
+function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
 {
     const GraphModel = function(width, height, config)
     {
         // Shape size/styling information
         this.config = config;
-        Vertex.prototype.config = config;
 
         // SpacialIndex needed information
         this.cellRatio  = 5;
         this.setDimensions(width, height);
 
-        this.adjList      = Object.create(null); // non-inheriting object
-        this.edgeMap      = Object.create(null);
-        Edge.adjList      = this.adjList; // Edge Class Static Reference
-        Vertex.edgeMap    = this.edgeMap; // Vertex Class Static Reference
+        this.adjList   = new AdjacencyList(this.config.undirected)
+        Edge.adjList   = this.adjList; // Edge Class Static Reference
+        Vertex.adjList = this.adjList; // Vertex Class Static Reference
         
         this.edgeSpacialIndex   = new SpacialIndex(this.cellWidth, this.cellHeight, this.cellRatio);
         this.vertexSpacialIndex = new SpacialIndex(this.cellWidth, this.cellHeight, this.cellRatio);
@@ -95,11 +95,17 @@ function(Event, Vertex, Edge, SpacialIndex, CommandLog)
 
             if(!this.adjList[data]) // prevent duplicates 
             {
-                const vertex = new Vertex(data, x, y);
-                this.adjList[data] = vertex;
+                const vertex = new Vertex(data, x, y, 
+                { 
+                    vertexSize:        this.config.vertexSize,
+                    vertexOutlineSize: this.config.vertexOutlineSize
+                });
+
+                this.adjList.insertVertex(vertex);
                 this.vertexSpacialIndex.add(vertex);
                 this.onVertexAdded.notify({ data: data, x: x, y: y });
 
+                // For Undo
                 for(const neighbor in neighbors)
                 {
                     this.addEdge({ from: data, to: neighbor });
@@ -114,26 +120,23 @@ function(Event, Vertex, Edge, SpacialIndex, CommandLog)
             const data    = args.symbol;
             const removed = this.adjList[data];
 
-            if(removed)
+            // Clean up edges
+            removed.forEachEdge(function(edge)
             {
-                // Clean up edges
-                removed.forEachEdge(function(edge)
-                {
-                    this.removeEdge
-                    ({
-                        from: edge.from,
-                        to:   edge.to
-                    });
+                this.removeEdge
+                ({
+                    from: edge.from,
+                    to:   edge.to
+                });
 
-                }.bind(this));
+            }.bind(this));
 
-                this.vertexSpacialIndex.remove(removed);
-                delete this.adjList[data];
+            this.adjList.deleteVertex(data);
+            this.vertexSpacialIndex.remove(removed);
 
-                if(args.returnSymbol) args.returnSymbol(data);
+            if(args.returnSymbol) args.returnSymbol(data);
 
-                this.onVertexRemoved.notify({ data: data });
-            }
+            this.onVertexRemoved.notify({ data: data });
         },
 
         addEdge(args={})
@@ -145,7 +148,7 @@ function(Event, Vertex, Edge, SpacialIndex, CommandLog)
             const from = args.from;
             const to   = args.to;
             // thank you discrete math!
-            const edgeDoesntExist = !this.edgeExists(from, to) && (this.undirected ? !this.edgeExists(to, from) : true);  
+            const edgeDoesntExist = !this.edgeExists(from, to) && (this.config.undirected ? !this.edgeExists(to, from) : true);  
 
             if(edgeDoesntExist)
             {
@@ -154,14 +157,14 @@ function(Event, Vertex, Edge, SpacialIndex, CommandLog)
                 
                 // Adjecency List Reference For Edge
                 fromVertex.neighbors[to] = to;
-                if(this.undirected) 
+                if(this.config.undirected) 
                     toVertex.neighbors[from] = from;
 
                 const edge = new Edge(args.from, args.to, this.config.edgeBoxSize, this.adjList);
                 
                 // Store Edge Objects In Map
                 this.edgeMap[ [from, to] ] = edge;
-                if(this.undirected)
+                if(this.config.undirected)
                     this.edgeMap[ [to, from] ] = edge;
                 
                 // Spacial Indexing The Edge
@@ -195,7 +198,7 @@ function(Event, Vertex, Edge, SpacialIndex, CommandLog)
 
             // Delete Edge Object Reference
             delete this.edgeMap[ [edge.from, edge.to] ];
-            if(this.undirected) 
+            if(this.config.undirected) 
                 delete this.edgeMap[ [edge.to, edge.from] ];
 
             const fromVertex = this.adjList[from];
@@ -203,7 +206,7 @@ function(Event, Vertex, Edge, SpacialIndex, CommandLog)
 
             // Delete Neighbor References
             delete fromVertex.neighbors[toVertex.data];
-            if(this.undirected)
+            if(this.config.undirected)
                 delete toVertex.neighbors[fromVertex.data];
 
             this.onEdgeRemoved.notify
