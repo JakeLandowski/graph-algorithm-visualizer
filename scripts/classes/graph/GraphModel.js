@@ -115,9 +115,10 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
 
         removeVertex(args={})
         {
-            this.assertArgs(args, ['symbol'], 'Missing arguments for removeVertex command');
+            this.assertArgs(args, ['symbol', 'returnSymbol'], 'Missing arguments for removeVertex command');
 
             const data    = args.symbol;
+            const returnSymbol = args.returnSymbol;
             const removed = this.adjList[data];
 
             // Clean up edges
@@ -133,8 +134,7 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
 
             this.adjList.deleteVertex(data);
             this.vertexSpacialIndex.remove(removed);
-
-            if(args.returnSymbol) args.returnSymbol(data);
+            returnSymbol(data);
 
             this.onVertexRemoved.notify({ data: data });
         },
@@ -148,26 +148,26 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
             const from = args.from;
             const to   = args.to;
             // thank you discrete math!
-            const edgeDoesntExist = !this.edgeExists(from, to) && (this.config.undirected ? !this.edgeExists(to, from) : true);  
+            // const edgeDoesntExist = !this.edgeExists(from, to) && (this.config.undirected ? !this.edgeExists(to, from) : true);  
 
-            if(edgeDoesntExist)
+            if(!this.adjList.edgeExists(from, to))
             {
-                const fromVertex = this.adjList[from];
-                const toVertex   = this.adjList[to];  
+                // const fromVertex = this.adjList.getVertex(from);
+                // const toVertex   = this.adjList.getVertex(to);  
                 
                 // Adjecency List Reference For Edge
-                fromVertex.neighbors[to] = to;
-                if(this.config.undirected) 
-                    toVertex.neighbors[from] = from;
+                // fromVertex.neighbors[to] = to;
+                // if(this.config.undirected) 
+                //     toVertex.neighbors[from] = from;
 
-                const edge = new Edge(args.from, args.to, this.config.edgeBoxSize, this.adjList);
+                const edge = new Edge(args.from, args.to, this.config.edgeBoxSize);
                 
                 // Store Edge Objects In Map
-                this.edgeMap[ [from, to] ] = edge;
-                if(this.config.undirected)
-                    this.edgeMap[ [to, from] ] = edge;
+                // this.edgeMap[ [from, to] ] = edge;
+                // if(this.config.undirected)
+                //     this.edgeMap[ [to, from] ] = edge;
                 
-                // Spacial Indexing The Edge
+                this.adjList.insertEdge(from, to, edge);
                 this.edgeSpacialIndex.add(edge);
                 
                 this.onEdgeAdded.notify
@@ -191,23 +191,24 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
             const from = args.from;
             const to   = args.to;
             
-            const edge = this.edgeMap[ [from, to] ];
+            const edge = this.adjList.getEdge(from, to); //this.edgeMap[ [from, to] ];
             
             // Clean Up Spacial Index
+            this.adjList.deleteEdge(from, to);
             this.edgeSpacialIndex.remove(edge);
 
             // Delete Edge Object Reference
-            delete this.edgeMap[ [edge.from, edge.to] ];
-            if(this.config.undirected) 
-                delete this.edgeMap[ [edge.to, edge.from] ];
+            // delete this.edgeMap[ [edge.from, edge.to] ];
+            // if(this.config.undirected) 
+            //     delete this.edgeMap[ [edge.to, edge.from] ];
 
-            const fromVertex = this.adjList[from];
-            const toVertex   = this.adjList[to];
+            // const fromVertex = this.adjList[from];
+            // const toVertex   = this.adjList[to];
 
             // Delete Neighbor References
-            delete fromVertex.neighbors[toVertex.data];
-            if(this.config.undirected)
-                delete toVertex.neighbors[fromVertex.data];
+            // delete fromVertex.neighbors[toVertex.data];
+            // if(this.config.undirected)
+            //     delete toVertex.neighbors[fromVertex.data];
 
             this.onEdgeRemoved.notify
             ({ 
@@ -328,11 +329,6 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
         edgeAt(x, y)
         {
             return this.edgeSpacialIndex.getEntity(x, y);
-        },
-
-        edgeExists(from, to)
-        {
-            return this.edgeMap[ [from, to] ] ? true : false;
         }
     };
 

@@ -67,6 +67,9 @@ define(function()
         deleteEdge(from, to)
         { 
             delete this.edgeMap[ [from, to] ];
+            if(this.undirected)
+                delete this.edgeMap[ [to, from] ];
+
             delete this.vertexMap[from].neighbors[to];
             delete this.vertexMap[to].neighbors[from];
         },
