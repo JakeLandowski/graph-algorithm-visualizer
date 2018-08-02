@@ -40,19 +40,51 @@ define(function()
         },
 
         /**
-         *  Get {x, y} position of a given line, 
-         *  true for ending point
-         *  false for starting point.
+         *  Get end {x, y} point of a given line.
          * 
-         *  @param line 
-         *  @param end true if wanting position for ending point
+         *  @param line
          */
-        linePosition(line, end=true)
+        lineStartPoint(line)
         {
             return {
-                x: line.vertices[end ? 0 : 1].x + line.translation.x,
-                y: line.vertices[end ? 0 : 1].y + line.translation.y
+                x: line.vertices[0].x + line.translation.x,
+                y: line.vertices[0].y + line.translation.y
             };
+        },
+
+        /**
+         *  Get start {x, y} point of a given line.
+         * 
+         *  @param line
+         */
+        lineEndPoint(line)
+        {
+            return {
+                x: line.vertices[1].x + line.translation.x,
+                y: line.vertices[1].y + line.translation.y
+            };
+        },
+
+        /**
+         *  Set the end {x, y} point of a given line.
+         * 
+         *  @param line
+         */
+        setLineEndPoint(line, x, y)
+        {
+            line.vertices[1].x = x - line.translation.x;
+            line.vertices[1].y = y - line.translation.y;
+        },
+
+        /**
+         *  Set the start {x, y} point of a given line.
+         * 
+         *  @param line
+         */
+        setLineStartPoint(line, x, y)
+        {
+            line.vertices[0].x = x - line.translation.x;
+            line.vertices[0].y = y - line.translation.y;
         },
 
         /**

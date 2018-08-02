@@ -22,14 +22,24 @@ define(function()
     {
         setPoints()
         {
-            const fromVertex = Edge.adjList.getVertex(this.from);
-            const toVertex   = Edge.adjList.getVertex(this.to);
+            const fromVertex = this.fromVertex;
+            const toVertex   = this.toVertex;
 
             // HitBox Coordinates
             this.x          = (fromVertex.x + toVertex.x) / 2;
             this.y          = (fromVertex.y + toVertex.y) / 2; 
             this.upperLeft  = { x: this.x - this.boxSize/2, y: this.y - this.boxSize/2 };
             this.lowerRight = { x: this.x + this.boxSize/2, y: this.y + this.boxSize/2 };
+        },
+
+        get fromVertex()
+        {
+            return Edge.adjList.getVertex(this.from);
+        },
+
+        get toVertex()
+        {
+            return Edge.adjList.getVertex(this.to);
         }
     };
 

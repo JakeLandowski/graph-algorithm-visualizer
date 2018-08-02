@@ -156,7 +156,7 @@ define(['classes/graph/GraphModel',
                         // and edge doesnt exist
                         // create edge
                         if(selected.data !== vertex.data && 
-                           !this.model.edgeExists(vertex.data, selected.data))
+                           !this.model.adjList.edgeExists(vertex.data, selected.data))
                         {
                             this.model.dispatch
                             ({
