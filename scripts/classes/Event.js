@@ -6,10 +6,9 @@
  *  For creating custom events to be used by Model.js and View.js
  */
 
+'use strict';
 define(function()
 {
-    console.log('Event Class loaded');
-
     const Event = function(sender)
     {
         this.sender = sender;
@@ -36,7 +35,7 @@ define(function()
             {
                 if(this.enabled)
                 {
-                    for(let listener in this.listeners)
+                    for(const listener in this.listeners)
                     {
                         this.listeners[listener](this.sender, args);
                     }

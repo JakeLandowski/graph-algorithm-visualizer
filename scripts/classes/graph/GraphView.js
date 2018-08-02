@@ -6,10 +6,9 @@
  *  Represents the rendering logic for the Graph class.
  */
 
+'use strict';
 define(['classes/Event', 'utils/Util'], function(Event, Util)
 {
-    console.log('GraphView Class loaded');
-
     const GraphView = function(model, two, config)
     {
         // Shape size/styling information
@@ -27,26 +26,27 @@ if(window.DEBUG_MODE)
 }
 //======== DEBUG =============/
 
+
         this.edgeGroup = this.two.makeGroup();
         this.edgeRenderingGroup = this.two.makeGroup();
-        
+
         this.vertexGroup = this.two.makeGroup();
         this.vertexRenderingGroup = this.two.makeGroup();
 
         this.graphGroup = this.two.makeGroup();
-        this.graphGroup.add(this.vertexGroup, this.vertexRenderingGroup,
-                            this.edgeGroup,   this.edgeRenderingGroup);
+        this.graphGroup.add(this.edgeGroup,   this.edgeRenderingGroup,
+                            this.vertexGroup, this.vertexRenderingGroup,);
         
 
         // For mapping data in model to their view shape equivalent
         this.vertexMap = Object.create(null);
         this.edgeMap   = Object.create(null);
 
-        this.onCanvasClicked   = new Event(this);
-        this.onCanvasMouseDown = new Event(this);
-        this.onCanvasMouseUp   = new Event(this);
-        this.onCanvasMouseMove = new Event(this);
-        this.onCanvasMouseDrag = new Event(this);
+        this.onCanvasMouseClick = new Event(this);
+        this.onCanvasMouseDown  = new Event(this);
+        this.onCanvasMouseUp    = new Event(this);
+        this.onCanvasMouseMove  = new Event(this);
+        this.onCanvasMouseDrag  = new Event(this);
 
         this.mouseMoved = false;
         this.mouseDown  = false;
@@ -60,19 +60,22 @@ if(window.DEBUG_MODE)
     
     GraphView.prototype = 
     {
-
-//========= Model Listeners ===========//
         initHandlers()
         {
+
+//========= Vertex Listeners ===========//
+
             // Vertex Added
             this.model.onVertexAdded.attach('createVertex', function(_, params)
             {
                 // Create new vertex shape and store it
-                let vertex = this.two.makeCircle(params.x, params.y, this.config.vertexSize);
-                vertex.fill = "#ff9a00";
+                const vertex    = this.two.makeCircle(params.x, params.y, this.config.vertexSize);
+                vertex.fill   = '#ff9a00';
+                vertex.stroke = '#dd6900';
+
                 vertex.linewidth = this.config.vertexOutlineSize;
 
-                let text = this.two.makeText(params.data, params.x, params.y);
+                const text = this.two.makeText(params.data, params.x, params.y);
                 this.vertexGroup.add(vertex, text);
 
                 this.vertexMap[params.data] = 
@@ -88,8 +91,8 @@ if(window.DEBUG_MODE)
             {
                 if(this.vertexMap[params.data])
                 {
-                    let circle = this.vertexMap[params.data].circle;
-                    let text   = this.vertexMap[params.data].text;
+                    const circle = this.vertexMap[params.data].circle;
+                    const text   = this.vertexMap[params.data].text;
                     this.vertexGroup.remove(circle, text);
                     circle.remove();
                     text.remove();
@@ -109,17 +112,94 @@ if(window.DEBUG_MODE)
 
             }.bind(this));
 
+            // Vertex Selected
+            this.model.onVertexSelected.attach('selectVertex', function(_, params)
+            {
+                if(this.vertexMap[params.data])
+                {
+                    this.vertexMap[params.data].circle.stroke = '#fffc55';
+                }
+            
+            }.bind(this));
+
+            // Vertex Deselected
+            this.model.onVertexDeselected.attach('deselectVertex', function(_, params)
+            {
+                if(this.vertexMap[params.data])
+                {
+                    this.vertexMap[params.data].circle.stroke = '#dd6900';
+                }                 
+
+            }.bind(this));
+
+//========= Edge Listeners ===========//
+
+            // Tracking Edge Added
+            this.model.onTrackingEdgeAdded.attach('trackingEdgeAdded', function(_, params)
+            {
+                const start = params.start;
+                const end   = params.end;
+
+                this.trackingEdge = this.two.makeLine(start.x, start.y, end.x, end.y);
+                this.trackingEdge.stroke = 'rgba(255, 255, 100, 0.5)';
+                this.trackingEdge.linewidth = this.config.edgeWidth;
+                this.edgeGroup.add(this.trackingEdge);
+
+            }.bind(this));
+
+            // Tracking Edge Moved
+            this.model.onTrackingEdgeMoved.attach('trackingEdgeMoved', function(_, params)
+            {
+                const edge = this.trackingEdge;
+                const end = Util.linePosition(edge);
+
+                edge.vertices[1].x = params.x - end.x;
+                edge.vertices[1].y = params.y - end.y;
+
+            }.bind(this));
+
+            // Tracking Edge Removed
+            this.model.onTrackingEdgeRemoved.attach('trackingEdgeRemoved', function(_, params)
+            {
+                this.edgeGroup.remove(this.trackingEdge);
+                this.trackingEdge.remove()
+                delete this.trackingEdge;                                
+
+            }.bind(this));
+
             // Edge Added
             this.model.onEdgeAdded.attach('createEdge', function(_, params)
             {
-                // Create new edge line and store it
-                let edge = this.two.makeLine(0, 0, 200, 200);
-                edge.stroke = "black";
-                edge.linewidth = this.config.edgeWidth;
+                const edge = 
+                {
+                    line: this.two.makeLine(params.fromPoint.x, params.fromPoint.y, 
+                                            params.toPoint.x,   params.toPoint.y),
 
-                this.edgeMap[ [params.to, params.from] ] = edge;
+                    box: this.two.makeRectangle(params.center.x, params.center.y, 
+                                                this.config.edgeBoxSize, this.config.edgeBoxSize)
+                };
+
+                edge.line.stroke = "rgb(255, 255, 100)";
+                edge.line.linewidth = this.config.edgeWidth;
+
+                edge.box.fill = 'rgb(255, 255, 100)';
+                
+                this.edgeGroup.add(edge.line, edge.box);
+                this.edgeMap[ [params.from, params.to] ] = edge;
             
             }.bind(this));
+
+            // Edge Removed
+            this.model.onEdgeRemoved.attach('removeEdge', function(_, params)
+            {                
+                const edge = this.edgeMap[ [params.from, params.to] ];
+                this.edgeGroup.remove(edge.line, edge.box);
+                edge.line.remove();
+                edge.box.remove();
+                delete this.edgeMap[ [params.from, params.to] ];
+
+            }.bind(this));
+
         },
 
 //========= Event Handlers ===========//
@@ -135,14 +215,6 @@ if(window.DEBUG_MODE)
 
         initCanvasHandlers()
         {
-            // MAY NEVER NEED AGAIN BAKED INTO MOUSEUP
-            // this.canvas.addEventListener('click', function(event)
-            // {
-            //     event.preventDefault();
-            //     this.onCanvasClicked.notify({x: event.offsetX, y: event.offsetY});
-            
-            // }.bind(this));
-
             this.canvas.addEventListener('mousedown', function(event)
             {
                 event.preventDefault(); 
@@ -159,7 +231,7 @@ if(window.DEBUG_MODE)
                 this.mouseDown = false;
                 
                 if(!this.mouseMoved)
-                    this.onCanvasClicked.notify({x: event.offsetX, y: event.offsetY});
+                    this.onCanvasMouseClick.notify({x: event.offsetX, y: event.offsetY});
             
             }.bind(this));
 
@@ -178,6 +250,7 @@ if(window.DEBUG_MODE)
             
             }.bind(this));
 
+            // Adds a small delay before triggering a mouse move event
             this.canvas.addEventListener('mousemove', Util.stagger(function(event)
             {
                 event.preventDefault();
@@ -208,8 +281,8 @@ drawSpacialIndex()
 {
     if(window.DEBUG_MODE)
     {
-        let group = this.spacialIndexGridGroup;
-        let two = this.two;
+        const group = this.spacialIndexGridGroup;
+        const two = this.two;
         
         // weird way to actually delete shapes
         group.children.forEach(function(shape)
@@ -218,19 +291,20 @@ drawSpacialIndex()
         });
         group.children = [];
 
+        let width, height, centerX, centerY, rect, text;
         for(let x = 0; x < this.model.cellRatio; x++)
         {
             for(let y = 0; y < this.model.cellRatio; y++)
             {
-                let width = this.model.cellWidth;
-                let height = this.model.cellHeight;
-                let centerX = x * width + width / 2;
-                let centerY = y * height + height / 2; 
-                let rect = this.two.makeRectangle(centerX, centerY, width, height);
+                width = this.model.cellWidth;
+                height = this.model.cellHeight;
+                centerX = x * width + width / 2;
+                centerY = y * height + height / 2; 
+                rect = this.two.makeRectangle(centerX, centerY, width, height);
                 rect.noFill();
                 rect.stroke = '#fff';
                 group.add(rect);
-                let text = this.two.makeText('' + x + y, centerX - width / 3 - 10, centerY - height / 3 - 10);
+                text = this.two.makeText('' + x + y, centerX - width / 3 - 10, centerY - height / 3 - 10);
                 text.stroke = '#fff'; 
                 group.add(text);
             }   

@@ -6,6 +6,7 @@
  *  Contains rand(), stagger()
  */
 
+'use strict';
 define(function()
 {
     return {
@@ -36,6 +37,32 @@ define(function()
                 if(timer) clearTimeout(timer);
                 timer = setTimeout(callback, delay, event);
             };
+        },
+
+        /**
+         *  Get {x, y} position of a given line, 
+         *  true for ending point
+         *  false for starting point.
+         * 
+         *  @param line 
+         *  @param end true if wanting position for ending point
+         */
+        linePosition(line, end=true)
+        {
+            return {
+                x: line.vertices[end ? 0 : 1].x + line.translation.x,
+                y: line.vertices[end ? 0 : 1].y + line.translation.y
+            };
+        },
+
+        /**
+         *  Creates a copy of an object
+         * 
+         *  @param object to copy 
+         */
+        copy(object)
+        {
+            return Object.assign({}, object);
         }
 
     }; // end module

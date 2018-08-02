@@ -6,13 +6,13 @@
  *  Represents the rendering logic for the Graph class.
  */
 
+'use strict';
 define(function()
 {
-    console.log('CommandLog Class loaded');
-
     const CommandLog = function()
     {
-        this.log  = [];
+        this.log = [];
+        this.undoHistory = [];
 
     }; // end constructor
     
@@ -23,9 +23,16 @@ define(function()
             this.log.push(command);
         },
 
-        undo()
+        undo() 
         {
-            return this.log.pop();
+            const command = this.log.pop();
+            if(command) this.undoHistory.push(command);
+            return command;
+        },
+        
+        redo()
+        {
+            return this.undoHistory.pop();
         }
     };
 

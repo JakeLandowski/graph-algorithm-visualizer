@@ -7,27 +7,34 @@
  *  to handle rendering and data logic.
  */
 
+'use strict';
 define(['classes/graph/GraphModel', 
         'classes/graph/GraphView',
-        'two'], 
-        function(GraphModel, GraphView, Two)
+        'two', 'utils/Util'], 
+        function(GraphModel, GraphView, Two, Util)
 {
-    console.log('Graph Class loaded');
-
-    const Graph = function(twoConfig={})
+    const Graph = function(config={})
     {
         this.two = new Two
         ({
-            fullscreen: twoConfig.fullscreen || false,
-            type:       twoConfig.type       || Two.Types.canvas,
-            width:      twoConfig.width      || 100,
-            height:     twoConfig.height     || 100
+            fullscreen: config.fullscreen || false,
+            type:       config.type       || Two.Types.canvas,
+            width:      config.width      || 100,
+            height:     config.height     || 100
         });
-        
-        this.initConfig();
+
+        this.config = 
+        {
+            undirected:        config.undirected        || true,
+            vertexSize:        config.vertexSize        || 25,
+            vertexOutlineSize: config.vertexOutlineSize || 3,
+            edgeWidth:         config.edgeWidth         || 5,
+            edgeBoxSize:       config.edgeBoxSize       || 50
+        };
+
         this.model = new GraphModel(this.two.width, this.two.height, this.config);
-        this.view  = new GraphView(this.model,      this.two,        this.config);
-        // this.initHandlers();
+
+        this.view  = new GraphView(this.model, this.two, this.config);
         this.initSymbols();
 
         this.mouseEventsLogged = [];
@@ -37,6 +44,7 @@ define(['classes/graph/GraphModel',
     {
 
 //====================== Initialization ===========================//
+
         initSymbols()
         {
             this.symbols = ['Z', 'Y', 'X', 'W', 'V', 'U', 
@@ -47,46 +55,21 @@ define(['classes/graph/GraphModel',
             this.usedSymbols = Object.create(null);
         },
 
-        initConfig()
-        {
-            this.config = Object.create(null); // non-inheriting object
-            this.config.vertexSize = 25;
-            this.config.vertexOutlineSize = 0;
-            this.config.edgeWidth = 1;
-        },
-
-        // initHandlers()
-        // {
-        //     this.view.onCanvasMouseUp.attach('onCanvasMouseUp', function(_, params)
-        //     {
-
-        //     }.bind(this));
-
-        //     this.view.onCanvasMouseMove.attach('onCanvasMouseMove', function(_, params)
-        //     {
-
-        //     }.bind(this));
-
-        //     this.view.onCanvasMouseDrag.attach('onCanvasMouseDrag', function(_, params)
-        //     {
-
-        //     }.bind(this));
-        // },
-
-//====================== UI Hooks ===========================//
+//====================== Graph Interaction Modes ===========================//
 
         vertexMode()
         {
             this.clearMouseEvents();
 
-            this.view.onCanvasClicked.attach('clickVertex', function(_, params)
+            this.view.onCanvasMouseClick.attach('clickVertex', function(_, params)
             {
                 this.mouseEventsLogged.push('clickVertex');
+
                 // see if clicked on vertex here using model
                 // if clicked on vertex tell model to delete
-                let vertex = this.model.vertexAt(params.x, params.y);
+                const vertex = this.model.vertexAt(params.x, params.y);
 
-                if(vertex)
+                if(vertex) // REMOVE
                 {
                     this.model.dispatch
                     ({
@@ -95,14 +78,14 @@ define(['classes/graph/GraphModel',
                         {
                             symbol: vertex.data,
                             x: params.x,
-                            y: params.y   
+                            y: params.y,
+                            neighbors: Util.copy(vertex.neighbors), // necessary for command log and undos
+                            returnSymbol: this.returnSymbol.bind(this)
                         },
-                        undo: 'addVertex'
+                        undo: 'addVertex',
                     });
-
-                    this.returnSymbol(vertex.data);
                 }
-                else if(this.symbols.length > 0)
+                else if(this.symbols.length > 0) // ADD
                 {   
                     this.model.dispatch
                     ({
@@ -111,7 +94,9 @@ define(['classes/graph/GraphModel',
                         {
                             symbol: this.getSymbol(),
                             x: params.x,
-                            y: params.y   
+                            y: params.y,
+                            neighbors: Object.create(null), // necessary for command log and undos
+                            returnSymbol: this.returnSymbol.bind(this)   
                         },
                         undo: 'removeVertex'
                     });
@@ -124,17 +109,17 @@ define(['classes/graph/GraphModel',
                 this.mouseEventsLogged.push('dragVertex');
 
                 // locate vertex at location
-                let vertex = this.model.vertexAt(params.x, params.y);
+                const vertex = this.model.vertexAt(params.x, params.y);
 
                 if(vertex)
                 {
-                    let offsetX = vertex.x - params.x;
-                    let offsetY = vertex.y - params.y;
+                    const offsetX = vertex.x - params.x;
+                    const offsetY = vertex.y - params.y;
 
                     function stickVertexToCursor(_, point)
                     {
                         // Mostly visual move
-                        this.model.softMoveVertex(vertex, point.x + offsetX, point.y + offsetY);
+                        this.model.moveVertex(vertex, point.x + offsetX, point.y + offsetY);
                     }
 
                     function releaseVertexFromCursor(_, point)
@@ -142,7 +127,7 @@ define(['classes/graph/GraphModel',
                         // Final movement, updates spatial information
                         this.view.onCanvasMouseDrag.detach('stickVertexToCursor');
                         this.view.onCanvasMouseUp.detach('releaseVertexFromCursor');
-                        this.model.hardMoveVertex(vertex, point.x + offsetX, point.y + offsetY);
+                        this.model.updateVertexSpatial(vertex, point.x + offsetX, point.y + offsetY);
                     }
 
                     this.view.onCanvasMouseDrag.attach('stickVertexToCursor', stickVertexToCursor.bind(this));
@@ -156,42 +141,91 @@ define(['classes/graph/GraphModel',
         {
             this.clearMouseEvents();
 
-            this.view.onCanvasClicked.attach('createEdge', function(_, params)
+            this.view.onCanvasMouseClick.attach('createEdge', function(_, params)
             {
                 this.mouseEventsLogged.push('createEdge');
                 
-                let vertex = this.model.vertexAt(params.x, params.y);
+                const vertex   = this.model.vertexAt(params.x, params.y);
+                const selected = this.model.selectedVertex; 
 
                 if(vertex)
                 {
-                    if(this.vertexSelected)
+                    if(selected)
                     {
-                        graph.dispatch
-                        ({
-                            type: 'addEdge',
-                            data: 
-                            {
-                                
-                            },
-                            undo: 'removeEdge'
-                        });
+                        // If not the same vertex
+                        // and edge doesnt exist
+                        // create edge
+                        if(selected.data !== vertex.data && 
+                           !this.model.edgeExists(vertex.data, selected.data))
+                        {
+                            this.model.dispatch
+                            ({
+                                type: 'addEdge',
+                                data: 
+                                {
+                                    from: selected.data, 
+                                    to:   vertex.data,
+                                },
+                                undo: 'removeEdge'
+                            });
+                        }
+
+                        this.model.deselectVertex();
                     }
                     else
                     {
-                        // highlight vertex
-                        // stick line to cursor from vertex
-                        this.vertexSelected = true;
+                        this.model.selectVertex(vertex);
+                        this.trackEdgeToCursor(params.x, params.y);
                     }
                 }
-                else if(this.vertexSelected)
+                else if(selected)
                 {
-                    this.vertexSelected = false;
+                    this.model.deselectVertex();
+                }
+                else
+                {
+                    const edge = this.model.edgeAt(params.x, params.y);
+                    
+                    if(edge)
+                    {
+                        this.model.dispatch
+                        ({
+                            type: 'removeEdge',
+                            data: 
+                            {
+                                from: edge.from, 
+                                to:   edge.to,
+                            },
+                            undo: 'addEdge'
+                        });
+                    }
                 }
 
             }.bind(this));
         },
 
+        trackEdgeToCursor(x, y)
+        {
+            this.model.addTrackingEdge(x, y);
+
+            function stickEdgeToCursor(_, point)
+            {
+                this.model.updateTrackingEdge(point.x, point.y);
+            }
+
+            function releaseEdgeFromCursor(_, point)
+            {
+                this.view.onCanvasMouseMove.detach('stickEdgeToCursor');
+                this.view.onCanvasMouseClick.detach('releaseEdgeFromCursor');
+                this.model.releaseTrackingEdge();
+            }
+
+            this.view.onCanvasMouseMove.attach('stickEdgeToCursor', stickEdgeToCursor.bind(this));
+            this.view.onCanvasMouseClick.attach('releaseEdgeFromCursor', releaseEdgeFromCursor.bind(this));
+        },
+
 //====================== Setters ===========================//
+
         set vertexSize(size)
         {
             this.config.vertexSize = size < 1 ? 1 : size;
@@ -208,6 +242,7 @@ define(['classes/graph/GraphModel',
         },
 
 //====================== Methods ===========================//
+
         start()
         {
             this.two.play();
@@ -231,7 +266,7 @@ define(['classes/graph/GraphModel',
 
         getSymbol()
         {
-            let symbol = this.symbols.pop();
+            const symbol = this.symbols.pop();
             this.usedSymbols[symbol] = symbol;
             return symbol;  
         },
@@ -244,32 +279,16 @@ define(['classes/graph/GraphModel',
 
         clearMouseEvents()
         {
-            let view = this.view;
+            const view = this.view;
             this.mouseEventsLogged.forEach(function(eventName)
             {
-                view.onCanvasClicked.detach(eventName);
+                view.onCanvasMouseClick.detach(eventName);
                 view.onCanvasMouseMove.detach(eventName);
                 view.onCanvasMouseDrag.detach(eventName);
                 view.onCanvasMouseDown.detach(eventName);
                 view.onCanvasMouseUp.detach(eventName);
             });
         },
-
-//======== DEBUG =============/
-showGraphData()
-{
-    console.log('Adjacency List:');
-    console.log('[\n');
-    for(let data in this.model.adjList)
-    {
-        let vertex = this.model.adjList[data];
-        console.log('\t' + data + ' => [' + vertex.x + ', ' + vertex.y + ', ' + vertex.id + '],');
-    }
-    console.log(']');
-}
-//======== DEBUG =============/
-
-
     };
 
     return Graph;

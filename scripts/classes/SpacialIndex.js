@@ -1,15 +1,17 @@
 /**
  *  @author Jake Landowski
- *  7/16/18
- *  main.js
+ *  7/22/18
+ *  SpacialIndex.js
  * 
- *  App entry point.
+ *  2D Matrix Spatial Hash for click detection on shapes.
+ *  Interface REQUIRES Objects given to have properties:
+ *      upperLeft:  {x, y},
+ *      lowerRIght: {x, y}
  */
 
+'use strict';
 define(function()
 {
-    console.log('GraphModel Class loaded');
-
     const SpacialIndex = function(cellWidth, cellHeight, cellRatio)
     {
         this.cellWidth  = cellWidth;
@@ -45,19 +47,21 @@ define(function()
          */
         add(entity)
         {
-            let startX = this.cellRow(entity.upperLeft.x);
-            let startY = this.cellCol(entity.upperLeft.y);
-            let endX   = this.cellRow(entity.lowerRight.x);
-            let endY   = this.cellCol(entity.lowerRight.y);
+            const startX = this.cellRow(entity.upperLeft.x);
+            const startY = this.cellCol(entity.upperLeft.y);
+            const endX   = this.cellRow(entity.lowerRight.x);
+            const endY   = this.cellCol(entity.lowerRight.y);
 
             // For removing from cells later
             if(!entity.cells) entity.cells = [];
+
+            let cell;
             
             for(let x = startX; x <= endX; x++)
             {
                 for(let y = startY; y <= endY; y++)
                 {
-                    let cell = this.cellFromIndex(x, y); 
+                    cell = this.cellFromIndex(x, y); 
                     
                     if(cell) 
                     {
@@ -88,10 +92,10 @@ define(function()
         /**
          *  Update the location of the entity in this SpacialIndex 
          */
-        update(entity, x, y)
+        update(entity)
         {
             this.remove(entity);
-            this.add(entity, x, y);
+            this.add(entity);
         },
 
         /**
@@ -99,13 +103,15 @@ define(function()
          */
         getEntity(x, y)
         {
-            let cell = this.cell(x, y);
+            const cell = this.cell(x, y);
 
-            for(let entityId in cell)
+            let entity, upperLeft, lowerRight;
+
+            for(const entityId in cell)
             {
-                let entity     = cell[entityId];
-                let upperLeft  = entity.upperLeft;
-                let lowerRight = entity.lowerRight;
+                entity     = cell[entityId];
+                upperLeft  = entity.upperLeft;
+                lowerRight = entity.lowerRight;
                 
                 // calculate point in rectangle here
                 if(x > upperLeft.x && x < lowerRight.x &&
