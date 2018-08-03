@@ -24,9 +24,9 @@ define(function()
             return vertex !== undefined && vertex !== null;
         },
 
-        insertVertex(symbol, vertex)
+        insertVertex(vertex)
         {
-            this.vertexMap[symbol] = vertex;
+            this.vertexMap[vertex.data] = vertex;
         },
 
         getVertex(symbol)
@@ -39,8 +39,10 @@ define(function()
             delete this.vertexMap[symbol];
         },
 
-        insertEdge(from, to, edge)
+        insertEdge(edge)
         {
+            const from = edge.from;
+            const to   = edge.to;
             this.vertexMap[from].neighbors[to] = to;
             this.vertexMap[to].neighbors[from] = from;
 
@@ -78,7 +80,21 @@ define(function()
         {
             const edge = this.edgeMap[ [from, to] ];
             return edge !== undefined && edge !== null;
-        }
+        },
+
+        forEachVertex(action)
+        {
+            const map = this.vertexMap;
+            for(const vertexData in map)
+                action(map[vertexData]);
+        },
+
+        forEachEdge(action)
+        {
+            const map = this.edgeMap;
+            for(const edgeData in map)
+                action(map[edgeData]);
+        },
     };
 
     return AdjacencyList;

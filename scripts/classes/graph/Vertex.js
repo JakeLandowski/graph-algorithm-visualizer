@@ -38,6 +38,24 @@ define(function()
                 if(Vertex.adjList.edgeExists(this.data, neighbor))
                     action(Vertex.adjList.getEdge(this.data, neighbor));
             }
+        },
+
+        forEachIncomingEdge(action)
+        {
+            // for(const neighbor in this.neighbors)
+            // {
+            //     if(Vertex.adjList.edgeExists(this.data, neighbor))
+            //         action(Vertex.adjList.getEdge(this.data, neighbor));
+            // }
+        },
+
+        forEachOutgoingEdge(action)
+        {
+            // for(const neighbor in this.neighbors)
+            // {
+            //     if(Vertex.adjList.edgeExists(this.data, neighbor))
+            //         action(Vertex.adjList.getEdge(this.data, neighbor));
+            // }
         }
     };
 

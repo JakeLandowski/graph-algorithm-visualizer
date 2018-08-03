@@ -40,7 +40,7 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
         
         this.onEdgeAdded           = new Event(this);
         this.onEdgeRemoved         = new Event(this);
-        this.onEdgePointMoved      = new Event(this);
+        this.onEdgeMoved      = new Event(this);
  
         this.userCommands = new CommandLog();
     };
@@ -93,7 +93,7 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
             const y         = args.y;
             const neighbors = args.neighbors;
 
-            if(!this.adjList[data]) // prevent duplicates 
+            if(!this.adjList.vertexExists(data)) // prevent duplicates 
             {
                 const vertex = new Vertex(data, x, y, 
                 { 
@@ -117,9 +117,9 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
         {
             this.assertArgs(args, ['symbol', 'returnSymbol'], 'Missing arguments for removeVertex command');
 
-            const data    = args.symbol;
+            const data         = args.symbol;
             const returnSymbol = args.returnSymbol;
-            const removed = this.adjList[data];
+            const removed      = this.adjList.getVertex(data);
 
             // Clean up edges
             removed.forEachEdge(function(edge)
@@ -142,41 +142,26 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
         addEdge(args={})
         {
             this.assertArgs(args, ['from', 'to'], 'Missing arguments for addEdge command');
-            this.assertArgs(this.adjList, [args.from, args.to], 
-                            'Missing vertices in adjList for addEdge command');
+            if(!this.adjList.vertexExists(args.from) || !this.adjList.vertexExists(args.to))
+                throw 'Missing vertices in adjList for addEdge command';
 
             const from = args.from;
-            const to   = args.to;
-            // thank you discrete math!
-            // const edgeDoesntExist = !this.edgeExists(from, to) && (this.config.undirected ? !this.edgeExists(to, from) : true);  
+            const to   = args.to;  
 
             if(!this.adjList.edgeExists(from, to))
             {
-                // const fromVertex = this.adjList.getVertex(from);
-                // const toVertex   = this.adjList.getVertex(to);  
-                
-                // Adjecency List Reference For Edge
-                // fromVertex.neighbors[to] = to;
-                // if(this.config.undirected) 
-                //     toVertex.neighbors[from] = from;
-
                 const edge = new Edge(args.from, args.to, this.config.edgeBoxSize);
                 
-                // Store Edge Objects In Map
-                // this.edgeMap[ [from, to] ] = edge;
-                // if(this.config.undirected)
-                //     this.edgeMap[ [to, from] ] = edge;
-                
-                this.adjList.insertEdge(from, to, edge);
+                this.adjList.insertEdge(edge);
                 this.edgeSpacialIndex.add(edge);
                 
                 this.onEdgeAdded.notify
                 ({ 
                     from:      from,
                     to:        to, 
-                    fromPoint: { x: fromVertex.x, y: fromVertex.y },
-                    toPoint:   { x: toVertex.x,   y: toVertex.y   },
-                    center:    { x: edge.x,       y: edge.y       }    
+                    fromPoint: { x: edge.fromVertex.x, y: edge.fromVertex.y },
+                    toPoint:   { x: edge.toVertex.x,   y: edge.toVertex.y   },
+                    center:    { x: edge.x,            y: edge.y            }    
                 });
             }
         },
@@ -184,39 +169,25 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
         removeEdge(args={})
         {
             this.assertArgs(args, ['from', 'to'], 'Missing arguments for removeEdge command');
-            this.assertArgs(this.adjList, [args.from, args.to], 
-                            'Missing vertices in adjList for removeEdge command');
-            this.assertArgs(this.edgeMap, [ [args.from, args.to] ], 'edge was not found for removeEdge');
+            if(!this.adjList.vertexExists(args.from) ||  !this.adjList.vertexExists(args.to)) 
+                throw 'Missing vertices in adjList for removeEdge command';
+            if(!this.adjList.edgeExists(args.from, args.to)) 
+                throw 'edge was not found for removeEdge';
 
             const from = args.from;
             const to   = args.to;
-            
             const edge = this.adjList.getEdge(from, to); //this.edgeMap[ [from, to] ];
             
             // Clean Up Spacial Index
             this.adjList.deleteEdge(from, to);
             this.edgeSpacialIndex.remove(edge);
-
-            // Delete Edge Object Reference
-            // delete this.edgeMap[ [edge.from, edge.to] ];
-            // if(this.config.undirected) 
-            //     delete this.edgeMap[ [edge.to, edge.from] ];
-
-            // const fromVertex = this.adjList[from];
-            // const toVertex   = this.adjList[to];
-
-            // Delete Neighbor References
-            // delete fromVertex.neighbors[toVertex.data];
-            // if(this.config.undirected)
-            //     delete toVertex.neighbors[fromVertex.data];
-
             this.onEdgeRemoved.notify
             ({ 
                 from:      from,
                 to:        to, 
-                fromPoint: { x: fromVertex.x, y: fromVertex.y },
-                toPoint:   { x: toVertex.x,   y: toVertex.y   },
-                center:    { x: edge.x,       y: edge.y       }    
+                fromPoint: { x: edge.fromVertex.x, y: edge.fromVertex.y },
+                toPoint:   { x: edge.toVertex.x,   y: edge.toVertex.y   },
+                center:    { x: edge.x,            y: edge.y            }    
             });
         },
 
@@ -227,33 +198,34 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
             this.onVertexMoved.notify({ data: vertex.data, x: x, y: y });
             
             // Update Vertex's Edge Positions
-            // vertex.forEachEdge(function(edge)
-            // {
-            //     edge.setPoints();
+            vertex.forEachEdge(function(edge)
+            {
+               this.moveEdge(edge); 
 
-            //     const pointMoved = edge.toVertex.data === vertex.data ? 'to' : 'from';
+            }.bind(this));
+        },
 
-            //     this.onEdgePointMoved.notify
-            //     ({ 
-            //         pointMoved: pointMoved, 
-            //         x: x, 
-            //         y: y,
-            //         center: { x: edge.x, y: edge.y } 
-            //     });
+        moveEdge(edge)
+        {
+            edge.setPoints();
+            this.edgeSpacialIndex.update(edge);
 
-            // }.bind(this));
+            const fromVertex = edge.fromVertex;
+            const toVertex   = edge.toVertex;
+
+            this.onEdgeMoved.notify
+            ({  
+                from: edge.from,
+                to:   edge.to,
+                fromPoint: { x: fromVertex.x, y: fromVertex.y }, 
+                toPoint:   { x: toVertex.x,   y: toVertex.y   },
+                center:    { x: edge.x,       y: edge.y       } 
+            });
         },
 
         updateVertexSpatial(vertex, x, y)
         {
             this.vertexSpacialIndex.update(vertex);
-
-            // vertex.forEachEdge(function(edge)
-            // {
-            //     this.edgeSpacialIndex.update(edge);
-
-            // }.bind(this));
-
             this.moveVertex(vertex, x, y);
         },
 
@@ -307,10 +279,11 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
         {
             this.setDimensions(width, height);
             this.vertexSpacialIndex = new SpacialIndex(width, height, this.cellRatio);
-            for(const vertexKey in this.adjList)
+            this.adjList.forEachVertex(function(vertex)
             {
-                this.vertexSpacialIndex.add(this.adjList[vertexKey]);
-            }
+                this.vertexSpacialIndex.add(vertex);
+
+            }.bind(this));
         },
 
         setDimensions(width, height)

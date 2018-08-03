@@ -151,10 +151,7 @@ if(window.DEBUG_MODE)
             this.model.onTrackingEdgeMoved.attach('trackingEdgeMoved', function(_, params)
             {
                 const edge = this.trackingEdge;
-                const end = Util.linePosition(edge);
-
-                edge.vertices[1].x = params.x - end.x;
-                edge.vertices[1].y = params.y - end.y;
+                Util.setLineEndPoint(edge, params.x, params.y);
 
             }.bind(this));
 
@@ -181,7 +178,6 @@ if(window.DEBUG_MODE)
 
                 edge.line.stroke = "rgb(255, 255, 100)";
                 edge.line.linewidth = this.config.edgeWidth;
-
                 edge.box.fill = 'rgb(255, 255, 100)';
                 
                 this.edgeGroup.add(edge.line, edge.box);
@@ -200,6 +196,16 @@ if(window.DEBUG_MODE)
 
             }.bind(this));
 
+            // Edge Moved
+            this.model.onEdgeMoved.attach('moveEdge', function(_, params)
+            {
+                const edge = this.edgeMap[ [params.from, params.to] ];
+
+                Util.setLineStartPoint(edge.line, params.fromPoint.x, params.fromPoint.y);
+                Util.setLineEndPoint(edge.line, params.toPoint.x, params.toPoint.y);
+                edge.box.translation.set(params.center.x, params.center.y);
+
+            }.bind(this));
         },
 
 //========= Event Handlers ===========//
