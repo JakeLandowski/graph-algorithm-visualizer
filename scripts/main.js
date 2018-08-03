@@ -47,6 +47,7 @@
     addVertexBtn.addEventListener('click', function() { graph.vertexMode(); });
     addEdgeBtn.addEventListener('click',   function() { graph.edgeMode();   });
     undoBtn.addEventListener('click',      function() { graph.undo();       });
+    redoBtn.addEventListener('click',      function() { graph.redo();       });
 
      function clearCanvas() {
          document.getElementById("main").innerHTML = "";

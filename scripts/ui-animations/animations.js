@@ -88,45 +88,6 @@ define(['ui-animations/anime'], function(Anime)
                 });
             }
 
-            //Hide/Show UI menu
-            hideUI.addEventListener('click', (function () {
-                delay = 0;
-                if(showUI) {
-                    menu.forEach(function(element) {
-                        generateUI(element,-225,0,0,delay);
-                        delay = delay + 100;
-                    });
-
-                    tools.forEach(function (element) {
-                        generateUI(element,240,200,25,delay);
-                        delay = delay + 100;
-                    });
-                    openTools = false;
-                    showUI = false;
-
-                    if(graphText.style.display = 'none') {
-                        graphText.style.display = 'block';
-                    }
-
-                    if(algorithmText.style.display = 'none') {
-                        algorithmText.style.display = 'block';
-                    }
-                } else {
-                    delay = 0;
-                    menu.forEach(function(element) {
-                        generateUI(element,200,200,50,delay);
-                        delay = delay + 100;
-                    });
-
-                    tools.forEach(function (element) {
-                        generateUI(element,-240,200,25,delay);
-                        delay = delay + 100;
-                    });
-                    openTools = true;
-                    showUI = true;
-                }
-            }));
-
             //ANIMATION FUNCTIONS
             function drawLine(target,direction,duration) {
                 let lineDrawing = Anime({

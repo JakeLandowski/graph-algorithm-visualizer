@@ -70,12 +70,19 @@ if(window.DEBUG_MODE)
             {
                 // Create new vertex shape and store it
                 const vertex    = this.two.makeCircle(params.x, params.y, this.config.vertexSize);
-                vertex.fill   = '#ff9a00';
-                vertex.stroke = '#dd6900';
+                vertex.fill   = '#262626';
+                vertex.shadowOffsetX = 10;
+                vertex.shadowOffsetY = 10;
+                vertex.shadowBlur = 5;
+                vertex.stroke = '#ff9a00';
+                vertex.color = '#ff9a00';
+                vertex.shadowColor = '#ff9a00';
 
                 vertex.linewidth = this.config.vertexOutlineSize;
 
                 const text = this.two.makeText(params.data, params.x, params.y);
+                text.stroke = '#ff9a00';
+                text.font = '20px Exo 2';
                 this.vertexGroup.add(vertex, text);
 
                 this.vertexMap[params.data] = 

@@ -248,6 +248,11 @@ define(['classes/graph/GraphModel',
             this.model.undo();
         },
 
+        redo()
+        {
+            this.model.redo();
+        },
+
         render()
         {
             this.two.update();
