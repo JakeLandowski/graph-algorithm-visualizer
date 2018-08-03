@@ -70,7 +70,6 @@ html, body {
     position: absolute;
     color:  #ff9a00;
     z-index: 2;
-    top: 4rem;
 }
 
 .mainmenu:hover {
@@ -92,7 +91,6 @@ html, body {
 
 .menu {
     left: -250px;
-    top: 10rem;
     position: absolute;
     z-index: 1;
     list-style: none;
