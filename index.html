@@ -14,17 +14,23 @@
 <body>
     <div id="menuoptions" class="ui-component noselect">
         <svg id="buttons" class="mainmenu menuoptions">
+            <defs>
+                <filter id="shadow">
+                    <feGaussianBlur result="blurOut" in="offOut" stdDeviation="3" />
+                    <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
+                </filter>
+            </defs>
             <!-- CREATE NEW GRAPH BUTTON -->
-            <path class="future creategraph" stroke="#ff9a00" stroke-width="4" fill="transparent" stroke-dasharray="25 5" d="
+            <path filter="url(#shadow)" id="creategraphbutton" class="future creategraph" stroke="#ff9a00" stroke-width="4" fill="transparent" stroke-dasharray="25 5" d="
                                 M 160, 45
                                 m -30, 0
                                 a 30,30 0 0,0 60,0
                                 a 30,30 0 0,0 -60,0
             "></path>
-            <text class="future creategraph" x="144" y="50" font-family="Exo 2" font-size="14" fill="#ff9a00">NEW</text>
+            <text class="future creategraph menubutton" x="144" y="50" font-family="Exo 2" font-size="14" fill="#ff9a00">NEW</text>
 
             <!-- SELECT GRAPH BUTTON -->
-            <path class="future selectgraph" stroke="#ff9a00" stroke-width="4" fill="transparent" stroke-dasharray="25 5" d="
+            <path filter="url(#shadow)" id="selectgraphbutton" class="future selectgraph" stroke="#ff9a00" stroke-width="4" fill="transparent" stroke-dasharray="25 5" d="
                                 M 130, 130
                                 m -30, 0
                                 a 30,30 0 0,0 60,0
@@ -33,7 +39,7 @@
             <text class="future selectgraph" x="112" y="135" font-family="Exo 2" font-size="14" fill="#ff9a00">GRPH</text>
 
             <!-- SELECT ALGORITHM BUTTON -->
-            <path class="future selectalgorithm" stroke="#ff9a00" stroke-width="4" fill="transparent" stroke-dasharray="25 5" d="
+            <path filter="url(#shadow)" id="selectalgorithmbutton" class="future selectalgorithm" stroke="#ff9a00" stroke-width="4" fill="transparent" stroke-dasharray="25 5" d="
                                 M 45, 160
                                 m -30, 0
                                 a 30,30 0 0,0 60,0
@@ -44,7 +50,7 @@
     </div>
     <div class="ui-component noselect">
         <svg id="inner" class="mainmenu" style="width:120px;height:120px">
-            <path class="future" stroke="#ff9a00" stroke-width="4" fill="transparent" stroke-dasharray="15 5 2" d="
+            <path filter="url(#shadow)" class="future" stroke="#ff9a00" stroke-width="4" fill="transparent" stroke-dasharray="15 5 2" d="
                                 M 60, 60
                                 m -30, 0
                                 a 30,30 0 0,0 60,0
@@ -52,7 +58,7 @@
             "></path>
         </svg>
         <svg id="outer" class="mainmenu" style="width:120px;height:120px">
-            <path class="future" stroke="#ff9a00" stroke-width="3" fill="transparent" stroke-dasharray="40 20" d="
+            <path filter="url(#shadow)" class="future" stroke="#ff9a00" stroke-width="3" fill="transparent" stroke-dasharray="40 20" d="
                     M 60, 60
                     m -40, 0
                     a 40,40 0 0,0 80,0
@@ -97,6 +103,12 @@
             <svg id="undo" class="future toolsbtn" width="200" height="0">
                 <rect width="200" height="0"></rect>
                 <text x="25" y="19" font-family="Exo 2" font-size="18" fill="#ff9a00">Undo</text>
+            </svg>
+        </li>
+        <li>
+            <svg id="redo" class="future toolsbtn" width="200" height="0">
+                <rect width="200" height="0"></rect>
+                <text x="25" y="19" font-family="Exo 2" font-size="18" fill="#ff9a00">Redo</text>
             </svg>
         </li>
     </ul>
