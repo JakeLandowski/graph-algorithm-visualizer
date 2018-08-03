@@ -105,7 +105,7 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
                 this.adjList.insertVertex(vertex);
                 this.vertexSpacialIndex.add(vertex);
                 this.onVertexAdded.notify({ data: data, x: x, y: y });
-
+ 
                 // For Undo
                 for(const neighbor in neighbors)
                 {
@@ -177,7 +177,7 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
 
             const from = args.from;
             const to   = args.to;
-            const edge = this.adjList.getEdge(from, to); //this.edgeMap[ [from, to] ];
+            const edge = this.adjList.getEdge(from, to);
             
             // Clean Up Spacial Index
             this.adjList.deleteEdge(from, to);
