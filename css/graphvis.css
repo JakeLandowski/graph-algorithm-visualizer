@@ -156,3 +156,7 @@ li {
     user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome and Opera */
 }
+
+/*#creategraphbutton:hover {*/
+    /*stroke: #ffcb48;*/
+/*}*/

@@ -52,7 +52,41 @@ define(['ui-animations/anime'], function(Anime)
                 }
             }));
 
+            let createGraph = document.getElementsByClassName('creategraph');
 
+            for(let i = 0; i<createGraph.length; i++) {
+                createGraph[i].addEventListener('mouseenter',function () {
+                    document.getElementById('creategraphbutton').style.stroke = "#ffcb48"
+                });
+
+                createGraph[i].addEventListener('mouseleave',function () {
+                    document.getElementById('creategraphbutton').style.stroke = "#ff9a00"
+                });
+            }
+
+            let selectGraph = document.getElementsByClassName('selectgraph');
+
+            for(let i = 0; i<selectGraph.length; i++) {
+                selectGraph[i].addEventListener('mouseenter',function () {
+                    document.getElementById('selectgraphbutton').style.stroke = "#ffcb48"
+                });
+
+                selectGraph[i].addEventListener('mouseleave',function () {
+                    document.getElementById('selectgraphbutton').style.stroke = "#ff9a00"
+                });
+            }
+
+            let selectAlgorithm = document.getElementsByClassName('selectalgorithm');
+
+            for(let i = 0; i<selectAlgorithm.length; i++) {
+                selectAlgorithm[i].addEventListener('mouseenter',function () {
+                    document.getElementById('selectalgorithmbutton').style.stroke = "#ffcb48"
+                });
+
+                selectAlgorithm[i].addEventListener('mouseleave',function () {
+                    document.getElementById('selectalgorithmbutton').style.stroke = "#ff9a00"
+                });
+            }
 
             //Hide/Show UI menu
             hideUI.addEventListener('click', (function () {

@@ -34,11 +34,14 @@
     const addEdgeBtn    = document.getElementById('add-edge');
     const editEdgeBtn   = document.getElementById('edit-edge');
     const undoBtn       = document.getElementById('undo');
+    const redoBtn       = document.getElementById('redo');
 
     for(let i = 0; i<createNewBtn.length; i++) {
         createNewBtn[i].addEventListener('click',function () {
             clearCanvas();
         })
+
+
     }
 
     addVertexBtn.addEventListener('click', function() { graph.vertexMode(); });
