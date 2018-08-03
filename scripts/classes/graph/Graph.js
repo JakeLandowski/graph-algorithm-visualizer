@@ -33,27 +33,19 @@ define(['classes/graph/GraphModel',
         };
 
         this.model = new GraphModel(this.two.width, this.two.height, this.config);
-
         this.view  = new GraphView(this.model, this.two, this.config);
-        this.initSymbols();
 
+        this.symbols = ['Z', 'Y', 'X', 'W', 'V', 'U', 
+                        'T', 'S', 'R', 'Q', 'P', 'O', 
+                        'N', 'M', 'L', 'K', 'J', 'I', 
+                        'H', 'G', 'F', 'E', 'D', 'C', 
+                        'B', 'A'];
+                        
         this.mouseEventsLogged = [];
     };
 
     Graph.prototype = 
     {
-
-//====================== Initialization ===========================//
-
-        initSymbols()
-        {
-            this.symbols = ['Z', 'Y', 'X', 'W', 'V', 'U', 
-                            'T', 'S', 'R', 'Q', 'P', 'O', 
-                            'N', 'M', 'L', 'K', 'J', 'I', 
-                            'H', 'G', 'F', 'E', 'D', 'C', 
-                            'B', 'A'];
-            this.usedSymbols = Object.create(null);
-        },
 
 //====================== Graph Interaction Modes ===========================//
 
@@ -80,7 +72,8 @@ define(['classes/graph/GraphModel',
                             x: params.x,
                             y: params.y,
                             neighbors: Util.copy(vertex.neighbors), // necessary for command log and undos
-                            returnSymbol: this.returnSymbol.bind(this)
+                            returnSymbol: this.returnSymbol.bind(this),
+                            getSymbol: this.getSymbol.bind(this)
                         },
                         undo: 'addVertex',
                     });
@@ -88,15 +81,16 @@ define(['classes/graph/GraphModel',
                 else if(this.symbols.length > 0) // ADD
                 {   
                     this.model.dispatch
-                    ({
+                    ({ 
                         type: 'addVertex',
                         data: 
                         {
-                            symbol: this.getSymbol(),
+                            symbol: this.peekSymbol(),
                             x: params.x,
                             y: params.y,
                             neighbors: Object.create(null), // necessary for command log and undos
-                            returnSymbol: this.returnSymbol.bind(this)   
+                            returnSymbol: this.returnSymbol.bind(this),   
+                            getSymbol: this.getSymbol.bind(this)
                         },
                         undo: 'removeVertex'
                     });
@@ -266,15 +260,17 @@ define(['classes/graph/GraphModel',
 
         getSymbol()
         {
-            const symbol = this.symbols.pop();
-            this.usedSymbols[symbol] = symbol;
-            return symbol;  
+            return this.symbols.pop();  
+        },
+
+        peekSymbol()
+        {
+            return this.symbols[this.symbols.length - 1];
         },
 
         returnSymbol(symbol)
         {
             this.symbols.push(symbol);
-            delete this.usedSymbols[symbol];
         },
 
         clearMouseEvents()
