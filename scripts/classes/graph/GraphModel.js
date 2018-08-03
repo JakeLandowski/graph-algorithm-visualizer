@@ -86,9 +86,10 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
         
         addVertex(args={})
         {
-            this.assertArgs(args, ['symbol', 'x', 'y', 'neighbors'], 'Missing arguments for addVertex command');
+            this.assertArgs(args, ['symbol', 'x', 'y', 'neighbors', 'returnSymbol', 'getSymbol'], 
+                            'Missing arguments for addVertex command');
 
-            const data      = args.symbol;
+            const data      = args.getSymbol();
             const x         = args.x;
             const y         = args.y;
             const neighbors = args.neighbors;
