@@ -23,10 +23,8 @@ define(['ui-animations/anime'], function(Anime)
             let graphText = document.getElementById('graph-text');
             let delay = 0;
             let openTools = true;
+            let showUI = true;
 
-
-            generateUI(hideUI,240,200,25,0);
-            drawLine('alternate',1000);
             tools.forEach(function (element) {
                 generateUI(element,-235,200,25,delay);
                 delay = delay + 50;
@@ -58,19 +56,10 @@ define(['ui-animations/anime'], function(Anime)
             //Hide/Show UI menu
             hideUI.addEventListener('click', (function () {
                 delay = 0;
-                let text = document.getElementById("hide");
-                if(text.innerHTML === "Hide UI") {
+                if(showUI) {
                     menu.forEach(function(element) {
                         generateUI(element,-225,0,0,delay);
                         delay = delay + 100;
-                    });
-                    text.innerHTML = "Show UI";
-                    let lineDrawing = Anime({
-                        targets: '#lineDrawing .lines path',
-                        strokeDashoffset: [Anime.setDashoffset, 0],
-                        easing: 'easeInOutSine',
-                        duration: 1000,
-                        direction: 'reverse',
                     });
 
                     tools.forEach(function (element) {
@@ -78,6 +67,7 @@ define(['ui-animations/anime'], function(Anime)
                         delay = delay + 100;
                     });
                     openTools = false;
+                    showUI = false;
 
                     if(graphText.style.display = 'none') {
                         graphText.style.display = 'block';
@@ -92,14 +82,13 @@ define(['ui-animations/anime'], function(Anime)
                         generateUI(element,200,200,50,delay);
                         delay = delay + 100;
                     });
-                    text.innerHTML = "Hide UI";
-                    drawLine('alternate',1000);
 
                     tools.forEach(function (element) {
                         generateUI(element,-240,200,25,delay);
                         delay = delay + 100;
                     });
                     openTools = true;
+                    showUI = true;
                 }
             }));
 
@@ -124,9 +113,9 @@ define(['ui-animations/anime'], function(Anime)
             });
 
             //ANIMATION FUNCTIONS
-            function drawLine(direction,duration) {
+            function drawLine(target,direction,duration) {
                 let lineDrawing = Anime({
-                    targets: '#lineDrawing .lines path',
+                    targets: target,
                     strokeDashoffset: [Anime.setDashoffset, 0],
                     easing: 'easeInOutSine',
                     duration: duration,
@@ -160,14 +149,22 @@ define(['ui-animations/anime'], function(Anime)
                 });
             }
 
-            let rotateLogo = Anime({
-                targets: '#logo',
+            let rotateOuter = Anime({
+                targets: '#outer',
                 rotate: '1turn',
                 loop: true,
-                duration: 5000,
-                delay: 1000,
-                easing: 'easeInOutSine'
-            })
+                duration: 10000,
+                easing: 'linear'
+            });
+
+            let rotateMenu = Anime({
+                targets: '#inner',
+                rotate: '1turn',
+                loop: true,
+                duration: 15000,
+                direction: 'reverse',
+                easing: 'linear'
+            });
         }
     };
 });

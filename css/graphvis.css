@@ -13,7 +13,7 @@ html, body {
 #title {
     width: 50%;
     top: -3.2%;
-    left: 75px;
+    left: 25px;
     position: absolute;
     font-family: 'Exo 2', sans-serif;
     font-size: 50px;
@@ -52,31 +52,35 @@ html, body {
     color:  #ff9a00;
 }
 
-#hide-ui {
-    position: absolute;
-    top: 6rem;
-    left: -250px;
-    width: 200px;
-}
-
 #hide-tools {
     right: 1%;
     top: 10%;
     position: absolute;
     color:  #ff9a00;
     padding-left: 5px;
+    z-index: 2;
     margin-bottom: 15px;
 }
 
 #hide-tools:hover {
-    background-color: #262626;
     cursor: pointer;
+
+}
+
+.mainmenu {
+    position: absolute;
+    color:  #ff9a00;
     z-index: 2;
+    top: 4rem;
+}
+
+.mainmenu:hover {
+    cursor: pointer;
 }
 
 .tools {
     right: -240px;
-    top: 15%;
+    top: 8rem;
     position: absolute;
     z-index: 1;
     list-style: none;
@@ -84,7 +88,7 @@ html, body {
 
 .menu {
     left: -250px;
-    top: 8rem;
+    top: 10rem;
     position: absolute;
     z-index: 1;
     list-style: none;
@@ -137,6 +141,6 @@ li {
 
 .shadow {
     /* Use -webkit- only if supporting: Chrome < 54, iOS < 9.3, Android < 4.4.4 */
-    -webkit-filter: drop-shadow( 0px 0px 5px #ff9a00 );
-    filter: drop-shadow( 0px 0px 5px #ff9a00 );
+    -webkit-filter: drop-shadow(0px 0px 5px #ff9a00);
+    filter: drop-shadow(0px 0px 5px #ff9a00);
 }
