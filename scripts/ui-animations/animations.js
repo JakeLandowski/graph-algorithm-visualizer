@@ -13,14 +13,11 @@ define(['ui-animations/anime'], function(Anime)
         start()
         {
             //Sets specific buttons as variables, set default delay at 0.
+            let menuOptions = document.querySelectorAll('.menuoptions');
             let menu = document.querySelectorAll('.menubtn');
             let hideUI = document.querySelector('#hide-ui');
             let hideTools = document.querySelector('#hide-tools');
             let tools = document.querySelectorAll('.toolsbtn');
-            let algorithms = document.querySelector('#select-algorithm');
-            let algorithmText = document.getElementById('algorithm-text');
-            let graphs = document.querySelector('#select-graph');
-            let graphText = document.getElementById('graph-text');
             let delay = 0;
             let openTools = true;
             let showUI = true;
@@ -29,6 +26,8 @@ define(['ui-animations/anime'], function(Anime)
                 generateUI(element,-235,200,25,delay);
                 delay = delay + 50;
             });
+
+
 
             menu.forEach(function (element) {
                 generateUI(element,200,200,50,delay);
@@ -52,6 +51,8 @@ define(['ui-animations/anime'], function(Anime)
                     });
                 }
             }));
+
+
 
             //Hide/Show UI menu
             hideUI.addEventListener('click', (function () {
@@ -91,26 +92,6 @@ define(['ui-animations/anime'], function(Anime)
                     showUI = true;
                 }
             }));
-
-            graphs.addEventListener('click',function () {
-                if(graphText.style.display !== 'none' && algorithmText.style.display !== 'none') {
-                    enlargeOption(graphs,3,350,400,1000);
-                    graphText.style.display = 'none';
-                } else {
-                    enlargeOption(graphs,1,200,0,200);
-                    graphText.style.display = 'block';
-                }
-            });
-
-            algorithms.addEventListener('click',function () {
-                if(algorithmText.style.display !== 'none' && graphText.style.display !== 'none') {
-                    enlargeOption(algorithms,3,250,325,1000);
-                    document.getElementById('algorithm-text').style.display = 'none';
-                } else {
-                    enlargeOption(algorithms,1,200,0,200);
-                    document.getElementById('algorithm-text').style.display = 'block';
-                }
-            });
 
             //ANIMATION FUNCTIONS
             function drawLine(target,direction,duration) {

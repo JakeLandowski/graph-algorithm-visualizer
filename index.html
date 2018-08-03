@@ -15,7 +15,37 @@
 
     <h1 id="title">Graph Visualizer</h1>
 
-    <div class="ui-component">
+    <div id="menuoptions" class="ui-component noselect">
+        <svg id="buttons" class="mainmenu menuoptions">
+            <!-- CREATE NEW GRAPH BUTTON -->
+            <path class="future creategraph" stroke="#ff9a00" stroke-width="4" fill="transparent" stroke-dasharray="25 5" d="
+                                M 160, 45
+                                m -30, 0
+                                a 30,30 0 0,0 60,0
+                                a 30,30 0 0,0 -60,0
+            "></path>
+            <text class="future creategraph" x="144" y="50" font-family="Exo 2" font-size="14" fill="#ff9a00">NEW</text>
+
+            <!-- SELECT GRAPH BUTTON -->
+            <path class="future selectgraph" stroke="#ff9a00" stroke-width="4" fill="transparent" stroke-dasharray="25 5" d="
+                                M 130, 130
+                                m -30, 0
+                                a 30,30 0 0,0 60,0
+                                a 30,30 0 0,0 -60,0
+            "></path>
+            <text class="future selectgraph" x="112" y="135" font-family="Exo 2" font-size="14" fill="#ff9a00">GRPH</text>
+
+            <!-- SELECT ALGORITHM BUTTON -->
+            <path class="future selectalgorithm" stroke="#ff9a00" stroke-width="4" fill="transparent" stroke-dasharray="25 5" d="
+                                M 45, 160
+                                m -30, 0
+                                a 30,30 0 0,0 60,0
+                                a 30,30 0 0,0 -60,0
+            "></path>
+            <text class="future selectalgorithm" x="33" y="165" font-family="Exo 2" font-size="14" fill="#ff9a00">ALG</text>
+        </svg>
+    </div>
+    <div class="ui-component noselect">
         <svg id="inner" class="mainmenu" style="width:120px;height:120px">
             <path class="future" stroke="#ff9a00" stroke-width="4" fill="transparent" stroke-dasharray="15 5 2" d="
                                 M 60, 60
@@ -33,40 +63,12 @@
                     "></path>
         </svg>
         <svg id="hide-ui" class="mainmenu" style="width:120px;height:120px">
-            <text class="future" x="40" y="65" style="box-shadow:
-                  inset 0 0 10px #ff9a00,
-                  0 0 10px #ff9a00;
-                  background-color:rgba(0, 0, 0, 0.65);
-                  border: 1px solid #ff9a00;
-                  color: #ff9a00" font-family="Exo 2" font-size="16" fill="#ff9a00">Menu</text>
+            <text class="future" x="40" y="65" font-family="Exo 2" font-size="16" fill="#ff9a00">Menu</text>
         </svg>
     </div>
 
-    <!-- UI Menu -->
-    <ul class="menu ui-component">
-        <li>
-            <svg id="createnewbtn" class="future menubtn" width="200" height="0">
-                <rect width="200" height="0"></rect>
-                <text x="30" y="30" font-family="Exo 2" font-size="20" fill="#ff9a00">Create New</text>
-            </svg>
-        </li>
-        <li>
-            <svg id="select-graph" class="future menubtn" width="200" height="0">
-                <rect width="200" height="0"></rect>
-                <text id="graph-text" x="30" y="30" font-family="Exo 2" font-size="20" fill="#ff9a00">Select Graph</text>
-
-            </svg>
-        </li>
-        <li>
-            <svg id="select-algorithm" class="future menubtn" width="200" height="0">
-                <rect width="200" height="0"></rect>
-                <text id="algorithm-text" x="30" y="30" font-family="Exo 2" font-size="20" fill="#ff9a00">Select Algorithm</text>
-            </svg>
-        </li>
-    </ul>
-
     <!-- Hide Tools Button -->
-    <div class="ui-component" id="hide-tools-icon">
+    <div class="ui-component noselect" id="hide-tools-icon">
         <svg id="hide-tools" style="width:48px;height:48px" viewBox="0 0 24 24">
             <path fill="#ff9a00" d="M22.7,19L13.6,9.9C14.5,7.6 14,4.9 12.1,3C10.1,1 7.1,0.6 4.7,1.7L9,6L6,
             9L1.6,4.7C0.4,7.1 0.9,10.1 2.9,12.1C4.8,14 7.5,14.5 9.8,13.6L18.9,22.7C19.3,23.1 19.9,23.1 20.3,
@@ -75,7 +77,7 @@
     </div>
 
     <!-- Tools Menu -->
-    <ul class="tools ui-component">
+    <ul class="tools ui-component noselect">
         <li>
             <svg id="add-vertex" class="future toolsbtn" width="200" height="0">
                 <rect width="200" height="0"></rect>
@@ -103,7 +105,7 @@
     </ul>
 
     <!-- Algorithm Media Buttons -->
-    <div class="mediabuttons ui-component">
+    <div class="mediabuttons ui-component noselect">
         <button class="mediabutton fa fa-angle-double-left" style="font-size:48px;"></button>
         <button class="mediabutton fa fa-angle-left" style="font-size:48px;"></button>
         <button class="mediabutton fa fa-play" style="font-size:48px;"></button>

@@ -28,14 +28,19 @@
     graph.start();
 
 
-    const createNewBtn  = document.getElementById('createnewbtn');
+    const createNewBtn  = document.getElementsByClassName('creategraph');
 
     const addVertexBtn  = document.getElementById('add-vertex');
     const addEdgeBtn    = document.getElementById('add-edge');
     const editEdgeBtn   = document.getElementById('edit-edge');
     const undoBtn       = document.getElementById('undo');
 
-    createNewBtn.addEventListener('click', function() { clearCanvas(); });
+    for(let i = 0; i<createNewBtn.length; i++) {
+        createNewBtn[i].addEventListener('click',function () {
+            clearCanvas();
+        })
+    }
+
     addVertexBtn.addEventListener('click', function() { graph.vertexMode(); });
     addEdgeBtn.addEventListener('click',   function() { graph.edgeMode();   });
     undoBtn.addEventListener('click',      function() { graph.undo();       });

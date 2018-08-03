@@ -11,9 +11,8 @@ html, body {
 }
 
 #title {
-    width: 50%;
-    top: -3.2%;
-    left: 25px;
+    margin: .1em;
+    left: .1em;
     position: absolute;
     font-family: 'Exo 2', sans-serif;
     font-size: 50px;
@@ -86,6 +85,11 @@ html, body {
     list-style: none;
 }
 
+#buttons {
+    width: 200px;
+    height: 200px;
+}
+
 .menu {
     left: -250px;
     top: 10rem;
@@ -143,4 +147,14 @@ li {
     /* Use -webkit- only if supporting: Chrome < 54, iOS < 9.3, Android < 4.4.4 */
     -webkit-filter: drop-shadow(0px 0px 5px #ff9a00);
     filter: drop-shadow(0px 0px 5px #ff9a00);
+}
+
+.noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
 }
