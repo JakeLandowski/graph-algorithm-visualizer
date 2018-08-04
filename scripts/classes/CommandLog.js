@@ -11,28 +11,29 @@ define(function()
 {
     const CommandLog = function()
     {
-        this.log = [];
-        this.undoHistory = [];
+        this.undoLog = [];
+        this.redoLog = [];
 
     }; // end constructor
     
     CommandLog.prototype = 
     {
-        record(command)
+        record(command, clearRedo)
         {
-            this.log.push(command);
+            this.undoLog.push(command);
+            if(clearRedo) this.redoLog = [];
         },
 
         undo() 
         {
-            const command = this.log.pop();
-            if(command) this.undoHistory.push(command);
+            const command = this.undoLog.pop();
+            if(command) this.redoLog.push(command);
             return command;
         },
         
         redo()
         {
-            return this.undoHistory.pop();
+            return this.redoLog.pop();
         }
     };
 

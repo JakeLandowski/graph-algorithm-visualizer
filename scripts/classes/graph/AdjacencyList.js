@@ -89,13 +89,21 @@ define(function()
                 action(map[vertexData]);
         },
 
-        // THIS WILL BREAK NEED TO AVOID DUPLICATES IN UNDIRECTED
-        // forEachEdge(action)
-        // {
-        //     const map = this.edgeMap;
-        //     for(const edgeData in map)
-        //         action(map[edgeData]);
-        // },
+        forEachEdge(action)
+        {
+            // LOOP THROUGH VERTEX NEIGHBORS VERSION
+            const map = this.vertexMap;
+            let vertex, toNeighbors;
+
+            for(const vertexData in map)
+            {
+                vertex = map[vertexData];
+                toNeighbors = vertex.toNeighbors;
+
+                for(const neighbor in toNeighbors)
+                    action(this.edgeMap[ [vertex.data, neighbor] ]);
+            }
+        },
     };
 
     return AdjacencyList;

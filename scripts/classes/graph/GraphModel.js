@@ -50,12 +50,12 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
 
 //====================== Command Handling ===========================//
 
-        dispatch(command)
+        dispatch(command, clearRedo=true)
         {
             if(this[command.type])
             {
                 this[command.type](command.data);
-                this.userCommands.record(command);
+                this.userCommands.record(command, clearRedo);
             }
             else throw 'Tried to run non-existant command ' + command.type;
         },
@@ -70,7 +70,7 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
         redo()
         {
             const command = this.userCommands.redo();
-            if(command) this.dispatch(command);
+            if(command) this.dispatch(command, false);
         },
 
         assertArgs(args, props, error)
@@ -82,7 +82,7 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
             });
         },
 
-//====================== Commands ===========================//
+//====================== Vertex Commands ===========================//
 
         addVertex(args={})
         {
@@ -149,6 +149,8 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
             this.onVertexRemoved.notify({ data: data });
         },
 
+//====================== Edge Commands ===========================//
+
         addEdge(args={})
         {
             this.assertArgs(args, ['from', 'to'], 'Missing arguments for addEdge command');
@@ -201,10 +203,13 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
             });
         },
 
+//====================== Move Entities ===========================//
+
         moveVertex(vertex, x, y)
         {
             // Update Vertex Position
             vertex.setPoints(x, y);
+            this.vertexSpacialIndex.update(vertex);
             this.onVertexMoved.notify({ data: vertex.data, x: x, y: y });
             
             // Update Vertex's Edge Positions
@@ -233,11 +238,7 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
             });
         },
 
-        updateVertexSpatial(vertex, x, y)
-        {
-            this.vertexSpacialIndex.update(vertex);
-            this.moveVertex(vertex, x, y);
-        },
+//====================== Vertex Selection Methods ===========================//
 
         selectVertex(vertex)
         {
@@ -254,13 +255,6 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
 
         addTrackingEdge(x, y)
         {
-            // MAY NOT NEED THIS OBJECT
-            this.trackingEdge = 
-            {
-                x: x,
-                y: y
-            };
-
             this.onTrackingEdgeAdded.notify
             ({ 
                 start: { x: this.selectedVertex.x, y: this.selectedVertex.y },
@@ -269,40 +263,16 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
         },
 
         updateTrackingEdge(x, y)
-        {
-            // MAY NOT NEED THIS OBJECT
-            this.trackingEdge.x = x;
-            this.trackingEdge.y = y;
-
+        {;
             this.onTrackingEdgeMoved.notify({ x: x, y: y });
         },
 
         releaseTrackingEdge()
         {
-            // MAY NOT NEED THIS OBJECT
-            this.trackingEdge = null;
-
             this.onTrackingEdgeRemoved.notify({});
         },
 
-        resize(width, height)
-        {
-            this.setDimensions(width, height);
-            this.vertexSpacialIndex = new SpacialIndex(width, height, this.cellRatio);
-            this.adjList.forEachVertex(function(vertex)
-            {
-                this.vertexSpacialIndex.add(vertex);
-
-            }.bind(this));
-        },
-
-        setDimensions(width, height)
-        {
-            this.width      = width;
-            this.cellWidth  = this.width / this.cellRatio;
-            this.height     = height;
-            this.cellHeight = this.height / this.cellRatio;
-        },
+//====================== Spatial Index API (Graph -> Model -> Spatial) ===========================//
 
         vertexAt(x, y)
         {
@@ -312,6 +282,63 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
         edgeAt(x, y)
         {
             return this.edgeSpacialIndex.getEntity(x, y);
+        },
+
+        updateVertexSpatial(vertex)
+        {
+            this.vertexSpacialIndex.update(vertex);
+            
+            vertex.forEachEdge(function(edge)
+            {
+               this.updateEdgeSpatial(edge); 
+
+            }.bind(this)); 
+        },
+
+        updateEdgeSpatial(edge)
+        {
+            this.edgeSpacialIndex.update(edge);
+        },
+
+        /**
+         *  Sets the new width/height and recreates the Spatialndex,
+         *  re-registering all entities hitbox locations. 
+         * 
+         *  @param width  width desired, should be canvas width 
+         *  @param height height desired, should be canvas width
+         */
+        resize(width, height)
+        {
+            this.setDimensions(width, height);
+
+            this.vertexSpacialIndex = new SpacialIndex(width, height, this.cellRatio);
+            this.adjList.forEachVertex(function(vertex)
+            {
+                this.vertexSpacialIndex.add(vertex);
+
+            }.bind(this));
+
+            this.edgeSpacialIndex = new SpacialIndex(width, height, this.cellRatio);
+            this.adjList.forEachEdge(function(edge)
+            {
+                this.edgeSpacialIndex.add(edge);
+
+            }.bind(this));
+        },
+
+        /**
+         *  Sets the width/height info in the model, and consequently
+         *  the cell width/height. This should reflect the canvas width/height.
+         * 
+         *  @param width  width desired, should be canvas width 
+         *  @param height height desired, should be canvas width
+         */
+        setDimensions(width, height)
+        {
+            this.width      = width;
+            this.cellWidth  = this.width / this.cellRatio;
+            this.height     = height;
+            this.cellHeight = this.height / this.cellRatio;
         }
     };
 

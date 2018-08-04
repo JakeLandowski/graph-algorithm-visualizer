@@ -123,7 +123,8 @@ define(['classes/graph/GraphModel',
                         // Final movement, updates spatial information
                         this.view.onCanvasMouseDrag.detach('stickVertexToCursor');
                         this.view.onCanvasMouseUp.detach('releaseVertexFromCursor');
-                        this.model.updateVertexSpatial(vertex, point.x + offsetX, point.y + offsetY);
+                        this.model.moveVertex(vertex, point.x + offsetX, point.y + offsetY);
+                        this.model.updateVertexSpatial(vertex);
                     }
 
                     this.view.onCanvasMouseDrag.attach('stickVertexToCursor', stickVertexToCursor.bind(this));

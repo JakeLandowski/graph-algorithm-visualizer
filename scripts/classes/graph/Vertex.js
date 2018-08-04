@@ -35,7 +35,7 @@ define(function()
         forEachEdge(action)
         {
             this.forEachOutgoingEdge(action);
-            this.forEachIngoingEdge(action);
+            this.forEachIncomingEdge(action);
         },
 
         forEachIncomingEdge(action)
