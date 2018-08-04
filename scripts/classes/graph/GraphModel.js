@@ -50,6 +50,14 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
 
 //====================== Command Handling ===========================//
 
+        /**
+         *  Execute the command given and log it for future
+         *  undo's.
+         * 
+         *  @param command   the command object to interpret and log
+         *  @param clearRedo used for redo() method to prevent redo 
+         *                   stack refreshing
+         */
         dispatch(command, clearRedo=true)
         {
             if(this[command.type])
@@ -60,6 +68,10 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
             else throw 'Tried to run non-existant command ' + command.type;
         },
 
+        /**
+         *  Execute the inverse command method to undo the
+         *  last dispatched command.
+         */
         undo()
         {
             const command = this.userCommands.undo();
@@ -67,12 +79,26 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
                 this[command.undo](command.data);
         },
 
+        /**
+         *  Execute the command that has last been undone.
+         */
         redo()
         {
             const command = this.userCommands.redo();
             if(command) this.dispatch(command, false);
         },
 
+        /**
+         *  For asserting that arguments in a given parameter object
+         *  are actually set when the method is called. Otherwise
+         *  throws the given message.
+         *  
+         *  @param args  the parameter object to test
+         *  @param props the required parameters
+         *  @param error the message to throw
+         *  @throws String error message if one of the required parameters
+         *          is missing
+         */
         assertArgs(args, props, error)
         {
             props.forEach(function(prop)
@@ -84,6 +110,25 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
 
 //====================== Vertex Commands ===========================//
 
+        /**
+         *  Adds a vertex with the given vertex data. Notifies everyone 
+         *  of this removal, so far GraphView listens to this and 
+         *  updates the visuals accordingly. 
+         * 
+         *  @param args an object of arguments given/required
+         *              by this command method.
+         *              {
+         *                  symbol:        the vertex data,
+         *                  x:             x coordinate of the point,
+         *                  y:             y coordinate of the point,
+         *                  toNeighbors:   array of incoming neighbor vertices used for undo,
+         *                  fromNeighbors: array of outgoing neighbor vertices used for undo,
+         *                  returnSymbol:  function to call to return generic symbol back to pool,
+         *                  getSymbol:     function to call to get a new vertex symbol from pool
+         *              }
+         *  @throws String error message if one of the required command
+         *          arguments is missing
+         */
         addVertex(args={})
         {
             this.assertArgs(args, ['symbol', 'x', 'y', 'toNeighbors', 'fromNeighbors', 'returnSymbol', 'getSymbol'], 
@@ -122,6 +167,26 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
             }
         },
 
+        /**
+         *  Removes a vertex from the given vertex data. Removes all 
+         *  of the vertex's incident edges as well. Notifies everyone 
+         *  of this removal, so far GraphView listens to this and 
+         *  updates the visuals accordingly. 
+         * 
+         *  @param args an object of arguments given/required
+         *              by this command method.
+         *              {
+         *                  symbol:        the vertex data,
+         *                  x:             x coordinate of the point used for undo,
+         *                  y:             y coordinate of the point used for undo,
+         *                  toNeighbors:   array of incoming neighbor vertices used for undo,
+         *                  fromNeighbors: array of outgoing neighbor vertices used for undo,
+         *                  returnSymbol:  function to call to return generic symbol back to pool,
+         *                  getSymbol:     function to call to get a new vertex symbol from pool
+         *              }
+         *  @throws String error message if one of the required command
+         *          arguments is missing
+         */
         removeVertex(args={})
         {
             this.assertArgs(args, ['symbol', 'x', 'y', 'toNeighbors', 'fromNeighbors', 'returnSymbol', 'getSymbol'], 
@@ -151,6 +216,20 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
 
 //====================== Edge Commands ===========================//
 
+        /**
+         *  Adds a new edge from the from/to vertex data given..
+         *  Notifies everyone of this addition, so far GraphView listens
+         *  to this and updates the visuals accordingly. 
+         * 
+         *  @param args an object of arguments given/required
+         *              by this command method.
+         *              {
+         *                  from: the from vertex data,
+         *                  to:   the to vertex data
+         *              }
+         *  @throws String error message if one of the required command
+         *          arguments is missing
+         */
         addEdge(args={})
         {
             this.assertArgs(args, ['from', 'to'], 'Missing arguments for addEdge command');
@@ -178,6 +257,20 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
             }
         },
 
+        /**
+         *  Removes an edge based on the from/to vertex data given.
+         *  Notifies everyone of this removal, so far GraphView listens
+         *  to this and updates the visuals accordingly. 
+         * 
+         *  @param args an object of arguments given/required
+         *              by this command method.
+         *              {
+         *                  from: the from vertex data,
+         *                  to:   the to vertex data
+         *              }
+         *  @throws String error message if one of the required command
+         *          arguments is missing
+         */
         removeEdge(args={})
         {
             this.assertArgs(args, ['from', 'to'], 'Missing arguments for removeEdge command');
@@ -205,6 +298,15 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
 
 //====================== Move Entities ===========================//
 
+        /**
+         *  Move the given vertex object, to this x, y point, 
+         *  and notifies everyone. so far GraphView listens to 
+         *  this and updates the vertex visuals accordingly. 
+         * 
+         *  @param vertex the vertex object
+         *  @param x x coordinate of this point  
+         *  @param y y coordinate of this point
+         */
         moveVertex(vertex, x, y)
         {
             // Update Vertex Position
@@ -220,6 +322,14 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
             }.bind(this));
         },
 
+        /**
+         *  Move the given edge object, updating its start and end
+         *  points according to the vertices it is connected to.
+         *  Notifies everyone, so far GraphView listens to this 
+         *  and updates the edge visuals accordingly. 
+         * 
+         *  @param edge the edge object
+         */
         moveEdge(edge)
         {
             edge.setPoints();
@@ -240,12 +350,22 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
 
 //====================== Vertex Selection Methods ===========================//
 
+        /**
+         *  Sets this vertex as the selected vertex, and notifies everyone.
+         *  So far GraphView listens to this and updates accordingly.
+         * 
+         *  @param vertex the vertex object to select
+         */
         selectVertex(vertex)
         {
             this.selectedVertex = vertex;
             this.onVertexSelected.notify({ data: vertex.data, x: vertex.x, y: vertex.y });
         },
 
+        /**
+         *  Deselects the currently selected vertex and notifies everyone.
+         *  So far GraphView listens to this and updates accordingly.
+         */
         deselectVertex()
         {
             const vertex = this.selectedVertex;
@@ -253,6 +373,14 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
             this.selectedVertex = null;
         },
 
+        /**
+         *  Notifies that the the mouse tracking edge has been added
+         *  from this point. So far GraphView listens to this and 
+         *  updates accordingly.
+         * 
+         *  @param x x coordinate of this point  
+         *  @param y y coordinate of this point
+         */
         addTrackingEdge(x, y)
         {
             this.onTrackingEdgeAdded.notify
@@ -262,11 +390,22 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
             });
         },
 
+        /**
+         *  Notifies that the mouse tracking edge has moved to this point.
+         *  So far GraphView listens to this and updates accordingly.
+         * 
+         *  @param x x coordinate of this point  
+         *  @param y y coordinate of this point
+         */
         updateTrackingEdge(x, y)
         {;
             this.onTrackingEdgeMoved.notify({ x: x, y: y });
         },
 
+        /**
+         *  Notifies that the mouse tracking edge is removed.
+         *  So far GraphView listens to this and updates accordingly.
+         */
         releaseTrackingEdge()
         {
             this.onTrackingEdgeRemoved.notify({});
@@ -274,16 +413,40 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
 
 //====================== Spatial Index API (Graph -> Model -> Spatial) ===========================//
 
+        /**
+         *  Searches the Vertex Spatial Index for an vertex object
+         *  clicked at this x, y point. Will return the vertex object
+         *  or null. 
+         * 
+         *  @param x x coordinate of this point  
+         *  @param y y coordinate of this point
+         */
         vertexAt(x, y)
         {
             return this.vertexSpacialIndex.getEntity(x, y);
         },
 
+        /**
+         *  Searches the Edge Spatial Index for an edge object
+         *  clicked at this x, y point. Will return the edge object
+         *  or null. 
+         * 
+         *  @param x x coordinate of this point  
+         *  @param y y coordinate of this point
+         */
         edgeAt(x, y)
         {
             return this.edgeSpacialIndex.getEntity(x, y);
         },
 
+        /**
+         *  Update the SpatialIndex register of a vertex object,
+         *  in addition to all of the connected edges due to the 
+         *  fact that this should be called when the vertex is being
+         *  moved, thus the edges connected have moved. 
+         * 
+         *  @param vertex the vertex object to update
+         */
         updateVertexSpatial(vertex)
         {
             this.vertexSpacialIndex.update(vertex);
@@ -295,6 +458,11 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
             }.bind(this)); 
         },
 
+        /**
+         *  Update the SpatialIndex register of an edge object 
+         * 
+         *  @param edge the edge object to update
+         */
         updateEdgeSpatial(edge)
         {
             this.edgeSpacialIndex.update(edge);
