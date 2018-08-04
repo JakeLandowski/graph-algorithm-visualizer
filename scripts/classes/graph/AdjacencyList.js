@@ -43,8 +43,8 @@ define(function()
         {
             const from = edge.from;
             const to   = edge.to;
-            this.vertexMap[from].neighbors[to] = to;
-            this.vertexMap[to].neighbors[from] = from;
+            this.vertexMap[from].toNeighbors[to] = to;
+            this.vertexMap[to].fromNeighbors[from] = from;
 
             this.edgeMap[ [from, to] ] = edge;
             if(this.undirected) 
@@ -72,8 +72,8 @@ define(function()
             if(this.undirected)
                 delete this.edgeMap[ [to, from] ];
 
-            delete this.vertexMap[from].neighbors[to];
-            delete this.vertexMap[to].neighbors[from];
+            delete this.vertexMap[from].toNeighbors[to];
+            delete this.vertexMap[to].fromNeighbors[from];
         },
 
         edgeExists(from, to)

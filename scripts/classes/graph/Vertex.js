@@ -12,10 +12,11 @@ define(function()
     const Vertex = function(data, x, y, options={})
     {
         // this.id = 'vertex' + Vertex.vertexId++,
-        this.id        = data;
-        this.data      = data,
-        this.options   = options;
-        this.neighbors = Object.create(null),
+        this.id            = data;
+        this.data          = data,
+        this.options       = options;
+        this.toNeighbors   = Object.create(null),
+        this.fromNeighbors = Object.create(null),
         this.setPoints(x, y);
     };
 
@@ -33,7 +34,13 @@ define(function()
 
         forEachEdge(action)
         {
-            for(const neighbor in this.neighbors)
+            for(const neighbor in this.toNeighbors)
+            {
+                if(Vertex.adjList.edgeExists(this.data, neighbor))
+                    action(Vertex.adjList.getEdge(this.data, neighbor));
+            }
+
+            for(const neighbor in this.fromNeighbors)
             {
                 if(Vertex.adjList.edgeExists(this.data, neighbor))
                     action(Vertex.adjList.getEdge(this.data, neighbor));

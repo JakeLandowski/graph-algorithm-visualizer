@@ -68,12 +68,13 @@ define(['classes/graph/GraphModel',
                         type: 'removeVertex',
                         data: 
                         {
-                            symbol: vertex.data,
-                            x: params.x,
-                            y: params.y,
-                            neighbors: Util.copy(vertex.neighbors), // necessary for command log and undos
-                            returnSymbol: this.returnSymbol.bind(this),
-                            getSymbol: this.getSymbol.bind(this)
+                            symbol:        vertex.data,
+                            x:             params.x,
+                            y:             params.y,
+                            toNeighbors:   Object.keys(vertex.toNeighbors), // FOR UNDO
+                            fromNeighbors: Object.keys(vertex.fromNeighbors), // FOR UNDO
+                            returnSymbol:  this.returnSymbol.bind(this),
+                            getSymbol:     this.getSymbol.bind(this)
                         },
                         undo: 'addVertex',
                     });
@@ -85,12 +86,13 @@ define(['classes/graph/GraphModel',
                         type: 'addVertex',
                         data: 
                         {
-                            symbol: this.peekSymbol(),
-                            x: params.x,
-                            y: params.y,
-                            neighbors: Object.create(null), // necessary for command log and undos
-                            returnSymbol: this.returnSymbol.bind(this),   
-                            getSymbol: this.getSymbol.bind(this)
+                            symbol:        this.peekSymbol(),
+                            x:             params.x,
+                            y:             params.y,
+                            toNeighbors:   [], // FOR UNDO
+                            fromNeighbors: [], // FOR UNDO
+                            returnSymbol:  this.returnSymbol.bind(this),   
+                            getSymbol:     this.getSymbol.bind(this)
                         },
                         undo: 'removeVertex'
                     });
@@ -165,6 +167,8 @@ define(['classes/graph/GraphModel',
                         }
 
                         this.model.deselectVertex();
+                        this.model.selectVertex(vertex);
+                        this.trackEdgeToCursor(params.x, params.y);
                     }
                     else
                     {
@@ -210,12 +214,12 @@ define(['classes/graph/GraphModel',
             function releaseEdgeFromCursor(_, point)
             {
                 this.view.onCanvasMouseMove.detach('stickEdgeToCursor');
-                this.view.onCanvasMouseClick.detach('releaseEdgeFromCursor');
+                this.model.onVertexDeselected.detach('releaseEdgeFromCursor');
                 this.model.releaseTrackingEdge();
             }
 
             this.view.onCanvasMouseMove.attach('stickEdgeToCursor', stickEdgeToCursor.bind(this));
-            this.view.onCanvasMouseClick.attach('releaseEdgeFromCursor', releaseEdgeFromCursor.bind(this));
+            this.model.onVertexDeselected.attach('releaseEdgeFromCursor', releaseEdgeFromCursor.bind(this));
         },
 
 //====================== Setters ===========================//
@@ -253,10 +257,10 @@ define(['classes/graph/GraphModel',
             this.model.redo();
         },
 
-        render()
-        {
-            this.two.update();
-        },
+        // render()
+        // {
+        //     this.two.update();
+        // },
 
         appendTo(container)
         {

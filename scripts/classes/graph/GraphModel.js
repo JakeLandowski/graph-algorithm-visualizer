@@ -83,16 +83,17 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
         },
 
 //====================== Commands ===========================//
-        
+
         addVertex(args={})
         {
-            this.assertArgs(args, ['symbol', 'x', 'y', 'neighbors', 'returnSymbol', 'getSymbol'], 
+            this.assertArgs(args, ['symbol', 'x', 'y', 'toNeighbors', 'fromNeighbors', 'returnSymbol', 'getSymbol'], 
                             'Missing arguments for addVertex command');
 
-            const data      = args.getSymbol();
-            const x         = args.x;
-            const y         = args.y;
-            const neighbors = args.neighbors;
+            const data          = args.getSymbol();
+            const x             = args.x;
+            const y             = args.y;
+            const toNeighbors   = args.toNeighbors;
+            const fromNeighbors = args.fromNeighbors;
 
             if(!this.adjList.vertexExists(data)) // prevent duplicates 
             {
@@ -107,16 +108,24 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
                 this.onVertexAdded.notify({ data: data, x: x, y: y });
  
                 // For Undo
-                for(const neighbor in neighbors)
+                toNeighbors.forEach(function(neighbor)
                 {
                     this.addEdge({ from: data, to: neighbor });
-                }
+
+                }.bind(this));
+                
+                fromNeighbors.forEach(function(neighbor)
+                {
+                    this.addEdge({ from: neighbor, to: data });
+
+                }.bind(this));
             }
         },
 
         removeVertex(args={})
         {
-            this.assertArgs(args, ['symbol', 'returnSymbol'], 'Missing arguments for removeVertex command');
+            this.assertArgs(args, ['symbol', 'x', 'y', 'toNeighbors', 'fromNeighbors', 'returnSymbol', 'getSymbol'], 
+                            'Missing arguments for removeVertex command');
 
             const data         = args.symbol;
             const returnSymbol = args.returnSymbol;
