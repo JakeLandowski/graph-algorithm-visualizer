@@ -71,18 +71,15 @@ if(window.DEBUG_MODE)
                 // Create new vertex shape and store it
                 const vertex    = this.two.makeCircle(params.x, params.y, this.config.vertexSize);
                 vertex.fill   = '#262626';
-                vertex.shadowOffsetX = 10;
-                vertex.shadowOffsetY = 10;
-                vertex.shadowBlur = 5;
                 vertex.stroke = '#ff9a00';
                 vertex.color = '#ff9a00';
-                vertex.shadowColor = '#ff9a00';
 
                 vertex.linewidth = this.config.vertexOutlineSize;
 
                 const text = this.two.makeText(params.data, params.x, params.y);
                 text.stroke = '#ff9a00';
-                text.font = '20px Exo 2';
+                text.family = 'Exo';
+                text.size = 25;
                 this.vertexGroup.add(vertex, text);
 
                 this.vertexMap[params.data] = 
@@ -222,6 +219,12 @@ if(window.DEBUG_MODE)
             this.container = container;
             this.two.appendTo(container);
             this.canvas = container.getElementsByTagName('canvas')[0];
+
+            // FOR ORANGE GLOW
+            let ctx = this.canvas.getContext('2d');
+            ctx.shadowBlur = 6;
+            ctx.shadowColor = '#ff9a00';
+
             this.initCanvasHandlers();
             this.initResize();
         },

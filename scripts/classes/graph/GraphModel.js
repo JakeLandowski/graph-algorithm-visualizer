@@ -40,7 +40,7 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
         
         this.onEdgeAdded           = new Event(this);
         this.onEdgeRemoved         = new Event(this);
-        this.onEdgeMoved      = new Event(this);
+        this.onEdgeMoved           = new Event(this);
  
         this.userCommands = new CommandLog();
     };
