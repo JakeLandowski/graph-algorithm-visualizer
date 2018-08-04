@@ -10,8 +10,8 @@
 'use strict';
 define(['classes/graph/GraphModel', 
         'classes/graph/GraphView',
-        'two', 'utils/Util'], 
-        function(GraphModel, GraphView, Two, Util)
+        'two'], 
+        function(GraphModel, GraphView, Two)
 {
     const Graph = function(config={})
     {
@@ -166,6 +166,7 @@ define(['classes/graph/GraphModel',
                             });
                         }
 
+                        // Edge hopping
                         this.model.deselectVertex();
                         this.model.selectVertex(vertex);
                         this.trackEdgeToCursor(params.x, params.y);

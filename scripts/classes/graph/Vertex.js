@@ -34,12 +34,12 @@ define(function()
 
         forEachEdge(action)
         {
-            for(const neighbor in this.toNeighbors)
-            {
-                if(Vertex.adjList.edgeExists(this.data, neighbor))
-                    action(Vertex.adjList.getEdge(this.data, neighbor));
-            }
+            this.forEachOutgoingEdge(action);
+            this.forEachIngoingEdge(action);
+        },
 
+        forEachIncomingEdge(action)
+        {
             for(const neighbor in this.fromNeighbors)
             {
                 if(Vertex.adjList.edgeExists(this.data, neighbor))
@@ -47,22 +47,13 @@ define(function()
             }
         },
 
-        forEachIncomingEdge(action)
-        {
-            // for(const neighbor in this.neighbors)
-            // {
-            //     if(Vertex.adjList.edgeExists(this.data, neighbor))
-            //         action(Vertex.adjList.getEdge(this.data, neighbor));
-            // }
-        },
-
         forEachOutgoingEdge(action)
         {
-            // for(const neighbor in this.neighbors)
-            // {
-            //     if(Vertex.adjList.edgeExists(this.data, neighbor))
-            //         action(Vertex.adjList.getEdge(this.data, neighbor));
-            // }
+            for(const neighbor in this.toNeighbors)
+            {
+                if(Vertex.adjList.edgeExists(this.data, neighbor))
+                    action(Vertex.adjList.getEdge(this.data, neighbor));
+            }
         }
     };
 
