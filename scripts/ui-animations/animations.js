@@ -13,14 +13,15 @@ define(['ui-animations/anime'], function(Anime)
         start()
         {
             //Sets specific buttons as variables, set default delay at 0.
-
+            let xpos;
+            let ypos;
             let menuOptions = document.querySelectorAll('.menuoptions');
             let menu = document.querySelectorAll('.menubtn');
             let hideUI = document.querySelector('#hide-ui');
             let hideTools = document.querySelector('#hide-tools');
             let tools = document.querySelectorAll('.toolsbtn');
             let delay = 0;
-            let openTools = true;
+            let openTools = false;
             let showUI = true;
 
             tools.forEach(function (element) {
@@ -143,61 +144,49 @@ define(['ui-animations/anime'], function(Anime)
                 });
             }
 
-
-            function hotkeyMenu(e) {
-                if (e.ctrlKey) {
-                    // call your function to do the thing
-                    displayToolMenu();
+            function findDocumentCoords(mouseEvent)
+            {
+                if (mouseEvent)
+                {
+                    //FireFox
+                    xpos = mouseEvent.pageX;
+                    ypos = mouseEvent.pageY;
+                }
+                else
+                {
+                    //IE
+                    xpos = window.event.x + document.body.scrollLeft - 2;
+                    ypos = window.event.y + document.body.scrollTop - 2;
                 }
             }
-// register the handler
-            document.addEventListener('keyup', hotkeyMenu, false);
+
+            document.onmousemove = findDocumentCoords;
+
+            window.onkeydown = function(e) {
+                let key = e.keyCode ? e.keyCode : e.which;
+                let toolButtons = document.querySelector("#toolbuttons");
+
+                if (key === 17 && openTools === false) {
+                    toolButtons.style.left = xpos - 150;
+                    toolButtons.style.top = ypos - 150;
+                    let toolDisplay = Anime({
+                        targets: '#toolbuttons',
+                        rotate: '1turn',
+                        loop: true,
+                        duration: 10000,
+                        easing: 'linear'
+                    });
+
+                    toolButtons.style.display = 'block';
+
+                    openTools = true;
+                } else if(key===17) {
+                    toolButtons.style.display = 'none';
+                    openTools = false;
+                }
+            };
 
             //ANIMATION FUNCTIONS
-            function displayToolMenu() {
-                let toolButtons = document.querySelector("#toolbuttons");
-                let container = document.body;
-
-                container.addEventListener("click", getClickPosition, false);
-
-                function getClickPosition(e) {
-                    let parentPosition = getPosition(container);
-                    let xPosition = e.clientX - parentPosition.x - (toolButtons.clientWidth / 2);
-                    let yPosition = e.clientY - parentPosition.y - (toolButtons.clientHeight / 2);
-
-                    toolButtons.style.left = xPosition + "px";
-                    toolButtons.style.top = yPosition + "px";
-                }
-
-                // Helper function to get an element's exact position
-                function getPosition(el) {
-                    let xPos = 0;
-                    let yPos = 0;
-
-                    while (el) {
-                        if (el.tagName == "BODY") {
-                            // deal with browser quirks with body/window/document and page scroll
-                            let xScroll = el.scrollLeft || document.documentElement.scrollLeft;
-                            let yScroll = el.scrollTop || document.documentElement.scrollTop;
-
-                            xPos += (el.offsetLeft - xScroll + el.clientLeft);
-                            yPos += (el.offsetTop - yScroll + el.clientTop);
-                        } else {
-                            // for all other non-BODY elements
-                            xPos += (el.offsetLeft - el.scrollLeft + el.clientLeft);
-                            yPos += (el.offsetTop - el.scrollTop + el.clientTop);
-                        }
-
-                        el = el.offsetParent;
-                    }
-                    return {
-                        x: xPos,
-                        y: yPos
-                    };
-                }
-            }
-
-
             function drawLine(target,direction,duration) {
                 let lineDrawing = Anime({
                     targets: target,

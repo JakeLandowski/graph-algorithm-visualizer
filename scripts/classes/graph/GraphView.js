@@ -78,7 +78,7 @@ if(window.DEBUG_MODE)
 
                 const text = this.two.makeText(params.data, params.x, params.y);
                 text.fill = '#ff9a00';
-                text.family = 'Exo sans-serif';
+                text.family = 'Exo 2';
                 text.size = 25;
                 this.vertexGroup.add(vertex, text);
 
@@ -162,9 +162,12 @@ if(window.DEBUG_MODE)
             // Tracking Edge Removed
             this.model.onTrackingEdgeRemoved.attach('trackingEdgeRemoved', function(_, params)
             {
-                this.edgeGroup.remove(this.trackingEdge);
-                this.trackingEdge.remove()
-                delete this.trackingEdge;                                
+                if(this.trackingEdge)
+                {
+                    this.edgeGroup.remove(this.trackingEdge);
+                    this.trackingEdge.remove()
+                    delete this.trackingEdge;                                
+                }
 
             }.bind(this));
 
