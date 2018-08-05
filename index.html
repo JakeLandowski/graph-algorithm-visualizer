@@ -21,7 +21,8 @@
                 </filter>
             </defs>
             <!-- CREATE NEW GRAPH BUTTON -->
-            <path filter="url(#shadow)" id="creategraphbutton" class="future creategraph" stroke="#ff9a00" stroke-width="4" fill="transparent" stroke-dasharray="25 5" d="
+            <path filter="url(#shadow)" id="creategraphbutton" class="future creategraph" stroke="#ff9a00"
+                  stroke-width="4" fill="transparent" stroke-dasharray="25 5" d="
                                 M 160, 45
                                 m -30, 0
                                 a 30,30 0 0,0 60,0
@@ -70,40 +71,32 @@
         </svg>
     </div>
 
-    <!-- Hide Tools Button -->
-    <div class="ui-component noselect" id="hide-tools-icon">
-        <svg id="hide-tools" style="width:48px;height:48px" viewBox="0 0 24 24">
-            <path fill="#ff9a00" d="M22.7,19L13.6,9.9C14.5,7.6 14,4.9 12.1,3C10.1,1 7.1,0.6 4.7,1.7L9,6L6,
-            9L1.6,4.7C0.4,7.1 0.9,10.1 2.9,12.1C4.8,14 7.5,14.5 9.8,13.6L18.9,22.7C19.3,23.1 19.9,23.1 20.3,
-            22.7L22.6,20.4C23.1,20 23.1,19.3 22.7,19Z" />
-        </svg>
-    </div>
-
     <div id="toolbar" class="ui-component noselect">
-        <svg id="toolbuttons" class="toolMenu" width="300" height="300">
+        <svg id="toolbuttons" class="toolMenu" width="310" height="310">
             <defs>
                 <filter id="shadow">
                     <feGaussianBlur result="blurOut" in="offOut" stdDeviation="3" />
                     <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
                 </filter>
             </defs>
+
             <!-- ADD VERTEX BUTTON -->
             <path filter="url(#shadow)" id="add-vertex" class="future addVertexButton" stroke="#ff9a00" stroke-width="4"
-                  fill="transparent" stroke-dasharray="25 5" d="
-                                M 150, 75
-                                m -26, 0
-                                a 26,26 0 0,0 52,0
-                                a 26,26 0 0,0 -52,0
+                  fill="#262626" d="
+                                M 155, 155
+                                m -148, 0
+                                a 148,148 0 0,0 296,0
+                                a 148,148 0 0,0 -296,0
             "></path>
             <text class="future addVertexButton" x="137" y="80" font-family="Exo 2" font-size="14" fill="#ff9a00">VTX</text>
 
             <!-- ADD EDGE BUTTON -->
             <path filter="url(#shadow)" id="add-edge" class="future addEdgeButton" stroke="#ff9a00" stroke-width="4"
-                  fill="transparent" stroke-dasharray="25 5" d="
-                                M 50, 150
-                                m -26, 0
-                                a 26,26 0 0,0 52,0
-                                a 26,26 0 0,0 -52,0
+                  fill="transparent" stroke-dasharray="25 5 10" d="
+                                M 155, 155
+                                m -100, 0
+                                a 100,100 0 0,0 200,0
+                                a 100,100 0 0,0 -200,0
             "></path>
             <text class="future addEdgeButton" x="37" y="155" font-family="Exo 2" font-size="14" fill="#ff9a00">EDG</text>
 

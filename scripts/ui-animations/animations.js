@@ -17,19 +17,9 @@ define(['ui-animations/anime'], function(Anime)
             let ypos;
             let menuOptions = document.querySelectorAll('.menuoptions');
             let menu = document.querySelectorAll('.menubtn');
-            let hideUI = document.querySelector('#hide-ui');
-            let hideTools = document.querySelector('#hide-tools');
-            let tools = document.querySelectorAll('.toolsbtn');
             let delay = 0;
             let openTools = false;
             let showUI = true;
-
-            tools.forEach(function (element) {
-                generateUI(element,-235,200,25,delay);
-                delay = delay + 50;
-            });
-
-
 
             menu.forEach(function (element) {
                 generateUI(element,200,200,50,delay);
@@ -37,23 +27,6 @@ define(['ui-animations/anime'], function(Anime)
             });
 
             //Hide/Show tools menu
-            hideTools.addEventListener('click',(function() {
-                delay = 0;
-                if(openTools) {
-                    openTools = false;
-                    tools.forEach(function (element) {
-                        generateUI(element,240,200,25,delay);
-                        delay = delay + 100;
-                    });
-                } else {
-                    openTools = true;
-                    tools.forEach(function (element) {
-                        generateUI(element,-240,200,25,delay);
-                        delay = delay + 100;
-                    });
-                }
-            }));
-
             let createGraph = document.getElementsByClassName('creategraph');
             for(let i = 0; i<createGraph.length; i++) {
                 createGraph[i].addEventListener('mouseenter',function () {
@@ -167,22 +140,26 @@ define(['ui-animations/anime'], function(Anime)
                 let toolButtons = document.querySelector("#toolbuttons");
 
                 if (key === 17 && openTools === false) {
+                    toolButtons.style.scale = .5;
                     toolButtons.style.left = xpos - 150;
                     toolButtons.style.top = ypos - 150;
-                    let toolDisplay = Anime({
-                        targets: '#toolbuttons',
-                        rotate: '1turn',
-                        loop: true,
-                        duration: 10000,
-                        easing: 'linear'
-                    });
 
                     toolButtons.style.display = 'block';
-
+                    drawLine('#add-vertex','normal',250);
+                    setTimeout(function() {
+                        document.getElementById('add-vertex').style.fill = '#262626';
+                        document.getElementById('add-vertex').style.fillOpacity = '0.7';
+                    },250);
                     openTools = true;
+
                 } else if(key===17) {
-                    toolButtons.style.display = 'none';
-                    openTools = false;
+                    drawLine('#add-vertex','reverse',250);
+                    setTimeout(function()
+                    {
+                        toolButtons.style.display = 'none';
+                        openTools = false;
+                    }, 250);
+
                 }
             };
 
@@ -195,7 +172,6 @@ define(['ui-animations/anime'], function(Anime)
                     duration: duration,
                     delay: function(el, i) { return i * 250 },
                     direction: direction,
-                    loop: false
                 });
             }
 

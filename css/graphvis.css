@@ -162,8 +162,6 @@ li {
 /*}*/
 
 .toolMenu {
-    right: 4rem;
-    bottom: 10rem;
     z-index: 2;
     position: absolute;
     display: none;
