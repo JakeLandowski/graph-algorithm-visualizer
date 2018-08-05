@@ -30,24 +30,47 @@
 
     const createNewBtn  = document.getElementsByClassName('creategraph');
 
-    const addVertexBtn  = document.getElementById('add-vertex');
-    const addEdgeBtn    = document.getElementById('add-edge');
-    const editEdgeBtn   = document.getElementById('edit-edge');
-    const undoBtn       = document.getElementById('undo');
-    const redoBtn       = document.getElementById('redo');
+    const addVertexBtn  = document.getElementsByClassName('addVertexButton');
+    const addEdgeBtn    = document.getElementsByClassName('addEdgeButton');
+    const editEdgeBtn   = document.getElementsByClassName('addWeightButton');
+    const undoBtn       = document.getElementsByClassName('undoButton');
+    const redoBtn       = document.getElementsByClassName('redoButton');
 
     for(let i = 0; i<createNewBtn.length; i++) {
         createNewBtn[i].addEventListener('click',function () {
             clearCanvas();
         })
-
-
     }
 
-    addVertexBtn.addEventListener('click', function() { graph.vertexMode(); });
-    addEdgeBtn.addEventListener('click',   function() { graph.edgeMode();   });
-    undoBtn.addEventListener('click',      function() { graph.undo();       });
-    redoBtn.addEventListener('click',      function() { graph.redo();       });
+     for(let i = 0; i<addVertexBtn.length; i++) {
+         addVertexBtn[i].addEventListener('click',function () {
+             graph.vertexMode();
+         })
+     }
+
+     for(let i = 0; i<addEdgeBtn.length; i++) {
+         addEdgeBtn[i].addEventListener('click',function () {
+             graph.edgeMode();
+         })
+     }
+
+     for(let i = 0; i<editEdgeBtn.length; i++) {
+         editEdgeBtn[i].addEventListener('click',function () {
+             //DO SOMETHING.....
+         })
+     }
+
+     for(let i = 0; i<undoBtn.length; i++) {
+         undoBtn[i].addEventListener('click',function () {
+             graph.undo();
+         })
+     }
+
+     for(let i = 0; i<redoBtn.length; i++) {
+         redoBtn[i].addEventListener('click',function () {
+             graph.redo();
+         })
+     }
 
      function clearCanvas() {
          document.getElementById("main").innerHTML = "";

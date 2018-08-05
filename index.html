@@ -79,40 +79,65 @@
         </svg>
     </div>
 
-    <!-- Tools Menu -->
-    <ul class="tools ui-component noselect">
-        <li>
-            <svg id="add-vertex" class="future toolsbtn" width="200" height="0">
-                <rect width="200" height="0"></rect>
-                <text x="25" y="19" font-family="Exo 2" font-size="18" fill="#ff9a00">Add/Remove Vertex</text>
-            </svg>
-        </li>
-        <li>
-            <svg id="add-edge" class="future toolsbtn" width="200" height="0">
-                <rect width="200" height="0"></rect>
-                <text x="25" y="19" font-family="Exo 2" font-size="18" fill="#ff9a00">Add/Remove Edge</text>
-            </svg>
-        </li>
-        <li>
-            <svg id="edit-edge" class="future toolsbtn" width="200" height="0">
-                <rect width="200" height="0"></rect>
-                <text x="25" y="19" font-family="Exo 2" font-size="18" fill="#ff9a00">Add/Edit Edge Weight</text>
-            </svg>
-        </li>
-        <li>
-            <svg id="undo" class="future toolsbtn" width="200" height="0">
-                <rect width="200" height="0"></rect>
-                <text x="25" y="19" font-family="Exo 2" font-size="18" fill="#ff9a00">Undo</text>
-            </svg>
-        </li>
-        <li>
-            <svg id="redo" class="future toolsbtn" width="200" height="0">
-                <rect width="200" height="0"></rect>
-                <text x="25" y="19" font-family="Exo 2" font-size="18" fill="#ff9a00">Redo</text>
-            </svg>
-        </li>
-    </ul>
+    <div id="toolbar" class="ui-component noselect">
+        <svg id="toolbuttons" class="toolMenu" width="300" height="300">
+            <defs>
+                <filter id="shadow">
+                    <feGaussianBlur result="blurOut" in="offOut" stdDeviation="3" />
+                    <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
+                </filter>
+            </defs>
+            <!-- ADD VERTEX BUTTON -->
+            <path filter="url(#shadow)" id="add-vertex" class="future addVertexButton" stroke="#ff9a00" stroke-width="4"
+                  fill="transparent" stroke-dasharray="25 5" d="
+                                M 150, 75
+                                m -26, 0
+                                a 26,26 0 0,0 52,0
+                                a 26,26 0 0,0 -52,0
+            "></path>
+            <text class="future addVertexButton" x="137" y="80" font-family="Exo 2" font-size="14" fill="#ff9a00">VTX</text>
 
+            <!-- ADD EDGE BUTTON -->
+            <path filter="url(#shadow)" id="add-edge" class="future addEdgeButton" stroke="#ff9a00" stroke-width="4"
+                  fill="transparent" stroke-dasharray="25 5" d="
+                                M 50, 150
+                                m -26, 0
+                                a 26,26 0 0,0 52,0
+                                a 26,26 0 0,0 -52,0
+            "></path>
+            <text class="future addEdgeButton" x="37" y="155" font-family="Exo 2" font-size="14" fill="#ff9a00">EDG</text>
+
+            <!-- ADD WEIGHT BUTTON -->
+            <path filter="url(#shadow)" id="edit-edge" class="future addWeightButton" stroke="#ff9a00" stroke-width="4"
+                  fill="transparent" stroke-dasharray="25 5" d="
+                                M 250,150
+                                m -26, 0
+                                a 26,26 0 0,0 52,0
+                                a 26,26 0 0,0 -52,0
+            "></path>
+            <text class="future addWeightButton" x="230" y="155" font-family="Exo 2" font-size="14" fill="#ff9a00">WGHT</text>
+
+            <!-- UNDO BUTTON -->
+            <path filter="url(#shadow)" id="undo" class="future undoButton" stroke="#ff9a00" stroke-width="4"
+                  fill="transparent" stroke-dasharray="25 5" d="
+                                M 100, 250
+                                m -26, 0
+                                a 26,26 0 0,0 52,0
+                                a 26,26 0 0,0 -52,0
+            "></path>
+            <text class="future undoButton" x="82" y="254" font-family="Exo 2" font-size="14" fill="#ff9a00">UNDO</text>
+
+            <!-- REDO BUTTON -->
+            <path filter="url(#shadow)" id="redo" class="future redoButton" stroke="#ff9a00" stroke-width="4"
+                  fill="transparent" stroke-dasharray="25 5" d="
+                                M 200, 250
+                                m -26, 0
+                                a 26,26 0 0,0 52,0
+                                a 26,26 0 0,0 -52,0
+            "></path>
+            <text class="future redoButton" x="183" y="255" font-family="Exo 2" font-size="14" fill="#ff9a00">REDO</text>
+        </svg>
+    </div>
     <!-- Graph Canvas div -->
     <div id="main"></div>
 

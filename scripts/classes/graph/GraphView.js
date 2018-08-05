@@ -77,8 +77,8 @@ if(window.DEBUG_MODE)
                 vertex.linewidth = this.config.vertexOutlineSize;
 
                 const text = this.two.makeText(params.data, params.x, params.y);
-                text.stroke = '#ff9a00';
-                text.family = 'Exo';
+                text.fill = '#ff9a00';
+                text.family = 'Exo sans-serif';
                 text.size = 25;
                 this.vertexGroup.add(vertex, text);
 

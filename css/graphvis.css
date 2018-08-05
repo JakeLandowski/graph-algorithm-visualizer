@@ -160,3 +160,10 @@ li {
 /*#creategraphbutton:hover {*/
     /*stroke: #ffcb48;*/
 /*}*/
+
+.toolMenu {
+    right: 4rem;
+    bottom: 10rem;
+    z-index: 2;
+    position: absolute;
+}
