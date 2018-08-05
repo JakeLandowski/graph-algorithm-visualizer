@@ -7,17 +7,9 @@
  */
 
 'use strict';
- requirejs(['classes/graph/Graph', 'ui-animations/animations'], function(Graph, Animations)
+ requirejs(['tests/start-tests', 'classes/graph/Graph', 'ui-animations/animations'], function(Tests, Graph, Animations)
  {
-    // create Graph
-    // configure graph
-    // append to div
-    // initialize events in graph (internal)
-    // start graph loop
-
-    // maintain html ui here, create an object for it
-    // attach new graph as main graph, hooking up to the ui
-
+    Tests.run();
     window.DEBUG_MODE = false;
 
     Animations.start();

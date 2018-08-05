@@ -78,7 +78,7 @@ if(window.DEBUG_MODE)
 
                 const text = this.two.makeText(params.data, params.x, params.y);
                 text.stroke = '#ff9a00';
-                text.family = 'Exo';
+                text.family = 'Exo 2';
                 text.size = 25;
                 this.vertexGroup.add(vertex, text);
 

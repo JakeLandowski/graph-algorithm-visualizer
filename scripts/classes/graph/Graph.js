@@ -53,10 +53,10 @@ define(['classes/graph/GraphModel',
         {
             this.clearMouseEvents();
 
+            this.mouseEventsLogged.push('clickVertex');
+
             this.view.onCanvasMouseClick.attach('clickVertex', function(_, params)
             {
-                this.mouseEventsLogged.push('clickVertex');
-
                 // see if clicked on vertex here using model
                 // if clicked on vertex tell model to delete
                 const vertex = this.model.vertexAt(params.x, params.y);
@@ -99,11 +99,11 @@ define(['classes/graph/GraphModel',
                 }
 
             }.bind(this));
+            
+            this.mouseEventsLogged.push('dragVertex');
 
             this.view.onCanvasMouseDown.attach('dragVertex', function(_, params)
             {
-                this.mouseEventsLogged.push('dragVertex');
-
                 // locate vertex at location
                 const vertex = this.model.vertexAt(params.x, params.y);
 
@@ -138,9 +138,10 @@ define(['classes/graph/GraphModel',
         {
             this.clearMouseEvents();
 
+            this.mouseEventsLogged.push('createEdge');
+
             this.view.onCanvasMouseClick.attach('createEdge', function(_, params)
             {
-                this.mouseEventsLogged.push('createEdge');
                 
                 const vertex   = this.model.vertexAt(params.x, params.y);
                 const selected = this.model.selectedVertex; 
