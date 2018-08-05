@@ -162,9 +162,12 @@ if(window.DEBUG_MODE)
             // Tracking Edge Removed
             this.model.onTrackingEdgeRemoved.attach('trackingEdgeRemoved', function(_, params)
             {
-                this.edgeGroup.remove(this.trackingEdge);
-                this.trackingEdge.remove()
-                delete this.trackingEdge;                                
+                if(this.trackingEdge)
+                {
+                    this.edgeGroup.remove(this.trackingEdge);
+                    this.trackingEdge.remove()
+                    delete this.trackingEdge;                                
+                }
 
             }.bind(this));
 

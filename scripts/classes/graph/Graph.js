@@ -53,6 +53,14 @@ define(['classes/graph/GraphModel',
         {
             this.clearMouseEvents();
 
+            // For when changing modes while tracking 
+            // edge exists and a vertex is selected
+            if(this.model.selectedVertex)
+            {
+                this.model.deselectVertex();
+                this.model.releaseTrackingEdge();
+            }
+
             this.mouseEventsLogged.push('clickVertex');
 
             this.view.onCanvasMouseClick.attach('clickVertex', function(_, params)
