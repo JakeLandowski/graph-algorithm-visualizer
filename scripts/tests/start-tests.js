@@ -7,7 +7,9 @@
  */
 
 'use strict';
- define(['tests/AdjacencyList.test'], function(AdjacencyListTest)
+ define(['tests/GraphModel.test', 
+         'tests/AdjacencyList.test'], 
+         function(GraphModelTest, AdjacencyListTest)
  {
      return {
         
@@ -20,6 +22,7 @@
         run()
         {
             console.log('Running tests...');
+            GraphModelTest.run(this.assertEquals);
             AdjacencyListTest.run(this.assertEquals);
             console.log('Tests done.');
         }

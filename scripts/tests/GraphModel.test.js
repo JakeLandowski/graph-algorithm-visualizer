@@ -23,7 +23,32 @@
                 edgeBoxSize:       50
             });
             
-
+            graphModel.dispatch
+            ({ 
+                type: 'addVertex',
+                data: 
+                {
+                    symbol:        'A',
+                    x:             500,
+                    y:             500,
+                    toNeighbors:   [], // FOR UNDO
+                    fromNeighbors: [], // FOR UNDO
+                    returnSymbol:  function(){},   
+                    getSymbol:     function(){ return 'A'; }
+                },
+                undo: 'removeVertex'
+            });
+            
+            graphModel.undo();
+            assertEquals(graphModel.userCommands.undoLog.length, 0, 
+                         'undo log should be empty after 1 command followed by 1 undo.');
+            graphModel.redo();
+            assertEquals(graphModel.userCommands.redoLog.length, 0, 
+                         'redo log should be empty after 1 undo followed by 1 redo.');
+            assertEquals(graphModel.userCommands.undoLog[0].type, 'addVertex', 
+                         'addVertex should be back on undo log after redo did a removeVertex.');
+            assertEquals(graphModel.adjList.vertexExists('A'), true, 
+                         'adjacency list should have vertex A back after redo recreated it.');
         }
      };
  });
