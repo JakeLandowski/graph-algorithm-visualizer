@@ -93,7 +93,7 @@ define(function()
         {
             // LOOP THROUGH VERTEX NEIGHBORS VERSION
             const map = this.vertexMap;
-            let vertex, toNeighbors;
+            let vertex, toNeighbors, edge;
 
             for(const vertexData in map)
             {
@@ -101,7 +101,11 @@ define(function()
                 toNeighbors = vertex.toNeighbors;
 
                 for(const neighbor in toNeighbors)
-                    action(this.edgeMap[ [vertex.data, neighbor] ]);
+                {
+                    edge = this.edgeMap[ [vertex.data, neighbor] ];
+                    if(edge.to === neighbor && edge.from === vertexData)
+                        action(edge);
+                }
             }
         },
     };

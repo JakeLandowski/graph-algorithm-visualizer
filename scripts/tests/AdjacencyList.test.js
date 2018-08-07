@@ -18,7 +18,7 @@
             
             const vertex1 = { data: 'vertex1', toNeighbors: {}, fromNeighbors: {} };
             const vertex2 = { data: 'vertex2', toNeighbors: {}, fromNeighbors: {} };
-            const edge1 = { from: 'vertex1', to: 'vertex2'};
+            const edge1   = { from: 'vertex1', to: 'vertex2'};
             directedAdjList.insertVertex(vertex1);
 
             assertEquals(directedAdjList.vertexMap['vertex1'], vertex1, 
@@ -36,7 +36,25 @@
                          'edgeMap should have the same edge that was inserted when' + 
                          ' gotted by the same from and to data.');
 
-            // const undirectedAdjList = new AdjacencyList(true);
+            const undirectedAdjList = new AdjacencyList(true);
+
+            const vertex3 = { data: 'vertex3', toNeighbors: {}, fromNeighbors: {} };
+            const vertex4 = { data: 'vertex4', toNeighbors: {}, fromNeighbors: {} };
+            const edge2   = { from: 'vertex3', to: 'vertex4'};
+
+            undirectedAdjList.insertVertex(vertex3);
+            undirectedAdjList.insertVertex(vertex4);
+            undirectedAdjList.insertEdge(edge2);
+            
+            let count = 0;
+            undirectedAdjList.forEachEdge(function()
+            {
+                count++;
+            });
+
+            assertEquals(count, 1, 'forEachEdge on vertex inside undirected graph' + 
+                         ' with only 1 registered edge object should have only ' + 
+                         'looped one time.');
         }
      };
  });
