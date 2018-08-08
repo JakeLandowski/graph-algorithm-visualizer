@@ -12,13 +12,10 @@ define(['classes/Event', 'classes/graph/AdjacencyList',
         'classes/SpacialIndex', 'classes/CommandLog'], 
 function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
 {
-    const GraphModel = function(width, height, config)
+    const GraphModel = function(width, height, config, cellRatio=5)
     {
-        // Shape size/styling information
-        this.config = config;
-
-        // SpacialIndex needed information
-        this.cellRatio  = 5;
+        this.config    = config;
+        this.cellRatio = cellRatio;
         this.setDimensions(width, height);
 
         this.adjList   = new AdjacencyList(this.config.undirected)

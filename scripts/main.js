@@ -10,15 +10,9 @@
  requirejs(['tests/start-tests', 'classes/graph/Graph', 'ui-animations/animations'], function(Tests, Graph, Animations)
  {
     Tests.run();
-    window.DEBUG_MODE = false;
-
     Animations.start();
 
-    let graph = new Graph({ fullscreen: true });
-
-    graph.appendTo(document.getElementById('main'));
-    graph.start();
-
+    let graph = new Graph(document.getElementById('main'));
 
     const createNewBtn  = document.getElementsByClassName('creategraph');
 

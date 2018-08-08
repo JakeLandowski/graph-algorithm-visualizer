@@ -7,26 +7,28 @@
  */
 
 'use strict';
-define(function()
+define(['classes/engine/Circle', 
+        'classes/engine/Rectangle', 
+        'classes/engine/Line',
+        'classes/engine/Text'], 
+function(Circle, Rectangle, Line, Text)
 {
-    const RenderingEngine = function(container, config={}) 
+    const RenderingEngine = function(config={}) 
     {
         this.config = 
         {
             backgroundColor: config.backgroundColor || '#222'
         };
 
-        this.container  = container;
         this.canvas     = document.createElement('canvas');
         this.context    = this.canvas.getContext('2d');
         this.calcPixelRatio();
         
-        this.canvas.style.background = this.config.backgroundColor;
-        container.appendChild(this.canvas);
-        this.resize(); 
+        this.canvas.style.background = this.config.backgroundColor; 
 
         // this.frameCount = 0;
-        this.entities   = Object.create(null);
+        this.layers    = []; // Layers
+        this.maxLayerLevel = 0;
     };
 
     RenderingEngine.prototype = 
@@ -61,7 +63,7 @@ define(function()
 
         // update()
         // {
-        //     this.entities.forEach(function(entity)
+        //     this.layers.forEach(function(entity)
         //     {
         //         entity.update();
 
@@ -71,17 +73,22 @@ define(function()
         render()
         {
             this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-            const entities = this.entities;
+            const layers = this.layers;
             let entity;
 
-            for(const entityId in entities)
+            layers.forEach(function(layer)
             {
-                entity = entities[entityId];
-                this.context.beginPath();
-                this.context.save();
-                entity.render();
-                this.context.restore();
-            }
+                for(const entityId in layer)
+                {
+                    entity = layer[entityId];
+                    this.context.beginPath();
+                    this.context.save();
+                    entity.render();
+                    this.context.restore();
+                }
+
+            }.bind(this));
+
         },
 
         frame() 
@@ -92,32 +99,73 @@ define(function()
             this.requestAnimationFrame(this.frame.bind(this));
         },
 
+        appendTo(container)
+        {
+            this.container = container;
+            container.appendChild(this.canvas);
+            this.resize();
+        },
+
         start()
         {
             this.frame();
         },
 
-        createCircle(x, y, radius)
+        createCircle(x, y, radius, level=0)
         {
-            let circ = new Circle(x, y, radius, this.context);
-            this.entities[circ.id] = circ;
+            let circ = new Circle(x, y, radius, this.context, this, level);
+            this.getLayer(level)[circ.id] = circ;
+            return circ;
         },
 
-        createRect(x, y, width, height, radius)
+        createRectangle(x, y, width, height, level=0)
         {
-            let rect = new Rectangle(x, y, width, height, this.context);
-            this.entities[rect.id] = rect;
+            let rect = new Rectangle(x, y, width, height, this.context, this, level);
+            this.getLayer(level)[rect.id] = rect;
+            return rect;
         },
 
-        createLine(x1, y1, x2, y2)
+        createLine(x1, y1, x2, y2, level=0)
         {
-            let line = new Line(x1, y1, x2, y2, this.context);
-            this.entities[line.id] = line;
+            let line = new Line(x1, y1, x2, y2, this.context, this, level);
+            this.getLayer(level)[line.id] = line;
+            return line;
+        },
+
+        createText(content, x, y, level=0)
+        {
+            let text = new Text(content, x, y, this.context, this, level);
+            this.getLayer(level)[text.id] = text;
+            return text;
         },
 
         deleteEntity(id)
         {
-            delete this.entities[id];
+            this.layers.forEach(function(layer)
+            {
+                if(layer[id]) delete layer[id];
+
+            }.bind(this));
+        },
+
+        getLayer(level)
+        {
+            if(!this.layers[level]) this.layers[level] = Object.create(null);
+            return this.layers[level];
+        },
+
+        moveEntityToLayer(id, prevLevel, newLevel)
+        {
+            const layer = this.getLayer(prevLevel);
+            this.getLayer(newLevel)[id] = this.layers[prevLevel][id];
+                                   delete this.layers[prevLevel][id];
+            
+            if(newLevel > this.maxLayerLevel) this.maxLayerLevel = newLevel;
+        },
+
+        maxLayer()
+        {
+            return this.maxLayerLevel;
         }
     };
     

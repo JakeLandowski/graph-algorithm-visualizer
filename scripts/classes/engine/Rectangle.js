@@ -7,30 +7,38 @@
  */
 
 'use strict';
-define(function()
+define(['classes/engine/Entity'], function(Entity)
 {
-    const Rectangle = function(x, y, width, height, context)
+    const Rectangle = function(x, y, width, height, context, engine)
     {
-        this.id = 'rect' + this.nextId++;
+        Entity.call(this, context, engine); // super
+        this.id = 'rect' + Rectangle.nextId++;
         this.x  = x;
         this.y  = y;
         this.width   = width;
         this.height  = height;
-        this.context = context;
     };
 
-    Rectangle.prototype = 
+    Rectangle.nextId = 0;
+    Rectangle.prototype = Object.create(Entity.prototype); // extend Entity
+    Rectangle.prototype.constructor = Rectangle; // reset constructor
+    Object.assign(Rectangle.prototype, // mixin normal Rectangle methods
     {
-        nextId: 0,
         render()
         {
             const ctx = this.context;
             ctx.lineWidth   = this.lineWidth   || 1;
             ctx.fillStyle   = this.fillStyle   || '#fff';
             ctx.strokeStyle = this.strokeStyle || '#000';
-            ctx.fillRect(this.x, this.y, this.width, this.height);
+            ctx.fillRect(this.x - this.width/2, this.y - this.height/2, this.width, this.height);
+        },
+
+        center(x, y)
+        {
+            this.x = x;
+            this.y = y;
         }
-    };
+    });
     
     return Rectangle;
 });

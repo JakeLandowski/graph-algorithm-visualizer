@@ -8,21 +8,14 @@
  */
 
 'use strict';
-define(['classes/graph/GraphModel', 
-        'classes/graph/GraphView',
-        'two'], 
-        function(GraphModel, GraphView, Two)
+define(['classes/graph/GraphModel', 'classes/graph/GraphView'], 
+function(GraphModel, GraphView)
 {
-    const Graph = function(config={})
+    const Graph = function(container, config={})
     {
-        this.two = new Two
-        ({
-            fullscreen: config.fullscreen || false,
-            type:       config.type       || Two.Types.canvas,
-            width:      config.width      || 100,
-            height:     config.height     || 100
-        });
-
+        if(!container) throw 'Need to provide a containing element for Graph to render in.';
+        this.container = container;
+        
         this.config = 
         {
             undirected:        config.undirected        || true,
@@ -32,16 +25,17 @@ define(['classes/graph/GraphModel',
             edgeBoxSize:       config.edgeBoxSize       || 50
         };
 
-        this.model = new GraphModel(this.two.width, this.two.height, this.config);
-        this.view  = new GraphView(this.model, this.two, this.config);
-
+        this.model = new GraphModel(container.clientWidth, container.clientHeight, this.config);
+        this.view = new GraphView(container, this.model, this.config);
+        
         this.symbols = ['Z', 'Y', 'X', 'W', 'V', 'U', 
                         'T', 'S', 'R', 'Q', 'P', 'O', 
                         'N', 'M', 'L', 'K', 'J', 'I', 
                         'H', 'G', 'F', 'E', 'D', 'C', 
                         'B', 'A'];
-                        
+        
         this.mouseEventsLogged = [];
+        this.vertexMode();
     };
 
     Graph.prototype = 
@@ -252,12 +246,6 @@ define(['classes/graph/GraphModel',
 
 //====================== Methods ===========================//
 
-        start()
-        {
-            this.two.play();
-            this.vertexMode();
-        },
-
         undo()
         {
             this.model.undo();
@@ -266,16 +254,6 @@ define(['classes/graph/GraphModel',
         redo()
         {
             this.model.redo();
-        },
-
-        // render()
-        // {
-        //     this.two.update();
-        // },
-
-        appendTo(container)
-        {
-            this.view.appendTo(container);
         },
 
         getSymbol()

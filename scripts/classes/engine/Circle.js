@@ -7,20 +7,22 @@
  */
 
 'use strict';
-define(function()
+define(['classes/engine/Entity'], function(Entity)
 {
-    const Circle = function(x, y, radius, context)
+    const Circle = function(x, y, radius, context, engine)
     {
-        this.id = 'circ' + this.nextId++;
+        Entity.call(this, context, engine); // super
+        this.id = 'circ' + Circle.nextId++;
         this.x  = x;
         this.y  = y;
         this.radius  = radius;
-        this.context = context;
     };
 
-    Circle.prototype = 
+    Circle.nextId = 0;
+    Circle.prototype = Object.create(Entity.prototype); // extend Entity
+    Circle.prototype.constructor = Circle; // reset constructor
+    Object.assign(Circle.prototype, // mixin normal Circle methods
     {
-        nextId: 0,
         render()
         {
             const ctx = this.context;
@@ -29,8 +31,15 @@ define(function()
             ctx.strokeStyle = this.strokeStyle || '#fff';
             ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
             ctx.fill();
+            ctx.stroke();
+        },
+
+        center(x, y)
+        {
+            this.x = x;
+            this.y = y;
         }
-    };
+    });
     
     return Circle;
 });
