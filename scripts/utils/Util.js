@@ -40,54 +40,6 @@ define(function()
         },
 
         /**
-         *  Get end {x, y} point of a given line.
-         * 
-         *  @param line
-         */
-        lineStartPoint(line)
-        {
-            return {
-                x: line.vertices[0].x + line.translation.x,
-                y: line.vertices[0].y + line.translation.y
-            };
-        },
-
-        /**
-         *  Get start {x, y} point of a given line.
-         * 
-         *  @param line
-         */
-        lineEndPoint(line)
-        {
-            return {
-                x: line.vertices[1].x + line.translation.x,
-                y: line.vertices[1].y + line.translation.y
-            };
-        },
-
-        /**
-         *  Set the end {x, y} point of a given line.
-         * 
-         *  @param line
-         */
-        setLineEndPoint(line, x, y)
-        {
-            line.vertices[1].x = x - line.translation.x;
-            line.vertices[1].y = y - line.translation.y;
-        },
-
-        /**
-         *  Set the start {x, y} point of a given line.
-         * 
-         *  @param line
-         */
-        setLineStartPoint(line, x, y)
-        {
-            line.vertices[0].x = x - line.translation.x;
-            line.vertices[0].y = y - line.translation.y;
-        },
-
-        /**
          *  Creates a copy of an object
          * 
          *  @param object to copy 
