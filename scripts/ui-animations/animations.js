@@ -146,10 +146,6 @@ define(['ui-animations/anime'], function(Anime)
 
                     toolButtons.style.display = 'block';
                     drawLine('#add-vertex','normal',250);
-                    setTimeout(function() {
-                        document.getElementById('add-vertex').style.fill = '#262626';
-                        document.getElementById('add-vertex').style.fillOpacity = '0.7';
-                    },250);
                     openTools = true;
 
                 } else if(key===17) {
