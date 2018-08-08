@@ -9,13 +9,20 @@
 'use strict';
 define(['classes/engine/Entity'], function(Entity)
 {
-    const Text = function(content, x, y, context, engine)
+    const Text = function(content, x, y, styles={}, context, engine)
     {
         Entity.call(this, context, engine); // super
         this.id = 'text' + Text.nextId++;
         this.content = content;
-        this.x  = x;
-        this.y  = y;
+        this.x = x;
+        this.y = y;
+        this.styles = 
+        {
+            font:         styles.font         || '16px serif',
+            fillStyle:    styles.fillStyle    || '#fff',
+            textAlign:    styles.textAlign    || 'center',
+            textBaseline: styles.textBaseline || 'middle'
+        };
     };
 
     Text.nextId = 0;
@@ -26,10 +33,10 @@ define(['classes/engine/Entity'], function(Entity)
         render()
         {
             const ctx = this.context;
-            ctx.font      = this.font            || '16px sans-serif';
-            ctx.fillStyle = this.fillStyle       || '#fff';
-            ctx.textAlign = this.textAlign       || 'center';
-            ctx.textBaseline = this.textBaseline || 'middle';
+            ctx.font         = this.styles.font;
+            ctx.fillStyle    = this.styles.fillStyle;
+            ctx.textAlign    = this.styles.textAlign;    
+            ctx.textBaseline = this.styles.textBaseline; 
             ctx.fillText(this.content, this.x, this.y);
         },
 

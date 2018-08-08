@@ -8,7 +8,7 @@
 
 'use strict';
 define(['classes/engine/RenderingEngine', 
-        'classes/Event', 
+        'classes/Event',
         'utils/Util'], function(RenderingEngine, Event, Util)
 {
     const GraphView = function(container, model, config)
@@ -53,17 +53,21 @@ define(['classes/engine/RenderingEngine',
             // Vertex Added
             this.model.onVertexAdded.attach('createVertex', function(_, params)
             {
-                const vertex = this.engine.createCircle(params.x, params.y, this.config.vertexSize, this.VERTEX_LAYER);
-                vertex.fillStyle = '#262626';
-                vertex.strokeStyle = '#ff9a00';
-                vertex.lineWidth = this.config.vertexOutlineSize;
+                const vertex = this.engine.createCircle(params.x, params.y, this.config.vertexSize, this.VERTEX_LAYER, 
+                {
+                    fillStyle:   '#262626',
+                    strokeStyle: '#ff9a00',
+                    lineWidth:   this.config.vertexOutlineSize
+                });
 
                 // vertex.shadowBlur = 6;
                 // vertex.shadowColor = '#ff9a00';
 
-                const text = this.engine.createText(params.data, params.x, params.y, this.VERTEX_LAYER);
-                text.fillStyle = '#ff9a00';
-                text.font = '25px Exo 2';
+                const text = this.engine.createText(params.data, params.x, params.y, this.VERTEX_LAYER, 
+                {
+                    fillStyle: '#ff9a00',
+                    font:      '24px monospace'
+                });
 
                 this.vertexMap[params.data] = 
                 {
@@ -103,7 +107,7 @@ define(['classes/engine/RenderingEngine',
             {
                 if(this.vertexMap[params.data])
                 {
-                    this.vertexMap[params.data].circle.strokeStyle = '#fffc55';
+                    this.vertexMap[params.data].circle.styles.strokeStyle = '#fffc55';
                 }
             
             }.bind(this));
@@ -113,7 +117,7 @@ define(['classes/engine/RenderingEngine',
             {
                 if(this.vertexMap[params.data])
                 {
-                    this.vertexMap[params.data].circle.strokeStyle = '#dd6900';
+                    this.vertexMap[params.data].circle.styles.strokeStyle = '#262626';
                 }                 
 
             }.bind(this));
@@ -126,9 +130,11 @@ define(['classes/engine/RenderingEngine',
                 const start = params.start;
                 const end   = params.end;
 
-                this.trackingEdge = this.engine.createLine(start.x, start.y, end.x, end.y, this.TRACKING_LAYER);
-                this.trackingEdge.strokeStyle = 'rgba(255, 255, 100, 0.5)';
-                this.trackingEdge.lineWidth = this.config.edgeWidth;
+                this.trackingEdge = this.engine.createLine(start.x, start.y, end.x, end.y, this.TRACKING_LAYER, 
+                {
+                    strokeStyle: 'rgba(255, 255, 100, 0.5)',
+                    lineWidth:   this.config.edgeWidth
+                });
 
             }.bind(this));
 
@@ -156,15 +162,19 @@ define(['classes/engine/RenderingEngine',
                 const edge = 
                 {
                     line: this.engine.createLine(params.fromPoint.x, params.fromPoint.y, 
-                                                 params.toPoint.x,   params.toPoint.y, this.EDGE_LAYER),
+                          params.toPoint.x, params.toPoint.y, this.EDGE_LAYER,
+                          {
+                              strokeStyle: 'rgb(255, 255, 100)',
+                              lineWidth:   this.config.edgeWidth
+                          }),
 
                     box: this.engine.createRectangle(params.center.x, params.center.y, 
-                                                     this.config.edgeBoxSize, this.config.edgeBoxSize, this.EDGE_LAYER)
+                         this.config.edgeBoxSize, this.config.edgeBoxSize, this.EDGE_LAYER, 
+                         {
+                             fillStyle: 'rgb(255, 255, 100)'
+                         })
                 };
 
-                edge.line.strokeStyle = "rgb(255, 255, 100)";
-                edge.line.lineWidth   = this.config.edgeWidth;
-                edge.box.fillStyle    = 'rgb(255, 255, 100)';
                 this.edgeMap[ [params.from, params.to] ] = edge;
             
             }.bind(this));

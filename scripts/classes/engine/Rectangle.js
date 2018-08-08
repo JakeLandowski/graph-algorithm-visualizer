@@ -9,14 +9,20 @@
 'use strict';
 define(['classes/engine/Entity'], function(Entity)
 {
-    const Rectangle = function(x, y, width, height, context, engine)
+    const Rectangle = function(x, y, width, height, styles={}, context, engine)
     {
         Entity.call(this, context, engine); // super
         this.id = 'rect' + Rectangle.nextId++;
         this.x  = x;
         this.y  = y;
-        this.width   = width;
-        this.height  = height;
+        this.width  = width;
+        this.height = height;
+        this.styles = 
+        {
+            lineWidth:   styles.lineWidth   || 1,
+            fillStyle:   styles.fillStyle   || '#fff',
+            strokeStyle: styles.strokeStyle || '#000'
+        };
     };
 
     Rectangle.nextId = 0;
@@ -27,9 +33,9 @@ define(['classes/engine/Entity'], function(Entity)
         render()
         {
             const ctx = this.context;
-            ctx.lineWidth   = this.lineWidth   || 1;
-            ctx.fillStyle   = this.fillStyle   || '#fff';
-            ctx.strokeStyle = this.strokeStyle || '#000';
+            ctx.lineWidth   = this.styles.lineWidth;
+            ctx.fillStyle   = this.styles.fillStyle;
+            ctx.strokeStyle = this.styles.strokeStyle;
             ctx.fillRect(this.x - this.width/2, this.y - this.height/2, this.width, this.height);
         },
 

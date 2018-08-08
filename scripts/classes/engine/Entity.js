@@ -15,6 +15,7 @@ define(function()
         this.context = context;
         this.engine  = engine;
         this.level   = level;
+        this.styles  = Object.create(null);
     };
 
     Entity.prototype = 

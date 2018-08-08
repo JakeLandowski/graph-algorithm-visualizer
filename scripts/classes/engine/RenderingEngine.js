@@ -111,30 +111,30 @@ function(Circle, Rectangle, Line, Text)
             this.frame();
         },
 
-        createCircle(x, y, radius, level=0)
+        createCircle(x, y, radius, level=0, styles={})
         {
-            let circ = new Circle(x, y, radius, this.context, this, level);
+            let circ = new Circle(x, y, radius, styles, this.context, this, level);
             this.getLayer(level)[circ.id] = circ;
             return circ;
         },
 
-        createRectangle(x, y, width, height, level=0)
+        createRectangle(x, y, width, height, level=0, styles={})
         {
-            let rect = new Rectangle(x, y, width, height, this.context, this, level);
+            let rect = new Rectangle(x, y, width, height, styles, this.context, this, level);
             this.getLayer(level)[rect.id] = rect;
             return rect;
         },
 
-        createLine(x1, y1, x2, y2, level=0)
+        createLine(x1, y1, x2, y2, level=0, styles={})
         {
-            let line = new Line(x1, y1, x2, y2, this.context, this, level);
+            let line = new Line(x1, y1, x2, y2, styles, this.context, this, level);
             this.getLayer(level)[line.id] = line;
             return line;
         },
 
-        createText(content, x, y, level=0)
+        createText(content, x, y, level=0, styles={})
         {
-            let text = new Text(content, x, y, this.context, this, level);
+            let text = new Text(content, x, y, styles, this.context, this, level);
             this.getLayer(level)[text.id] = text;
             return text;
         },

@@ -9,7 +9,7 @@
 'use strict';
 define(['classes/engine/Entity'], function(Entity)
 {
-    const Line = function(x1, y1, x2, y2, context, engine)
+    const Line = function(x1, y1, x2, y2, styles={}, context, engine)
     {
         Entity.call(this, context, engine); // super
         this.id = 'line' + Line.nextId++;
@@ -17,6 +17,11 @@ define(['classes/engine/Entity'], function(Entity)
         this.y1 = y1;
         this.x2 = x2;
         this.y2 = y2;
+        this.styles = 
+        {
+            strokeStyle: styles.strokeStyle || '#fff',
+            fillStyle:   styles.fillStyle   || '#fff'
+        };
     };
 
     Line.nextId = 0;
@@ -49,8 +54,8 @@ define(['classes/engine/Entity'], function(Entity)
         render()
         {
             const ctx = this.context;
-            ctx.lineWidth   = this.lineWidth   || 100;
-            ctx.strokeStyle = this.strokeStyle || '#fff';
+            ctx.lineWidth   = this.styles.lineWidth;
+            ctx.strokeStyle = this.styles.strokeStyle;
             ctx.moveTo(this.x1, this.y1);
             ctx.lineTo(this.x2, this.y2);
             ctx.stroke();

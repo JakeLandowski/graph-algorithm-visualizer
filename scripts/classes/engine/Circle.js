@@ -9,13 +9,19 @@
 'use strict';
 define(['classes/engine/Entity'], function(Entity)
 {
-    const Circle = function(x, y, radius, context, engine)
+    const Circle = function(x, y, radius, styles={}, context, engine)
     {
         Entity.call(this, context, engine); // super
         this.id = 'circ' + Circle.nextId++;
         this.x  = x;
         this.y  = y;
-        this.radius  = radius;
+        this.radius = radius;
+        this.styles = 
+        {
+            lineWidth:   styles.lineWidth   || 1,
+            fillStyle:   styles.fillStyle   || '#fff',
+            strokeStyle: styles.strokeStyle || '#fff'
+        };
     };
 
     Circle.nextId = 0;
@@ -26,9 +32,9 @@ define(['classes/engine/Entity'], function(Entity)
         render()
         {
             const ctx = this.context;
-            ctx.lineWidth   = this.lineWidth   || 1;
-            ctx.fillStyle   = this.fillStyle   || '#fff';
-            ctx.strokeStyle = this.strokeStyle || '#fff';
+            ctx.lineWidth   = this.styles.lineWidth; 
+            ctx.fillStyle   = this.styles.fillStyle;
+            ctx.strokeStyle = this.styles.strokeStyle;
             ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
             ctx.fill();
             ctx.stroke();
