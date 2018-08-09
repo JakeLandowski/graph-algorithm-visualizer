@@ -40,6 +40,7 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
         this.onEdgeMoved           = new Event(this);
  
         this.userCommands = new CommandLog();
+        this.indirectEdgeRemoveCommands = new CommandLog();
     };
 
     GraphModel.prototype = 
@@ -55,12 +56,12 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
          *  @param clearRedo used for redo() method to prevent redo 
          *                   stack refreshing
          */
-        dispatch(command, clearRedo=true)
+        dispatch(log=undefined, command)
         {
             if(this[command.type])
             {
                 this[command.type](command.data);
-                this.userCommands.record(command, clearRedo);
+                if(log) log.record(command, true);
             }
             else throw 'Tried to run non-existant command ' + command.type;
         },
@@ -69,9 +70,9 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
          *  Execute the inverse command method to undo the
          *  last dispatched command.
          */
-        undo()
+        undo(log)
         {
-            const command = this.userCommands.undo();
+            const command = log.undo();
             if(command && this[command.undo])
                 this[command.undo](command.data);
         },
@@ -79,10 +80,15 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
         /**
          *  Execute the command that has last been undone.
          */
-        redo()
+        redo(log)
         {
-            const command = this.userCommands.redo();
-            if(command) this.dispatch(command, false);
+            const command = log.redo();
+            if(command && this[command.type])
+            {
+                this[command.type](command.data);
+                log.record(command, false);
+            }
+            else throw 'Tried to run non-existant command ' + command.type;
         },
 
         /**
@@ -134,8 +140,8 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
             const data          = args.getSymbol();
             const x             = args.x;
             const y             = args.y;
-            const toNeighbors   = args.toNeighbors;
-            const fromNeighbors = args.fromNeighbors;
+            // const toNeighbors   = args.toNeighbors;
+            // const fromNeighbors = args.fromNeighbors;
 
             if(!this.adjList.vertexExists(data)) // prevent duplicates 
             {
@@ -150,17 +156,17 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
                 this.onVertexAdded.notify({ data: data, x: x, y: y });
  
                 // For Undo
-                toNeighbors.forEach(function(neighbor)
-                {
-                    this.addEdge({ from: data, to: neighbor });
+                // toNeighbors.forEach(function(neighbor)
+                // {
+                //     this.addEdge({ from: data, to: neighbor });
 
-                }.bind(this));
+                // }.bind(this));
                 
-                fromNeighbors.forEach(function(neighbor)
-                {
-                    this.addEdge({ from: neighbor, to: data });
+                // fromNeighbors.forEach(function(neighbor)
+                // {
+                //     this.addEdge({ from: neighbor, to: data });
 
-                }.bind(this));
+                // }.bind(this));
             }
         },
 
@@ -196,11 +202,11 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
             // Clean up edges
             removed.forEachEdge(function(edge)
             {
-                this.removeEdge
-                ({
-                    from: edge.from,
-                    to:   edge.to
-                });
+                // this.removeEdge
+                // ({
+                //     from: edge.from,
+                //     to:   edge.to
+                // });
 
             }.bind(this));
 
@@ -229,16 +235,17 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
          */
         addEdge(args={})
         {
-            this.assertArgs(args, ['from', 'to'], 'Missing arguments for addEdge command');
+            this.assertArgs(args, ['from', 'to', 'weight'], 'Missing arguments for addEdge command');
             if(!this.adjList.vertexExists(args.from) || !this.adjList.vertexExists(args.to))
                 throw 'Missing vertices in adjList for addEdge command';
 
-            const from = args.from;
-            const to   = args.to;  
+            const from   = args.from;
+            const to     = args.to;
+            const weight = args.weight;  
 
             if(!this.adjList.edgeExists(from, to))
             {
-                const edge = new Edge(args.from, args.to, this.config.edgeBoxSize);
+                const edge = new Edge(args.from, args.to, this.config.edgeBoxSize, weight);
                 
                 this.adjList.insertEdge(edge);
                 this.edgeSpacialIndex.add(edge);
@@ -249,7 +256,8 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
                     to:        to, 
                     fromPoint: { x: edge.fromVertex.x, y: edge.fromVertex.y },
                     toPoint:   { x: edge.toVertex.x,   y: edge.toVertex.y   },
-                    center:    { x: edge.x,            y: edge.y            }    
+                    center:    { x: edge.x,            y: edge.y            } ,
+                    weight:    weight   
                 });
             }
         },
@@ -270,7 +278,7 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
          */
         removeEdge(args={})
         {
-            this.assertArgs(args, ['from', 'to'], 'Missing arguments for removeEdge command');
+            this.assertArgs(args, ['from', 'to', 'weight'], 'Missing arguments for removeEdge command');
             if(!this.adjList.vertexExists(args.from) ||  !this.adjList.vertexExists(args.to)) 
                 throw 'Missing vertices in adjList for removeEdge command';
             if(!this.adjList.edgeExists(args.from, args.to)) 

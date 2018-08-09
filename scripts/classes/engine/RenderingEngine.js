@@ -17,7 +17,7 @@ function(Circle, Rectangle, Line, Text)
     {
         this.config = 
         {
-            backgroundColor: config.backgroundColor || '#222'
+            backgroundColor: config.backgroundColor || '#fff'
         };
 
         this.canvas     = document.createElement('canvas');

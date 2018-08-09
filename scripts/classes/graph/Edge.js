@@ -9,11 +9,12 @@
 'use strict';
 define(function()
 {
-   const Edge = function(from, to, boxSize)
+   const Edge = function(from, to, boxSize, weight=0)
    {
-        this.from = from;
-        this.to   = to;
-        this.id   = '' + from + ',' + to,
+        this.from    = from;
+        this.to      = to;
+        this.weight  = weight;
+        this.id      = '' + from + ',' + to,
         this.boxSize = boxSize;
         this.setPoints();
    };
@@ -22,12 +23,9 @@ define(function()
     {
         setPoints()
         {
-            const fromVertex = this.fromVertex;
-            const toVertex   = this.toVertex;
-
             // HitBox Coordinates
-            this.x          = (fromVertex.x + toVertex.x) / 2;
-            this.y          = (fromVertex.y + toVertex.y) / 2; 
+            this.x          = (this.fromVertex.x + this.toVertex.x) / 2;
+            this.y          = (this.fromVertex.y + this.toVertex.y) / 2; 
             this.upperLeft  = { x: this.x - this.boxSize/2, y: this.y - this.boxSize/2 };
             this.lowerRight = { x: this.x + this.boxSize/2, y: this.y + this.boxSize/2 };
         },

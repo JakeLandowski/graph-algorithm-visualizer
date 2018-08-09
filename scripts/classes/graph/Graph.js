@@ -8,8 +8,8 @@
  */
 
 'use strict';
-define(['classes/graph/GraphModel', 'classes/graph/GraphView'], 
-function(GraphModel, GraphView)
+define(['classes/graph/GraphModel', 'classes/graph/GraphView', 'utils/Util'], 
+function(GraphModel, GraphView, Util)
 {
     const Graph = function(container, config={})
     {
@@ -18,7 +18,9 @@ function(GraphModel, GraphView)
         
         this.config = 
         {
-            undirected:        config.undirected        || true,
+            backgroundColor:   config.backgroundColor   || '#262626',
+            undirected:        config.undirected        || true, // NEEDS LOGIC WORK
+            weighted:          config.weighted          || true,
             vertexSize:        config.vertexSize        || 25,
             vertexOutlineSize: config.vertexOutlineSize || 3,
             edgeWidth:         config.edgeWidth         || 5,
@@ -65,8 +67,8 @@ function(GraphModel, GraphView)
 
                 if(vertex) // REMOVE
                 {
-                    this.model.dispatch
-                    ({
+                    this.model.dispatch(this.model.userCommands, 
+                    {
                         type: 'removeVertex',
                         data: 
                         {
@@ -83,8 +85,8 @@ function(GraphModel, GraphView)
                 }
                 else if(this.symbols.length > 0) // ADD
                 {   
-                    this.model.dispatch
-                    ({ 
+                    this.model.dispatch(this.model.userCommands,
+                    { 
                         type: 'addVertex',
                         data: 
                         {
@@ -158,22 +160,27 @@ function(GraphModel, GraphView)
                         if(selected.data !== vertex.data && 
                            !this.model.adjList.edgeExists(vertex.data, selected.data))
                         {
-                            this.model.dispatch
-                            ({
+                            this.model.dispatch(this.model.userCommands,
+                            {
                                 type: 'addEdge',
                                 data: 
                                 {
-                                    from: selected.data, 
-                                    to:   vertex.data,
+                                    from:   selected.data, 
+                                    to:     vertex.data,
+                                    weight: Util.rand(1, 20)     
                                 },
                                 undo: 'removeEdge'
                             });
-                        }
 
-                        // Edge hopping
-                        this.model.deselectVertex();
-                        this.model.selectVertex(vertex);
-                        this.trackEdgeToCursor(params.x, params.y);
+                            // Edge hopping
+                            this.model.deselectVertex();
+                            this.model.selectVertex(vertex);
+                            this.trackEdgeToCursor(params.x, params.y);
+                        }
+                        else
+                        {
+                            this.model.deselectVertex();
+                        }
                     }
                     else
                     {
@@ -191,13 +198,14 @@ function(GraphModel, GraphView)
                     
                     if(edge)
                     {
-                        this.model.dispatch
-                        ({
+                        this.model.dispatch(this.model.userCommands,
+                        {
                             type: 'removeEdge',
                             data: 
                             {
-                                from: edge.from, 
-                                to:   edge.to,
+                                from:   edge.from, 
+                                to:     edge.to,
+                                weight: edge.weight
                             },
                             undo: 'addEdge'
                         });
@@ -205,6 +213,24 @@ function(GraphModel, GraphView)
                 }
 
             }.bind(this));
+        },
+
+        editEdgeMode()
+        {
+            // this.clearMouseEvents();
+
+            // this.mouseEventsLogged.push('createEdge');
+
+            // this.view.onCanvasMouseClick.attach('createEdge', function(_, params)
+            // {
+            //     const vertex   = this.model.vertexAt(params.x, params.y); 
+
+            //     if(vertex)
+            //     {
+
+            //     }
+
+            // }.bind(this));            
         },
 
         trackEdgeToCursor(x, y)
@@ -248,12 +274,12 @@ function(GraphModel, GraphView)
 
         undo()
         {
-            this.model.undo();
+            this.model.undo(this.model.userCommands);
         },
 
         redo()
         {
-            this.model.redo();
+            this.model.redo(this.model.userCommands);
         },
 
         getSymbol()

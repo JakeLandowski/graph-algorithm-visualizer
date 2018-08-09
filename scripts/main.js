@@ -7,7 +7,10 @@
  */
 
 'use strict';
- requirejs(['tests/start-tests', 'classes/graph/Graph', 'ui-animations/animations'], function(Tests, Graph, Animations)
+ requirejs(['tests/start-tests', 
+            'classes/graph/Graph', 
+            'ui-animations/animations'], 
+function(Tests, Graph, Animations)
  {
     Tests.run();
     Animations.start();
@@ -40,7 +43,7 @@
 
      for(let i = 0; i<editEdgeBtn.length; i++) {
          editEdgeBtn[i].addEventListener('click',function () {
-             //DO SOMETHING.....
+             graph.editEdgeMode();
          })
      }
 
@@ -56,8 +59,8 @@
          })
      }
 
-     function newGraph() {
+     function newGraph(config={}) {
          document.getElementById("main").innerHTML = "";
-         return new Graph(document.getElementById('main'));
+         return new Graph(document.getElementById('main'), config);
      }
  });

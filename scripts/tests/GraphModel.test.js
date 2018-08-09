@@ -23,8 +23,8 @@
                 edgeBoxSize:       50
             });
             
-            graphModel.dispatch
-            ({ 
+            graphModel.dispatch(graphModel.userCommands,
+            { 
                 type: 'addVertex',
                 data: 
                 {
@@ -39,10 +39,10 @@
                 undo: 'removeVertex'
             });
             
-            graphModel.undo();
+            graphModel.undo(graphModel.userCommands);
             assertEquals(graphModel.userCommands.undoLog.length, 0, 
                          'undo log should be empty after 1 command followed by 1 undo.');
-            graphModel.redo();
+            graphModel.redo(graphModel.userCommands);
             assertEquals(graphModel.userCommands.redoLog.length, 0, 
                          'redo log should be empty after 1 undo followed by 1 redo.');
             assertEquals(graphModel.userCommands.undoLog[0].type, 'addVertex', 

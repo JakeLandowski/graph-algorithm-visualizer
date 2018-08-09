@@ -16,7 +16,7 @@ define(['classes/engine/RenderingEngine',
         this.container = container;
         this.model     = model;
         this.config    = config;
-        this.engine    = new RenderingEngine(container, config);
+        this.engine    = new RenderingEngine(config);
 
         this.VERTEX_LAYER   = 1;
         this.EDGE_LAYER     = 0;
@@ -162,7 +162,7 @@ define(['classes/engine/RenderingEngine',
             // Edge Added
             this.model.onEdgeAdded.attach('createEdge', function(_, params)
             {
-                const edge = 
+                this.edgeMap[ [params.from, params.to] ] =  
                 {
                     line: this.engine.createLine(params.fromPoint.x, params.fromPoint.y, 
                           params.toPoint.x, params.toPoint.y, this.EDGE_LAYER,
@@ -176,13 +176,22 @@ define(['classes/engine/RenderingEngine',
                     box: this.engine.createRectangle(params.center.x, params.center.y, 
                          this.config.edgeBoxSize, this.config.edgeBoxSize, this.EDGE_LAYER, 
                          {
-                             fillStyle:   'rgb(255, 154, 0)',
+                             strokeStyle: 'rgb(255, 154, 0)',
+                             lineWidth:   this.config.vertexOutlineSize,
+                             fillStyle:   '#262626',
                              shadowBlur:  16,
                              shadowColor: '#ff9a00'
-                         })
-                };
+                         }),
 
-                this.edgeMap[ [params.from, params.to] ] = edge;
+                    text: this.engine.createText(params.weight, params.center.x, 
+                          params.center.y, this.EDGE_LAYER, 
+                          {
+                              fillStyle:   'rgb(255, 154, 0)',
+                              shadowBlur:  16,
+                              shadowColor: '#ff9a00',
+                              font:        '16px monospace'
+                          })
+                };
             
             }.bind(this));
 
