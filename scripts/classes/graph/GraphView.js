@@ -56,17 +56,18 @@ define(['classes/engine/RenderingEngine',
                 const vertex = this.engine.createCircle(params.x, params.y, this.config.vertexSize, this.VERTEX_LAYER, 
                 {
                     fillStyle:   '#262626',
-                    strokeStyle: '#ff9a00',
-                    lineWidth:   this.config.vertexOutlineSize
+                    strokeStyle: 'rgb(255, 154, 0)',
+                    lineWidth:   this.config.vertexOutlineSize,
+                    shadowBlur:  6,
+                    shadowColor: '#ff9a00'
                 });
-
-                // vertex.shadowBlur = 6;
-                // vertex.shadowColor = '#ff9a00';
 
                 const text = this.engine.createText(params.data, params.x, params.y, this.VERTEX_LAYER, 
                 {
-                    fillStyle: '#ff9a00',
-                    font:      '24px monospace'
+                    fillStyle: 'rgb(255, 154, 0)',
+                    font:      '24px monospace',
+                    shadowBlur:  6,
+                    shadowColor: '#ff9a00'
                 });
 
                 this.vertexMap[params.data] = 
@@ -117,7 +118,7 @@ define(['classes/engine/RenderingEngine',
             {
                 if(this.vertexMap[params.data])
                 {
-                    this.vertexMap[params.data].circle.styles.strokeStyle = '#ff9a00';
+                    this.vertexMap[params.data].circle.styles.strokeStyle = 'rgb(255, 154, 0)';
                 }                 
 
             }.bind(this));
@@ -133,7 +134,9 @@ define(['classes/engine/RenderingEngine',
                 this.trackingEdge = this.engine.createLine(start.x, start.y, end.x, end.y, this.TRACKING_LAYER, 
                 {
                     strokeStyle: 'rgba(255, 255, 100, 0.5)',
-                    lineWidth:   this.config.edgeWidth
+                    lineWidth:   this.config.edgeWidth,
+                    shadowBlur:  10,
+                    shadowColor: 'rgba(255, 255, 150, 0.8)'
                 });
 
             }.bind(this));
@@ -164,14 +167,18 @@ define(['classes/engine/RenderingEngine',
                     line: this.engine.createLine(params.fromPoint.x, params.fromPoint.y, 
                           params.toPoint.x, params.toPoint.y, this.EDGE_LAYER,
                           {
-                              strokeStyle: 'rgb(255, 255, 100)',
-                              lineWidth:   this.config.edgeWidth
+                              strokeStyle: 'rgb(255, 154, 0)',
+                              lineWidth:   this.config.edgeWidth,
+                              shadowBlur:  6,
+                              shadowColor: '#ff9a00'
                           }),
 
                     box: this.engine.createRectangle(params.center.x, params.center.y, 
                          this.config.edgeBoxSize, this.config.edgeBoxSize, this.EDGE_LAYER, 
                          {
-                             fillStyle: 'rgb(255, 255, 100)'
+                             fillStyle:   'rgb(255, 154, 0)',
+                             shadowBlur:  6,
+                             shadowColor: '#ff9a00'
                          })
                 };
 

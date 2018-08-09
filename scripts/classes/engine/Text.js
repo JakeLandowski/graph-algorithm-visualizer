@@ -21,7 +21,9 @@ define(['classes/engine/Entity'], function(Entity)
             font:         styles.font         || '16px serif',
             fillStyle:    styles.fillStyle    || '#fff',
             textAlign:    styles.textAlign    || 'center',
-            textBaseline: styles.textBaseline || 'middle'
+            textBaseline: styles.textBaseline || 'middle',
+            shadowBlur:   styles.shadowBlur   || 0,
+            shadowColor:  styles.shadowColor  || '#000'
         };
     };
 
@@ -36,7 +38,9 @@ define(['classes/engine/Entity'], function(Entity)
             ctx.font         = this.styles.font;
             ctx.fillStyle    = this.styles.fillStyle;
             ctx.textAlign    = this.styles.textAlign;    
-            ctx.textBaseline = this.styles.textBaseline; 
+            ctx.textBaseline = this.styles.textBaseline;
+            ctx.shadowBlur   = this.styles.shadowBlur;
+            ctx.shadowColor  = this.styles.shadowColor; 
             ctx.fillText(this.content, this.x, this.y);
         },
 

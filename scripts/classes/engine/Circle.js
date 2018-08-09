@@ -20,7 +20,9 @@ define(['classes/engine/Entity'], function(Entity)
         {
             lineWidth:   styles.lineWidth   || 1,
             fillStyle:   styles.fillStyle   || '#fff',
-            strokeStyle: styles.strokeStyle || '#fff'
+            strokeStyle: styles.strokeStyle || '#fff',
+            shadowBlur:  styles.shadowBlur  || 0,
+            shadowColor: styles.shadowColor || '#000'
         };
     };
 
@@ -32,9 +34,11 @@ define(['classes/engine/Entity'], function(Entity)
         render()
         {
             const ctx = this.context;
-            ctx.lineWidth   = this.styles.lineWidth; 
-            ctx.fillStyle   = this.styles.fillStyle;
-            ctx.strokeStyle = this.styles.strokeStyle;
+            ctx.lineWidth    = this.styles.lineWidth; 
+            ctx.fillStyle    = this.styles.fillStyle;
+            ctx.strokeStyle  = this.styles.strokeStyle;
+            ctx.shadowBlur   = this.styles.shadowBlur;
+            ctx.shadowColor  = this.styles.shadowColor;
             ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
             ctx.fill();
             ctx.stroke();
