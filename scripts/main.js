@@ -12,7 +12,7 @@
     Tests.run();
     Animations.start();
 
-    let graph = new Graph(document.getElementById('main'));
+    let graph = newGraph(); 
 
     const createNewBtn  = document.getElementsByClassName('creategraph');
 
@@ -23,9 +23,7 @@
     const redoBtn       = document.getElementsByClassName('redoButton');
 
     for(let i = 0; i<createNewBtn.length; i++) {
-        createNewBtn[i].addEventListener('click',function () {
-            clearCanvas();
-        })
+        createNewBtn[i].addEventListener('click', newGraph);
     }
 
      for(let i = 0; i<addVertexBtn.length; i++) {
@@ -58,10 +56,8 @@
          })
      }
 
-     function clearCanvas() {
+     function newGraph() {
          document.getElementById("main").innerHTML = "";
-         graph = new Graph({ fullscreen: true });
-         graph.appendTo(document.getElementById('main'));
-         graph.start();
+         return new Graph(document.getElementById('main'));
      }
  });
