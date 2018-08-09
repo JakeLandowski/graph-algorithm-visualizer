@@ -26,7 +26,7 @@ function(GraphModel, GraphView)
         };
 
         this.model = new GraphModel(container.clientWidth, container.clientHeight, this.config);
-        this.view = new GraphView(container, this.model, this.config);
+        this.view  = new GraphView(container, this.model, this.config);
         
         this.symbols = ['Z', 'Y', 'X', 'W', 'V', 'U', 
                         'T', 'S', 'R', 'Q', 'P', 'O', 

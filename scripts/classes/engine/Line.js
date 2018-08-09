@@ -20,7 +20,8 @@ define(['classes/engine/Entity'], function(Entity)
         this.styles = 
         {
             strokeStyle: styles.strokeStyle || '#fff',
-            fillStyle:   styles.fillStyle   || '#fff'
+            fillStyle:   styles.fillStyle   || '#fff',
+            lineWidth:   styles.lineWidth   || 1
         };
     };
 

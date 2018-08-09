@@ -35,7 +35,7 @@ define(['classes/engine/RenderingEngine',
         this.mouseMoved = false;
         this.mouseDown  = false;
         this.mouseMoveTimer = 0;
-        this.mouseMoveDelay = 10;
+        this.mouseMoveDelay = 0; // NEEDS WORK
         this.mouseMoveResetDelay = 200;
 
         this.initHandlers();
@@ -117,7 +117,7 @@ define(['classes/engine/RenderingEngine',
             {
                 if(this.vertexMap[params.data])
                 {
-                    this.vertexMap[params.data].circle.styles.strokeStyle = '#262626';
+                    this.vertexMap[params.data].circle.styles.strokeStyle = '#ff9a00';
                 }                 
 
             }.bind(this));
@@ -201,7 +201,7 @@ define(['classes/engine/RenderingEngine',
             }.bind(this));
         },
 
-//========= Event Handlers ===========//
+//========= Mouse Event Interception ===========//
 
         appendTo(container)
         {
@@ -235,7 +235,7 @@ define(['classes/engine/RenderingEngine',
             }.bind(this));
 
             this.engine.canvas.addEventListener('mousemove', function(event)
-            {
+            { 
                 event.preventDefault();
                 if(this.mouseMoveTimer > this.mouseMoveDelay)
                 {
@@ -263,7 +263,8 @@ define(['classes/engine/RenderingEngine',
             window.addEventListener('resize', Util.stagger(function(event)
             {
                 event.preventDefault();
-                this.model.resize(this.two.width, this.two.height);
+                this.engine.resize();
+                this.model.resize(this.engine.canvas.width, this.engine.canvas.height);
 
             }.bind(this), 400));
         }, 
