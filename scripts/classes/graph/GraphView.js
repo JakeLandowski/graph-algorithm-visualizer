@@ -58,7 +58,7 @@ define(['classes/engine/RenderingEngine',
                     fillStyle:   '#262626',
                     strokeStyle: 'rgb(255, 154, 0)',
                     lineWidth:   this.config.vertexOutlineSize,
-                    shadowBlur:  6,
+                    shadowBlur:  16,
                     shadowColor: '#ff9a00'
                 });
 
@@ -66,7 +66,7 @@ define(['classes/engine/RenderingEngine',
                 {
                     fillStyle: 'rgb(255, 154, 0)',
                     font:      '24px monospace',
-                    shadowBlur:  6,
+                    shadowBlur:  16,
                     shadowColor: '#ff9a00'
                 });
 
@@ -135,7 +135,7 @@ define(['classes/engine/RenderingEngine',
                 {
                     strokeStyle: 'rgba(255, 255, 100, 0.5)',
                     lineWidth:   this.config.edgeWidth,
-                    shadowBlur:  10,
+                    shadowBlur:  20,
                     shadowColor: 'rgba(255, 255, 150, 0.8)'
                 });
 
@@ -169,7 +169,7 @@ define(['classes/engine/RenderingEngine',
                           {
                               strokeStyle: 'rgb(255, 154, 0)',
                               lineWidth:   this.config.edgeWidth,
-                              shadowBlur:  6,
+                              shadowBlur:  16,
                               shadowColor: '#ff9a00'
                           }),
 
@@ -177,7 +177,7 @@ define(['classes/engine/RenderingEngine',
                          this.config.edgeBoxSize, this.config.edgeBoxSize, this.EDGE_LAYER, 
                          {
                              fillStyle:   'rgb(255, 154, 0)',
-                             shadowBlur:  6,
+                             shadowBlur:  16,
                              shadowColor: '#ff9a00'
                          })
                 };
