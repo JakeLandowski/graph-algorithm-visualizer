@@ -201,6 +201,7 @@ define(['classes/engine/RenderingEngine',
                 const edge = this.edgeMap[ [params.from, params.to] ];
                 edge.line.delete();
                 edge.box.delete();
+                edge.text.delete();
                 delete this.edgeMap[ [params.from, params.to] ];
 
             }.bind(this));
@@ -213,6 +214,7 @@ define(['classes/engine/RenderingEngine',
                 edge.line.setStart(params.fromPoint.x, params.fromPoint.y);
                 edge.line.setEnd(params.toPoint.x, params.toPoint.y);
                 edge.box.center(params.center.x, params.center.y);
+                edge.text.center(params.center.x, params.center.y);
 
             }.bind(this));
         },
