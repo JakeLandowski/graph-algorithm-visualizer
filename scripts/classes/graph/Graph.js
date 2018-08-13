@@ -65,26 +65,7 @@ function(GraphModel, GraphView, Util)
                 // if clicked on vertex tell model to delete
                 const vertex = this.model.vertexAt(params.x, params.y);
 
-                if(vertex) // REMOVE
-                {
-                    this.model.dispatch(this.model.userCommands, 
-                    {
-                        type: 'removeVertex',
-                        data: 
-                        {
-                            symbol:        vertex.data,
-                            x:             params.x,
-                            y:             params.y,
-                            // toNeighbors:   Object.keys(vertex.toNeighbors), // FOR UNDO
-                            // fromNeighbors: Object.keys(vertex.fromNeighbors), // FOR UNDO
-                            numEdges:      vertex.numEdges,
-                            returnSymbol:  this.returnSymbol.bind(this),
-                            getSymbol:     this.getSymbol.bind(this)
-                        },
-                        undo: 'addVertex',
-                    });
-                }
-                else if(this.symbols.length > 0) // ADD
+                if(!vertex && this.symbols.length > 0) // ADD
                 {   
                     this.model.dispatch(this.model.userCommands,
                     { 
@@ -148,7 +129,6 @@ function(GraphModel, GraphView, Util)
 
             this.view.onCanvasMouseClick.attach('createEdge', function(_, params)
             {
-                
                 const vertex   = this.model.vertexAt(params.x, params.y);
                 const selected = this.model.selectedVertex; 
 
@@ -194,45 +174,75 @@ function(GraphModel, GraphView, Util)
                 {
                     this.model.deselectVertex();
                 }
-                else
-                {
-                    const edge = this.model.edgeAt(params.x, params.y);
+                // else
+                // {
+                //     const edge = this.model.edgeAt(params.x, params.y);
                     
-                    if(edge)
-                    {
-                        this.model.dispatch(this.model.userCommands,
-                        {
-                            type: 'removeEdge',
-                            data: 
-                            {
-                                from:   edge.from, 
-                                to:     edge.to,
-                                weight: edge.weight
-                            },
-                            undo: 'addEdge'
-                        });
-                    }
-                }
+                //     if(edge)
+                //     {
+                //         this.model.dispatch(this.model.userCommands,
+                //         {
+                //             type: 'removeEdge',
+                //             data: 
+                //             {
+                //                 from:   edge.from, 
+                //                 to:     edge.to,
+                //                 weight: edge.weight
+                //             },
+                //             undo: 'addEdge'
+                //         });
+                //     }
+                // }
 
             }.bind(this));
         },
 
-        editEdgeMode()
+        eraseMode()
         {
-            // this.clearMouseEvents();
+            this.clearMouseEvents();
+            
+            this.mouseEventsLogged.push('removeEntity');
 
-            // this.mouseEventsLogged.push('createEdge');
+            this.view.onCanvasMouseClick.attach('removeEntity', function(_, params)
+            {
+                const vertex = this.model.vertexAt(params.x, params.y);
+                const edge = this.model.edgeAt(params.x, params.y);
 
-            // this.view.onCanvasMouseClick.attach('createEdge', function(_, params)
-            // {
-            //     const vertex   = this.model.vertexAt(params.x, params.y); 
+                if(vertex) // REMOVE
+                {
+                    this.model.dispatch(this.model.userCommands, 
+                    {
+                        type: 'removeVertex',
+                        data: 
+                        {
+                            symbol:        vertex.data,
+                            x:             params.x,
+                            y:             params.y,
+                            // toNeighbors:   Object.keys(vertex.toNeighbors), // FOR UNDO
+                            // fromNeighbors: Object.keys(vertex.fromNeighbors), // FOR UNDO
+                            numEdges:      vertex.numEdges,
+                            returnSymbol:  this.returnSymbol.bind(this),
+                            getSymbol:     this.getSymbol.bind(this)
+                        },
+                        undo: 'addVertex',
+                    });
+                }
+                else if(edge)
+                {
+                    this.model.dispatch(this.model.userCommands,
+                    {
+                        type: 'removeEdge',
+                        data: 
+                        {
+                            from:   edge.from, 
+                            to:     edge.to,
+                            weight: edge.weight
+                        },
+                        undo: 'addEdge'
+                    });
+                }
 
-            //     if(vertex)
-            //     {
-
-            //     }
-
-            // }.bind(this));            
+            }.bind(this));
         },
 
         trackEdgeToCursor(x, y)
