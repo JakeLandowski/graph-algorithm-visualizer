@@ -75,8 +75,9 @@ function(GraphModel, GraphView, Util)
                             symbol:        vertex.data,
                             x:             params.x,
                             y:             params.y,
-                            toNeighbors:   Object.keys(vertex.toNeighbors), // FOR UNDO
-                            fromNeighbors: Object.keys(vertex.fromNeighbors), // FOR UNDO
+                            // toNeighbors:   Object.keys(vertex.toNeighbors), // FOR UNDO
+                            // fromNeighbors: Object.keys(vertex.fromNeighbors), // FOR UNDO
+                            numEdges:      vertex.numEdges,
                             returnSymbol:  this.returnSymbol.bind(this),
                             getSymbol:     this.getSymbol.bind(this)
                         },
@@ -93,8 +94,9 @@ function(GraphModel, GraphView, Util)
                             symbol:        this.peekSymbol(),
                             x:             params.x,
                             y:             params.y,
-                            toNeighbors:   [], // FOR UNDO
-                            fromNeighbors: [], // FOR UNDO
+                            numEdges:      0, 
+                            // toNeighbors:   [], // FOR UNDO
+                            // fromNeighbors: [], // FOR UNDO
                             returnSymbol:  this.returnSymbol.bind(this),   
                             getSymbol:     this.getSymbol.bind(this)
                         },

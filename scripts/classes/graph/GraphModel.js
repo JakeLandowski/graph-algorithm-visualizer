@@ -88,7 +88,6 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
                 this[command.type](command.data);
                 log.record(command, false);
             }
-            else throw 'Tried to run non-existant command ' + command.type;
         },
 
         /**
@@ -134,12 +133,15 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
          */
         addVertex(args={})
         {
-            this.assertArgs(args, ['symbol', 'x', 'y', 'toNeighbors', 'fromNeighbors', 'returnSymbol', 'getSymbol'], 
-                            'Missing arguments for addVertex command');
+            this.assertArgs(args, ['symbol', 'x', 'y', 'numEdges', 
+                                //    'toNeighbors', 'fromNeighbors', 
+                                   'returnSymbol', 'getSymbol'], 
+                                   'Missing arguments for addVertex command');
 
             const data          = args.getSymbol();
             const x             = args.x;
             const y             = args.y;
+            const numEdges      = args.numEdges;
             // const toNeighbors   = args.toNeighbors;
             // const fromNeighbors = args.fromNeighbors;
 
@@ -155,6 +157,9 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
                 this.vertexSpacialIndex.add(vertex);
                 this.onVertexAdded.notify({ data: data, x: x, y: y });
  
+                for(let i = 0; i < args.numEdges; i++)
+                    this.undo(this.indirectEdgeRemoveCommands);
+
                 // For Undo
                 // toNeighbors.forEach(function(neighbor)
                 // {
@@ -192,8 +197,10 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
          */
         removeVertex(args={})
         {
-            this.assertArgs(args, ['symbol', 'x', 'y', 'toNeighbors', 'fromNeighbors', 'returnSymbol', 'getSymbol'], 
-                            'Missing arguments for removeVertex command');
+            this.assertArgs(args, ['symbol', 'x', 'y', 'numEdges', 
+                                //    'toNeighbors', 'fromNeighbors', 
+                                   'returnSymbol', 'getSymbol'], 
+                                   'Missing arguments for removeVertex command');
 
             const data         = args.symbol;
             const returnSymbol = args.returnSymbol;
@@ -202,6 +209,17 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
             // Clean up edges
             removed.forEachEdge(function(edge)
             {
+                this.dispatch(this.indirectEdgeRemoveCommands,
+                {
+                    type: 'removeEdge',
+                    data: 
+                    {
+                        from:   edge.from, 
+                        to:     edge.to,
+                        weight: edge.weight
+                    },
+                    undo: 'addEdge'
+                });
                 // this.removeEdge
                 // ({
                 //     from: edge.from,

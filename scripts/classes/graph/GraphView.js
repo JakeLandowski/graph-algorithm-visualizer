@@ -34,9 +34,10 @@ define(['classes/engine/RenderingEngine',
 
         this.mouseMoved = false;
         this.mouseDown  = false;
-        this.mouseMoveTimer = 0;
-        this.mouseMoveDelay = 0; // NEEDS WORK
-        this.mouseMoveResetDelay = 200;
+        // this.mouseMoveTimer = 0;
+        // this.mouseMoveDelay = 0; // NEEDS WORK
+        // this.mouseMoveResetDelay = 200;
+        this.mouseJustPutDownDelay = 100;
 
         this.initHandlers();
         this.appendTo(container);
@@ -234,10 +235,11 @@ define(['classes/engine/RenderingEngine',
         {
             this.engine.canvas.addEventListener('mousedown', function(event)
             {
-                event.preventDefault(); 
-                this.mouseMoved = false;
-                this.mouseDown  = true;
+                event.preventDefault();
+                this.mouseDown = true;
+                this.mouseJustPutDown = true;
                 this.onCanvasMouseDown.notify({x: event.offsetX, y: event.offsetY});
+                setTimeout(function(){ this.mouseJustPutDown = false; }.bind(this), this.mouseJustPutDownDelay);
             
             }.bind(this));
 
@@ -245,35 +247,18 @@ define(['classes/engine/RenderingEngine',
             {
                 event.preventDefault();
                 this.onCanvasMouseUp.notify({x: event.offsetX, y: event.offsetY});
-                this.mouseDown = false;
-                
-                if(!this.mouseMoved)
-                    this.onCanvasMouseClick.notify({x: event.offsetX, y: event.offsetY});
+                if(this.mouseJustPutDown) this.onCanvasMouseClick.notify({x: event.offsetX, y: event.offsetY});
             
             }.bind(this));
 
             this.engine.canvas.addEventListener('mousemove', function(event)
             { 
                 event.preventDefault();
-                if(this.mouseMoveTimer > this.mouseMoveDelay)
-                {
-                    this.mouseMoved = true;
-                    this.onCanvasMouseMove.notify({x: event.offsetX, y: event.offsetY});
-                }
-                else this.mouseMoveTimer++;
-
+                this.onCanvasMouseMove.notify({x: event.offsetX, y: event.offsetY});
                 if(this.mouseDown)
-                        this.onCanvasMouseDrag.notify({x: event.offsetX, y: event.offsetY});
+                    this.onCanvasMouseDrag.notify({x: event.offsetX, y: event.offsetY});
             
             }.bind(this));
-
-            // Adds a small delay before triggering a mouse move event
-            this.engine.canvas.addEventListener('mousemove', Util.stagger(function(event)
-            {
-                event.preventDefault();
-                this.mouseMoveTimer = 0;
-            
-            }.bind(this), this.mouseMoveResetDelay));
         },
 
         initResize()

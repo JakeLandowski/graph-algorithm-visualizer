@@ -31,8 +31,9 @@
                     symbol:        'A',
                     x:             500,
                     y:             500,
-                    toNeighbors:   [], // FOR UNDO
-                    fromNeighbors: [], // FOR UNDO
+                    // toNeighbors:   [], 
+                    // fromNeighbors: [], 
+                    numEdges: 0,
                     returnSymbol:  function(){},   
                     getSymbol:     function(){ return 'A'; }
                 },
