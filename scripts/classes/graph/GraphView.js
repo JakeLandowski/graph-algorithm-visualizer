@@ -131,6 +131,7 @@ define(['classes/engine/RenderingEngine',
                 const vertex = this.vertexMap[params.data]; 
                 if(vertex)
                 {
+                    document.body.style.cursor = 'pointer';
                     vertex.circle.styles.strokeStyle = 'rgb(255, 255, 255)';
                     vertex.circle.styles.shadowColor = '#ffffff';
                 }                 
@@ -143,6 +144,7 @@ define(['classes/engine/RenderingEngine',
                 const vertex = this.vertexMap[params.data]; 
                 if(vertex)
                 {
+                    document.body.style.cursor = 'auto';
                     vertex.circle.styles.strokeStyle = 'rgb(255, 154, 0)';
                     vertex.circle.styles.shadowColor = '#ff9a00';
                 }                 
@@ -250,6 +252,7 @@ define(['classes/engine/RenderingEngine',
                 const edge = this.edgeMap[ [params.from, params.to] ]; 
                 if(edge)
                 {
+                    document.body.style.cursor = 'pointer';
                     edge.box.styles.strokeStyle = 'rgb(255, 255, 255)';
                     edge.box.styles.shadowColor = '#ffffff';
                     edge.text.styles.fillStyle = 'rgb(255, 255, 255)';
@@ -264,6 +267,7 @@ define(['classes/engine/RenderingEngine',
                 const edge = this.edgeMap[ [params.from, params.to] ];
                 if(edge)
                 {
+                    document.body.style.cursor = 'auto';
                     edge.box.styles.strokeStyle = 'rgb(255, 154, 0)';
                     edge.box.styles.shadowColor = '#ff9a00';
                     edge.text.styles.fillStyle = 'rgb(255, 154, 0)';

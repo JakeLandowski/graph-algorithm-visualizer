@@ -132,7 +132,7 @@ function(GraphModel, GraphView, Util)
 
             this.mouseEventsLogged.push('hoverEntity');
             this.view.onCanvasMouseMove.attach('hoverEntity', Util.throttle(function(_, params)
-            {console.log('hover');
+            {
                 const vertex = this.model.vertexAt(params.x, params.y);
 
                 if(vertex)
@@ -158,7 +158,7 @@ function(GraphModel, GraphView, Util)
                 // locate vertex at location
                 const vertex = this.model.vertexAt(params.x, params.y);
 
-                if(vertex)
+                if(vertex && !this.model.selectedVertex)
                 {
                     const offsetX = vertex.x - params.x;
                     const offsetY = vertex.y - params.y;
@@ -183,11 +183,6 @@ function(GraphModel, GraphView, Util)
                 }
 
             }.bind(this));
-        },
-
-        edgeMode()
-        {
-            this.clearMouseEvents();  
         },
 
         eraseMode()
