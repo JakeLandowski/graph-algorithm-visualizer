@@ -31,12 +31,11 @@ define(['classes/engine/RenderingEngine',
         this.onCanvasMouseUp    = new Event(this);
         this.onCanvasMouseMove  = new Event(this);
         this.onCanvasMouseDrag  = new Event(this);
+        this.onUndo             = new Event(this);
+        this.onRedo             = new Event(this);
 
         this.mouseMoved = false;
         this.mouseDown  = false;
-        // this.mouseMoveTimer = 0;
-        // this.mouseMoveDelay = 0; // NEEDS WORK
-        // this.mouseMoveResetDelay = 200;
         this.mouseJustPutDownDelay = 100;
 
         this.initHandlers();
@@ -258,6 +257,23 @@ define(['classes/engine/RenderingEngine',
                 if(this.mouseDown)
                     this.onCanvasMouseDrag.notify({x: event.offsetX, y: event.offsetY});
             
+            }.bind(this));
+
+            window.addEventListener('keydown', function(event)
+            {
+                event.preventDefault();
+                const key = event.keyCode;
+
+                if(event.ctrlKey)
+                { 
+                    if(key === 90)
+                    {
+                        if(event.shiftKey) this.onRedo.notify();
+                        else               this.onUndo.notify();
+                    }
+                    else if(key === 89) this.onRedo.notify();
+                }
+
             }.bind(this));
         },
 

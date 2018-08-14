@@ -29,6 +29,9 @@ function(GraphModel, GraphView, Util)
 
         this.model = new GraphModel(container.clientWidth, container.clientHeight, this.config);
         this.view  = new GraphView(container, this.model, this.config);
+
+        this.view.onUndo.attach('undo', function(_, params) { this.undo(); }.bind(this));
+        this.view.onRedo.attach('redo', function(_, params) { this.redo(); }.bind(this));
         
         this.symbols = ['Z', 'Y', 'X', 'W', 'V', 'U', 
                         'T', 'S', 'R', 'Q', 'P', 'O', 
@@ -174,25 +177,6 @@ function(GraphModel, GraphView, Util)
                 {
                     this.model.deselectVertex();
                 }
-                // else
-                // {
-                //     const edge = this.model.edgeAt(params.x, params.y);
-                    
-                //     if(edge)
-                //     {
-                //         this.model.dispatch(this.model.userCommands,
-                //         {
-                //             type: 'removeEdge',
-                //             data: 
-                //             {
-                //                 from:   edge.from, 
-                //                 to:     edge.to,
-                //                 weight: edge.weight
-                //             },
-                //             undo: 'addEdge'
-                //         });
-                //     }
-                // }
 
             }.bind(this));
         },
@@ -206,7 +190,7 @@ function(GraphModel, GraphView, Util)
             this.view.onCanvasMouseClick.attach('removeEntity', function(_, params)
             {
                 const vertex = this.model.vertexAt(params.x, params.y);
-                const edge = this.model.edgeAt(params.x, params.y);
+                const edge   = this.model.edgeAt(params.x, params.y);
 
                 if(vertex) // REMOVE
                 {
