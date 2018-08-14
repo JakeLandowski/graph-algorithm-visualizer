@@ -130,56 +130,27 @@ function(GraphModel, GraphView, Util)
 
             }.bind(this));
 
-            // this.mouseEventsLogged.push('createEdge');
-            // this.view.onCanvasMouseClick.attach('createEdge', function(_, params)
-            // {
-            //     const vertex   = this.model.vertexAt(params.x, params.y);
-            //     const selected = this.model.selectedVertex; 
+            this.mouseEventsLogged.push('hoverEntity');
+            this.view.onCanvasMouseMove.attach('hoverEntity', Util.throttle(function(_, params)
+            {console.log('hover');
+                const vertex = this.model.vertexAt(params.x, params.y);
 
-            //     if(vertex)
-            //     {
-            //         if(selected)
-            //         {
-            //             // If not the same vertex
-            //             // and edge doesnt exist
-            //             // create edge
-            //             if(selected.data !== vertex.data && 
-            //                !this.model.adjList.edgeExists(vertex.data, selected.data))
-            //             {
-            //                 this.model.dispatch(this.model.userCommands,
-            //                 {
-            //                     type: 'addEdge',
-            //                     data: 
-            //                     {
-            //                         from:   selected.data, 
-            //                         to:     vertex.data,
-            //                         weight: Util.rand(1, 20)     
-            //                     },
-            //                     undo: 'removeEdge'
-            //                 });
+                if(vertex)
+                {
+                    this.model.hoverVertex(vertex);
+                }
+                else
+                {
+                    const edge = this.model.edgeAt(params.x, params.y);
 
-            //                 // Edge hopping
-            //                 this.model.deselectVertex();
-            //                 this.model.selectVertex(vertex);
-            //                 this.trackEdgeToCursor(params.x, params.y);
-            //             }
-            //             else
-            //             {
-            //                 this.model.deselectVertex();
-            //             }
-            //         }
-            //         else
-            //         {
-            //             this.model.selectVertex(vertex);
-            //             this.trackEdgeToCursor(params.x, params.y);
-            //         }
-            //     }
-            //     else if(selected)
-            //     {
-            //         this.model.deselectVertex();
-            //     }
+                    if(edge)
+                    {
+                        this.model.hoverEdge(edge);
+                    }
+                    else this.model.hoverNothing();
+                }
 
-            // }.bind(this));
+            }.bind(this), 50));
             
             this.mouseEventsLogged.push('dragVertex');
             this.view.onCanvasMouseDown.attach('dragVertex', function(_, params)
@@ -227,7 +198,6 @@ function(GraphModel, GraphView, Util)
             this.view.onCanvasMouseClick.attach('removeEntity', function(_, params)
             {
                 const vertex = this.model.vertexAt(params.x, params.y);
-                const edge   = this.model.edgeAt(params.x, params.y);
 
                 if(vertex) // REMOVE
                 {
@@ -246,19 +216,24 @@ function(GraphModel, GraphView, Util)
                         undo: 'addVertex',
                     });
                 }
-                else if(edge)
+                else
                 {
-                    this.model.dispatch(this.model.userCommands,
+                    const edge   = this.model.edgeAt(params.x, params.y);
+
+                    if(edge)
                     {
-                        type: 'removeEdge',
-                        data: 
+                        this.model.dispatch(this.model.userCommands,
                         {
-                            from:   edge.from, 
-                            to:     edge.to,
-                            weight: edge.weight
-                        },
-                        undo: 'addEdge'
-                    });
+                            type: 'removeEdge',
+                            data: 
+                            {
+                                from:   edge.from, 
+                                to:     edge.to,
+                                weight: edge.weight
+                            },
+                            undo: 'addEdge'
+                        });
+                    }
                 }
 
             }.bind(this));

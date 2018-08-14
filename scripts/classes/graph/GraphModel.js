@@ -30,6 +30,8 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
         this.onVertexMoved         = new Event(this);
         this.onVertexSelected      = new Event(this);
         this.onVertexDeselected    = new Event(this);
+        this.onVertexHovered       = new Event(this);
+        this.onVertexNotHovered    = new Event(this);
 
         this.onTrackingEdgeAdded   = new Event(this);
         this.onTrackingEdgeRemoved = new Event(this);
@@ -38,6 +40,8 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
         this.onEdgeAdded           = new Event(this);
         this.onEdgeRemoved         = new Event(this);
         this.onEdgeMoved           = new Event(this);
+        this.onEdgeHovered         = new Event(this);
+        this.onEdgeNotHovered      = new Event(this);
  
         this.userCommands = new CommandLog();
         this.indirectEdgeRemoveCommands = new CommandLog();
@@ -406,6 +410,7 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
          */
         addTrackingEdge(x, y)
         {
+            this.currentlyTracking = true;
             this.onTrackingEdgeAdded.notify
             ({ 
                 start: { x: this.selectedVertex.x, y: this.selectedVertex.y },
@@ -431,7 +436,51 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
          */
         releaseTrackingEdge()
         {
+            this.currentlyTracking = false;
             this.onTrackingEdgeRemoved.notify({});
+        },
+
+//====================== Hover Methods ===========================//
+
+        hoverVertex(vertex)
+        {
+            if(!this.vertexHovered) 
+            {
+                if(!this.selectedVertex || this.selectedVertex.data !== vertex.data)
+                {
+                    this.vertexHovered = vertex;
+                    this.onVertexHovered.notify({ data: vertex.data });
+                }
+            }
+        },
+
+        hoverEdge(edge)
+        {
+            if(!this.edgeHovered && !this.selectedVertex)
+            {
+                this.edgeHovered = edge;
+                this.onEdgeHovered.notify({ from: edge.from, to: edge.to });
+            }
+        },
+
+        hoverNothing()
+        {
+            if(this.vertexHovered)
+            {
+                this.onVertexNotHovered.notify({ data: this.vertexHovered.data });
+                this.vertexHovered = null;
+                
+            }
+            
+            if(this.edgeHovered)// && !this.currentlyTracking)
+            {
+                this.onEdgeNotHovered.notify
+                ({ 
+                    from: this.edgeHovered.from, 
+                    to:   this.edgeHovered.to 
+                });
+                this.edgeHovered = null;
+            }
         },
 
 //====================== Spatial Index API (Graph -> Model -> Spatial) ===========================//

@@ -39,6 +39,24 @@ define(function()
             };
         },
 
+        throttle(fn, cooldown) 
+        {
+            let activate = true;
+
+            return function()
+            {
+                if(activate) 
+                {
+                    fn.apply(this, arguments);
+                    activate = false;
+                    setTimeout(function()
+                    {
+                        activate = true;
+                    }, cooldown);
+                }
+            };
+        },
+
         /**
          *  Creates a copy of an object
          * 

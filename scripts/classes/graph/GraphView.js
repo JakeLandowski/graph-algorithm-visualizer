@@ -109,6 +109,7 @@ define(['classes/engine/RenderingEngine',
                 if(this.vertexMap[params.data])
                 {
                     this.vertexMap[params.data].circle.styles.strokeStyle = '#fffc55';
+                    this.vertexMap[params.data].circle.styles.shadowColor = '#fffc55';
                 }
             
             }.bind(this));
@@ -119,6 +120,31 @@ define(['classes/engine/RenderingEngine',
                 if(this.vertexMap[params.data])
                 {
                     this.vertexMap[params.data].circle.styles.strokeStyle = 'rgb(255, 154, 0)';
+                    this.vertexMap[params.data].circle.styles.shadowColor = '#ff9a00';
+                }                 
+
+            }.bind(this));
+
+            // Vertex Hovered
+            this.model.onVertexHovered.attach('hoverVertex', function(_, params)
+            {
+                const vertex = this.vertexMap[params.data]; 
+                if(vertex)
+                {
+                    vertex.circle.styles.strokeStyle = 'rgb(255, 255, 255)';
+                    vertex.circle.styles.shadowColor = '#ffffff';
+                }                 
+
+            }.bind(this));
+
+            // Vertex Not Hovered
+            this.model.onVertexNotHovered.attach('unhoverVertex', function(_, params)
+            {
+                const vertex = this.vertexMap[params.data]; 
+                if(vertex)
+                {
+                    vertex.circle.styles.strokeStyle = 'rgb(255, 154, 0)';
+                    vertex.circle.styles.shadowColor = '#ff9a00';
                 }                 
 
             }.bind(this));
@@ -217,6 +243,34 @@ define(['classes/engine/RenderingEngine',
                 edge.text.center(params.center.x, params.center.y);
 
             }.bind(this));
+            
+            // Edge Hovered
+            this.model.onEdgeHovered.attach('hoverEdge', function(_, params)
+            {
+                const edge = this.edgeMap[ [params.from, params.to] ]; 
+                if(edge)
+                {
+                    edge.box.styles.strokeStyle = 'rgb(255, 255, 255)';
+                    edge.box.styles.shadowColor = '#ffffff';
+                    edge.text.styles.fillStyle = 'rgb(255, 255, 255)';
+                    edge.text.styles.shadowColor = '#ffffff';
+                }                 
+                
+            }.bind(this));
+            
+            // Edge Not Hovered
+            this.model.onEdgeNotHovered.attach('unhoverEdge', function(_, params)
+            {
+                const edge = this.edgeMap[ [params.from, params.to] ];
+                if(edge)
+                {
+                    edge.box.styles.strokeStyle = 'rgb(255, 154, 0)';
+                    edge.box.styles.shadowColor = '#ff9a00';
+                    edge.text.styles.fillStyle = 'rgb(255, 154, 0)';
+                    edge.text.styles.shadowColor = '#ff9a00';
+                }                 
+                
+            }.bind(this));
         },
 
 //========= Mouse Event Interception ===========//
@@ -253,9 +307,8 @@ define(['classes/engine/RenderingEngine',
             this.engine.canvas.addEventListener('mousemove', function(event)
             { 
                 event.preventDefault();
+                if(this.mouseDown) this.onCanvasMouseDrag.notify({x: event.offsetX, y: event.offsetY});
                 this.onCanvasMouseMove.notify({x: event.offsetX, y: event.offsetY});
-                if(this.mouseDown)
-                    this.onCanvasMouseDrag.notify({x: event.offsetX, y: event.offsetY});
             
             }.bind(this));
 
