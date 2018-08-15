@@ -29,6 +29,9 @@ function(GraphModel, GraphView, Util)
 
         this.model = new GraphModel(container.clientWidth, container.clientHeight, this.config);
         this.view  = new GraphView(container, this.model, this.config);
+
+        this.view.onUndo.attach('undo', function(_, params) { this.undo(); }.bind(this));
+        this.view.onRedo.attach('redo', function(_, params) { this.redo(); }.bind(this));
         
         this.symbols = ['Z', 'Y', 'X', 'W', 'V', 'U', 
                         'T', 'S', 'R', 'Q', 'P', 'O', 
@@ -37,6 +40,7 @@ function(GraphModel, GraphView, Util)
                         'B', 'A'];
         
         this.mouseEventsLogged = [];
+        this.initAlwaysOnFeatures();
         this.vertexMode();
     };
 
@@ -44,6 +48,25 @@ function(GraphModel, GraphView, Util)
     {
 
 //====================== Graph Interaction Modes ===========================//
+
+        initAlwaysOnFeatures()
+        {
+            this.enableHover();
+            
+            this.view.onEdgeFormSubmitted.attach('editEdgeWeight', function(_, params)
+            {
+                let weight = Number.parseInt(params.weight);
+
+                if(!isNaN(weight))
+                {
+                    weight = weight < 0 ? 0 : (weight > 20 ? 20 : weight);
+                    this.model.editEdgeWeight(weight);
+                    this.model.clearEdgeEdit();
+                } 
+
+            }.bind(this));
+
+        },
 
         vertexMode()
         {
@@ -57,96 +80,13 @@ function(GraphModel, GraphView, Util)
                 this.model.releaseTrackingEdge();
             }
 
-            this.mouseEventsLogged.push('clickVertex');
-
-            this.view.onCanvasMouseClick.attach('clickVertex', function(_, params)
+            this.mouseEventsLogged.push('clickEntity');
+            this.view.onCanvasMouseClick.attach('clickEntity', function(_, params)
             {
+                this.model.clearEdgeEdit();
+
                 // see if clicked on vertex here using model
                 // if clicked on vertex tell model to delete
-                const vertex = this.model.vertexAt(params.x, params.y);
-
-                if(vertex) // REMOVE
-                {
-                    this.model.dispatch(this.model.userCommands, 
-                    {
-                        type: 'removeVertex',
-                        data: 
-                        {
-                            symbol:        vertex.data,
-                            x:             params.x,
-                            y:             params.y,
-                            toNeighbors:   Object.keys(vertex.toNeighbors), // FOR UNDO
-                            fromNeighbors: Object.keys(vertex.fromNeighbors), // FOR UNDO
-                            returnSymbol:  this.returnSymbol.bind(this),
-                            getSymbol:     this.getSymbol.bind(this)
-                        },
-                        undo: 'addVertex',
-                    });
-                }
-                else if(this.symbols.length > 0) // ADD
-                {   
-                    this.model.dispatch(this.model.userCommands,
-                    { 
-                        type: 'addVertex',
-                        data: 
-                        {
-                            symbol:        this.peekSymbol(),
-                            x:             params.x,
-                            y:             params.y,
-                            toNeighbors:   [], // FOR UNDO
-                            fromNeighbors: [], // FOR UNDO
-                            returnSymbol:  this.returnSymbol.bind(this),   
-                            getSymbol:     this.getSymbol.bind(this)
-                        },
-                        undo: 'removeVertex'
-                    });
-                }
-
-            }.bind(this));
-            
-            this.mouseEventsLogged.push('dragVertex');
-
-            this.view.onCanvasMouseDown.attach('dragVertex', function(_, params)
-            {
-                // locate vertex at location
-                const vertex = this.model.vertexAt(params.x, params.y);
-
-                if(vertex)
-                {
-                    const offsetX = vertex.x - params.x;
-                    const offsetY = vertex.y - params.y;
-
-                    function stickVertexToCursor(_, point)
-                    {
-                        // Mostly visual move
-                        this.model.moveVertex(vertex, point.x + offsetX, point.y + offsetY);
-                    }
-
-                    function releaseVertexFromCursor(_, point)
-                    {
-                        // Final movement, updates spatial information
-                        this.view.onCanvasMouseDrag.detach('stickVertexToCursor');
-                        this.view.onCanvasMouseUp.detach('releaseVertexFromCursor');
-                        this.model.moveVertex(vertex, point.x + offsetX, point.y + offsetY);
-                        this.model.updateVertexSpatial(vertex);
-                    }
-
-                    this.view.onCanvasMouseDrag.attach('stickVertexToCursor', stickVertexToCursor.bind(this));
-                    this.view.onCanvasMouseUp.attach('releaseVertexFromCursor', releaseVertexFromCursor.bind(this));
-                }
-
-            }.bind(this));
-        },
-
-        edgeMode()
-        {
-            this.clearMouseEvents();
-
-            this.mouseEventsLogged.push('createEdge');
-
-            this.view.onCanvasMouseClick.attach('createEdge', function(_, params)
-            {
-                
                 const vertex   = this.model.vertexAt(params.x, params.y);
                 const selected = this.model.selectedVertex; 
 
@@ -177,25 +117,111 @@ function(GraphModel, GraphView, Util)
                             this.model.selectVertex(vertex);
                             this.trackEdgeToCursor(params.x, params.y);
                         }
-                        else
+                        else // if same vertex or edge exists already
                         {
                             this.model.deselectVertex();
                         }
                     }
-                    else
+                    else // no vertex selected, selected it
                     {
                         this.model.selectVertex(vertex);
                         this.trackEdgeToCursor(params.x, params.y);
                     }
                 }
-                else if(selected)
+                else // no vertex clicked
                 {
-                    this.model.deselectVertex();
+                    if(selected) this.model.deselectVertex();
+
+                    const edge = this.model.edgeAt(params.x, params.y);
+                    
+                    if(edge) // edit edge
+                    {
+                        this.model.startEditingEdge(edge);
+                    }
+                    else if(this.symbols.length > 0) // symbols left? Add vertex!
+                    {   
+                        this.model.dispatch(this.model.userCommands,
+                        { 
+                            type: 'addVertex',
+                            data: 
+                            {
+                                symbol:        this.peekSymbol(),
+                                x:             params.x,
+                                y:             params.y,
+                                numEdges:      0, 
+                                returnSymbol:  this.returnSymbol.bind(this),   
+                                getSymbol:     this.getSymbol.bind(this)
+                            },
+                            undo: 'removeVertex'
+                        });
+                    }
+                }
+
+            }.bind(this));
+            
+            this.mouseEventsLogged.push('dragVertex');
+            this.view.onCanvasMouseDown.attach('dragVertex', function(_, params)
+            {
+                // locate vertex at location
+                const vertex = this.model.vertexAt(params.x, params.y);
+
+                if(vertex && !this.model.selectedVertex)
+                {
+                    const offsetX = vertex.x - params.x;
+                    const offsetY = vertex.y - params.y;
+
+                    function stickVertexToCursor(_, point)
+                    {
+                        // Mostly visual move
+                        this.model.moveVertex(vertex, point.x + offsetX, point.y + offsetY);
+                    }
+
+                    function releaseVertexFromCursor(_, point)
+                    {
+                        // Final movement, updates spatial information
+                        this.view.onCanvasMouseDrag.detach('stickVertexToCursor');
+                        this.view.onCanvasMouseUp.detach('releaseVertexFromCursor');
+                        this.model.moveVertex(vertex, point.x + offsetX, point.y + offsetY);
+                        this.model.updateVertexSpatial(vertex);
+                    }
+
+                    this.view.onCanvasMouseDrag.attach('stickVertexToCursor', stickVertexToCursor.bind(this));
+                    this.view.onCanvasMouseUp.attach('releaseVertexFromCursor', releaseVertexFromCursor.bind(this));
+                }
+
+            }.bind(this));
+        },
+
+        eraseMode()
+        {
+            this.clearMouseEvents();
+            
+            this.mouseEventsLogged.push('removeEntity');
+            this.view.onCanvasMouseClick.attach('removeEntity', function(_, params)
+            {
+                const vertex = this.model.vertexAt(params.x, params.y);
+
+                if(vertex) // REMOVE
+                {
+                    this.model.dispatch(this.model.userCommands, 
+                    {
+                        type: 'removeVertex',
+                        data: 
+                        {
+                            symbol:       vertex.data,
+                            x:            params.x,
+                            y:            params.y,
+                            numEdges:     vertex.numEdges,
+                            returnSymbol: this.returnSymbol.bind(this),
+                            getSymbol:    this.getSymbol.bind(this)
+                        },
+                        undo: 'addVertex',
+                    });
                 }
                 else
                 {
                     const edge = this.model.edgeAt(params.x, params.y);
-                    
+
                     if(edge)
                     {
                         this.model.dispatch(this.model.userCommands,
@@ -215,22 +241,26 @@ function(GraphModel, GraphView, Util)
             }.bind(this));
         },
 
-        editEdgeMode()
+        enableHover()
         {
-            // this.clearMouseEvents();
+            this.mouseEventsLogged.push('hoverEntity');
+            this.view.onCanvasMouseMove.attach('hoverEntity', Util.throttle(function(_, params)
+            {
+                const vertex = this.model.vertexAt(params.x, params.y);
 
-            // this.mouseEventsLogged.push('createEdge');
+                if(vertex)
+                {
+                    this.model.hoverVertex(vertex);
+                }
+                else
+                {
+                    const edge = this.model.edgeAt(params.x, params.y);
 
-            // this.view.onCanvasMouseClick.attach('createEdge', function(_, params)
-            // {
-            //     const vertex   = this.model.vertexAt(params.x, params.y); 
+                    if(edge) this.model.hoverEdge(edge);
+                    else     this.model.hoverNothing();
+                }
 
-            //     if(vertex)
-            //     {
-
-            //     }
-
-            // }.bind(this));            
+            }.bind(this), 50));
         },
 
         trackEdgeToCursor(x, y)

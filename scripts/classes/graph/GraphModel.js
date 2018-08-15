@@ -25,19 +25,26 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
         this.edgeSpacialIndex   = new SpacialIndex(this.cellWidth, this.cellHeight, this.cellRatio);
         this.vertexSpacialIndex = new SpacialIndex(this.cellWidth, this.cellHeight, this.cellRatio);
 
-        this.onVertexAdded         = new Event(this);
-        this.onVertexRemoved       = new Event(this);
-        this.onVertexMoved         = new Event(this);
-        this.onVertexSelected      = new Event(this);
-        this.onVertexDeselected    = new Event(this);
+        this.onVertexAdded          = new Event(this);
+        this.onVertexRemoved        = new Event(this);
+        this.onVertexMoved          = new Event(this);
+        this.onVertexSelected       = new Event(this);
+        this.onVertexDeselected     = new Event(this);
+        this.onVertexHovered        = new Event(this);
+        this.onVertexNotHovered     = new Event(this);
 
-        this.onTrackingEdgeAdded   = new Event(this);
-        this.onTrackingEdgeRemoved = new Event(this);
-        this.onTrackingEdgeMoved   = new Event(this);
+        this.onTrackingEdgeAdded    = new Event(this);
+        this.onTrackingEdgeRemoved  = new Event(this);
+        this.onTrackingEdgeMoved    = new Event(this);
         
-        this.onEdgeAdded           = new Event(this);
-        this.onEdgeRemoved         = new Event(this);
-        this.onEdgeMoved           = new Event(this);
+        this.onEdgeAdded            = new Event(this);
+        this.onEdgeRemoved          = new Event(this);
+        this.onEdgeMoved            = new Event(this);
+        this.onEdgeHovered          = new Event(this);
+        this.onEdgeNotHovered       = new Event(this);
+        this.onEdgeEditStarted      = new Event(this);
+        this.onEdgeWeightEditted    = new Event(this);
+        this.onEdgeEditingFinished = new Event(this);
  
         this.userCommands = new CommandLog();
         this.indirectEdgeRemoveCommands = new CommandLog();
@@ -88,7 +95,6 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
                 this[command.type](command.data);
                 log.record(command, false);
             }
-            else throw 'Tried to run non-existant command ' + command.type;
         },
 
         /**
@@ -134,12 +140,15 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
          */
         addVertex(args={})
         {
-            this.assertArgs(args, ['symbol', 'x', 'y', 'toNeighbors', 'fromNeighbors', 'returnSymbol', 'getSymbol'], 
-                            'Missing arguments for addVertex command');
+            this.assertArgs(args, ['symbol', 'x', 'y', 'numEdges', 
+                                //    'toNeighbors', 'fromNeighbors', 
+                                   'returnSymbol', 'getSymbol'], 
+                                   'Missing arguments for addVertex command');
 
             const data          = args.getSymbol();
             const x             = args.x;
             const y             = args.y;
+            const numEdges      = args.numEdges;
             // const toNeighbors   = args.toNeighbors;
             // const fromNeighbors = args.fromNeighbors;
 
@@ -155,6 +164,9 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
                 this.vertexSpacialIndex.add(vertex);
                 this.onVertexAdded.notify({ data: data, x: x, y: y });
  
+                for(let i = 0; i < args.numEdges; i++)
+                    this.undo(this.indirectEdgeRemoveCommands);
+
                 // For Undo
                 // toNeighbors.forEach(function(neighbor)
                 // {
@@ -192,8 +204,10 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
          */
         removeVertex(args={})
         {
-            this.assertArgs(args, ['symbol', 'x', 'y', 'toNeighbors', 'fromNeighbors', 'returnSymbol', 'getSymbol'], 
-                            'Missing arguments for removeVertex command');
+            this.assertArgs(args, ['symbol', 'x', 'y', 'numEdges', 
+                                //    'toNeighbors', 'fromNeighbors', 
+                                   'returnSymbol', 'getSymbol'], 
+                                   'Missing arguments for removeVertex command');
 
             const data         = args.symbol;
             const returnSymbol = args.returnSymbol;
@@ -202,6 +216,17 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
             // Clean up edges
             removed.forEachEdge(function(edge)
             {
+                this.dispatch(this.indirectEdgeRemoveCommands,
+                {
+                    type: 'removeEdge',
+                    data: 
+                    {
+                        from:   edge.from, 
+                        to:     edge.to,
+                        weight: edge.weight
+                    },
+                    undo: 'addEdge'
+                });
                 // this.removeEdge
                 // ({
                 //     from: edge.from,
@@ -388,6 +413,7 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
          */
         addTrackingEdge(x, y)
         {
+            this.currentlyTracking = true;
             this.onTrackingEdgeAdded.notify
             ({ 
                 start: { x: this.selectedVertex.x, y: this.selectedVertex.y },
@@ -413,7 +439,87 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
          */
         releaseTrackingEdge()
         {
+            this.currentlyTracking = false;
             this.onTrackingEdgeRemoved.notify({});
+        },
+
+//====================== Edge Edit Methods ===========================//
+
+        startEditingEdge(edge)
+        {
+            this.editingEdge = edge;
+            this.onEdgeEditStarted.notify
+            ({
+                from:   edge.from,
+                to:     edge.to,
+                center: { x: edge.x, y: edge.y }
+            });
+        },
+
+        editEdgeWeight(weight)
+        {
+            const edge  = this.editingEdge;
+            edge.weight = weight;
+
+            this.onEdgeWeightEditted.notify
+            ({ 
+                from:   edge.from,
+                to:     edge.to,
+                weight: weight   
+            });  
+        },
+
+        clearEdgeEdit()
+        {
+            if(this.editingEdge)
+            {
+                this.onEdgeEditingFinished.notify();
+                this.editingEdge = null;
+            }
+        },
+
+//====================== Hover Methods ===========================//
+
+        hoverVertex(vertex)
+        {
+            if(!this.vertexHovered) 
+            {
+                if(!this.selectedVertex || this.selectedVertex.data !== vertex.data)
+                {
+                    this.hoverNothing();
+                    this.vertexHovered = vertex;
+                    this.onVertexHovered.notify({ data: vertex.data });
+                }
+            }
+        },
+
+        hoverEdge(edge)
+        {
+            if(!this.edgeHovered && !this.selectedVertex)
+            {
+                this.hoverNothing();
+                this.edgeHovered = edge;
+                this.onEdgeHovered.notify({ from: edge.from, to: edge.to });
+            }
+        },
+
+        hoverNothing()
+        {
+            if(this.vertexHovered)
+            {
+                this.onVertexNotHovered.notify({ data: this.vertexHovered.data });
+                this.vertexHovered = null;   
+            }
+            
+            if(this.edgeHovered)
+            {
+                this.onEdgeNotHovered.notify
+                ({ 
+                    from: this.edgeHovered.from, 
+                    to:   this.edgeHovered.to 
+                });
+                this.edgeHovered = null;
+            }
         },
 
 //====================== Spatial Index API (Graph -> Model -> Spatial) ===========================//

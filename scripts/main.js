@@ -21,7 +21,7 @@ function(Tests, Graph, Animations)
 
     const addVertexBtn  = document.getElementsByClassName('addVertexButton');
     const addEdgeBtn    = document.getElementsByClassName('addEdgeButton');
-    const editEdgeBtn   = document.getElementsByClassName('addWeightButton');
+    const eraseBtn      = document.getElementsByClassName('eraseButton');
     const undoBtn       = document.getElementsByClassName('undoButton');
     const redoBtn       = document.getElementsByClassName('redoButton');
 
@@ -41,9 +41,9 @@ function(Tests, Graph, Animations)
          })
      }
 
-     for(let i = 0; i<editEdgeBtn.length; i++) {
-         editEdgeBtn[i].addEventListener('click',function () {
-             graph.editEdgeMode();
+     for(let i = 0; i<eraseBtn.length; i++) {
+         eraseBtn[i].addEventListener('click',function () {
+             graph.eraseMode();
          })
      }
 

@@ -26,17 +26,20 @@ define(['classes/engine/RenderingEngine',
         this.vertexMap = Object.create(null);
         this.edgeMap   = Object.create(null);
 
-        this.onCanvasMouseClick = new Event(this);
-        this.onCanvasMouseDown  = new Event(this);
-        this.onCanvasMouseUp    = new Event(this);
-        this.onCanvasMouseMove  = new Event(this);
-        this.onCanvasMouseDrag  = new Event(this);
+        this.onCanvasMouseClick  = new Event(this);
+        this.onCanvasMouseDown   = new Event(this);
+        this.onCanvasMouseUp     = new Event(this);
+        this.onCanvasMouseMove   = new Event(this);
+        this.onCanvasMouseDrag   = new Event(this);
+
+        this.onEdgeFormSubmitted = new Event(this);
+
+        this.onUndo              = new Event(this);
+        this.onRedo              = new Event(this);
 
         this.mouseMoved = false;
         this.mouseDown  = false;
-        this.mouseMoveTimer = 0;
-        this.mouseMoveDelay = 0; // NEEDS WORK
-        this.mouseMoveResetDelay = 200;
+        this.mouseJustPutDownDelay = 100;
 
         this.initHandlers();
         this.appendTo(container);
@@ -109,6 +112,7 @@ define(['classes/engine/RenderingEngine',
                 if(this.vertexMap[params.data])
                 {
                     this.vertexMap[params.data].circle.styles.strokeStyle = '#fffc55';
+                    this.vertexMap[params.data].circle.styles.shadowColor = '#fffc55';
                 }
             
             }.bind(this));
@@ -119,6 +123,33 @@ define(['classes/engine/RenderingEngine',
                 if(this.vertexMap[params.data])
                 {
                     this.vertexMap[params.data].circle.styles.strokeStyle = 'rgb(255, 154, 0)';
+                    this.vertexMap[params.data].circle.styles.shadowColor = '#ff9a00';
+                }                 
+
+            }.bind(this));
+
+            // Vertex Hovered
+            this.model.onVertexHovered.attach('hoverVertex', function(_, params)
+            {
+                const vertex = this.vertexMap[params.data]; 
+                if(vertex)
+                {
+                    document.body.style.cursor = 'pointer';
+                    vertex.circle.styles.strokeStyle = 'rgb(255, 255, 255)';
+                    vertex.circle.styles.shadowColor = '#ffffff';
+                }                 
+
+            }.bind(this));
+
+            // Vertex Not Hovered
+            this.model.onVertexNotHovered.attach('unhoverVertex', function(_, params)
+            {
+                const vertex = this.vertexMap[params.data]; 
+                if(vertex)
+                {
+                    document.body.style.cursor = 'auto';
+                    vertex.circle.styles.strokeStyle = 'rgb(255, 154, 0)';
+                    vertex.circle.styles.shadowColor = '#ff9a00';
                 }                 
 
             }.bind(this));
@@ -217,6 +248,80 @@ define(['classes/engine/RenderingEngine',
                 edge.text.center(params.center.x, params.center.y);
 
             }.bind(this));
+            
+            // Edge Hovered
+            this.model.onEdgeHovered.attach('hoverEdge', function(_, params)
+            {
+                const edge = this.edgeMap[ [params.from, params.to] ]; 
+                if(edge)
+                {
+                    document.body.style.cursor = 'pointer';
+                    edge.box.styles.strokeStyle = 'rgb(255, 255, 255)';
+                    edge.box.styles.shadowColor = '#ffffff';
+                    edge.text.styles.fillStyle = 'rgb(255, 255, 255)';
+                    edge.text.styles.shadowColor = '#ffffff';
+                }                 
+                
+            }.bind(this));
+            
+            // Edge Not Hovered
+            this.model.onEdgeNotHovered.attach('unhoverEdge', function(_, params)
+            {
+                const edge = this.edgeMap[ [params.from, params.to] ];
+                if(edge)
+                {
+                    document.body.style.cursor = 'auto';
+                    edge.box.styles.strokeStyle = 'rgb(255, 154, 0)';
+                    edge.box.styles.shadowColor = '#ff9a00';
+                    edge.text.styles.fillStyle = 'rgb(255, 154, 0)';
+                    edge.text.styles.shadowColor = '#ff9a00';
+                }                 
+                
+            }.bind(this));
+
+            // Edge Edit Started
+            this.model.onEdgeEditStarted.attach('startEdittingEdge', function(_, params)
+            {
+                const edge = this.edgeMap[ [params.from, params.to] ];
+                if(edge)
+                {
+                    const container = this.container;
+                    const form = '<form id="edit-edge-form" style="z-index: 100;position: absolute; background-color:white; left:' + params.center.x + 'px; top:' + params.center.y + 'px;">' +
+                                    '<input id="edit-edge-weight-field" type="text"/>' +
+                                    '<input type="submit" value="Done" />' +
+                                 '</form>'; 
+                    Util.appendHtml(container, form);
+
+                    const field = container.querySelector('#edit-edge-weight-field');
+                    this.edgeEditForm = container.querySelector('#edit-edge-form');
+                    
+                    this.edgeEditForm.addEventListener('submit', function(event)
+                    {
+                        event.preventDefault();
+                        this.onEdgeFormSubmitted.notify({ weight: field.value });
+                        
+                    }.bind(this));
+                }                 
+                
+            }.bind(this));
+
+            // Edge Weight Editted
+            this.model.onEdgeWeightEditted.attach('changeEdgeWeight', function(_, params)
+            {
+                const edge = this.edgeMap[ [params.from, params.to] ];
+                
+                if(edge) edge.text.content = params.weight;
+                
+            }.bind(this));
+            
+            // Edge Weight Editted
+            this.model.onEdgeEditingFinished.attach('clearEdgeEdit', function(_, params)
+            {
+                console.log(this.edgeEditForm);
+                this.container.removeChild(this.edgeEditForm);
+                this.edgeEditForm = null;
+                
+            }.bind(this));
         },
 
 //========= Mouse Event Interception ===========//
@@ -234,10 +339,11 @@ define(['classes/engine/RenderingEngine',
         {
             this.engine.canvas.addEventListener('mousedown', function(event)
             {
-                event.preventDefault(); 
-                this.mouseMoved = false;
-                this.mouseDown  = true;
+                event.preventDefault();
+                this.mouseDown = true;
+                this.mouseJustPutDown = true;
                 this.onCanvasMouseDown.notify({x: event.offsetX, y: event.offsetY});
+                setTimeout(function(){ this.mouseJustPutDown = false; }.bind(this), this.mouseJustPutDownDelay);
             
             }.bind(this));
 
@@ -245,35 +351,34 @@ define(['classes/engine/RenderingEngine',
             {
                 event.preventDefault();
                 this.onCanvasMouseUp.notify({x: event.offsetX, y: event.offsetY});
-                this.mouseDown = false;
-                
-                if(!this.mouseMoved)
-                    this.onCanvasMouseClick.notify({x: event.offsetX, y: event.offsetY});
+                if(this.mouseJustPutDown) this.onCanvasMouseClick.notify({x: event.offsetX, y: event.offsetY});
             
             }.bind(this));
 
             this.engine.canvas.addEventListener('mousemove', function(event)
             { 
                 event.preventDefault();
-                if(this.mouseMoveTimer > this.mouseMoveDelay)
-                {
-                    this.mouseMoved = true;
-                    this.onCanvasMouseMove.notify({x: event.offsetX, y: event.offsetY});
-                }
-                else this.mouseMoveTimer++;
-
-                if(this.mouseDown)
-                        this.onCanvasMouseDrag.notify({x: event.offsetX, y: event.offsetY});
+                if(this.mouseDown) this.onCanvasMouseDrag.notify({x: event.offsetX, y: event.offsetY});
+                this.onCanvasMouseMove.notify({x: event.offsetX, y: event.offsetY});
             
             }.bind(this));
 
-            // Adds a small delay before triggering a mouse move event
-            this.engine.canvas.addEventListener('mousemove', Util.stagger(function(event)
+            window.addEventListener('keydown', function(event)
             {
-                event.preventDefault();
-                this.mouseMoveTimer = 0;
-            
-            }.bind(this), this.mouseMoveResetDelay));
+                // event.preventDefault();
+                const key = event.keyCode;
+
+                if(event.ctrlKey)
+                { 
+                    if(key === 90)
+                    {
+                        if(event.shiftKey) this.onRedo.notify();
+                        else               this.onUndo.notify();
+                    }
+                    else if(key === 89) this.onRedo.notify();
+                }
+
+            }.bind(this));
         },
 
         initResize()

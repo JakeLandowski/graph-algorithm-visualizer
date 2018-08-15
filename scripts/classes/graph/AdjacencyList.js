@@ -45,6 +45,8 @@ define(function()
             const to   = edge.to;
             this.vertexMap[from].toNeighbors[to] = to;
             this.vertexMap[to].fromNeighbors[from] = from;
+            this.vertexMap[from].numEdges++;
+            this.vertexMap[to].numEdges++;            
 
             this.edgeMap[ [from, to] ] = edge;
             if(this.undirected) 
@@ -74,6 +76,8 @@ define(function()
 
             delete this.vertexMap[from].toNeighbors[to];
             delete this.vertexMap[to].fromNeighbors[from];
+            this.vertexMap[from].numEdges--;
+            this.vertexMap[to].numEdges--;
         },
 
         edgeExists(from, to)

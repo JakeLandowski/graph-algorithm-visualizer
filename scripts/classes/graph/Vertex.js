@@ -15,6 +15,7 @@ define(function()
         this.id            = data;
         this.data          = data,
         this.options       = options;
+        this.numEdges      = 0;
         this.toNeighbors   = Object.create(null),
         this.fromNeighbors = Object.create(null),
         this.setPoints(x, y);
