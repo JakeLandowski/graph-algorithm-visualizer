@@ -51,6 +51,7 @@ function(GraphModel, GraphView, Util)
         vertexMode()
         {
             this.clearMouseEvents();
+            this.enableHover();
 
             // For when changing modes while tracking 
             // edge exists and a vertex is selected
@@ -60,12 +61,12 @@ function(GraphModel, GraphView, Util)
                 this.model.releaseTrackingEdge();
             }
 
-            this.mouseEventsLogged.push('clickVertex');
-            this.view.onCanvasMouseClick.attach('clickVertex', function(_, params)
+            this.mouseEventsLogged.push('clickEntity');
+            this.view.onCanvasMouseClick.attach('clickEntity', function(_, params)
             {
                 // see if clicked on vertex here using model
                 // if clicked on vertex tell model to delete
-                const vertex = this.model.vertexAt(params.x, params.y);
+                const vertex   = this.model.vertexAt(params.x, params.y);
                 const selected = this.model.selectedVertex; 
 
                 if(vertex)
@@ -95,22 +96,22 @@ function(GraphModel, GraphView, Util)
                             this.model.selectVertex(vertex);
                             this.trackEdgeToCursor(params.x, params.y);
                         }
-                        else
+                        else // if same vertex or edge exists already
                         {
                             this.model.deselectVertex();
                         }
                     }
-                    else
+                    else // no vertex selected, selected it
                     {
                         this.model.selectVertex(vertex);
                         this.trackEdgeToCursor(params.x, params.y);
                     }
                 }
-                else if(selected)
+                else if(selected) // if no vertex but one curently selected
                 {
                     this.model.deselectVertex();
                 }
-                else if(this.symbols.length > 0) // ADD
+                else if(this.symbols.length > 0) // symbols left? Add vertex!
                 {   
                     this.model.dispatch(this.model.userCommands,
                     { 
@@ -129,28 +130,6 @@ function(GraphModel, GraphView, Util)
                 }
 
             }.bind(this));
-
-            this.mouseEventsLogged.push('hoverEntity');
-            this.view.onCanvasMouseMove.attach('hoverEntity', Util.throttle(function(_, params)
-            {
-                const vertex = this.model.vertexAt(params.x, params.y);
-
-                if(vertex)
-                {
-                    this.model.hoverVertex(vertex);
-                }
-                else
-                {
-                    const edge = this.model.edgeAt(params.x, params.y);
-
-                    if(edge)
-                    {
-                        this.model.hoverEdge(edge);
-                    }
-                    else this.model.hoverNothing();
-                }
-
-            }.bind(this), 50));
             
             this.mouseEventsLogged.push('dragVertex');
             this.view.onCanvasMouseDown.attach('dragVertex', function(_, params)
@@ -188,6 +167,7 @@ function(GraphModel, GraphView, Util)
         eraseMode()
         {
             this.clearMouseEvents();
+            this.enableHover();
             
             this.mouseEventsLogged.push('removeEntity');
             this.view.onCanvasMouseClick.attach('removeEntity', function(_, params)
@@ -201,19 +181,19 @@ function(GraphModel, GraphView, Util)
                         type: 'removeVertex',
                         data: 
                         {
-                            symbol:        vertex.data,
-                            x:             params.x,
-                            y:             params.y,
-                            numEdges:      vertex.numEdges,
-                            returnSymbol:  this.returnSymbol.bind(this),
-                            getSymbol:     this.getSymbol.bind(this)
+                            symbol:       vertex.data,
+                            x:            params.x,
+                            y:            params.y,
+                            numEdges:     vertex.numEdges,
+                            returnSymbol: this.returnSymbol.bind(this),
+                            getSymbol:    this.getSymbol.bind(this)
                         },
                         undo: 'addVertex',
                     });
                 }
                 else
                 {
-                    const edge   = this.model.edgeAt(params.x, params.y);
+                    const edge = this.model.edgeAt(params.x, params.y);
 
                     if(edge)
                     {
@@ -232,6 +212,28 @@ function(GraphModel, GraphView, Util)
                 }
 
             }.bind(this));
+        },
+
+        enableHover()
+        {
+            this.mouseEventsLogged.push('hoverEntity');
+            this.view.onCanvasMouseMove.attach('hoverEntity', Util.throttle(function(_, params)
+            {
+                const vertex = this.model.vertexAt(params.x, params.y);
+
+                if(vertex)
+                {
+                    this.model.hoverVertex(vertex);
+                }
+                else
+                {
+                    const edge = this.model.edgeAt(params.x, params.y);
+
+                    if(edge) this.model.hoverEdge(edge);
+                    else     this.model.hoverNothing();
+                }
+
+            }.bind(this), 50));
         },
 
         trackEdgeToCursor(x, y)
