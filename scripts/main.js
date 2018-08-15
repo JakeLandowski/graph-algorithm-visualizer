@@ -19,7 +19,7 @@ function(Tests, Graph, Animations)
 
     const createNewBtn  = document.getElementsByClassName('creategraph');
 
-    const addVertexBtn  = document.getElementsByClassName('addVertexButton');
+    const createBtn     = document.getElementsByClassName('addVertexButton');
     const addEdgeBtn    = document.getElementsByClassName('addEdgeButton');
     const eraseBtn      = document.getElementsByClassName('eraseButton');
     const undoBtn       = document.getElementsByClassName('undoButton');
@@ -29,9 +29,9 @@ function(Tests, Graph, Animations)
         createNewBtn[i].addEventListener('click', newGraph);
     }
 
-     for(let i = 0; i<addVertexBtn.length; i++) {
-         addVertexBtn[i].addEventListener('click',function () {
-             graph.vertexMode();
+     for(let i = 0; i<createBtn.length; i++) {
+         createBtn[i].addEventListener('click',function () {
+             graph.createMode();
          })
      }
 

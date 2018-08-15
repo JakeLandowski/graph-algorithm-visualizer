@@ -41,7 +41,7 @@ function(GraphModel, GraphView, Util)
         
         this.mouseEventsLogged = [];
         this.initAlwaysOnFeatures();
-        this.vertexMode();
+        this.createMode();
     };
 
     Graph.prototype = 
@@ -67,7 +67,7 @@ function(GraphModel, GraphView, Util)
             }.bind(this));
         },
 
-        vertexMode()
+        createMode()
         {
             this.clearMouseEvents();
 
