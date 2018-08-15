@@ -73,7 +73,21 @@ define(function()
                 element.insertAdjacentHTML('beforeend', htmlString);
             else
                 element.innerHTML += htmlString;
-        }
+        },
+
+        calcArrowPoints(x1, y1, x2, y2, end=true)
+        {
+            const dx = x2 - x1;
+            const dy = y2 - y1;
+            let theta = this.toDegrees(Math.atan2(-dy, -dx));
+            if(theta < 0) theta += 360;
+            console.log(theta);
+
+            return theta;
+        },
+
+        toDegrees(angle) { return angle * (180 / Math.PI); },
+        toRadians(angle) { return angle * (Math.PI / 180); }
 
     }; // end module
 });

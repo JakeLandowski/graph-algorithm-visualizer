@@ -228,6 +228,30 @@ define(['classes/engine/RenderingEngine',
                               font:        '16px monospace'
                           })
                 };
+
+                const angle = Util.calcArrowPoints
+                (
+                    params.fromPoint.x,
+                    params.fromPoint.y,
+                    params.toPoint.x,
+                    params.toPoint.y,
+                    true
+                );
+
+                let x = params.toPoint.x + (this.config.vertexSize * Math.cos(Util.toRadians(angle)));
+                let y = params.toPoint.y + (this.config.vertexSize * Math.sin(Util.toRadians(angle)));
+                this.engine.createCircle(x, y, 5, this.VERTEX_LAYER, { fillStyle: '#fff' });
+
+
+                let firstX = x + (15 * Math.cos(Util.toRadians(angle + 30)));
+                let firstY = y + (15 * Math.cos(Util.toRadians(angle + 30)));
+
+
+
+                let secondX = x + (15 * Math.cos(Util.toRadians(angle - 30)));
+                let secondY = y + (15 * Math.cos(Util.toRadians(angle - 30)));
+                this.engine.createCircle(firstX, firstY, 5, this.VERTEX_LAYER, { fillStyle: '#fff' });
+                this.engine.createCircle(secondX, secondY, 5, this.VERTEX_LAYER, { fillStyle: '#fff' });
             
             }.bind(this));
 
