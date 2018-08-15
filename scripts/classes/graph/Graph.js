@@ -128,10 +128,12 @@ function(GraphModel, GraphView, Util)
                         this.trackEdgeToCursor(params.x, params.y);
                     }
                 }
-                else // no vertex clicked
+                else if(selected) // no vertex clicked
                 {
-                    if(selected) this.model.deselectVertex();
-
+                    this.model.deselectVertex();
+                }
+                else
+                {
                     const edge = this.model.edgeAt(params.x, params.y);
                     
                     if(edge) // edit edge
