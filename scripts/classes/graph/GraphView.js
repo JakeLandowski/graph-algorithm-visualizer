@@ -309,7 +309,6 @@ define(['classes/engine/RenderingEngine',
             this.model.onEdgeWeightEditted.attach('changeEdgeWeight', function(_, params)
             {
                 const edge = this.edgeMap[ [params.from, params.to] ];
-                
                 if(edge) edge.text.content = params.weight;
                 
             }.bind(this));
@@ -317,7 +316,6 @@ define(['classes/engine/RenderingEngine',
             // Edge Weight Editted
             this.model.onEdgeEditingFinished.attach('clearEdgeEdit', function(_, params)
             {
-                console.log(this.edgeEditForm);
                 this.container.removeChild(this.edgeEditForm);
                 this.edgeEditForm = null;
                 

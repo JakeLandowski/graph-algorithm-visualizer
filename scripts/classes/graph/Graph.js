@@ -41,7 +41,7 @@ function(GraphModel, GraphView, Util)
         
         this.mouseEventsLogged = [];
         this.initAlwaysOnFeatures();
-        this.vertexMode();
+        this.createMode();
     };
 
     Graph.prototype = 
@@ -65,10 +65,9 @@ function(GraphModel, GraphView, Util)
                 } 
 
             }.bind(this));
-
         },
 
-        vertexMode()
+        createMode()
         {
             this.clearMouseEvents();
 
@@ -128,10 +127,12 @@ function(GraphModel, GraphView, Util)
                         this.trackEdgeToCursor(params.x, params.y);
                     }
                 }
-                else // no vertex clicked
+                else if(selected) // no vertex clicked
                 {
-                    if(selected) this.model.deselectVertex();
-
+                    this.model.deselectVertex();
+                }
+                else
+                {
                     const edge = this.model.edgeAt(params.x, params.y);
                     
                     if(edge) // edit edge
@@ -243,7 +244,6 @@ function(GraphModel, GraphView, Util)
 
         enableHover()
         {
-            this.mouseEventsLogged.push('hoverEntity');
             this.view.onCanvasMouseMove.attach('hoverEntity', Util.throttle(function(_, params)
             {
                 const vertex = this.model.vertexAt(params.x, params.y);
