@@ -40,6 +40,7 @@ function(GraphModel, GraphView, Util)
                         'B', 'A'];
         
         this.mouseEventsLogged = [];
+        this.initAlwaysOnFeatures();
         this.vertexMode();
     };
 
@@ -48,10 +49,28 @@ function(GraphModel, GraphView, Util)
 
 //====================== Graph Interaction Modes ===========================//
 
+        initAlwaysOnFeatures()
+        {
+            this.enableHover();
+            
+            this.view.onEdgeFormSubmitted.attach('editEdgeWeight', function(_, params)
+            {
+                let weight = Number.parseInt(params.weight);
+
+                if(!isNaN(weight))
+                {
+                    weight = weight < 0 ? 0 : (weight > 20 ? 20 : weight);
+                    this.model.editEdgeWeight(weight);
+                    this.model.clearEdgeEdit();
+                } 
+
+            }.bind(this));
+
+        },
+
         vertexMode()
         {
             this.clearMouseEvents();
-            this.enableHover();
 
             // For when changing modes while tracking 
             // edge exists and a vertex is selected
@@ -64,6 +83,8 @@ function(GraphModel, GraphView, Util)
             this.mouseEventsLogged.push('clickEntity');
             this.view.onCanvasMouseClick.attach('clickEntity', function(_, params)
             {
+                this.model.clearEdgeEdit();
+
                 // see if clicked on vertex here using model
                 // if clicked on vertex tell model to delete
                 const vertex   = this.model.vertexAt(params.x, params.y);
@@ -107,26 +128,33 @@ function(GraphModel, GraphView, Util)
                         this.trackEdgeToCursor(params.x, params.y);
                     }
                 }
-                else if(selected) // if no vertex but one curently selected
+                else // no vertex clicked
                 {
-                    this.model.deselectVertex();
-                }
-                else if(this.symbols.length > 0) // symbols left? Add vertex!
-                {   
-                    this.model.dispatch(this.model.userCommands,
-                    { 
-                        type: 'addVertex',
-                        data: 
-                        {
-                            symbol:        this.peekSymbol(),
-                            x:             params.x,
-                            y:             params.y,
-                            numEdges:      0, 
-                            returnSymbol:  this.returnSymbol.bind(this),   
-                            getSymbol:     this.getSymbol.bind(this)
-                        },
-                        undo: 'removeVertex'
-                    });
+                    if(selected) this.model.deselectVertex();
+
+                    const edge = this.model.edgeAt(params.x, params.y);
+                    
+                    if(edge) // edit edge
+                    {
+                        this.model.startEditingEdge(edge);
+                    }
+                    else if(this.symbols.length > 0) // symbols left? Add vertex!
+                    {   
+                        this.model.dispatch(this.model.userCommands,
+                        { 
+                            type: 'addVertex',
+                            data: 
+                            {
+                                symbol:        this.peekSymbol(),
+                                x:             params.x,
+                                y:             params.y,
+                                numEdges:      0, 
+                                returnSymbol:  this.returnSymbol.bind(this),   
+                                getSymbol:     this.getSymbol.bind(this)
+                            },
+                            undo: 'removeVertex'
+                        });
+                    }
                 }
 
             }.bind(this));
@@ -167,7 +195,6 @@ function(GraphModel, GraphView, Util)
         eraseMode()
         {
             this.clearMouseEvents();
-            this.enableHover();
             
             this.mouseEventsLogged.push('removeEntity');
             this.view.onCanvasMouseClick.attach('removeEntity', function(_, params)

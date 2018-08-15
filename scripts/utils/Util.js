@@ -65,6 +65,14 @@ define(function()
         copy(object)
         {
             return Object.assign({}, object);
+        },
+
+        appendHtml(element, htmlString)
+        {
+            if(element.insertAdjacentHTML)
+                element.insertAdjacentHTML('beforeend', htmlString);
+            else
+                element.innerHTML += htmlString;
         }
 
     }; // end module

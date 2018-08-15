@@ -26,13 +26,16 @@ define(['classes/engine/RenderingEngine',
         this.vertexMap = Object.create(null);
         this.edgeMap   = Object.create(null);
 
-        this.onCanvasMouseClick = new Event(this);
-        this.onCanvasMouseDown  = new Event(this);
-        this.onCanvasMouseUp    = new Event(this);
-        this.onCanvasMouseMove  = new Event(this);
-        this.onCanvasMouseDrag  = new Event(this);
-        this.onUndo             = new Event(this);
-        this.onRedo             = new Event(this);
+        this.onCanvasMouseClick  = new Event(this);
+        this.onCanvasMouseDown   = new Event(this);
+        this.onCanvasMouseUp     = new Event(this);
+        this.onCanvasMouseMove   = new Event(this);
+        this.onCanvasMouseDrag   = new Event(this);
+
+        this.onEdgeFormSubmitted = new Event(this);
+
+        this.onUndo              = new Event(this);
+        this.onRedo              = new Event(this);
 
         this.mouseMoved = false;
         this.mouseDown  = false;
@@ -275,6 +278,50 @@ define(['classes/engine/RenderingEngine',
                 }                 
                 
             }.bind(this));
+
+            // Edge Edit Started
+            this.model.onEdgeEditStarted.attach('startEdittingEdge', function(_, params)
+            {
+                const edge = this.edgeMap[ [params.from, params.to] ];
+                if(edge)
+                {
+                    const container = this.container;
+                    const form = '<form id="edit-edge-form" style="z-index: 100;position: absolute; background-color:white; left:' + params.center.x + 'px; top:' + params.center.y + 'px;">' +
+                                    '<input id="edit-edge-weight-field" type="text"/>' +
+                                    '<input type="submit" value="Done" />' +
+                                 '</form>'; 
+                    Util.appendHtml(container, form);
+
+                    const field = container.querySelector('#edit-edge-weight-field');
+                    this.edgeEditForm = container.querySelector('#edit-edge-form');
+                    
+                    this.edgeEditForm.addEventListener('submit', function(event)
+                    {
+                        event.preventDefault();
+                        this.onEdgeFormSubmitted.notify({ weight: field.value });
+                        
+                    }.bind(this));
+                }                 
+                
+            }.bind(this));
+
+            // Edge Weight Editted
+            this.model.onEdgeWeightEditted.attach('changeEdgeWeight', function(_, params)
+            {
+                const edge = this.edgeMap[ [params.from, params.to] ];
+                
+                if(edge) edge.text.content = params.weight;
+                
+            }.bind(this));
+            
+            // Edge Weight Editted
+            this.model.onEdgeEditingFinished.attach('clearEdgeEdit', function(_, params)
+            {
+                console.log(this.edgeEditForm);
+                this.container.removeChild(this.edgeEditForm);
+                this.edgeEditForm = null;
+                
+            }.bind(this));
         },
 
 //========= Mouse Event Interception ===========//
@@ -318,7 +365,7 @@ define(['classes/engine/RenderingEngine',
 
             window.addEventListener('keydown', function(event)
             {
-                event.preventDefault();
+                // event.preventDefault();
                 const key = event.keyCode;
 
                 if(event.ctrlKey)

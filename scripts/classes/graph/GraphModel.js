@@ -25,23 +25,26 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
         this.edgeSpacialIndex   = new SpacialIndex(this.cellWidth, this.cellHeight, this.cellRatio);
         this.vertexSpacialIndex = new SpacialIndex(this.cellWidth, this.cellHeight, this.cellRatio);
 
-        this.onVertexAdded         = new Event(this);
-        this.onVertexRemoved       = new Event(this);
-        this.onVertexMoved         = new Event(this);
-        this.onVertexSelected      = new Event(this);
-        this.onVertexDeselected    = new Event(this);
-        this.onVertexHovered       = new Event(this);
-        this.onVertexNotHovered    = new Event(this);
+        this.onVertexAdded          = new Event(this);
+        this.onVertexRemoved        = new Event(this);
+        this.onVertexMoved          = new Event(this);
+        this.onVertexSelected       = new Event(this);
+        this.onVertexDeselected     = new Event(this);
+        this.onVertexHovered        = new Event(this);
+        this.onVertexNotHovered     = new Event(this);
 
-        this.onTrackingEdgeAdded   = new Event(this);
-        this.onTrackingEdgeRemoved = new Event(this);
-        this.onTrackingEdgeMoved   = new Event(this);
+        this.onTrackingEdgeAdded    = new Event(this);
+        this.onTrackingEdgeRemoved  = new Event(this);
+        this.onTrackingEdgeMoved    = new Event(this);
         
-        this.onEdgeAdded           = new Event(this);
-        this.onEdgeRemoved         = new Event(this);
-        this.onEdgeMoved           = new Event(this);
-        this.onEdgeHovered         = new Event(this);
-        this.onEdgeNotHovered      = new Event(this);
+        this.onEdgeAdded            = new Event(this);
+        this.onEdgeRemoved          = new Event(this);
+        this.onEdgeMoved            = new Event(this);
+        this.onEdgeHovered          = new Event(this);
+        this.onEdgeNotHovered       = new Event(this);
+        this.onEdgeEditStarted      = new Event(this);
+        this.onEdgeWeightEditted    = new Event(this);
+        this.onEdgeEditingFinished = new Event(this);
  
         this.userCommands = new CommandLog();
         this.indirectEdgeRemoveCommands = new CommandLog();
@@ -438,6 +441,41 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
         {
             this.currentlyTracking = false;
             this.onTrackingEdgeRemoved.notify({});
+        },
+
+//====================== Edge Edit Methods ===========================//
+
+        startEditingEdge(edge)
+        {
+            this.editingEdge = edge;
+            this.onEdgeEditStarted.notify
+            ({
+                from:   edge.from,
+                to:     edge.to,
+                center: { x: edge.x, y: edge.y }
+            });
+        },
+
+        editEdgeWeight(weight)
+        {
+            const edge  = this.editingEdge;
+            edge.weight = weight;
+
+            this.onEdgeWeightEditted.notify
+            ({ 
+                from:   edge.from,
+                to:     edge.to,
+                weight: weight   
+            });  
+        },
+
+        clearEdgeEdit()
+        {
+            if(this.editingEdge)
+            {
+                this.onEdgeEditingFinished.notify();
+                this.editingEdge = null;
+            }
         },
 
 //====================== Hover Methods ===========================//
