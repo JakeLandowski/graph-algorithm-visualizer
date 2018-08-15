@@ -44,6 +44,7 @@ define(['classes/engine/RenderingEngine',
         this.initHandlers();
         this.appendTo(container);
 
+
     }; // end constructor
     
     GraphView.prototype = 
@@ -154,7 +155,7 @@ define(['classes/engine/RenderingEngine',
 
             }.bind(this));
 
-//========= Edge Listeners ===========//
+            //========= Edge Listeners ===========//
 
             // Tracking Edge Added
             this.model.onTrackingEdgeAdded.attach('trackingEdgeAdded', function(_, params)
@@ -193,6 +194,12 @@ define(['classes/engine/RenderingEngine',
             // Edge Added
             this.model.onEdgeAdded.attach('createEdge', function(_, params)
             {
+                let grd = this.engine.context.createRadialGradient(params.center.x, params.center.y, 10, params.center.x,
+                    params.center.y, 20);
+                grd.addColorStop(.3, "#262626");
+                grd.addColorStop(.7, "transparent");
+                grd.addColorStop(1, "#262626");
+
                 this.edgeMap[ [params.from, params.to] ] =  
                 {
                     line: this.engine.createLine(params.fromPoint.x, params.fromPoint.y, 
@@ -207,11 +214,9 @@ define(['classes/engine/RenderingEngine',
                     box: this.engine.createRectangle(params.center.x, params.center.y, 
                          this.config.edgeBoxSize, this.config.edgeBoxSize, this.EDGE_LAYER, 
                          {
-                             strokeStyle: 'rgb(255, 154, 0)',
-                             lineWidth:   this.config.vertexOutlineSize,
-                             fillStyle:   '#262626',
-                             shadowBlur:  16,
-                             shadowColor: '#ff9a00'
+                             strokeStyle: 'transparent',
+                             fillStyle:   grd,
+                             background: 'transparent'
                          }),
 
                     text: this.engine.createText(params.weight, params.center.x, 
