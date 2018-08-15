@@ -448,6 +448,7 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
             {
                 if(!this.selectedVertex || this.selectedVertex.data !== vertex.data)
                 {
+                    this.hoverNothing();
                     this.vertexHovered = vertex;
                     this.onVertexHovered.notify({ data: vertex.data });
                 }
@@ -458,6 +459,7 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
         {
             if(!this.edgeHovered && !this.selectedVertex)
             {
+                this.hoverNothing();
                 this.edgeHovered = edge;
                 this.onEdgeHovered.notify({ from: edge.from, to: edge.to });
             }
@@ -468,11 +470,10 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
             if(this.vertexHovered)
             {
                 this.onVertexNotHovered.notify({ data: this.vertexHovered.data });
-                this.vertexHovered = null;
-                
+                this.vertexHovered = null;   
             }
             
-            if(this.edgeHovered)// && !this.currentlyTracking)
+            if(this.edgeHovered)
             {
                 this.onEdgeNotHovered.notify
                 ({ 
