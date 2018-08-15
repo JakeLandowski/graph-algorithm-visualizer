@@ -148,13 +148,19 @@ define(['ui-animations/anime'], function(Anime)
                     drawLine('#add-vertex','normal',250);
                     openTools = true;
 
-                } else if(key===17) {
-                    drawLine('#add-vertex','reverse',250);
-                    setTimeout(function()
-                    {
+                }
+            };
+
+            window.onkeyup = function(e) {
+                let key = e.keyCode ? e.keyCode : e.which;
+                let toolButtons = document.querySelector("#toolbuttons");
+
+                if (key === 17 && openTools === true) {
+                    drawLine('#add-vertex', 'reverse', 250);
+                    setTimeout(function () {
                         toolButtons.style.display = 'none';
                         openTools = false;
-                    }, 250);
+                    }, 0);
                 }
             };
 
