@@ -43,8 +43,8 @@ define(function()
         {
             for(const neighbor in this.fromNeighbors)
             {
-                if(Vertex.adjList.edgeExists(this.data, neighbor))
-                    action(Vertex.adjList.getEdge(this.data, neighbor));
+                if(Vertex.adjList.edgeExists(neighbor, this.data))
+                    action(Vertex.adjList.getEdge(neighbor, this.data));
             }
         },
 

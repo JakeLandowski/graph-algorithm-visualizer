@@ -18,13 +18,13 @@ function(GraphModel, GraphView, Util)
         
         this.config = 
         {
-            backgroundColor:   config.backgroundColor   || '#262626',
-            undirected:        config.undirected        || true, // NEEDS LOGIC WORK
-            weighted:          config.weighted          || true,
-            vertexSize:        config.vertexSize        || 25,
-            vertexOutlineSize: config.vertexOutlineSize || 3,
-            edgeWidth:         config.edgeWidth         || 5,
-            edgeBoxSize:       config.edgeBoxSize       || 50
+            backgroundColor:   config.backgroundColor   !== undefined ? config.backgroundColor   : '#262626',
+            undirected:        config.undirected        !== undefined ? config.undirected        : true,
+            weighted:          config.weighted          !== undefined ? config.weighted          : true,
+            vertexSize:        config.vertexSize        !== undefined ? config.vertexSize        : 25,
+            vertexOutlineSize: config.vertexOutlineSize !== undefined ? config.vertexOutlineSize : 3,
+            edgeWidth:         config.edgeWidth         !== undefined ? config.edgeWidth         : 5,
+            edgeBoxSize:       config.edgeBoxSize       !== undefined ? config.edgeBoxSize       : 50
         };
 
         this.model = new GraphModel(container.clientWidth, container.clientHeight, this.config);
@@ -39,7 +39,8 @@ function(GraphModel, GraphView, Util)
                         'H', 'G', 'F', 'E', 'D', 'C', 
                         'B', 'A'];
         
-        this.mouseEventsLogged = [];
+        this.mouseEventsLogged  = [];
+        this.hoverThrottleDelay = 30;
         this.initAlwaysOnFeatures();
         this.createMode();
     };
@@ -260,7 +261,7 @@ function(GraphModel, GraphView, Util)
                     else     this.model.hoverNothing();
                 }
 
-            }.bind(this), 50));
+            }.bind(this), this.hoverThrottleDelay));
         },
 
         trackEdgeToCursor(x, y)
