@@ -144,6 +144,15 @@ define(['ui-animations/anime'], function(Anime)
                     toolButtons.style.left = xpos - 150;
                     toolButtons.style.top = ypos - 150;
 
+                    let rotateToolMenu = Anime({
+                        targets: '#toolbuttons',
+                        rotate: '1turn',
+                        loop: false,
+                        duration: 250,
+                        direction: 'reverse',
+                        easing: 'linear'
+                    });
+
                     toolButtons.style.display = 'block';
                     drawLine('#add-vertex','normal',250);
                     openTools = true;
@@ -216,6 +225,8 @@ define(['ui-animations/anime'], function(Anime)
                 direction: 'reverse',
                 easing: 'linear'
             });
+
+
         }
     };
 });
