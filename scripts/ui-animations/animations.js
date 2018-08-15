@@ -155,7 +155,6 @@ define(['ui-animations/anime'], function(Anime)
                         toolButtons.style.display = 'none';
                         openTools = false;
                     }, 250);
-
                 }
             };
 
