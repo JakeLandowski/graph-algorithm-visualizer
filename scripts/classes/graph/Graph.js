@@ -65,7 +65,6 @@ function(GraphModel, GraphView, Util)
                 } 
 
             }.bind(this));
-
         },
 
         vertexMode()
@@ -245,7 +244,6 @@ function(GraphModel, GraphView, Util)
 
         enableHover()
         {
-            this.mouseEventsLogged.push('hoverEntity');
             this.view.onCanvasMouseMove.attach('hoverEntity', Util.throttle(function(_, params)
             {
                 const vertex = this.model.vertexAt(params.x, params.y);
