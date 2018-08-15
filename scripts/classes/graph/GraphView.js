@@ -39,7 +39,7 @@ define(['classes/engine/RenderingEngine',
 
         this.mouseMoved = false;
         this.mouseDown  = false;
-        this.mouseJustPutDownDelay = 100;
+        this.mouseJustPutDownDelay = 150;
 
         this.initHandlers();
         this.appendTo(container);

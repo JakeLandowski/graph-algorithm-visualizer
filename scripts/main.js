@@ -15,7 +15,10 @@ function(Tests, Graph, Animations)
     Tests.run();
     Animations.start();
 
-    let graph = newGraph(); 
+    let graph = newGraph
+    ({
+        undirected: false
+    }); 
 
     const createNewBtn  = document.getElementsByClassName('creategraph');
 

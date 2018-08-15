@@ -44,7 +44,7 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
         this.onEdgeNotHovered       = new Event(this);
         this.onEdgeEditStarted      = new Event(this);
         this.onEdgeWeightEditted    = new Event(this);
-        this.onEdgeEditingFinished = new Event(this);
+        this.onEdgeEditingFinished  = new Event(this);
  
         this.userCommands = new CommandLog();
         this.indirectEdgeRemoveCommands = new CommandLog();
@@ -149,8 +149,6 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
             const x             = args.x;
             const y             = args.y;
             const numEdges      = args.numEdges;
-            // const toNeighbors   = args.toNeighbors;
-            // const fromNeighbors = args.fromNeighbors;
 
             if(!this.adjList.vertexExists(data)) // prevent duplicates 
             {
@@ -166,19 +164,6 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
  
                 for(let i = 0; i < args.numEdges; i++)
                     this.undo(this.indirectEdgeRemoveCommands);
-
-                // For Undo
-                // toNeighbors.forEach(function(neighbor)
-                // {
-                //     this.addEdge({ from: data, to: neighbor });
-
-                // }.bind(this));
-                
-                // fromNeighbors.forEach(function(neighbor)
-                // {
-                //     this.addEdge({ from: neighbor, to: data });
-
-                // }.bind(this));
             }
         },
 
@@ -227,11 +212,6 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
                     },
                     undo: 'addEdge'
                 });
-                // this.removeEdge
-                // ({
-                //     from: edge.from,
-                //     to:   edge.to
-                // });
 
             }.bind(this));
 
