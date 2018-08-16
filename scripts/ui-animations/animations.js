@@ -138,23 +138,40 @@ define(['ui-animations/anime'], function(Anime)
             window.onkeydown = function(e) {
                 let key = e.keyCode ? e.keyCode : e.which;
                 let toolButtons = document.querySelector("#toolbuttons");
+                let toolText = document.querySelectorAll(".toolText");
 
                 if (key === 17 && openTools === false) {
                     toolButtons.style.scale = .5;
                     toolButtons.style.left = xpos - 150;
                     toolButtons.style.top = ypos - 150;
 
-                    let rotateToolMenu = Anime({
+
+
+                    toolButtons.style.display = 'block';
+                    toolText.forEach(function(text) {
+                        text.style.display = 'none';
+                    });
+
+                    let rotateMenu = Anime({
                         targets: '#toolbuttons',
-                        rotate: '1turn',
-                        loop: false,
+                        rotate: '90',
                         duration: 250,
                         direction: 'reverse',
                         easing: 'linear'
                     });
 
-                    toolButtons.style.display = 'block';
-                    drawLine('#add-vertex','normal',250);
+                    expandTools("#createModeButton",0,-95);
+                    expandTools("#deleteModeButton",105,-20);
+                    expandTools("#extraModeButton",-105,-20);
+                    expandTools("#undoModeButton",-50,90);
+                    expandTools("#redoModeButton",50,90);
+
+                    setTimeout(function () {
+                        toolText.forEach(function(text) {
+                            text.style.display = 'block';
+                        });
+                    }, 250);
+
                     openTools = true;
 
                 }
@@ -163,13 +180,30 @@ define(['ui-animations/anime'], function(Anime)
             window.onkeyup = function(e) {
                 let key = e.keyCode ? e.keyCode : e.which;
                 let toolButtons = document.querySelector("#toolbuttons");
+                let toolText = document.querySelectorAll(".toolText");
 
                 if (key === 17 && openTools === true) {
-                    drawLine('#add-vertex', 'reverse', 250);
+                    toolText.forEach(function (text) {
+                        text.style.display = 'none';
+                    });
+
+                    let rotateMenu = Anime({
+                        targets: '#toolbuttons',
+                        rotate: '-90',
+                        duration: 250,
+                        direction: 'reverse',
+                        easing: 'linear'
+                    });
+
+                    expandTools("#createModeButton",0,0);
+                    expandTools("#deleteModeButton",0,0);
+                    expandTools("#extraModeButton",0,0);
+                    expandTools("#undoModeButton",0,0);
+                    expandTools("#redoModeButton",0,0);
                     setTimeout(function () {
                         toolButtons.style.display = 'none';
                         openTools = false;
-                    }, 0);
+                    }, 250);
                 }
             };
 
@@ -206,6 +240,16 @@ define(['ui-animations/anime'], function(Anime)
                     scale: scale,
                     loop: false,
                     easing: 'easeInOutQuart'
+                });
+            }
+
+            function expandTools(target, moveX, moveY) {
+                let expandTool = Anime({
+                    targets: target,
+                    translateX: moveX,
+                    translateY: moveY,
+                    easing: 'easeInOutQuart',
+                    duration: 250
                 });
             }
 
