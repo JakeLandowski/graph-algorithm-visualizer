@@ -24,7 +24,8 @@ function(GraphModel, GraphView, Util)
             vertexSize:        config.vertexSize        !== undefined ? config.vertexSize        : 25,
             vertexOutlineSize: config.vertexOutlineSize !== undefined ? config.vertexOutlineSize : 3,
             edgeWidth:         config.edgeWidth         !== undefined ? config.edgeWidth         : 5,
-            edgeBoxSize:       config.edgeBoxSize       !== undefined ? config.edgeBoxSize       : 50
+            edgeBoxSize:       config.edgeBoxSize       !== undefined ? config.edgeBoxSize       : 50,
+            edgeCurveOffset:   config.edgeCurveOffset   !== undefined ? config.edgeCurveOffset   : 100
         };
 
         this.model = new GraphModel(container.clientWidth, container.clientHeight, this.config);
@@ -93,12 +94,12 @@ function(GraphModel, GraphView, Util)
                 if(vertex)
                 {
                     if(selected)
-                    {
+                    {console.log();
                         // If not the same vertex
                         // and edge doesnt exist
                         // create edge
                         if(selected.data !== vertex.data && 
-                           !this.model.adjList.edgeExists(vertex.data, selected.data))
+                           !this.model.adjList.edgeExists(selected.data, vertex.data))
                         {
                             this.model.dispatch(this.model.userCommands,
                             {

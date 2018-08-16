@@ -141,7 +141,6 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
         addVertex(args={})
         {
             this.assertArgs(args, ['symbol', 'x', 'y', 'numEdges', 
-                                //    'toNeighbors', 'fromNeighbors', 
                                    'returnSymbol', 'getSymbol'], 
                                    'Missing arguments for addVertex command');
 
@@ -189,8 +188,7 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
          */
         removeVertex(args={})
         {
-            this.assertArgs(args, ['symbol', 'x', 'y', 'numEdges', 
-                                //    'toNeighbors', 'fromNeighbors', 
+            this.assertArgs(args, ['symbol', 'x', 'y', 'numEdges',
                                    'returnSymbol', 'getSymbol'], 
                                    'Missing arguments for removeVertex command');
 
@@ -261,7 +259,7 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
                     to:        to, 
                     fromPoint: { x: edge.fromVertex.x, y: edge.fromVertex.y },
                     toPoint:   { x: edge.toVertex.x,   y: edge.toVertex.y   },
-                    center:    { x: edge.x,            y: edge.y            } ,
+                    center:    { x: edge.x,            y: edge.y            },
                     weight:    weight   
                 });
             }

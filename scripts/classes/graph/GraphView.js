@@ -200,15 +200,26 @@ define(['classes/engine/RenderingEngine',
                 grd.addColorStop(.7, "transparent");
                 grd.addColorStop(1, "#262626");
 
-                this.edgeMap[ [params.from, params.to] ] =  
+                // Set other existing edge to curve
+                const otherEdge = this.edgeMap[ [params.to, params.from] ];
+                if(otherEdge) 
+                {
+                    otherEdge.line.styles.curveDirection = 90;
+                    otherEdge.line.changed = true;
+                }
+                console.log(otherEdge);
+                    
+                const edge =  
                 {
                     line: this.engine.createLine(params.fromPoint.x, params.fromPoint.y, 
                           params.toPoint.x, params.toPoint.y, this.EDGE_LAYER,
                           {
-                              strokeStyle: 'rgb(255, 154, 0)',
-                              lineWidth:   this.config.edgeWidth,
-                              shadowBlur:  16,
-                              shadowColor: '#ff9a00'
+                              curveDirection: otherEdge ? -90 : 0, // the angle, 0 = none
+                              curveOffset:    this.config.edgeCurveOffset,
+                              strokeStyle:    'rgb(255, 154, 0)',
+                              lineWidth:      this.config.edgeWidth,
+                              shadowBlur:     16,
+                              shadowColor:    '#ff9a00'
                           }),
 
                     box: this.engine.createRectangle(params.center.x, params.center.y, 
@@ -229,11 +240,13 @@ define(['classes/engine/RenderingEngine',
                           })
                 };
 
+                this.edgeMap[ [params.from, params.to] ] = edge;
+
 // Example of arrow creation
 const points = Util.calcArrowPoints
 (
-    params.fromPoint.x,
-    params.fromPoint.y,
+    edge.line.curveOffsetX,
+    edge.line.curveOffsetY,
     params.toPoint.x,
     params.toPoint.y,
     30, // angle,

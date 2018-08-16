@@ -77,9 +77,7 @@ define(function()
 
         calcArrowPoints(x1, y1, x2, y2, arrowAngle=30, length=15, offset=0, end=true)
         {
-            const dx = x2 - x1;
-            const dy = y2 - y1;
-            let theta = this.toDegrees(Math.atan2(-dy, -dx));
+            const theta = this.toDegrees(this.calcAngle(x1, y1, x2, y2));
 
             const centerX = (end ? x2 : x1)  + (offset * Math.cos(this.toRadians(theta)));
             const centerY = (end ? y2 : y1) + (offset * Math.sin(this.toRadians(theta)))
@@ -106,6 +104,11 @@ define(function()
             };
 
             return points;
+        },
+
+        calcAngle(x1, y1, x2, y2)
+        {
+            return Math.atan2(-(y2 - y1), -(x2 - x1));
         },
 
         toDegrees(angle)   
