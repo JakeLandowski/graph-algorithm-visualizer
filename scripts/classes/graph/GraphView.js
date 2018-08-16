@@ -229,30 +229,38 @@ define(['classes/engine/RenderingEngine',
                           })
                 };
 
-                const angle = Util.calcArrowPoints
-                (
-                    params.fromPoint.x,
-                    params.fromPoint.y,
-                    params.toPoint.x,
-                    params.toPoint.y,
-                    true
-                );
+// Example of arrow creation
+const points = Util.calcArrowPoints
+(
+    params.fromPoint.x,
+    params.fromPoint.y,
+    params.toPoint.x,
+    params.toPoint.y,
+    30, // angle,
+    30, //length
+    this.config.vertexSize, // offset
+    true // end of line
+);
 
-                let x = params.toPoint.x + (this.config.vertexSize * Math.cos(Util.toRadians(angle)));
-                let y = params.toPoint.y + (this.config.vertexSize * Math.sin(Util.toRadians(angle)));
-                this.engine.createCircle(x, y, 5, this.VERTEX_LAYER, { fillStyle: '#fff' });
+this.engine.createLine(points.center.x, points.center.y, 
+points.left.x, points.left.y, this.EDGE_LAYER,
+{
+    strokeStyle: 'rgb(255, 154, 0)',
+    lineWidth:   this.config.edgeWidth,
+    shadowBlur:  16,
+    shadowColor: '#ff9a00'
+});
+
+this.engine.createLine(points.center.x, points.center.y, 
+points.right.x, points.right.y, this.EDGE_LAYER,
+{
+    strokeStyle: 'rgb(255, 154, 0)',
+    lineWidth:   this.config.edgeWidth,
+    shadowBlur:  16,
+    shadowColor: '#ff9a00'
+});
 
 
-                let firstX = x + (15 * Math.cos(Util.toRadians(angle + 30)));
-                let firstY = y + (15 * Math.cos(Util.toRadians(angle + 30)));
-
-
-
-                let secondX = x + (15 * Math.cos(Util.toRadians(angle - 30)));
-                let secondY = y + (15 * Math.cos(Util.toRadians(angle - 30)));
-                this.engine.createCircle(firstX, firstY, 5, this.VERTEX_LAYER, { fillStyle: '#fff' });
-                this.engine.createCircle(secondX, secondY, 5, this.VERTEX_LAYER, { fillStyle: '#fff' });
-            
             }.bind(this));
 
             // Edge Removed

@@ -75,19 +75,49 @@ define(function()
                 element.innerHTML += htmlString;
         },
 
-        calcArrowPoints(x1, y1, x2, y2, end=true)
+        calcArrowPoints(x1, y1, x2, y2, arrowAngle=30, length=15, offset=0, end=true)
         {
             const dx = x2 - x1;
             const dy = y2 - y1;
             let theta = this.toDegrees(Math.atan2(-dy, -dx));
-            if(theta < 0) theta += 360;
-            console.log(theta);
 
-            return theta;
+            const centerX = (end ? x2 : x1)  + (offset * Math.cos(this.toRadians(theta)));
+            const centerY = (end ? y2 : y1) + (offset * Math.sin(this.toRadians(theta)))
+
+            const points = 
+            {
+                center: 
+                {
+                     x: centerX,
+                     y: centerY
+                },
+
+                left: 
+                {
+                    x: centerX + (length * Math.cos(this.toRadians(theta - arrowAngle))),
+                    y: centerY + (length * Math.sin(this.toRadians(theta - arrowAngle)))
+                },
+
+                right:
+                {
+                    x: centerX + (length * Math.cos(this.toRadians(theta + arrowAngle))),
+                    y: centerY + (length * Math.sin(this.toRadians(theta + arrowAngle)))
+                }
+            };
+
+            return points;
         },
 
-        toDegrees(angle) { return angle * (180 / Math.PI); },
-        toRadians(angle) { return angle * (Math.PI / 180); }
+        toDegrees(angle)   
+        {
+            angle *= (180 / Math.PI); 
+            return angle < 0 ? angle + 360 : angle; 
+        },
+
+        toRadians(angle)   
+        { 
+            return angle * (Math.PI / 180); 
+        }
 
     }; // end module
 });
