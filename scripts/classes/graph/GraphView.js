@@ -207,14 +207,13 @@ define(['classes/engine/RenderingEngine',
                     otherEdge.line.styles.curveDirection = 90;
                     otherEdge.line.changed = true;
                 }
-                console.log(otherEdge);
                     
                 const edge =  
                 {
                     line: this.engine.createLine(params.fromPoint.x, params.fromPoint.y, 
                           params.toPoint.x, params.toPoint.y, this.EDGE_LAYER,
                           {
-                              curveDirection: otherEdge ? -90 : 0, // the angle, 0 = none
+                              curveDirection: otherEdge ? 90 : 0, // the angle, 0 = none
                               curveOffset:    this.config.edgeCurveOffset,
                               strokeStyle:    'rgb(255, 154, 0)',
                               lineWidth:      this.config.edgeWidth,
@@ -239,14 +238,16 @@ define(['classes/engine/RenderingEngine',
                               font:        '16px monospace'
                           })
                 };
-
                 this.edgeMap[ [params.from, params.to] ] = edge;
+
+                this.engine.createCircle(edge.line.curveCenterX,
+                    edge.line.curveCenterY, 5);
 
 // Example of arrow creation
 const points = Util.calcArrowPoints
 (
-    edge.line.curveOffsetX,
-    edge.line.curveOffsetY,
+    edge.line.curveCenterX,
+    edge.line.curveCenterY,
     params.toPoint.x,
     params.toPoint.y,
     30, // angle,
@@ -258,6 +259,8 @@ const points = Util.calcArrowPoints
 this.engine.createLine(points.center.x, points.center.y, 
 points.left.x, points.left.y, this.EDGE_LAYER,
 {
+    curveDirection: otherEdge ? -90 : 0,
+    curveOffset: 5,
     strokeStyle: 'rgb(255, 154, 0)',
     lineWidth:   this.config.edgeWidth,
     shadowBlur:  16,
@@ -267,6 +270,8 @@ points.left.x, points.left.y, this.EDGE_LAYER,
 this.engine.createLine(points.center.x, points.center.y, 
 points.right.x, points.right.y, this.EDGE_LAYER,
 {
+    curveDirection: otherEdge ? -90 : 0,
+    curveOffset: 5,
     strokeStyle: 'rgb(255, 154, 0)',
     lineWidth:   this.config.edgeWidth,
     shadowBlur:  16,
