@@ -7,7 +7,7 @@
  */
 
 'use strict';
-define(['ui-animations/anime'], function(Anime)
+define(['ui-animations/anime','utils/Util'], function(Anime,Util)
 {
     return {
         start()
@@ -20,6 +20,7 @@ define(['ui-animations/anime'], function(Anime)
             let delay = 0;
             let openTools = false;
             let showUI = true;
+
 
             menu.forEach(function (element) {
                 generateUI(element,200,200,50,delay);
@@ -135,19 +136,20 @@ define(['ui-animations/anime'], function(Anime)
 
             document.onmousemove = findDocumentCoords;
 
-            window.onkeydown = function(e) {
+
+            window.addEventListener('keydown', Util.throttle(function(e)
+            {
                 let key = e.keyCode ? e.keyCode : e.which;
                 let toolButtons = document.querySelector("#toolbuttons");
                 let toolText = document.querySelectorAll(".toolText");
 
-                if (key === 17 && openTools === false) {
+                if (key === 17 && !openTools) {
                     toolButtons.style.scale = .5;
                     toolButtons.style.left = xpos - 150;
                     toolButtons.style.top = ypos - 150;
 
-
-
                     toolButtons.style.display = 'block';
+
                     toolText.forEach(function(text) {
                         text.style.display = 'none';
                     });
@@ -155,10 +157,12 @@ define(['ui-animations/anime'], function(Anime)
                     let rotateMenu = Anime({
                         targets: '#toolbuttons',
                         rotate: '90',
-                        duration: 250,
-                        direction: 'reverse',
+                        duration: 0,
+                        direction: 'normal',
                         easing: 'linear'
                     });
+
+                    console.log("I HAVE TURNED 90 DEGREES MOTHER FUCKER");
 
                     expandTools("#createModeButton",0,-95);
                     expandTools("#deleteModeButton",105,-20);
@@ -173,16 +177,18 @@ define(['ui-animations/anime'], function(Anime)
                     }, 250);
 
                     openTools = true;
-
                 }
-            };
 
-            window.onkeyup = function(e) {
+            }, 250));
+
+
+            window.addEventListener('keydown', Util.throttle(function(e)
+            {
                 let key = e.keyCode ? e.keyCode : e.which;
                 let toolButtons = document.querySelector("#toolbuttons");
                 let toolText = document.querySelectorAll(".toolText");
 
-                if (key === 17 && openTools === true) {
+                if (key === 17 && openTools) {
                     toolText.forEach(function (text) {
                         text.style.display = 'none';
                     });
@@ -191,9 +197,11 @@ define(['ui-animations/anime'], function(Anime)
                         targets: '#toolbuttons',
                         rotate: '-90',
                         duration: 250,
-                        direction: 'reverse',
+                        direction: 'normal',
                         easing: 'linear'
                     });
+
+                    console.log("I have turned NEGATIVE 90 DEGREES MOTHERFUCKER!");
 
                     expandTools("#createModeButton",0,0);
                     expandTools("#deleteModeButton",0,0);
@@ -202,10 +210,11 @@ define(['ui-animations/anime'], function(Anime)
                     expandTools("#redoModeButton",0,0);
                     setTimeout(function () {
                         toolButtons.style.display = 'none';
-                        openTools = false;
                     }, 250);
+
+                    openTools = false;
                 }
-            };
+            }, 250));
 
             //ANIMATION FUNCTIONS
             function drawLine(target,direction,duration) {
