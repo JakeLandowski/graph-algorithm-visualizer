@@ -206,6 +206,20 @@ define(['classes/engine/RenderingEngine',
                 {
                     otherEdge.line.styles.curveDirection = 90;
                     otherEdge.line.changed = true;
+
+                    const points = Util.calcArrowPoints
+                    (
+                        otherEdge.line.curveCenterX,
+                        otherEdge.line.curveCenterY,
+                        params.toFrom.x,
+                        params.toFrom.y,
+                        30, // angle,
+                        30, // length
+                        this.config.vertexSize, // offset
+                        true // end of line
+                    );
+
+                    
                 }
                     
                 const edge =  
@@ -226,7 +240,7 @@ define(['classes/engine/RenderingEngine',
                          {
                              strokeStyle: 'transparent',
                              fillStyle:   grd,
-                             background: 'transparent'
+                             background:  'transparent'
                          }),
 
                     text: this.engine.createText(params.weight, params.center.x, 
@@ -240,44 +254,39 @@ define(['classes/engine/RenderingEngine',
                 };
                 this.edgeMap[ [params.from, params.to] ] = edge;
 
-                this.engine.createCircle(edge.line.curveCenterX,
-                    edge.line.curveCenterY, 5);
+                const points = Util.calcArrowPoints
+                (
+                    otherEdge ? edge.line.curveCenterX : params.fromPoint.x,
+                    otherEdge ? edge.line.curveCenterY : params.fromPoint.y,
+                    params.toPoint.x,
+                    params.toPoint.y,
+                    30, // angle,
+                    30, //length
+                    this.config.vertexSize, // offset
+                    true // end of line
+                );
 
-// Example of arrow creation
-const points = Util.calcArrowPoints
-(
-    edge.line.curveCenterX,
-    edge.line.curveCenterY,
-    params.toPoint.x,
-    params.toPoint.y,
-    30, // angle,
-    30, //length
-    this.config.vertexSize, // offset
-    true // end of line
-);
+                this.engine.createLine(points.center.x, points.center.y, 
+                points.left.x, points.left.y, this.EDGE_LAYER,
+                {
+                    curveDirection: otherEdge ? -90 : 0,
+                    curveOffset: 5,
+                    strokeStyle: 'rgb(255, 154, 0)',
+                    lineWidth:   this.config.edgeWidth,
+                    shadowBlur:  16,
+                    shadowColor: '#ff9a00'
+                });
 
-this.engine.createLine(points.center.x, points.center.y, 
-points.left.x, points.left.y, this.EDGE_LAYER,
-{
-    curveDirection: otherEdge ? -90 : 0,
-    curveOffset: 5,
-    strokeStyle: 'rgb(255, 154, 0)',
-    lineWidth:   this.config.edgeWidth,
-    shadowBlur:  16,
-    shadowColor: '#ff9a00'
-});
-
-this.engine.createLine(points.center.x, points.center.y, 
-points.right.x, points.right.y, this.EDGE_LAYER,
-{
-    curveDirection: otherEdge ? -90 : 0,
-    curveOffset: 5,
-    strokeStyle: 'rgb(255, 154, 0)',
-    lineWidth:   this.config.edgeWidth,
-    shadowBlur:  16,
-    shadowColor: '#ff9a00'
-});
-
+                this.engine.createLine(points.center.x, points.center.y, 
+                points.right.x, points.right.y, this.EDGE_LAYER,
+                {
+                    curveDirection: otherEdge ? -90 : 0,
+                    curveOffset: 5,
+                    strokeStyle: 'rgb(255, 154, 0)',
+                    lineWidth:   this.config.edgeWidth,
+                    shadowBlur:  16,
+                    shadowColor: '#ff9a00'
+                });
 
             }.bind(this));
 
@@ -418,6 +427,7 @@ points.right.x, points.right.y, this.EDGE_LAYER,
 
             window.addEventListener('keydown', function(event)
             {
+                // stops ALL keybinds on window
                 // event.preventDefault();
                 const key = event.keyCode;
 
