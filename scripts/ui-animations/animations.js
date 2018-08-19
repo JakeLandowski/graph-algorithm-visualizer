@@ -143,6 +143,7 @@ define(['ui-animations/anime','utils/Util'], function(Anime,Util)
                 let toolButtons = document.querySelector("#toolbuttons");
                 let toolText = document.querySelectorAll(".toolText");
 
+
                 if (key === 17 && !openTools) {
                     toolButtons.style.scale = .5;
                     toolButtons.style.left = xpos - 150;
@@ -156,9 +157,9 @@ define(['ui-animations/anime','utils/Util'], function(Anime,Util)
 
                     let rotateMenu = Anime({
                         targets: '#toolbuttons',
-                        rotate: '90',
-                        duration: 0,
-                        direction: 'normal',
+                        rotate: '-90',
+                        duration: 250,
+                        direction: 'reverse',
                         easing: 'linear'
                     });
 
@@ -176,13 +177,13 @@ define(['ui-animations/anime','utils/Util'], function(Anime,Util)
                         });
                     }, 250);
 
-                    openTools = true;
+
                 }
+                openTools = true;
+            }, 1000));
 
-            }, 250));
 
-
-            window.addEventListener('keydown', Util.throttle(function(e)
+            window.addEventListener('keyup', Util.throttle(function(e)
             {
                 let key = e.keyCode ? e.keyCode : e.which;
                 let toolButtons = document.querySelector("#toolbuttons");
@@ -195,8 +196,7 @@ define(['ui-animations/anime','utils/Util'], function(Anime,Util)
 
                     let rotateMenu = Anime({
                         targets: '#toolbuttons',
-                        rotate: '-90',
-                        duration: 250,
+                        rotate: '0',
                         direction: 'normal',
                         easing: 'linear'
                     });
@@ -211,10 +211,9 @@ define(['ui-animations/anime','utils/Util'], function(Anime,Util)
                     setTimeout(function () {
                         toolButtons.style.display = 'none';
                     }, 250);
-
-                    openTools = false;
                 }
-            }, 250));
+                openTools = false;
+            }, 1000));
 
             //ANIMATION FUNCTIONS
             function drawLine(target,direction,duration) {
