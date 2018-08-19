@@ -145,6 +145,7 @@ define(['ui-animations/anime','utils/Util'], function(Anime,Util)
 
 
                 if (key === 17 && !openTools) {
+                    openTools = true;
                     toolButtons.style.scale = .5;
                     toolButtons.style.left = xpos - 150;
                     toolButtons.style.top = ypos - 150;
@@ -179,8 +180,8 @@ define(['ui-animations/anime','utils/Util'], function(Anime,Util)
 
 
                 }
-                openTools = true;
-            }, 1000));
+
+            }, 300));
 
 
             window.addEventListener('keyup', Util.throttle(function(e)
@@ -190,6 +191,7 @@ define(['ui-animations/anime','utils/Util'], function(Anime,Util)
                 let toolText = document.querySelectorAll(".toolText");
 
                 if (key === 17 && openTools) {
+                    openTools = false;
                     toolText.forEach(function (text) {
                         text.style.display = 'none';
                     });
@@ -212,8 +214,8 @@ define(['ui-animations/anime','utils/Util'], function(Anime,Util)
                         toolButtons.style.display = 'none';
                     }, 250);
                 }
-                openTools = false;
-            }, 1000));
+
+            }, 300));
 
             //ANIMATION FUNCTIONS
             function drawLine(target,direction,duration) {
