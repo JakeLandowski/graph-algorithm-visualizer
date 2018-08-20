@@ -75,37 +75,6 @@ define(function()
                 element.innerHTML += htmlString;
         },
 
-        calcArrowPoints(x1, y1, x2, y2, arrowAngle=30, length=15, offset=0, end=true)
-        {
-            const theta = this.toDegrees(this.calcAngle(x1, y1, x2, y2));
-
-            const centerX = (end ? x2 : x1)  + (offset * Math.cos(this.toRadians(theta)));
-            const centerY = (end ? y2 : y1) + (offset * Math.sin(this.toRadians(theta)))
-
-            const points = 
-            {
-                center: 
-                {
-                     x: centerX,
-                     y: centerY
-                },
-
-                left: 
-                {
-                    x: centerX + (length * Math.cos(this.toRadians(theta - arrowAngle))),
-                    y: centerY + (length * Math.sin(this.toRadians(theta - arrowAngle)))
-                },
-
-                right:
-                {
-                    x: centerX + (length * Math.cos(this.toRadians(theta + arrowAngle))),
-                    y: centerY + (length * Math.sin(this.toRadians(theta + arrowAngle)))
-                }
-            };
-
-            return points;
-        },
-
         calcAngle(x1, y1, x2, y2)
         {
             return Math.atan2(-(y2 - y1), -(x2 - x1));

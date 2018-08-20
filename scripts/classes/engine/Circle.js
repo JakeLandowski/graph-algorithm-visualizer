@@ -9,9 +9,9 @@
 'use strict';
 define(['classes/engine/Entity'], function(Entity)
 {
-    const Circle = function(x, y, radius, styles={}, context, engine)
+    const Circle = function(x, y, radius, styles={}, context, engine, level)
     {
-        Entity.call(this, context, engine); // super
+        Entity.call(this, context, engine, level); // super
         this.id = 'circ' + Circle.nextId++;
         this.x  = x;
         this.y  = y;

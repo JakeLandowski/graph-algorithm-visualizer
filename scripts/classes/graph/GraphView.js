@@ -206,20 +206,13 @@ define(['classes/engine/RenderingEngine',
                 {
                     otherEdge.line.styles.curveDirection = 90;
                     otherEdge.line.changed = true;
+                    otherEdge.line.calculateCurve();
 
-                    const points = Util.calcArrowPoints
-                    (
-                        otherEdge.line.curveCenterX,
-                        otherEdge.line.curveCenterY,
-                        params.toFrom.x,
-                        params.toFrom.y,
-                        30, // angle,
-                        30, // length
-                        this.config.vertexSize, // offset
-                        true // end of line
-                    );
-
-                    
+                    otherEdge.arrow.calcArrowPoints(otherEdge.line.curveCenterX, otherEdge.line.curveCenterY, 
+                                                    params.fromPoint.x, params.fromPoint.y);
+                    otherEdge.arrow.styles.leftCurveDirection  = -90;
+                    otherEdge.arrow.styles.rightCurveDirection = -90;
+                    otherEdge.arrow.calculateCurve();
                 }
                     
                 const edge =  
@@ -250,43 +243,28 @@ define(['classes/engine/RenderingEngine',
                               shadowBlur:  16,
                               shadowColor: '#ff9a00',
                               font:        '16px monospace'
-                          })
+                          }),
                 };
+                
+                edge.arrow = this.engine.createArrow(otherEdge ? edge.line.curveCenterX : params.fromPoint.x, 
+                otherEdge ? edge.line.curveCenterY : params.fromPoint.y, 
+                params.toPoint.x, params.toPoint.y, this.EDGE_LAYER,
+                {
+                    leftCurveDirection:  otherEdge ? -90 : 0, // the angle, 0 = none
+                    rightCurveDirection: otherEdge ? -90 : 0, // the angle, 0 = none
+                    leftCurveOffset:     5,
+                    rightCurveOffset:    5,
+                    length:              30,
+                    angle:               30,
+                    endOfLine:           true,
+                    offset:              this.config.vertexSize,
+                    strokeStyle:         'rgb(255, 154, 0)',
+                    lineWidth:           this.config.edgeWidth,
+                    shadowBlur:          16,
+                    shadowColor:         '#ff9a00'
+                }),
+
                 this.edgeMap[ [params.from, params.to] ] = edge;
-
-                const points = Util.calcArrowPoints
-                (
-                    otherEdge ? edge.line.curveCenterX : params.fromPoint.x,
-                    otherEdge ? edge.line.curveCenterY : params.fromPoint.y,
-                    params.toPoint.x,
-                    params.toPoint.y,
-                    30, // angle,
-                    30, //length
-                    this.config.vertexSize, // offset
-                    true // end of line
-                );
-
-                this.engine.createLine(points.center.x, points.center.y, 
-                points.left.x, points.left.y, this.EDGE_LAYER,
-                {
-                    curveDirection: otherEdge ? -90 : 0,
-                    curveOffset: 5,
-                    strokeStyle: 'rgb(255, 154, 0)',
-                    lineWidth:   this.config.edgeWidth,
-                    shadowBlur:  16,
-                    shadowColor: '#ff9a00'
-                });
-
-                this.engine.createLine(points.center.x, points.center.y, 
-                points.right.x, points.right.y, this.EDGE_LAYER,
-                {
-                    curveDirection: otherEdge ? -90 : 0,
-                    curveOffset: 5,
-                    strokeStyle: 'rgb(255, 154, 0)',
-                    lineWidth:   this.config.edgeWidth,
-                    shadowBlur:  16,
-                    shadowColor: '#ff9a00'
-                });
 
             }.bind(this));
 
@@ -297,6 +275,7 @@ define(['classes/engine/RenderingEngine',
                 edge.line.delete();
                 edge.box.delete();
                 edge.text.delete();
+                edge.arrow.delete();
                 delete this.edgeMap[ [params.from, params.to] ];
 
             }.bind(this));

@@ -9,9 +9,9 @@
 'use strict';
 define(['classes/engine/Entity'], function(Entity)
 {
-    const Rectangle = function(x, y, width, height, styles={}, context, engine)
+    const Rectangle = function(x, y, width, height, styles={}, context, engine, level)
     {
-        Entity.call(this, context, engine); // super
+        Entity.call(this, context, engine, level); // super
         this.id = 'rect' + Rectangle.nextId++;
         this.x  = x;
         this.y  = y;

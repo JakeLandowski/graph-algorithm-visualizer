@@ -9,9 +9,9 @@
 'use strict';
 define(['classes/engine/Entity', 'utils/Util'], function(Entity, Util)
 {
-    const Line = function(x1, y1, x2, y2, styles={}, context, engine)
+    const Line = function(x1, y1, x2, y2, styles={}, context, engine, level)
     {
-        Entity.call(this, context, engine); // super
+        Entity.call(this, context, engine, level); // super
         this.id = 'line' + Line.nextId++;
         this.x1 = x1;
         this.y1 = y1;

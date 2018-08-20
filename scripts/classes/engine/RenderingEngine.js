@@ -10,8 +10,9 @@
 define(['classes/engine/Circle', 
         'classes/engine/Rectangle', 
         'classes/engine/Line',
-        'classes/engine/Text'], 
-function(Circle, Rectangle, Line, Text)
+        'classes/engine/Text',
+        'classes/engine/Arrow'], 
+function(Circle, Rectangle, Line, Text, Arrow)
 {
     const RenderingEngine = function(config={}) 
     {
@@ -137,6 +138,13 @@ function(Circle, Rectangle, Line, Text)
             let text = new Text(content, x, y, styles, this.context, this, level);
             this.getLayer(level)[text.id] = text;
             return text;
+        },
+
+        createArrow(x1, y1, x2, y2, level=0, styles={})
+        {
+            let arrow = new Arrow(x1, y1, x2, y2, styles, this.context, this, level);
+            this.getLayer(level)[arrow.id] = arrow;
+            return arrow;
         },
 
         deleteEntity(id)
