@@ -278,6 +278,18 @@ define(['classes/engine/RenderingEngine',
                 edge.arrow.delete();
                 delete this.edgeMap[ [params.from, params.to] ];
 
+                const otherEdge = this.edgeMap[ [params.to, params.from] ];
+                if(otherEdge)
+                {
+                    otherEdge.line.styles.curveDirection = 0;
+                    otherEdge.line.changed = true;
+                    otherEdge.arrow.styles.leftCurveDirection = 0;
+                    otherEdge.arrow.styles.rightCurveDirection = 0;
+                    otherEdge.arrow.changed = true;
+                    otherEdge.arrow.calcArrowPoints(params.toPoint.x, params.toPoint.y,
+                                                    params.fromPoint.x, params.fromPoint.y);
+                }
+
             }.bind(this));
 
             // Edge Moved
@@ -289,6 +301,13 @@ define(['classes/engine/RenderingEngine',
                 edge.line.setEnd(params.toPoint.x, params.toPoint.y);
                 edge.box.center(params.center.x, params.center.y);
                 edge.text.center(params.center.x, params.center.y);
+
+                const otherEdge = this.edgeMap[ [params.to, params.from] ];
+
+                const fromX = otherEdge ? edge.line.curveCenterX : params.fromPoint.x;
+                const fromY = otherEdge ? edge.line.curveCenterY : params.fromPoint.y;
+
+                edge.arrow.calcArrowPoints(fromX, fromY, params.toPoint.x, params.toPoint.y);
 
             }.bind(this));
             
