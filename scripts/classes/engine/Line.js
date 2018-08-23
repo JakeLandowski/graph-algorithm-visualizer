@@ -70,8 +70,8 @@ define(['classes/engine/Entity', 'utils/Util'], function(Entity, Util)
                 const centerY = (this.y2 + this.y1) / 2;
                 this.curveOffsetX = centerX + (this.styles.curveOffset * Math.cos(Util.toRadians(theta + this.styles.curveDirection)));
                 this.curveOffsetY = centerY + (this.styles.curveOffset * Math.sin(Util.toRadians(theta + this.styles.curveDirection)));
-                this.curveCenterX = centerX + (this.styles.curveOffset*0.75 * Math.cos(Util.toRadians(theta + this.styles.curveDirection)));
-                this.curveCenterY = centerY + (this.styles.curveOffset*0.75 * Math.sin(Util.toRadians(theta + this.styles.curveDirection)));   
+                this.curveCenterX = centerX + (this.styles.curveOffset*0.5 * Math.cos(Util.toRadians(theta + this.styles.curveDirection)));
+                this.curveCenterY = centerY + (this.styles.curveOffset*0.5 * Math.sin(Util.toRadians(theta + this.styles.curveDirection)));   
             }
         },
 

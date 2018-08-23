@@ -208,6 +208,9 @@ define(['classes/engine/RenderingEngine',
                     otherEdge.line.changed = true;
                     otherEdge.line.calculateCurve();
 
+                    otherEdge.box.center(otherEdge.line.curveCenterX, otherEdge.line.curveCenterY);
+                    otherEdge.text.center(otherEdge.line.curveCenterX, otherEdge.line.curveCenterY);
+
                     otherEdge.arrow.calcArrowPoints(otherEdge.line.curveCenterX, otherEdge.line.curveCenterY, 
                                                     params.fromPoint.x, params.fromPoint.y);
                     otherEdge.arrow.styles.leftCurveDirection  = -90;
@@ -227,24 +230,26 @@ define(['classes/engine/RenderingEngine',
                               shadowBlur:     16,
                               shadowColor:    this.config.edgeLineColor
                           }),
-
-                    box: this.engine.createRectangle(params.center.x, params.center.y, 
-                         this.config.edgeBoxSize, this.config.edgeBoxSize, this.EDGE_LAYER, 
-                         {
-                             strokeStyle: this.config.edgeBoxOutlineColor,
-                             fillStyle:   grd,
-                             background:  this.config.edgeBoxBackgroundColor
-                         }),
-
-                    text: this.engine.createText(params.weight, params.center.x, 
-                          params.center.y, this.EDGE_LAYER, 
-                          {
-                              fillStyle:   this.config.edgeTextColor,
-                              shadowBlur:  16,
-                              shadowColor: this.config.edgeTextColor,
-                              font:        '16px monospace'
-                          }),
                 };
+
+                edge.box = this.engine.createRectangle(otherEdge ? edge.line.curveCenterX : params.center.x,
+                otherEdge ? edge.line.curveCenterY : params.center.y, 
+                this.config.edgeBoxSize, this.config.edgeBoxSize, this.EDGE_LAYER, 
+                {
+                    strokeStyle: this.config.edgeBoxOutlineColor,
+                    fillStyle:   grd,
+                    background:  this.config.edgeBoxBackgroundColor
+                }),
+
+                edge.text = this.engine.createText(params.weight, 
+                otherEdge ? edge.line.curveCenterX : params.center.x, 
+                otherEdge ? edge.line.curveCenterY : params.center.y, this.EDGE_LAYER, 
+                {
+                    fillStyle:   this.config.edgeTextColor,
+                    shadowBlur:  16,
+                    shadowColor: this.config.edgeTextColor,
+                    font:        '16px monospace'
+                }),
                 
                 edge.arrow = this.engine.createArrow(otherEdge ? edge.line.curveCenterX : params.fromPoint.x, 
                 otherEdge ? edge.line.curveCenterY : params.fromPoint.y, 
@@ -296,13 +301,14 @@ define(['classes/engine/RenderingEngine',
             this.model.onEdgeMoved.attach('moveEdge', function(_, params)
             {
                 const edge = this.edgeMap[ [params.from, params.to] ];
+                const otherEdge = this.edgeMap[ [params.to, params.from] ];
 
                 edge.line.setStart(params.fromPoint.x, params.fromPoint.y);
                 edge.line.setEnd(params.toPoint.x,     params.toPoint.y);
-                edge.box.center(params.center.x,       params.center.y);
-                edge.text.center(params.center.x,      params.center.y);
-
-                const otherEdge = this.edgeMap[ [params.to, params.from] ];
+                edge.box.center(otherEdge ? edge.line.curveCenterX : params.center.x,
+                                otherEdge ? edge.line.curveCenterY : params.center.y);
+                edge.text.center(otherEdge ? edge.line.curveCenterX : params.center.x,
+                                 otherEdge ? edge.line.curveCenterY : params.center.y);
 
                 const fromX = otherEdge ? edge.line.curveCenterX : params.fromPoint.x;
                 const fromY = otherEdge ? edge.line.curveCenterY : params.fromPoint.y;
