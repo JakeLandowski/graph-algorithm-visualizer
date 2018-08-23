@@ -59,8 +59,8 @@ define(['classes/engine/RenderingEngine',
             {
                 const vertex = this.engine.createCircle(params.x, params.y, this.config.vertexSize, this.VERTEX_LAYER, 
                 {
-                    fillStyle:   '#262626',
-                    strokeStyle: 'rgb(255, 154, 0)',
+                    fillStyle:   this.config.backgroundColor,
+                    strokeStyle: this.config.strokeColor,
                     lineWidth:   this.config.vertexOutlineSize,
                     shadowBlur:  16,
                     shadowColor: '#ff9a00'
@@ -68,10 +68,10 @@ define(['classes/engine/RenderingEngine',
 
                 const text = this.engine.createText(params.data, params.x, params.y, this.VERTEX_LAYER, 
                 {
-                    fillStyle: 'rgb(255, 154, 0)',
-                    font:      '24px monospace',
+                    fillStyle:   this.config.vertexTextColor,
+                    font:        '24px monospace',
                     shadowBlur:  16,
-                    shadowColor: '#ff9a00'
+                    shadowColor: this.config.vertexTextColor
                 });
 
                 this.vertexMap[params.data] = 
@@ -112,8 +112,8 @@ define(['classes/engine/RenderingEngine',
             {
                 if(this.vertexMap[params.data])
                 {
-                    this.vertexMap[params.data].circle.styles.strokeStyle = '#fffc55';
-                    this.vertexMap[params.data].circle.styles.shadowColor = '#fffc55';
+                    this.vertexMap[params.data].circle.styles.strokeStyle = this.config.vertexSelectColor;
+                    this.vertexMap[params.data].circle.styles.shadowColor = this.config.vertexSelectColor;
                 }
             
             }.bind(this));
@@ -123,8 +123,8 @@ define(['classes/engine/RenderingEngine',
             {
                 if(this.vertexMap[params.data])
                 {
-                    this.vertexMap[params.data].circle.styles.strokeStyle = 'rgb(255, 154, 0)';
-                    this.vertexMap[params.data].circle.styles.shadowColor = '#ff9a00';
+                    this.vertexMap[params.data].circle.styles.strokeStyle = this.config.vertexOutlineColor;
+                    this.vertexMap[params.data].circle.styles.shadowColor = this.config.vertexOutlineColor;
                 }                 
 
             }.bind(this));
@@ -136,8 +136,8 @@ define(['classes/engine/RenderingEngine',
                 if(vertex)
                 {
                     document.body.style.cursor = 'pointer';
-                    vertex.circle.styles.strokeStyle = 'rgb(255, 255, 255)';
-                    vertex.circle.styles.shadowColor = '#ffffff';
+                    vertex.circle.styles.strokeStyle = this.config.vertexHoverColor;
+                    vertex.circle.styles.shadowColor = this.config.vertexHoverColor;
                 }                 
 
             }.bind(this));
@@ -149,8 +149,8 @@ define(['classes/engine/RenderingEngine',
                 if(vertex)
                 {
                     document.body.style.cursor = 'auto';
-                    vertex.circle.styles.strokeStyle = 'rgb(255, 154, 0)';
-                    vertex.circle.styles.shadowColor = '#ff9a00';
+                    vertex.circle.styles.strokeStyle = this.config.vertexOutlineColor;
+                    vertex.circle.styles.shadowColor = this.config.vertexOutlineColor;
                 }                 
 
             }.bind(this));
@@ -165,10 +165,10 @@ define(['classes/engine/RenderingEngine',
 
                 this.trackingEdge = this.engine.createLine(start.x, start.y, end.x, end.y, this.TRACKING_LAYER, 
                 {
-                    strokeStyle: 'rgba(255, 255, 100, 0.5)',
+                    strokeStyle: this.config.trackingEdgeColor,
                     lineWidth:   this.config.edgeWidth,
                     shadowBlur:  20,
-                    shadowColor: 'rgba(255, 255, 150, 0.8)'
+                    shadowColor: this.config.trackingEdgeColor
                 });
 
             }.bind(this));
@@ -196,9 +196,9 @@ define(['classes/engine/RenderingEngine',
             {
                 let grd = this.engine.context.createRadialGradient(params.center.x, params.center.y, 10, params.center.x,
                     params.center.y, 20);
-                grd.addColorStop(.3, "#262626");
+                grd.addColorStop(.3, this.config.backgroundColor);
                 grd.addColorStop(.7, "transparent");
-                grd.addColorStop(1, "#262626");
+                grd.addColorStop(1, this.config.backgroundColor);
 
                 // Set other existing edge to curve
                 const otherEdge = this.edgeMap[ [params.to, params.from] ];
@@ -222,26 +222,26 @@ define(['classes/engine/RenderingEngine',
                           {
                               curveDirection: otherEdge ? 90 : 0, // the angle, 0 = none
                               curveOffset:    this.config.edgeCurveOffset,
-                              strokeStyle:    'rgb(255, 154, 0)',
+                              strokeStyle:    this.config.edgeLineColor,
                               lineWidth:      this.config.edgeWidth,
                               shadowBlur:     16,
-                              shadowColor:    '#ff9a00'
+                              shadowColor:    this.config.edgeLineColor
                           }),
 
                     box: this.engine.createRectangle(params.center.x, params.center.y, 
                          this.config.edgeBoxSize, this.config.edgeBoxSize, this.EDGE_LAYER, 
                          {
-                             strokeStyle: 'transparent',
+                             strokeStyle: this.config.edgeBoxOutlineColor,
                              fillStyle:   grd,
-                             background:  'transparent'
+                             background:  this.config.edgeBoxBackgroundColor
                          }),
 
                     text: this.engine.createText(params.weight, params.center.x, 
                           params.center.y, this.EDGE_LAYER, 
                           {
-                              fillStyle:   'rgb(255, 154, 0)',
+                              fillStyle:   this.config.edgeTextColor,
                               shadowBlur:  16,
-                              shadowColor: '#ff9a00',
+                              shadowColor: this.config.edgeTextColor,
                               font:        '16px monospace'
                           }),
                 };
@@ -258,10 +258,10 @@ define(['classes/engine/RenderingEngine',
                     angle:               30,
                     endOfLine:           true,
                     offset:              this.config.vertexSize,
-                    strokeStyle:         'rgb(255, 154, 0)',
+                    strokeStyle:         this.config.edgeArrowColor,
                     lineWidth:           this.config.edgeWidth,
                     shadowBlur:          16,
-                    shadowColor:         '#ff9a00'
+                    shadowColor:         this.config.edgeArrowColor
                 }),
 
                 this.edgeMap[ [params.from, params.to] ] = edge;
@@ -298,9 +298,9 @@ define(['classes/engine/RenderingEngine',
                 const edge = this.edgeMap[ [params.from, params.to] ];
 
                 edge.line.setStart(params.fromPoint.x, params.fromPoint.y);
-                edge.line.setEnd(params.toPoint.x, params.toPoint.y);
-                edge.box.center(params.center.x, params.center.y);
-                edge.text.center(params.center.x, params.center.y);
+                edge.line.setEnd(params.toPoint.x,     params.toPoint.y);
+                edge.box.center(params.center.x,       params.center.y);
+                edge.text.center(params.center.x,      params.center.y);
 
                 const otherEdge = this.edgeMap[ [params.to, params.from] ];
 
@@ -317,11 +317,11 @@ define(['classes/engine/RenderingEngine',
                 const edge = this.edgeMap[ [params.from, params.to] ]; 
                 if(edge)
                 {
-                    document.body.style.cursor = 'pointer';
-                    edge.box.styles.strokeStyle = 'rgb(255, 255, 255)';
-                    edge.box.styles.shadowColor = '#ffffff';
-                    edge.text.styles.fillStyle = 'rgb(255, 255, 255)';
-                    edge.text.styles.shadowColor = '#ffffff';
+                    document.body.style.cursor   = 'pointer';
+                    edge.box.styles.strokeStyle  = this.config.edgeHoverColor;
+                    edge.box.styles.shadowColor  = this.config.edgeHoverColor;
+                    edge.text.styles.fillStyle   = this.config.edgeHoverColor;
+                    edge.text.styles.shadowColor = this.config.edgeHoverColor;
                 }                 
                 
             }.bind(this));
@@ -332,11 +332,11 @@ define(['classes/engine/RenderingEngine',
                 const edge = this.edgeMap[ [params.from, params.to] ];
                 if(edge)
                 {
-                    document.body.style.cursor = 'auto';
-                    edge.box.styles.strokeStyle = 'rgb(255, 154, 0)';
-                    edge.box.styles.shadowColor = '#ff9a00';
-                    edge.text.styles.fillStyle = 'rgb(255, 154, 0)';
-                    edge.text.styles.shadowColor = '#ff9a00';
+                    document.body.style.cursor   = 'auto';
+                    edge.box.styles.strokeStyle  = this.config.edgeBoxOutlineColor;
+                    edge.box.styles.shadowColor  = this.config.edgeBoxOutlineColor;
+                    edge.text.styles.fillStyle   = this.config.edgeTextColor;
+                    edge.text.styles.shadowColor = this.config.edgeTextColor;
                 }                 
                 
             }.bind(this));

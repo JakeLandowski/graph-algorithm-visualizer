@@ -18,14 +18,25 @@ function(GraphModel, GraphView, Util)
         
         this.config = 
         {
-            backgroundColor:   config.backgroundColor   !== undefined ? config.backgroundColor   : '#262626',
-            undirected:        config.undirected        !== undefined ? config.undirected        : true,
-            weighted:          config.weighted          !== undefined ? config.weighted          : true,
-            vertexSize:        config.vertexSize        !== undefined ? config.vertexSize        : 25,
-            vertexOutlineSize: config.vertexOutlineSize !== undefined ? config.vertexOutlineSize : 3,
-            edgeWidth:         config.edgeWidth         !== undefined ? config.edgeWidth         : 5,
-            edgeBoxSize:       config.edgeBoxSize       !== undefined ? config.edgeBoxSize       : 50,
-            edgeCurveOffset:   config.edgeCurveOffset   !== undefined ? config.edgeCurveOffset   : 100
+            backgroundColor:        config.backgroundColor        !== undefined ? config.backgroundColor        : '#262626',
+            undirected:             config.undirected             !== undefined ? config.undirected             : true,
+            weighted:               config.weighted               !== undefined ? config.weighted               : true,
+            vertexSize:             config.vertexSize             !== undefined ? config.vertexSize             : 25,
+            vertexOutlineSize:      config.vertexOutlineSize      !== undefined ? config.vertexOutlineSize      : 3,
+            edgeWidth:              config.edgeWidth              !== undefined ? config.edgeWidth              : 5,
+            edgeBoxSize:            config.edgeBoxSize            !== undefined ? config.edgeBoxSize            : 50,
+            edgeCurveOffset:        config.edgeCurveOffset        !== undefined ? config.edgeCurveOffset        : 100,
+            vertexOutlineColor:     config.vertexOutlineColor     !== undefined ? config.vertexOutlineColor     : 'rgb(255, 154, 0)',
+            vertexTextColor:        config.vertexTextColor        !== undefined ? config.vertexTextColor        : 'rgb(255, 154, 0)',
+            vertexHoverColor:       config.vertexHoverColor       !== undefined ? config.vertexHoverColor       : 'rgb(255, 255, 255)',
+            vertexSelectColor:      config.vertexSelectColor      !== undefined ? config.vertexSelectColor      : '#fffc55',
+            edgeLineColor:          config.edgeLineColor          !== undefined ? config.edgeLineColor          : 'rgb(255, 154, 0)',
+            edgeBoxOutlineColor:    config.edgeBoxOutlineColor    !== undefined ? config.edgeBoxOutlineColor    : 'rgb(255, 154, 0)',
+            edgeBoxBackgroundColor: config.edgeBoxBackgroundColor !== undefined ? config.edgeBoxBackgroundColor : 'rgb(255, 154, 0)',
+            edgeTextColor:          config.edgeTextColor          !== undefined ? config.edgeTextColor          : 'rgb(255, 154, 0)',
+            edgeArrowColor:         config.edgeArrowColor         !== undefined ? config.edgeArrowColor         : 'rgb(255, 154, 0)',
+            edgeHoverColor:         config.edgeHoverColor         !== undefined ? config.edgeHoverColor         : 'rgb(255, 255, 255)',
+            trackingEdgeColor:      config.trackingEdgeColor      !== undefined ? config.trackingEdgeColor      : '#fffc55',
         };
 
         this.model = new GraphModel(container.clientWidth, container.clientHeight, this.config);
