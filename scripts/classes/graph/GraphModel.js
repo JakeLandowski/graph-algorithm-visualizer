@@ -217,6 +217,12 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
             this.vertexSpacialIndex.remove(removed);
             returnSymbol(data);
 
+            if(this.selectedVertex)
+            {
+                this.deselectVertex();
+                this.releaseTrackingEdge();
+            }
+
             this.onVertexRemoved.notify({ data: data });
         },
 

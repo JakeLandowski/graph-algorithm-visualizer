@@ -24,8 +24,13 @@ define(function()
         setPoints()
         {
             // HitBox Coordinates
-            this.x          = (this.fromVertex.x + this.toVertex.x) / 2;
-            this.y          = (this.fromVertex.y + this.toVertex.y) / 2; 
+            this.x = (this.fromVertex.x + this.toVertex.x) / 2;
+            this.y = (this.fromVertex.y + this.toVertex.y) / 2;
+            this.setBounds(); 
+        },
+        
+        setBounds()
+        {
             this.upperLeft  = { x: this.x - this.boxSize/2, y: this.y - this.boxSize/2 };
             this.lowerRight = { x: this.x + this.boxSize/2, y: this.y + this.boxSize/2 };
         },

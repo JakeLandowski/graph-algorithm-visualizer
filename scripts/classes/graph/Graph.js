@@ -78,6 +78,15 @@ function(GraphModel, GraphView, Util)
                 } 
 
             }.bind(this));
+
+            this.view.onEdgeCurveChanged.attach('edgeSpatialCurve', function(_, params)
+            {
+                const edge = this.model.adjList.getEdge(params.from, params.to);
+                edge.x = params.centerX;
+                edge.y = params.centerY;
+                edge.setBounds(); // for spatial
+                this.model.updateEdgeSpatial(edge);
+            }.bind(this));
         },
 
         createMode()
@@ -105,7 +114,7 @@ function(GraphModel, GraphView, Util)
                 if(vertex)
                 {
                     if(selected)
-                    {console.log();
+                    {
                         // If not the same vertex
                         // and edge doesnt exist
                         // create edge

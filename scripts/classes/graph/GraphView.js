@@ -33,6 +33,7 @@ define(['classes/engine/RenderingEngine',
         this.onCanvasMouseDrag   = new Event(this);
 
         this.onEdgeFormSubmitted = new Event(this);
+        this.onEdgeCurveChanged  = new Event(this);
 
         this.onUndo              = new Event(this);
         this.onRedo              = new Event(this);
@@ -205,7 +206,9 @@ define(['classes/engine/RenderingEngine',
 
                 // Set other existing edge to curve
                 const otherEdge = this.edgeMap[ [params.to, params.from] ];
-                if(otherEdge) 
+                const directedAndOtherEdge = !this.config.undirected && otherEdge;
+                
+                if(directedAndOtherEdge) 
                 {
                     otherEdge.line.styles.curveDirection = 90;
                     otherEdge.line.changed = true; // for forcing calculateCurve to run 
@@ -219,6 +222,14 @@ define(['classes/engine/RenderingEngine',
                     otherEdge.arrow.styles.leftCurveDirection  = -90;
                     otherEdge.arrow.styles.rightCurveDirection = -90;
                     otherEdge.arrow.calculateCurve();
+
+                    this.onEdgeCurveChanged.notify
+                    ({
+                        from: params.to,   // reversed because other edge
+                        to:   params.from, // reversed because other edge
+                        centerX: otherEdge.line.curveCenterX,
+                        centerY: otherEdge.line.curveCenterY
+                    });
                 }
                     
                 const edge =  
@@ -226,7 +237,7 @@ define(['classes/engine/RenderingEngine',
                     line: this.engine.createLine(params.fromPoint.x, params.fromPoint.y, 
                           params.toPoint.x, params.toPoint.y, this.EDGE_LAYER,
                           {
-                              curveDirection: otherEdge ? 90 : 0, // the angle, 0 = none
+                              curveDirection: directedAndOtherEdge ? 90 : 0, // the angle, 0 = none
                               curveOffset:    this.config.edgeCurveOffset,
                               strokeStyle:    this.config.edgeLineColor,
                               lineWidth:      this.config.edgeWidth,
@@ -235,27 +246,30 @@ define(['classes/engine/RenderingEngine',
                           }),
                 };
 
-                edge.box = this.engine.createRectangle(otherEdge ? edge.line.curveCenterX : params.center.x,
-                otherEdge ? edge.line.curveCenterY : params.center.y, 
+                const edgeCenterX = directedAndOtherEdge ? edge.line.curveCenterX : params.center.x;
+                const edgeCenterY = directedAndOtherEdge ? edge.line.curveCenterY : params.center.y;
+
+                edge.box = this.engine.createRectangle(edgeCenterX, edgeCenterY, 
                 this.config.edgeBoxSize, this.config.edgeBoxSize, this.EDGE_LAYER, 
                 {
                     strokeStyle: this.config.edgeBoxOutlineColor,
                     fillStyle:   grd,
                     background:  this.config.edgeBoxBackgroundColor
-                }),
+                });
 
-                edge.text = this.engine.createText(params.weight, 
-                otherEdge ? edge.line.curveCenterX : params.center.x, 
-                otherEdge ? edge.line.curveCenterY : params.center.y, this.EDGE_LAYER, 
+                edge.text = this.engine.createText(params.weight, edgeCenterX, 
+                edgeCenterY, this.EDGE_LAYER, 
                 {
                     fillStyle:   this.config.edgeTextColor,
                     shadowBlur:  16,
                     shadowColor: this.config.edgeTextColor,
                     font:        '16px monospace'
-                }),
+                });
+
+                const arrowFromX = directedAndOtherEdge ? edge.line.curveArrowX : params.fromPoint.x;
+                const arrowFromY = directedAndOtherEdge ? edge.line.curveArrowY : params.fromPoint.y;
                 
-                edge.arrow = this.engine.createArrow(otherEdge ? edge.line.curveArrowX : params.fromPoint.x, 
-                otherEdge ? edge.line.curveArrowY : params.fromPoint.y, 
+                edge.arrow = this.engine.createArrow(arrowFromX, arrowFromY, 
                 params.toPoint.x, params.toPoint.y, this.EDGE_LAYER,
                 {
                     leftCurveDirection:  otherEdge ? -90 : 0, // the angle, 0 = none
@@ -270,9 +284,18 @@ define(['classes/engine/RenderingEngine',
                     lineWidth:           this.config.edgeWidth,
                     shadowBlur:          16,
                     shadowColor:         this.config.edgeArrowColor
-                }),
+                });
 
                 this.edgeMap[ [params.from, params.to] ] = edge;
+
+                if(directedAndOtherEdge)
+                    this.onEdgeCurveChanged.notify
+                    ({
+                        from: params.from,   
+                        to:   params.to, 
+                        centerX: edge.line.curveCenterX,
+                        centerY: edge.line.curveCenterY
+                    });
 
             }.bind(this));
 
@@ -287,15 +310,25 @@ define(['classes/engine/RenderingEngine',
                 delete this.edgeMap[ [params.from, params.to] ];
 
                 const otherEdge = this.edgeMap[ [params.to, params.from] ];
-                if(otherEdge)
+                const directedAndOtherEdge = !this.config.undirected && otherEdge;
+                
+                if(directedAndOtherEdge)
                 {
                     otherEdge.line.styles.curveDirection = 0;
-                    otherEdge.line.changed = true;
                     otherEdge.arrow.styles.leftCurveDirection = 0;
                     otherEdge.arrow.styles.rightCurveDirection = 0;
-                    otherEdge.arrow.changed = true;
                     otherEdge.arrow.calcArrowPoints(params.toPoint.x, params.toPoint.y,
                                                     params.fromPoint.x, params.fromPoint.y);
+                    otherEdge.box.center(otherEdge.line.cx, otherEdge.line.cy);
+                    otherEdge.text.center(otherEdge.line.cx, otherEdge.line.cy);
+
+                    this.onEdgeCurveChanged.notify
+                    ({
+                        from: params.to,   // reversed because other edge
+                        to:   params.from, // reversed because other edge
+                        centerX: otherEdge.line.cx,
+                        centerY: otherEdge.line.cy
+                    });
                 }
 
             }.bind(this));
@@ -305,18 +338,28 @@ define(['classes/engine/RenderingEngine',
             {
                 const edge = this.edgeMap[ [params.from, params.to] ];
                 const otherEdge = this.edgeMap[ [params.to, params.from] ];
+                const directedAndOtherEdge = !this.config.undirected && otherEdge;
 
                 edge.line.setStart(params.fromPoint.x, params.fromPoint.y);
                 edge.line.setEnd(params.toPoint.x,     params.toPoint.y);
-                edge.box.center(otherEdge ? edge.line.curveCenterX : params.center.x,
-                                otherEdge ? edge.line.curveCenterY : params.center.y);
-                edge.text.center(otherEdge ? edge.line.curveCenterX : params.center.x,
-                                 otherEdge ? edge.line.curveCenterY : params.center.y);
+                edge.box.center(directedAndOtherEdge ? edge.line.curveCenterX : params.center.x,
+                                directedAndOtherEdge ? edge.line.curveCenterY : params.center.y);
+                edge.text.center(directedAndOtherEdge ? edge.line.curveCenterX : params.center.x,
+                                 directedAndOtherEdge ? edge.line.curveCenterY : params.center.y);
 
-                const fromX = otherEdge ? edge.line.curveArrowX : params.fromPoint.x;
-                const fromY = otherEdge ? edge.line.curveArrowY : params.fromPoint.y;
+                const fromX = directedAndOtherEdge ? edge.line.curveArrowX : params.fromPoint.x;
+                const fromY = directedAndOtherEdge ? edge.line.curveArrowY : params.fromPoint.y;
 
                 edge.arrow.calcArrowPoints(fromX, fromY, params.toPoint.x, params.toPoint.y);
+
+                if(directedAndOtherEdge)
+                    this.onEdgeCurveChanged.notify
+                    ({
+                        from: params.from,
+                        to:   params.to, 
+                        centerX: edge.line.curveCenterX,
+                        centerY: edge.line.curveCenterY
+                    });
 
             }.bind(this));
             
@@ -372,6 +415,8 @@ define(['classes/engine/RenderingEngine',
                         this.onEdgeFormSubmitted.notify({ weight: field.value });
                         
                     }.bind(this));
+
+                    field.focus();
                 }                 
                 
             }.bind(this));

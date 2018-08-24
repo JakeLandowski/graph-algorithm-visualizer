@@ -17,6 +17,7 @@ define(['classes/engine/Entity', 'utils/Util'], function(Entity, Util)
         this.y1 = y1;
         this.x2 = x2;
         this.y2 = y2;
+        this.calculateCenter();
         this.styles = 
         {
             curveDirection: styles.curveDirection || 0, // -1 0 1, 0 = none 
@@ -36,28 +37,31 @@ define(['classes/engine/Entity', 'utils/Util'], function(Entity, Util)
     Line.prototype.constructor = Line; // reset constructor
     Object.assign(Line.prototype, // mixin normal Line methods
     {
-        getStart()
-        {
-            return { x: this.x1, y: this.y1 };
-        },
-
-        getEnd()
-        {
-            return { x: this.x2, y: this.y2 };
-        },
+        getStart() { return { x: this.x1, y: this.y1 }; },
+        getEnd()   { return { x: this.x2, y: this.y2 }; },
 
         setStart(x, y)
         {
             this.x1 = x;
             this.y1 = y;
+            this.calculateCenter();
             this.changed = true;
+            this.calculateCurve();
         },
 
         setEnd(x, y)
         {
             this.x2 = x;
             this.y2 = y;
+            this.calculateCenter();
             this.changed = true;
+            this.calculateCurve();
+        },
+
+        calculateCenter()
+        {
+            this.cx = (this.x2 + this.x1) / 2;
+            this.cy = (this.y2 + this.y1) / 2;
         },
 
         calculateCurve()
@@ -66,14 +70,13 @@ define(['classes/engine/Entity', 'utils/Util'], function(Entity, Util)
             {
                 this.changed = false;
                 const theta = Util.toDegrees(Util.calcAngle(this.x1, this.y1, this.x2, this.y2));
-                const centerX = (this.x2 + this.x1) / 2;
-                const centerY = (this.y2 + this.y1) / 2;
-                this.curveOffsetX = centerX + (this.styles.curveOffset * Math.cos(Util.toRadians(theta + this.styles.curveDirection)));
-                this.curveOffsetY = centerY + (this.styles.curveOffset * Math.sin(Util.toRadians(theta + this.styles.curveDirection)));
-                this.curveCenterX = centerX + (this.styles.curveOffset*0.5 * Math.cos(Util.toRadians(theta + this.styles.curveDirection)));
-                this.curveCenterY = centerY + (this.styles.curveOffset*0.5 * Math.sin(Util.toRadians(theta + this.styles.curveDirection)));
-                this.curveArrowX = centerX + (this.styles.curveOffset*0.75 * Math.cos(Util.toRadians(theta + this.styles.curveDirection)));
-                this.curveArrowY = centerY + (this.styles.curveOffset*0.75 * Math.sin(Util.toRadians(theta + this.styles.curveDirection)));   
+
+                this.curveOffsetX = this.cx + (this.styles.curveOffset * Math.cos(Util.toRadians(theta + this.styles.curveDirection)));
+                this.curveOffsetY = this.cy + (this.styles.curveOffset * Math.sin(Util.toRadians(theta + this.styles.curveDirection)));
+                this.curveCenterX = this.cx + (this.styles.curveOffset * 0.5  * Math.cos(Util.toRadians(theta + this.styles.curveDirection)));
+                this.curveCenterY = this.cy + (this.styles.curveOffset * 0.5  * Math.sin(Util.toRadians(theta + this.styles.curveDirection)));
+                this.curveArrowX  = this.cx + (this.styles.curveOffset * 0.75 * Math.cos(Util.toRadians(theta + this.styles.curveDirection)));
+                this.curveArrowY  = this.cy + (this.styles.curveOffset * 0.75 * Math.sin(Util.toRadians(theta + this.styles.curveDirection)));   
             }
         },
 
