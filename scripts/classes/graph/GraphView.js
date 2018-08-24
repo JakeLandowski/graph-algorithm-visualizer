@@ -99,10 +99,11 @@ define(['classes/engine/RenderingEngine',
             // Vertex Moved
             this.model.onVertexMoved.attach('moveVertex', function(_, params)
             {
-                if(this.vertexMap[params.data])
+                const vertex = this.vertexMap[params.data];
+                if(vertex)
                 {
-                    this.vertexMap[params.data].circle.center(params.x, params.y);
-                    this.vertexMap[params.data].text.center(params.x, params.y);
+                    vertex.circle.center(params.x, params.y);
+                    vertex.text.center(params.x, params.y);
                 }
 
             }.bind(this));
@@ -110,10 +111,11 @@ define(['classes/engine/RenderingEngine',
             // Vertex Selected
             this.model.onVertexSelected.attach('selectVertex', function(_, params)
             {
-                if(this.vertexMap[params.data])
+                const vertex = this.vertexMap[params.data];
+                if(vertex)
                 {
-                    this.vertexMap[params.data].circle.styles.strokeStyle = this.config.vertexSelectColor;
-                    this.vertexMap[params.data].circle.styles.shadowColor = this.config.vertexSelectColor;
+                    vertex.circle.styles.strokeStyle = this.config.vertexSelectColor;
+                    vertex.circle.styles.shadowColor = this.config.vertexSelectColor;
                 }
             
             }.bind(this));
@@ -121,10 +123,11 @@ define(['classes/engine/RenderingEngine',
             // Vertex Deselected
             this.model.onVertexDeselected.attach('deselectVertex', function(_, params)
             {
-                if(this.vertexMap[params.data])
+                const vertex = this.vertexMap[params.data];
+                if(vertex)
                 {
-                    this.vertexMap[params.data].circle.styles.strokeStyle = this.config.vertexOutlineColor;
-                    this.vertexMap[params.data].circle.styles.shadowColor = this.config.vertexOutlineColor;
+                    vertex.circle.styles.strokeStyle = this.config.vertexOutlineColor;
+                    vertex.circle.styles.shadowColor = this.config.vertexOutlineColor;
                 }                 
 
             }.bind(this));
@@ -205,13 +208,13 @@ define(['classes/engine/RenderingEngine',
                 if(otherEdge) 
                 {
                     otherEdge.line.styles.curveDirection = 90;
-                    otherEdge.line.changed = true;
+                    otherEdge.line.changed = true; // for forcing calculateCurve to run 
                     otherEdge.line.calculateCurve();
 
                     otherEdge.box.center(otherEdge.line.curveCenterX, otherEdge.line.curveCenterY);
                     otherEdge.text.center(otherEdge.line.curveCenterX, otherEdge.line.curveCenterY);
 
-                    otherEdge.arrow.calcArrowPoints(otherEdge.line.curveCenterX, otherEdge.line.curveCenterY, 
+                    otherEdge.arrow.calcArrowPoints(otherEdge.line.curveArrowX, otherEdge.line.curveArrowY, 
                                                     params.fromPoint.x, params.fromPoint.y);
                     otherEdge.arrow.styles.leftCurveDirection  = -90;
                     otherEdge.arrow.styles.rightCurveDirection = -90;
@@ -251,8 +254,8 @@ define(['classes/engine/RenderingEngine',
                     font:        '16px monospace'
                 }),
                 
-                edge.arrow = this.engine.createArrow(otherEdge ? edge.line.curveCenterX : params.fromPoint.x, 
-                otherEdge ? edge.line.curveCenterY : params.fromPoint.y, 
+                edge.arrow = this.engine.createArrow(otherEdge ? edge.line.curveArrowX : params.fromPoint.x, 
+                otherEdge ? edge.line.curveArrowY : params.fromPoint.y, 
                 params.toPoint.x, params.toPoint.y, this.EDGE_LAYER,
                 {
                     leftCurveDirection:  otherEdge ? -90 : 0, // the angle, 0 = none
@@ -310,8 +313,8 @@ define(['classes/engine/RenderingEngine',
                 edge.text.center(otherEdge ? edge.line.curveCenterX : params.center.x,
                                  otherEdge ? edge.line.curveCenterY : params.center.y);
 
-                const fromX = otherEdge ? edge.line.curveCenterX : params.fromPoint.x;
-                const fromY = otherEdge ? edge.line.curveCenterY : params.fromPoint.y;
+                const fromX = otherEdge ? edge.line.curveArrowX : params.fromPoint.x;
+                const fromY = otherEdge ? edge.line.curveArrowY : params.fromPoint.y;
 
                 edge.arrow.calcArrowPoints(fromX, fromY, params.toPoint.x, params.toPoint.y);
 
