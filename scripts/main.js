@@ -15,10 +15,20 @@ function(Tests, Graph, Animations)
     Tests.run();
     Animations.start();
 
+     let eduMode = document.getElementsByClassName('eduMode');
+
+
+     for(let i = 0; i<eduMode.length; i++) {
+         eduMode[i].addEventListener('click',function () {
+             Animations.swapColors(graph);
+         });
+     }
+
     let graph = newGraph
     ({
         undirected: false
     }); 
+
 
     const createNewBtn  = document.getElementsByClassName('creategraph');
 

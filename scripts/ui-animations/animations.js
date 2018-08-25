@@ -18,7 +18,7 @@ define(['ui-animations/anime','utils/Util'], function(Anime,Util)
             let menuOptions = document.querySelectorAll('.menuoptions');
             let menu = document.querySelectorAll('.menubtn');
             let delay = 0;
-            let openTools = false;
+            let openTools = true;
             let showUI = true;
             let eduModeStyle = false;
             let lightOrange = "#ffcb48";
@@ -154,9 +154,8 @@ define(['ui-animations/anime','utils/Util'], function(Anime,Util)
                 let toolButtons = document.querySelector("#toolbuttons");
                 let toolText = document.querySelectorAll(".toolText");
 
-
-                if (key === 17 && !openTools) {
-                    openTools = true;
+                if (key === 17 && openTools) {
+                    openTools = false;
                     toolButtons.style.scale = .5;
                     toolButtons.style.left = xpos - 150;
                     toolButtons.style.top = ypos - 150;
@@ -182,15 +181,13 @@ define(['ui-animations/anime','utils/Util'], function(Anime,Util)
                     expandTools("#redoModeButton",50,90);
 
                     setTimeout(function () {
+                        openTools = true;
                         toolText.forEach(function(text) {
                             text.style.display = 'block';
                         });
-                    }, 250);
-
-
+                    }, 200);
                 }
-
-            }, 300));
+            }, 500));
 
 
             window.addEventListener('keyup', Util.throttle(function(e)
@@ -219,10 +216,10 @@ define(['ui-animations/anime','utils/Util'], function(Anime,Util)
                     expandTools("#redoModeButton",0,0);
                     setTimeout(function () {
                         toolButtons.style.display = 'none';
-                    }, 250);
+                        openTools = true;
+                    }, 200);
                 }
-
-            }, 300));
+            }, 500));
 
             //ANIMATION FUNCTIONS
             function drawLine(target,direction,duration) {
@@ -307,6 +304,9 @@ define(['ui-animations/anime','utils/Util'], function(Anime,Util)
                     eduModeStyle = true;
                 }
             }
+
+        }, swapColors(graph) {
+                graph.view.engine.config.backgroundColor = '#fff';
         }
     };
 });
