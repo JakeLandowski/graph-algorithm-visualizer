@@ -21,26 +21,26 @@ function(GraphModel, GraphView, Util)
         this.container = container;
         
         this.config = 
-        {
-            backgroundColor:        config.backgroundColor        !== undefined ? config.backgroundColor        : background,
-            undirected:             config.undirected             !== undefined ? config.undirected             : true,
-            weighted:               config.weighted               !== undefined ? config.weighted               : true,
-            vertexSize:             config.vertexSize             !== undefined ? config.vertexSize             : 25,
-            vertexOutlineSize:      config.vertexOutlineSize      !== undefined ? config.vertexOutlineSize      : 3,
-            edgeWidth:              config.edgeWidth              !== undefined ? config.edgeWidth              : 5,
-            edgeBoxSize:            config.edgeBoxSize            !== undefined ? config.edgeBoxSize            : 15,
-            edgeCurveOffset:        config.edgeCurveOffset        !== undefined ? config.edgeCurveOffset        : 100,
-            vertexOutlineColor:     config.vertexOutlineColor     !== undefined ? config.vertexOutlineColor     : primaryColor,
-            vertexTextColor:        config.vertexTextColor        !== undefined ? config.vertexTextColor        : primaryColor,
-            vertexHoverColor:       config.vertexHoverColor       !== undefined ? config.vertexHoverColor       : secondaryColor,
-            vertexSelectColor:      config.vertexSelectColor      !== undefined ? config.vertexSelectColor      : secondaryColor,
-            edgeLineColor:          config.edgeLineColor          !== undefined ? config.edgeLineColor          : primaryColor,
-            edgeBoxOutlineColor:    config.edgeBoxOutlineColor    !== undefined ? config.edgeBoxOutlineColor    : 'transparent',
-            edgeBoxBackgroundColor: config.edgeBoxBackgroundColor !== undefined ? config.edgeBoxBackgroundColor : 'transparent',
-            edgeTextColor:          config.edgeTextColor          !== undefined ? config.edgeTextColor          : primaryColor,
-            edgeArrowColor:         config.edgeArrowColor         !== undefined ? config.edgeArrowColor         : primaryColor,
-            edgeHoverColor:         config.edgeHoverColor         !== undefined ? config.edgeHoverColor         : secondaryColor,
-            trackingEdgeColor:      config.trackingEdgeColor      !== undefined ? config.trackingEdgeColor      : secondaryColor,
+        {  
+            backgroundColor:        config.backgroundColor        !== undefined ? [config.backgroundColor]        : [background],
+            undirected:             config.undirected             !== undefined ? config.undirected               : true,
+            weighted:               config.weighted               !== undefined ? config.weighted                 : true,
+            vertexSize:             config.vertexSize             !== undefined ? config.vertexSize               : 25,
+            vertexOutlineSize:      config.vertexOutlineSize      !== undefined ? config.vertexOutlineSize        : 3,
+            edgeWidth:              config.edgeWidth              !== undefined ? config.edgeWidth                : 5,
+            edgeBoxSize:            config.edgeBoxSize            !== undefined ? config.edgeBoxSize              : 15,
+            edgeCurveOffset:        config.edgeCurveOffset        !== undefined ? config.edgeCurveOffset          : 100,
+            vertexOutlineColor:     config.vertexOutlineColor     !== undefined ? [config.vertexOutlineColor]     : [primaryColor],
+            vertexTextColor:        config.vertexTextColor        !== undefined ? [config.vertexTextColor]        : [primaryColor],
+            vertexHoverColor:       config.vertexHoverColor       !== undefined ? [config.vertexHoverColor]       : [secondaryColor],
+            vertexSelectColor:      config.vertexSelectColor      !== undefined ? [config.vertexSelectColor]      : [secondaryColor],
+            edgeLineColor:          config.edgeLineColor          !== undefined ? [config.edgeLineColor]          : [primaryColor],
+            edgeBoxOutlineColor:    config.edgeBoxOutlineColor    !== undefined ? [config.edgeBoxOutlineColor]    : ['transparent'],
+            edgeBoxBackgroundColor: config.edgeBoxBackgroundColor !== undefined ? [config.edgeBoxBackgroundColor] : ['transparent'],
+            edgeTextColor:          config.edgeTextColor          !== undefined ? [config.edgeTextColor]          : [primaryColor],
+            edgeArrowColor:         config.edgeArrowColor         !== undefined ? [config.edgeArrowColor]         : [primaryColor],
+            edgeHoverColor:         config.edgeHoverColor         !== undefined ? [config.edgeHoverColor]         : [secondaryColor],
+            trackingEdgeColor:      config.trackingEdgeColor      !== undefined ? [config.trackingEdgeColor]      : [secondaryColor],
         };
 
         this.model = new GraphModel(container.clientWidth, container.clientHeight, this.config);
