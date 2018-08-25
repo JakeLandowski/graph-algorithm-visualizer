@@ -31,8 +31,8 @@ define(function()
         
         setBounds()
         {
-            this.upperLeft  = { x: this.x - this.boxSize/2, y: this.y - this.boxSize/2 };
-            this.lowerRight = { x: this.x + this.boxSize/2, y: this.y + this.boxSize/2 };
+            this.upperLeft  = { x: this.x - this.boxSize, y: this.y - this.boxSize };
+            this.lowerRight = { x: this.x + this.boxSize, y: this.y + this.boxSize };
         },
 
         get fromVertex()
