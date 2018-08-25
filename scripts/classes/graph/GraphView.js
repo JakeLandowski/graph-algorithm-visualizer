@@ -64,7 +64,7 @@ define(['classes/engine/RenderingEngine',
                     strokeStyle: this.config.strokeColor,
                     lineWidth:   this.config.vertexOutlineSize,
                     shadowBlur:  16,
-                    shadowColor: '#ff9a00'
+                    shadowColor: this.config.vertexOutlineSize
                 });
 
                 const text = this.engine.createText(params.data, params.x, params.y, this.VERTEX_LAYER, 
