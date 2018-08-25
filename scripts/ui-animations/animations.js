@@ -154,7 +154,7 @@ define(['ui-animations/anime','utils/Util'], function(Anime,Util)
                 let toolButtons = document.querySelector("#toolbuttons");
                 let toolText = document.querySelectorAll(".toolText");
 
-                if (key === 17 && openTools) {
+                if (key === 17 && openTools && !e.repeat) {
                     openTools = false;
                     toolButtons.style.scale = .5;
                     toolButtons.style.left = xpos - 150;
@@ -197,7 +197,6 @@ define(['ui-animations/anime','utils/Util'], function(Anime,Util)
                 let toolText = document.querySelectorAll(".toolText");
 
                 if (key === 17) {
-                    // openTools = false;
                     toolText.forEach(function (text) {
                         text.style.display = 'none';
                     });
@@ -216,7 +215,6 @@ define(['ui-animations/anime','utils/Util'], function(Anime,Util)
                     expandTools("#redoModeButton",0,0);
                     setTimeout(function () {
                         toolButtons.style.display = 'none';
-                        // openTools = true;
                     }, 200);
                 }
             }, 500));
