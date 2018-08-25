@@ -16,11 +16,24 @@ function(Tests, Graph, Animations)
     Animations.start();
 
      let eduMode = document.getElementsByClassName('eduMode');
-
+     let lightOrange = "#ffcb48";
+     let darkOrange = "#ff9a00";
+     let lightGray = "#9d9b98";
+     let darkGray = "#262626";
+     let white = "#fff";
+     let eduModeActive = false;
 
      for(let i = 0; i<eduMode.length; i++) {
          eduMode[i].addEventListener('click',function () {
-             Animations.swapColors(graph);
+             if(eduModeActive){
+                 Animations.swapColors(graph,darkOrange,lightOrange,darkGray);
+                 window.localStorage.setItem('eduModeOn','false');
+                 eduModeActive = false;
+             } else {
+                 Animations.swapColors(graph,darkGray,lightGray,white);
+                 window.localStorage.setItem('eduModeOn','true');
+                 eduModeActive = true;
+             }
          });
      }
 

@@ -22,11 +22,9 @@ define(['ui-animations/anime','utils/Util'], function(Anime,Util)
             //Sets specific buttons as variables, set default delay at 0.
             let xpos;
             let ypos;
-            let menuOptions = document.querySelectorAll('.menuoptions');
             let menu = document.querySelectorAll('.menubtn');
             let delay = 0;
             let openTools = true;
-            let showUI = true;
             let eduModeStyle = false;
 
             menu.forEach(function (element) {
@@ -305,18 +303,17 @@ define(['ui-animations/anime','utils/Util'], function(Anime,Util)
                 }
             }
 
-        }, swapColors(graph,color,) {
-
-            graph.config.backgroundColor = white;
-            graph.config.vertexOutlineColor = darkGray;
-            graph.config.vertexTextColor = darkGray;
-            graph.config.vertexHoverColor = lightGray;
-            graph.config.vertexSelectColor = lightGray;
-            graph.config.edgeLineColor = darkGray;
-            graph.config.edgeTextColor = darkGray;
-            graph.config.edgeArrowColor = darkGray;
-            graph.config.edgeHoverColor = lightGray;
-            graph.config.trackingEdgeColor = lightGray;
+        }, swapColors(graph,primary,secondary,bg) {
+            graph.config.backgroundColor[0] = bg;
+            graph.config.vertexOutlineColor[0] = primary;
+            graph.config.vertexTextColor[0] = primary;
+            graph.config.vertexHoverColor[0] = secondary;
+            graph.config.vertexSelectColor[0] = secondary;
+            graph.config.edgeLineColor[0] = primary;
+            graph.config.edgeTextColor[0] = primary;
+            graph.config.edgeArrowColor[0] = primary;
+            graph.config.edgeHoverColor[0] = secondary;
+            graph.config.trackingEdgeColor[0] = secondary;
         }
     };
 });
