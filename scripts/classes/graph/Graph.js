@@ -13,12 +13,16 @@ function(GraphModel, GraphView, Util)
 {
     const Graph = function(container, config={})
     {
+        let primaryColor = "#ff9a00";
+        let secondaryColor = "#ffcb48";
+        let background = "#262626";
+
         if(!container) throw 'Need to provide a containing element for Graph to render in.';
         this.container = container;
         
         this.config = 
         {
-            backgroundColor:        config.backgroundColor        !== undefined ? config.backgroundColor        : '#262626',
+            backgroundColor:        config.backgroundColor        !== undefined ? config.backgroundColor        : background,
             undirected:             config.undirected             !== undefined ? config.undirected             : true,
             weighted:               config.weighted               !== undefined ? config.weighted               : true,
             vertexSize:             config.vertexSize             !== undefined ? config.vertexSize             : 25,
@@ -26,17 +30,17 @@ function(GraphModel, GraphView, Util)
             edgeWidth:              config.edgeWidth              !== undefined ? config.edgeWidth              : 5,
             edgeBoxSize:            config.edgeBoxSize            !== undefined ? config.edgeBoxSize            : 50,
             edgeCurveOffset:        config.edgeCurveOffset        !== undefined ? config.edgeCurveOffset        : 100,
-            vertexOutlineColor:     config.vertexOutlineColor     !== undefined ? config.vertexOutlineColor     : 'rgb(255, 154, 0)',
-            vertexTextColor:        config.vertexTextColor        !== undefined ? config.vertexTextColor        : 'rgb(255, 154, 0)',
-            vertexHoverColor:       config.vertexHoverColor       !== undefined ? config.vertexHoverColor       : 'rgb(255, 255, 255)',
-            vertexSelectColor:      config.vertexSelectColor      !== undefined ? config.vertexSelectColor      : '#fffc55',
-            edgeLineColor:          config.edgeLineColor          !== undefined ? config.edgeLineColor          : 'rgb(255, 154, 0)',
-            edgeBoxOutlineColor:    config.edgeBoxOutlineColor    !== undefined ? config.edgeBoxOutlineColor    : 'rgb(255, 154, 0)',
-            edgeBoxBackgroundColor: config.edgeBoxBackgroundColor !== undefined ? config.edgeBoxBackgroundColor : 'rgb(255, 154, 0)',
-            edgeTextColor:          config.edgeTextColor          !== undefined ? config.edgeTextColor          : 'rgb(255, 154, 0)',
-            edgeArrowColor:         config.edgeArrowColor         !== undefined ? config.edgeArrowColor         : 'rgb(255, 154, 0)',
-            edgeHoverColor:         config.edgeHoverColor         !== undefined ? config.edgeHoverColor         : 'rgb(255, 255, 255)',
-            trackingEdgeColor:      config.trackingEdgeColor      !== undefined ? config.trackingEdgeColor      : '#fffc55',
+            vertexOutlineColor:     config.vertexOutlineColor     !== undefined ? config.vertexOutlineColor     : primaryColor,
+            vertexTextColor:        config.vertexTextColor        !== undefined ? config.vertexTextColor        : primaryColor,
+            vertexHoverColor:       config.vertexHoverColor       !== undefined ? config.vertexHoverColor       : secondaryColor,
+            vertexSelectColor:      config.vertexSelectColor      !== undefined ? config.vertexSelectColor      : secondaryColor,
+            edgeLineColor:          config.edgeLineColor          !== undefined ? config.edgeLineColor          : primaryColor,
+            edgeBoxOutlineColor:    config.edgeBoxOutlineColor    !== undefined ? config.edgeBoxOutlineColor    : primaryColor,
+            edgeBoxBackgroundColor: config.edgeBoxBackgroundColor !== undefined ? config.edgeBoxBackgroundColor : primaryColor,
+            edgeTextColor:          config.edgeTextColor          !== undefined ? config.edgeTextColor          : primaryColor,
+            edgeArrowColor:         config.edgeArrowColor         !== undefined ? config.edgeArrowColor         : primaryColor,
+            edgeHoverColor:         config.edgeHoverColor         !== undefined ? config.edgeHoverColor         : secondaryColor,
+            trackingEdgeColor:      config.trackingEdgeColor      !== undefined ? config.trackingEdgeColor      : secondaryColor,
         };
 
         this.model = new GraphModel(container.clientWidth, container.clientHeight, this.config);
