@@ -196,9 +196,9 @@ define(['classes/engine/RenderingEngine',
             // Edge Added
             this.model.onEdgeAdded.attach('createEdge', function(_, params)
             {
-                let grd = this.engine.context.createRadialGradient(params.center.x, params.center.y, 10, params.center.x,
-                    params.center.y, 20);
-                grd.addColorStop(.5, this.config.backgroundColor);
+                // let grd = this.engine.context.createRadialGradient(params.center.x, params.center.y, 10, params.center.x,
+                //     params.center.y, 20);
+                // grd.addColorStop(.5, this.config.backgroundColor);
 
                 // Set other existing edge to curve
                 const otherEdge = this.edgeMap[ [params.to, params.from] ];
@@ -247,7 +247,7 @@ define(['classes/engine/RenderingEngine',
                 this.config.edgeBoxSize, this.EDGE_LAYER,
                 {
                     strokeStyle: this.config.edgeBoxOutlineColor,
-                    fillStyle:   grd,
+                    fillStyle:   this.config.backgroundColor,
                 });
 
                 edge.text = this.engine.createText(params.weight, edgeCenterX,
