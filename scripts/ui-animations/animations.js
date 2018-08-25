@@ -20,7 +20,12 @@ define(['ui-animations/anime','utils/Util'], function(Anime,Util)
             let delay = 0;
             let openTools = false;
             let showUI = true;
-
+            let eduModeStyle = false;
+            let lightOrange = "#ffcb48";
+            let darkOrange = "#ff9a00";
+            let lightGray = "#9d9b98";
+            let darkGray = "#262626";
+            let white = "#fff";
 
             menu.forEach(function (element) {
                 generateUI(element,200,200,50,delay);
@@ -31,33 +36,39 @@ define(['ui-animations/anime','utils/Util'], function(Anime,Util)
             let createGraph = document.getElementsByClassName('creategraph');
             for(let i = 0; i<createGraph.length; i++) {
                 createGraph[i].addEventListener('mouseenter',function () {
-                    document.getElementById('creategraphbutton').style.stroke = "#ffcb48"
+                    document.getElementById('creategraphbutton').style.stroke = (eduModeStyle) ? lightGray : lightOrange;
                 });
 
                 createGraph[i].addEventListener('mouseleave',function () {
-                    document.getElementById('creategraphbutton').style.stroke = "#ff9a00"
+                    document.getElementById('creategraphbutton').style.stroke = (eduModeStyle) ? darkGray : darkOrange;
                 });
             }
 
             let selectGraph = document.getElementsByClassName('selectgraph');
             for(let i = 0; i<selectGraph.length; i++) {
                 selectGraph[i].addEventListener('mouseenter',function () {
-                    document.getElementById('selectgraphbutton').style.stroke = "#ffcb48"
+                    document.getElementById('selectgraphbutton').style.stroke = (eduModeStyle) ? lightGray : lightOrange;
                 });
 
                 selectGraph[i].addEventListener('mouseleave',function () {
-                    document.getElementById('selectgraphbutton').style.stroke = "#ff9a00"
+                    document.getElementById('selectgraphbutton').style.stroke = (eduModeStyle) ? darkGray : darkOrange;
                 });
             }
 
-            let selectAlgorithm = document.getElementsByClassName('selectalgorithm');
-            for(let i = 0; i<selectAlgorithm.length; i++) {
-                selectAlgorithm[i].addEventListener('mouseenter',function () {
-                    document.getElementById('selectalgorithmbutton').style.stroke = "#ffcb48"
+            let eduMode = document.getElementsByClassName('eduMode');
+
+
+            for(let i = 0; i<eduMode.length; i++) {
+                eduMode[i].addEventListener('click',function () {
+                    swapStyleSheet('graphedu.css');
                 });
 
-                selectAlgorithm[i].addEventListener('mouseleave',function () {
-                    document.getElementById('selectalgorithmbutton').style.stroke = "#ff9a00"
+                eduMode[i].addEventListener('mouseenter',function () {
+                    document.getElementById('eduModeButton').style.stroke = (eduModeStyle) ? lightGray : lightOrange;
+                });
+
+                eduMode[i].addEventListener('mouseleave',function () {
+                    document.getElementById('eduModeButton').style.stroke = (eduModeStyle) ? darkGray : darkOrange;
                 });
             }
 
@@ -66,55 +77,55 @@ define(['ui-animations/anime','utils/Util'], function(Anime,Util)
             let addVertex = document.getElementsByClassName('addVertexButton');
             for(let i = 0; i<addVertex.length; i++) {
                 addVertex[i].addEventListener('mouseenter',function () {
-                    document.getElementById('add-vertex').style.stroke = "#ffcb48"
+                    document.getElementById('add-vertex').style.stroke = (eduModeStyle) ? lightGray : lightOrange;
                 });
 
                 addVertex[i].addEventListener('mouseleave',function () {
-                    document.getElementById('add-vertex').style.stroke = "#ff9a00"
+                    document.getElementById('add-vertex').style.stroke = (eduModeStyle) ? darkGray : darkOrange;
                 });
             }
 
             let addEdge = document.getElementsByClassName('addEdgeButton');
             for(let i = 0; i<addEdge.length; i++) {
                 addEdge[i].addEventListener('mouseenter',function () {
-                    document.getElementById('add-edge').style.stroke = "#ffcb48"
+                    document.getElementById('add-edge').style.stroke = (eduModeStyle) ? lightGray : lightOrange;
                 });
 
                 addEdge[i].addEventListener('mouseleave',function () {
-                    document.getElementById('add-edge').style.stroke = "#ff9a00"
+                    document.getElementById('add-edge').style.stroke = (eduModeStyle) ? darkGray : darkOrange;
                 });
             }
 
             let addWeight = document.getElementsByClassName('addWeightButton');
             for(let i = 0; i<addWeight.length; i++) {
                 addWeight[i].addEventListener('mouseenter',function () {
-                    document.getElementById('edit-edge').style.stroke = "#ffcb48"
+                    document.getElementById('edit-edge').style.stroke = (eduModeStyle) ? lightGray : lightOrange;
                 });
 
                 addWeight[i].addEventListener('mouseleave',function () {
-                    document.getElementById('edit-edge').style.stroke = "#ff9a00"
+                    document.getElementById('edit-edge').style.stroke = (eduModeStyle) ? darkGray : darkOrange;
                 });
             }
 
             let undo = document.getElementsByClassName('undoButton');
             for(let i = 0; i<undo.length; i++) {
                 undo[i].addEventListener('mouseenter',function () {
-                    document.getElementById('undo').style.stroke = "#ffcb48"
+                    document.getElementById('undo').style.stroke = (eduModeStyle) ? lightGray : lightOrange;
                 });
 
                 undo[i].addEventListener('mouseleave',function () {
-                    document.getElementById('undo').style.stroke = "#ff9a00"
+                    document.getElementById('undo').style.stroke = (eduModeStyle) ? darkGray : darkOrange;
                 });
             }
 
             let redo = document.getElementsByClassName('redoButton');
             for(let i = 0; i<redo.length; i++) {
                 redo[i].addEventListener('mouseenter',function () {
-                    document.getElementById('redo').style.stroke = "#ffcb48"
+                    document.getElementById('redo').style.stroke = (eduModeStyle) ? lightGray : lightOrange;
                 });
 
                 redo[i].addEventListener('mouseleave',function () {
-                    document.getElementById('redo').style.stroke = "#ff9a00"
+                    document.getElementById('redo').style.stroke = (eduModeStyle) ? darkGray : darkOrange;
                 });
             }
 
@@ -164,8 +175,6 @@ define(['ui-animations/anime','utils/Util'], function(Anime,Util)
                         easing: 'linear'
                     });
 
-                    console.log("I HAVE TURNED 90 DEGREES MOTHER FUCKER");
-
                     expandTools("#createModeButton",0,-95);
                     expandTools("#deleteModeButton",105,-20);
                     expandTools("#extraModeButton",-105,-20);
@@ -202,8 +211,6 @@ define(['ui-animations/anime','utils/Util'], function(Anime,Util)
                         direction: 'normal',
                         easing: 'linear'
                     });
-
-                    console.log("I have turned NEGATIVE 90 DEGREES MOTHERFUCKER!");
 
                     expandTools("#createModeButton",0,0);
                     expandTools("#deleteModeButton",0,0);
@@ -280,7 +287,26 @@ define(['ui-animations/anime','utils/Util'], function(Anime,Util)
                 easing: 'linear'
             });
 
+            //StyleSheet Switch
 
+            function swapStyleSheet() {
+                let ui = document.getElementsByClassName('ui');
+
+                if(eduModeStyle) {
+                    document.getElementById('pagestyle').setAttribute('href', 'css/graphvis.css');
+                    for(let i = 0; i<ui.length; i++) {
+                        ui[i].style.stroke = darkOrange;
+                    }
+                    //.engine.config.backgroundColor = '#262626';
+                    eduModeStyle = false;
+                } else {
+                    document.getElementById('pagestyle').setAttribute('href', 'css/graphedu.css');
+                    for(let i = 0; i<ui.length; i++) {
+                        ui[i].style.stroke = darkGray;
+                    }
+                    eduModeStyle = true;
+                }
+            }
         }
     };
 });

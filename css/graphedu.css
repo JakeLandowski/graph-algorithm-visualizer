@@ -1,6 +1,6 @@
 html, body {
-    overflow-x: hidden;
-    background-color: #ffffff;
+    overflow: hidden;
+    background-color: #262626;
 }
 
 #main
@@ -10,97 +10,33 @@ html, body {
     z-index: 1;
 }
 
-#title {
-    width: 50%;
-    top: -4%;
+.mainmenu {
     position: absolute;
-    font-family: 'Exo 2', sans-serif;
-    font-size: 50px;
-    color: #21569e;
+    z-index: 2;
 }
 
-
-/* Media Buttons CSS */
-.button.play {
-    border-style: solid;
-    box-sizing: border-box;
-    width: 74px;
-    height: 74px;
-    border-width: 37px 0px 37px 74px;
-    border-color: transparent transparent transparent #202020;
+.mainmenu:hover {
+    cursor: pointer;
 }
 
-.mediabuttons {
-    position: absolute;
-    left: 42%;
-    top: 85%;
-}
-
-.mediabutton {
-    background: none;
-    border: none;
-    padding-right: 20px;
-    outline: none;
-}
-
-.mediabutton:hover {
-    color: #21569e;
-}
-
-.mediabutton:focus {
-    color:  #21569e;
-}
-
-#hide-ui {
-    position: absolute;
-    top: 10%;
-    left: -250px;
+#buttons {
     width: 200px;
-}
-
-#hide-tools {
-    right: 5%;
-    top: 10%;
-    position: absolute;
-    color:  #21569e;
-    border-left: 2px solid #21569e;
-    padding-left: 5px;
-}
-
-.tools {
-    right: -240px;
-    top: 15%;
-    position: absolute;
-    z-index: 1;
-    list-style: none;
+    height: 200px;
 }
 
 .menu {
     left: -250px;
-    top: 15%;
     position: absolute;
     z-index: 1;
     list-style: none;
 }
 
-
-/* Dropdown Button */
-.toolsbtn {
-    padding: 16px;
-    font-size: 16px;
-}
-
-li {
-    padding-bottom: 20px;
-}
-
 .future {
     box-shadow:
-            inset 0 0 10px #21569e,
-            0 0 10px #21569e;
+            inset 0 0 10px #262626,
+            0 0 10px #262626;
     background-color:rgba(0, 0, 0, 0.65);
-    border: 1px solid #21569e;
-    color: #21569e;
+    border: 1px solid #262626;
     font-family: 'Exo 2', sans-serif;
 }
 
@@ -118,10 +54,10 @@ li {
     overflow: hidden;
     background-color:rgba(0, 0, 0, 0.8);
     box-shadow:
-            inset 0 0 10px #21569e,
-            0 0 12px #21569e,
-            -5px 0 20px #21569e,
-            5px 0 20px #21569e;
+            inset 0 0 10px #262626,
+            0 0 12px #262626,
+            -5px 0 20px #262626,
+            5px 0 20px #262626;
 }
 
 .ui-component {
@@ -130,6 +66,37 @@ li {
 
 .shadow {
     /* Use -webkit- only if supporting: Chrome < 54, iOS < 9.3, Android < 4.4.4 */
-    -webkit-filter: drop-shadow( 0px 0px 5px #21569e );
-    filter: drop-shadow( 0px 0px 5px #21569e );
+    -webkit-filter: drop-shadow(0px 0px 5px #262626);
+    filter: drop-shadow(0px 0px 5px #262626);
+}
+
+.noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+}
+
+/*#creategraphbutton:hover {*/
+/*stroke: #ffcb48;*/
+/*}*/
+
+.toolMenu {
+    z-index: 2;
+    position: absolute;
+    display: none;
+}
+
+
+.ui {
+    stroke: #262626;
+    fill: transparent;
+}
+
+.ui-text {
+    color: #262626;
+    background: #fff;
 }

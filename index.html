@@ -7,7 +7,7 @@
     <title>Graph Algorithm Visualizer</title>
     <link rel="icon" href="favicon.ico">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="css/graphvis.css">
+    <link id="pagestyle" rel="stylesheet" href="css/graphvis.css">
     <link href="https://fonts.googleapis.com/css?family=Exo+2" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 </head>
@@ -21,53 +21,57 @@
                 </filter>
             </defs>
             <!-- CREATE NEW GRAPH BUTTON -->
-            <path filter="url(#shadow)" id="creategraphbutton" class="future creategraph" stroke="#ff9a00"
-                  stroke-width="4" fill="transparent" stroke-dasharray="25 5" d="
+            <path filter="url(#shadow)" id="creategraphbutton" class="future creategraph ui" stroke-width="4"
+                  fill="transparent" stroke-dasharray="25 5" d="
                                 M 160, 45
                                 m -30, 0
                                 a 30,30 0 0,0 60,0
                                 a 30,30 0 0,0 -60,0
             "></path>
-            <text class="future creategraph menubutton" x="144" y="50" font-family="Exo 2" font-size="14" fill="#ff9a00">NEW</text>
+            <text class="future creategraph menubutton ui-text" x="144" y="50" font-family="Exo 2" font-size="14">NEW</text>
 
             <!-- SELECT GRAPH BUTTON -->
-            <path filter="url(#shadow)" id="selectgraphbutton" class="future selectgraph" stroke="#ff9a00" stroke-width="4" fill="transparent" stroke-dasharray="25 5" d="
+            <path filter="url(#shadow)" id="selectgraphbutton" class="future selectgraph ui"
+                  stroke-width="4" fill="transparent" stroke-dasharray="25 5" d="
                                 M 130, 130
                                 m -30, 0
                                 a 30,30 0 0,0 60,0
                                 a 30,30 0 0,0 -60,0
             "></path>
-            <text class="future selectgraph" x="112" y="135" font-family="Exo 2" font-size="14" fill="#ff9a00">GRPH</text>
+            <text class="future selectgraph ui-text" x="112" y="135" font-family="Exo 2" font-size="14">GRPH</text>
 
             <!-- SELECT ALGORITHM BUTTON -->
-            <path filter="url(#shadow)" id="selectalgorithmbutton" class="future selectalgorithm" stroke="#ff9a00" stroke-width="4" fill="transparent" stroke-dasharray="25 5" d="
+            <path filter="url(#shadow)" id="eduModeButton" class="future eduMode ui"
+                  stroke-width="4" fill="transparent" stroke-dasharray="25 5" d="
                                 M 45, 160
                                 m -30, 0
                                 a 30,30 0 0,0 60,0
                                 a 30,30 0 0,0 -60,0
             "></path>
-            <text class="future selectalgorithm" x="33" y="165" font-family="Exo 2" font-size="14" fill="#ff9a00">ALG</text>
+            <text class="future eduMode ui-text" x="33" y="165" font-family="Exo 2" font-size="14">EDU</text>
         </svg>
     </div>
     <div class="ui-component noselect">
-        <svg id="inner" class="mainmenu" style="width:120px;height:120px">
-            <path filter="url(#shadow)" class="future" stroke="#ff9a00" stroke-width="4" fill="transparent" stroke-dasharray="15 5 2" d="
-                                M 60, 60
-                                m -30, 0
-                                a 30,30 0 0,0 60,0
-                                a 30,30 0 0,0 -60,0
-            "></path>
-        </svg>
-        <svg id="outer" class="mainmenu" style="width:120px;height:120px">
-            <path filter="url(#shadow)" class="future" stroke="#ff9a00" stroke-width="3" fill="transparent" stroke-dasharray="40 20" d="
+        <svg id="outer" class="mainmenu ui" style="width:120px;height:120px">
+            <path filter="url(#shadow)" class="future ui" stroke-width="3" fill="transparent"
+                  stroke-dasharray="40 20" d="
                     M 60, 60
                     m -40, 0
                     a 40,40 0 0,0 80,0
                     a 40,40 0 0,0 -80,0
                     "></path>
         </svg>
+        <svg id="inner" class="mainmenu ui" style="width:120px;height:120px">
+            <path filter="url(#shadow)" class="future ui" stroke-width="4" fill="transparent"
+                  stroke-dasharray="15 5 2" d="
+                                M 60, 60
+                                m -30, 0
+                                a 30,30 0 0,0 60,0
+                                a 30,30 0 0,0 -60,0
+            "></path>
+        </svg>
         <svg id="hide-ui" class="mainmenu" style="width:120px;height:120px">
-            <text class="future" x="40" y="65" font-family="Exo 2" font-size="16" fill="#ff9a00">Menu</text>
+            <text class="future ui-text" x="40" y="65" font-family="Exo 2" font-size="16">Menu</text>
         </svg>
     </div>
 
@@ -80,32 +84,37 @@
                 </filter>
             </defs>
 
-            <circle id="createModeButton" filter="url(#shadow)" class="future createButton" cx="150" cy="150" r="35" stroke="#ff9a00"
-                    stroke-width="3" fill="#262626" fill-opacity=".7"></circle>
-            <circle id="deleteModeButton" filter="url(#shadow)" class="future deleteButton" cx="150" cy="150" r="35" stroke="#ff9a00"
-                    stroke-width="3" fill="#262626" fill-opacity=".7"></circle>
-            <circle id="extraModeButton" filter="url(#shadow)" class="future extraButton" cx="150" cy="150" r="35" stroke="#ff9a00"
-                    stroke-width="3" fill="#262626" fill-opacity=".7"></circle>
-            <circle id="undoModeButton" filter="url(#shadow)" class="future undoButton" cx="150" cy="150" r="35" stroke="#ff9a00"
-                    stroke-width="3" fill="#262626" fill-opacity=".7"></circle>
-            <circle id="redoModeButton" filter="url(#shadow)" class="future redoButton" cx="150" cy="150" r="35" stroke="#ff9a00"
-                    stroke-width="3" fill="#262626" fill-opacity=".7"></circle>
+            <circle id="createModeButton" filter="url(#shadow)" class="future createButton ui" cx="150" cy="150" r="35"
+                    stroke-width="3"></circle>
+            <circle id="deleteModeButton" filter="url(#shadow)" class="future deleteButton ui" cx="150" cy="150" r="35"
+                    stroke-width="3"></circle>
+            <circle id="extraModeButton" filter="url(#shadow)" class="future extraButton ui" cx="150" cy="150" r="35"
+                    stroke-width="3"></circle>
+            <circle id="undoModeButton" filter="url(#shadow)" class="future undoButton ui" cx="150" cy="150" r="35"
+                    stroke-width="3"></circle>
+            <circle id="redoModeButton" filter="url(#shadow)" class="future redoButton ui" cx="150" cy="150" r="35"
+                    stroke-width="3"></circle>
 
 
             <!-- ADD VERTEX BUTTON -->
-            <text id="add-vertex" class="future addVertexButton toolText" x="125" y="60" font-family="Exo 2" font-size="14" fill="#ff9a00">CREATE</text>
+            <text id="add-vertex" class="future addVertexButton toolText ui-text" x="125" y="60"
+                  font-family="Exo 2" font-size="14">CREATE</text>
 
             <!-- ADD EDGE BUTTON -->
-            <text id="add-edge" class="future addEdgeButton toolText" x="18" y="135" font-family="Exo 2" font-size="14" fill="#ff9a00">UNUSED</text>
+            <text id="add-edge" class="future addEdgeButton toolText ui-text" x="18" y="135"
+                  font-family="Exo 2" font-size="14">UNUSED</text>
 
             <!-- ADD WEIGHT BUTTON -->
-            <text id="erase" class="future eraseButton toolText" x="230" y="135" font-family="Exo 2" font-size="14" fill="#ff9a00">DELETE</text>
+            <text id="erase" class="future eraseButton toolText ui-text" x="230" y="135"
+                  font-family="Exo 2" font-size="14">DELETE</text>
 
             <!-- UNDO BUTTON -->
-            <text id="undo" class="future undoButton toolText" x="80" y="245" font-family="Exo 2" font-size="14" fill="#ff9a00">UNDO</text>
+            <text id="undo" class="future undoButton toolText ui-text" x="80" y="245"
+                  font-family="Exo 2" font-size="14">UNDO</text>
 
             <!-- REDO BUTTON -->
-            <text id="redo" class="future redoButton toolText" x="182" y="245" font-family="Exo 2" font-size="14" fill="#ff9a00">REDO</text>
+            <text id="redo" class="future redoButton toolText ui-text" x="182" y="245"
+                  font-family="Exo 2" font-size="14">REDO</text>
         </svg>
     </div>
 
