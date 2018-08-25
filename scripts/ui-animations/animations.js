@@ -9,7 +9,14 @@
 'use strict';
 define(['ui-animations/anime','utils/Util'], function(Anime,Util)
 {
+    let lightOrange = "#ffcb48";
+    let darkOrange = "#ff9a00";
+    let lightGray = "#9d9b98";
+    let darkGray = "#262626";
+    let white = "#fff";
+
     return {
+
         start()
         {
             //Sets specific buttons as variables, set default delay at 0.
@@ -21,11 +28,6 @@ define(['ui-animations/anime','utils/Util'], function(Anime,Util)
             let openTools = true;
             let showUI = true;
             let eduModeStyle = false;
-            let lightOrange = "#ffcb48";
-            let darkOrange = "#ff9a00";
-            let lightGray = "#9d9b98";
-            let darkGray = "#262626";
-            let white = "#fff";
 
             menu.forEach(function (element) {
                 generateUI(element,200,200,50,delay);
@@ -304,7 +306,18 @@ define(['ui-animations/anime','utils/Util'], function(Anime,Util)
             }
 
         }, swapColors(graph) {
-                graph.view.engine.config.backgroundColor = '#fff';
+            graph.config.backgroundColor = white;
+            graph.config.vertexOutlineColor = darkGray;
+            graph.config.vertexTextColor = darkGray;
+            graph.config.vertexHoverColor = lightGray;
+            graph.config.vertexSelectColor = lightGray;
+            graph.config.edgeLineColor = darkGray;
+            graph.config.edgeBoxOutlineColor = darkGray;
+            graph.config.edgeBoxBackgroundColor = white;
+            graph.config.edgeTextColor = darkGray;
+            graph.config.edgeArrowColor = darkGray;
+            graph.config.edgeHoverColor = lightGray;
+            graph.config.trackingEdgeColor = lightGray;
         }
     };
 });
