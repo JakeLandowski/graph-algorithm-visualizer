@@ -30,7 +30,7 @@ function(GraphModel, GraphView, Util)
             edgeWidth:              config.edgeWidth              !== undefined ? config.edgeWidth                : 5,
             edgeBoxSize:            config.edgeBoxSize            !== undefined ? config.edgeBoxSize              : 15,
             edgeCurveOffset:        config.edgeCurveOffset        !== undefined ? config.edgeCurveOffset          : 100,
-            vertexOutlineColor:     config.vertexOutlineColor     !== undefined ? [config.vertexOutlineColor]     : [primaryColor],
+            vertexOutlineColor:     config.vertexOutlineColor     !== undefined ? [config.vertexOutlineColor]     : [primaryColor], 
             vertexTextColor:        config.vertexTextColor        !== undefined ? [config.vertexTextColor]        : [primaryColor],
             vertexHoverColor:       config.vertexHoverColor       !== undefined ? [config.vertexHoverColor]       : [secondaryColor],
             vertexSelectColor:      config.vertexSelectColor      !== undefined ? [config.vertexSelectColor]      : [secondaryColor],
@@ -41,7 +41,8 @@ function(GraphModel, GraphView, Util)
             edgeArrowColor:         config.edgeArrowColor         !== undefined ? [config.edgeArrowColor]         : [primaryColor],
             edgeHoverColor:         config.edgeHoverColor         !== undefined ? [config.edgeHoverColor]         : [secondaryColor],
             trackingEdgeColor:      config.trackingEdgeColor      !== undefined ? [config.trackingEdgeColor]      : [secondaryColor],
-        };
+        }; // these are arrays because it makes the colors pointers that cascade down and canvas render automatically extacts the values
+           //from the array so if you decide to change the color you will need to access the array [0] and change that color
 
         this.model = new GraphModel(container.clientWidth, container.clientHeight, this.config);
         this.view  = new GraphView(container, this.model, this.config);
@@ -335,7 +336,12 @@ function(GraphModel, GraphView, Util)
 
         load()
         {
-            
+            const commandJSON = localStorage.getItem('graph');
+
+            if(commandJSON)
+            {
+                this.model.loadGraph(commandJSON);
+            }
         },
 
         undo()

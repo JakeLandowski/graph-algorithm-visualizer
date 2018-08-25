@@ -43,8 +43,8 @@ function(Tests, Graph, Animations)
         createNewBtn[i].addEventListener('click', function(){graph.save();});//newGraph);
     }
 
-    for(let i = 0; i<createNewBtn.length; i++) {
-        createNewBtn[i].addEventListener('click', function(){graph.load();});//newGraph);
+    for(let i = 0; i<selectGraphBtn.length; i++) {
+        selectGraphBtn[i].addEventListener('click', function(){graph.load();});//newGraph);
     }
 
      for(let i = 0; i<createBtn.length; i++) {

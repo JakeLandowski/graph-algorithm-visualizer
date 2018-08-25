@@ -34,6 +34,11 @@ define(function()
         redo()
         {
             return this.redoLog.pop();
+        },
+
+        serialize()
+        {
+            return JSON.stringify(this);
         }
     };
 
