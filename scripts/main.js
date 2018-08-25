@@ -31,6 +31,7 @@ function(Tests, Graph, Animations)
 
 
     const createNewBtn  = document.getElementsByClassName('creategraph');
+    const selectGraphBtn  = document.getElementsByClassName('selectgraph');
 
     const createBtn     = document.getElementsByClassName('addVertexButton');
     const addEdgeBtn    = document.getElementsByClassName('addEdgeButton');
@@ -39,7 +40,11 @@ function(Tests, Graph, Animations)
     const redoBtn       = document.getElementsByClassName('redoButton');
 
     for(let i = 0; i<createNewBtn.length; i++) {
-        createNewBtn[i].addEventListener('click', newGraph);
+        createNewBtn[i].addEventListener('click', function(){graph.save();});//newGraph);
+    }
+
+    for(let i = 0; i<createNewBtn.length; i++) {
+        createNewBtn[i].addEventListener('click', function(){graph.load();});//newGraph);
     }
 
      for(let i = 0; i<createBtn.length; i++) {
