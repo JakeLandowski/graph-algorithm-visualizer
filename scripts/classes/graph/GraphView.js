@@ -171,8 +171,6 @@ define(['classes/engine/RenderingEngine',
                 {
                     strokeStyle: this.config.trackingEdgeColor,
                     lineWidth:   this.config.edgeWidth,
-                    shadowBlur:  20,
-                    shadowColor: this.config.trackingEdgeColor
                 });
 
             }.bind(this));
@@ -200,9 +198,7 @@ define(['classes/engine/RenderingEngine',
             {
                 let grd = this.engine.context.createRadialGradient(params.center.x, params.center.y, 10, params.center.x,
                     params.center.y, 20);
-                grd.addColorStop(.3, this.config.backgroundColor);
-                grd.addColorStop(.7, "transparent");
-                grd.addColorStop(1, this.config.backgroundColor);
+                grd.addColorStop(.5, this.config.backgroundColor);
 
                 // Set other existing edge to curve
                 const otherEdge = this.edgeMap[ [params.to, params.from] ];
@@ -241,28 +237,23 @@ define(['classes/engine/RenderingEngine',
                               curveOffset:    this.config.edgeCurveOffset,
                               strokeStyle:    this.config.edgeLineColor,
                               lineWidth:      this.config.edgeWidth,
-                              shadowBlur:     16,
-                              shadowColor:    this.config.edgeLineColor
                           }),
                 };
 
                 const edgeCenterX = directedAndOtherEdge ? edge.line.curveCenterX : params.center.x;
                 const edgeCenterY = directedAndOtherEdge ? edge.line.curveCenterY : params.center.y;
 
-                edge.box = this.engine.createRectangle(edgeCenterX, edgeCenterY, 
-                this.config.edgeBoxSize, this.config.edgeBoxSize, this.EDGE_LAYER, 
+                edge.box = this.engine.createCircle(edgeCenterX, edgeCenterY,
+                this.config.edgeBoxSize, this.EDGE_LAYER,
                 {
                     strokeStyle: this.config.edgeBoxOutlineColor,
                     fillStyle:   grd,
-                    background:  this.config.edgeBoxBackgroundColor
                 });
 
-                edge.text = this.engine.createText(params.weight, edgeCenterX, 
-                edgeCenterY, this.EDGE_LAYER, 
+                edge.text = this.engine.createText(params.weight, edgeCenterX,
+                edgeCenterY, this.EDGE_LAYER,
                 {
                     fillStyle:   this.config.edgeTextColor,
-                    shadowBlur:  16,
-                    shadowColor: this.config.edgeTextColor,
                     font:        '16px monospace'
                 });
 

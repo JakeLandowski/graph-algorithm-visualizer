@@ -305,15 +305,14 @@ define(['ui-animations/anime','utils/Util'], function(Anime,Util)
                 }
             }
 
-        }, swapColors(graph) {
+        }, swapColors(graph,color,) {
+
             graph.config.backgroundColor = white;
             graph.config.vertexOutlineColor = darkGray;
             graph.config.vertexTextColor = darkGray;
             graph.config.vertexHoverColor = lightGray;
             graph.config.vertexSelectColor = lightGray;
             graph.config.edgeLineColor = darkGray;
-            graph.config.edgeBoxOutlineColor = darkGray;
-            graph.config.edgeBoxBackgroundColor = white;
             graph.config.edgeTextColor = darkGray;
             graph.config.edgeArrowColor = darkGray;
             graph.config.edgeHoverColor = lightGray;
