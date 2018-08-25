@@ -61,10 +61,10 @@ define(['classes/engine/RenderingEngine',
                 const vertex = this.engine.createCircle(params.x, params.y, this.config.vertexSize, this.VERTEX_LAYER, 
                 {
                     fillStyle:   this.config.backgroundColor,
-                    strokeStyle: this.config.strokeColor,
+                    strokeStyle: this.config.vertexOutlineColor,
                     lineWidth:   this.config.vertexOutlineSize,
                     shadowBlur:  16,
-                    shadowColor: this.config.vertexOutlineSize
+                    shadowColor: this.config.vertexOutlineColor
                 });
 
                 const text = this.engine.createText(params.data, params.x, params.y, this.VERTEX_LAYER, 

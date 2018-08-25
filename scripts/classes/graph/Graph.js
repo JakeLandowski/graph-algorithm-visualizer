@@ -326,7 +326,7 @@ function(GraphModel, GraphView, Util)
 
         save()
         {
-            this.model.save();
+            localStorage.setItem('graph', this.model.saveCurrentGraph());
         },
 
         load()

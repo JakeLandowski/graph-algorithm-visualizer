@@ -508,6 +508,11 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
 
 //====================== Spatial Index API (Graph -> Model -> Spatial) ===========================//
 
+        saveCurrentGraph()
+        {
+            return this.userCommands.serialize();
+        },
+
         /**
          *  Searches the Vertex Spatial Index for an vertex object
          *  clicked at this x, y point. Will return the vertex object
