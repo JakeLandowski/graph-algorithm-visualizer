@@ -25,7 +25,7 @@ function(Circle, Rectangle, Line, Text, Arrow)
         this.context    = this.canvas.getContext('2d');
         this.calcPixelRatio();
         
-        this.canvas.style.background = this.config.backgroundColor; 
+        // this.canvas.style.background = this.config.backgroundColor; 
 
         // this.frameCount = 0;
         this.layers    = []; // Layers

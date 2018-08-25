@@ -324,6 +324,16 @@ function(GraphModel, GraphView, Util)
 
 //====================== Methods ===========================//
 
+        save()
+        {
+            this.model.save();
+        },
+
+        load()
+        {
+            
+        },
+
         undo()
         {
             this.model.undo(this.model.userCommands);
