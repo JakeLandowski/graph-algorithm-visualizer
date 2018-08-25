@@ -196,8 +196,8 @@ define(['ui-animations/anime','utils/Util'], function(Anime,Util)
                 let toolButtons = document.querySelector("#toolbuttons");
                 let toolText = document.querySelectorAll(".toolText");
 
-                if (key === 17 && openTools) {
-                    openTools = false;
+                if (key === 17) {
+                    // openTools = false;
                     toolText.forEach(function (text) {
                         text.style.display = 'none';
                     });
@@ -216,7 +216,7 @@ define(['ui-animations/anime','utils/Util'], function(Anime,Util)
                     expandTools("#redoModeButton",0,0);
                     setTimeout(function () {
                         toolButtons.style.display = 'none';
-                        openTools = true;
+                        // openTools = true;
                     }, 200);
                 }
             }, 500));
