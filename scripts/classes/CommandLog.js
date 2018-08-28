@@ -38,7 +38,16 @@ define(function()
 
         serialize()
         {
+            console.log(this);
+            console.log(JSON.parse(JSON.stringify(this)));
             return JSON.stringify(this);
+        },
+
+        parse(jsonData)
+        {
+            const data = JSON.parse(jsonData);
+            this.undoLog = data.undoLog;
+            this.redoLog = data.redoLog;
         }
     };
 

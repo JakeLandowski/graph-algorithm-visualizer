@@ -50,11 +50,11 @@ function(GraphModel, GraphView, Util)
         this.view.onUndo.attach('undo', function(_, params) { this.undo(); }.bind(this));
         this.view.onRedo.attach('redo', function(_, params) { this.redo(); }.bind(this));
         
-        this.symbols = ['Z', 'Y', 'X', 'W', 'V', 'U', 
-                        'T', 'S', 'R', 'Q', 'P', 'O', 
-                        'N', 'M', 'L', 'K', 'J', 'I', 
-                        'H', 'G', 'F', 'E', 'D', 'C', 
-                        'B', 'A'];
+        // this.symbols = ['Z', 'Y', 'X', 'W', 'V', 'U', 
+        //                 'T', 'S', 'R', 'Q', 'P', 'O', 
+        //                 'N', 'M', 'L', 'K', 'J', 'I', 
+        //                 'H', 'G', 'F', 'E', 'D', 'C', 
+        //                 'B', 'A'];
         
         this.mouseEventsLogged  = [];
         this.hoverThrottleDelay = 30;
@@ -166,19 +166,19 @@ function(GraphModel, GraphView, Util)
                     {
                         this.model.startEditingEdge(edge);
                     }
-                    else if(this.symbols.length > 0) // symbols left? Add vertex!
+                    else if(this.model.symbols.length > 0) // symbols left? Add vertex!
                     {   
                         this.model.dispatch(this.model.userCommands,
                         { 
                             type: 'addVertex',
                             data: 
                             {
-                                symbol:        this.peekSymbol(),
+                                symbol:        this.model.peekSymbol(),
                                 x:             params.x,
                                 y:             params.y,
                                 numEdges:      0, 
-                                returnSymbol:  this.returnSymbol.bind(this),   
-                                getSymbol:     this.getSymbol.bind(this)
+                                // returnSymbol:  this.returnSymbol.bind(this),   
+                                // getSymbol:     this.getSymbol.bind(this)
                             },
                             undo: 'removeVertex'
                         });
@@ -240,8 +240,8 @@ function(GraphModel, GraphView, Util)
                             x:            params.x,
                             y:            params.y,
                             numEdges:     vertex.numEdges,
-                            returnSymbol: this.returnSymbol.bind(this),
-                            getSymbol:    this.getSymbol.bind(this)
+                            // returnSymbol: this.returnSymbol.bind(this),
+                            // getSymbol:    this.getSymbol.bind(this)
                         },
                         undo: 'addVertex',
                     });
@@ -312,26 +312,26 @@ function(GraphModel, GraphView, Util)
 
 //====================== Setters ===========================//
 
-        set vertexSize(size)
-        {
-            this.config.vertexSize = size < 1 ? 1 : size;
-        },
+        // set vertexSize(size)
+        // {
+        //     this.config.vertexSize = size < 1 ? 1 : size;
+        // },
 
-        set vertexOutlineSize(size)
-        {
-            this.config.vertexOutlineSize = size < 1 ? 1 : size;
-        },
+        // set vertexOutlineSize(size)
+        // {
+        //     this.config.vertexOutlineSize = size < 1 ? 1 : size;
+        // },
 
-        set edgeWidth(width)
-        {
-            this.config.edgeWidth = width < 1 ? 1 : width;
-        },
+        // set edgeWidth(width)
+        // {
+        //     this.config.edgeWidth = width < 1 ? 1 : width;
+        // },
 
 //====================== Methods ===========================//
 
         save()
         {
-            localStorage.setItem('graph', this.model.saveCurrentGraph());
+            localStorage.setItem('graph', this.model.saveGraph());
         },
 
         load()
@@ -354,20 +354,20 @@ function(GraphModel, GraphView, Util)
             this.model.redo(this.model.userCommands);
         },
 
-        getSymbol()
-        {
-            return this.symbols.pop();  
-        },
+        // getSymbol()
+        // {
+        //     return this.symbols.pop();  
+        // },
 
-        peekSymbol()
-        {
-            return this.symbols[this.symbols.length - 1];
-        },
+        // peekSymbol()
+        // {
+        //     return this.symbols[this.symbols.length - 1];
+        // },
 
-        returnSymbol(symbol)
-        {
-            this.symbols.push(symbol);
-        },
+        // returnSymbol(symbol)
+        // {
+        //     this.symbols.push(symbol);
+        // },
 
         clearMouseEvents()
         {

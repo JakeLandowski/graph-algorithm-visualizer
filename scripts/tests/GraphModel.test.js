@@ -34,8 +34,8 @@
                     // toNeighbors:   [], 
                     // fromNeighbors: [], 
                     numEdges: 0,
-                    returnSymbol:  function(){},   
-                    getSymbol:     function(){ return 'A'; }
+                    // returnSymbol:  function(){},   
+                    // getSymbol:     function(){ return 'A'; }
                 },
                 undo: 'removeVertex'
             });

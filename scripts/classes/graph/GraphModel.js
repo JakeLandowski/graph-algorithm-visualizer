@@ -48,6 +48,12 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
  
         this.userCommands = new CommandLog();
         this.indirectEdgeRemoveCommands = new CommandLog();
+
+        this.symbols = ['Z', 'Y', 'X', 'W', 'V', 'U', 
+                        'T', 'S', 'R', 'Q', 'P', 'O', 
+                        'N', 'M', 'L', 'K', 'J', 'I', 
+                        'H', 'G', 'F', 'E', 'D', 'C', 
+                        'B', 'A'];
     };
 
     GraphModel.prototype = 
@@ -97,6 +103,38 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
             }
         },
 
+        saveGraph()
+        {
+            return this.userCommands.serialize();
+        },
+
+        loadGraph(commandJSON)
+        {
+            const log = this.userCommands;
+            this.clearGraph();
+            log.parse(commandJSON);
+
+            log.undoLog.forEach(function(command)
+            {  
+                if(this[command.type])
+                {
+                    console.log(command);
+                    this[command.type](command.data);
+                }
+
+            }.bind(this));
+        },
+
+        clearGraph()
+        {
+            let command = this.userCommands.undo();
+            while(command && this[command.undo])
+            {
+                this[command.undo](command.data);
+                command = this.userCommands.undo();
+            }
+        },
+
         /**
          *  For asserting that arguments in a given parameter object
          *  are actually set when the method is called. Otherwise
@@ -140,11 +178,12 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
          */
         addVertex(args={})
         {
-            this.assertArgs(args, ['symbol', 'x', 'y', 'numEdges', 
-                                   'returnSymbol', 'getSymbol'], 
+            this.assertArgs(args, ['symbol', 'x', 'y', 'numEdges'], 
+                                //    'returnSymbol', 'getSymbol'], 
                                    'Missing arguments for addVertex command');
 
-            const data          = args.getSymbol();
+            const data          = this.getSymbol();
+
             const x             = args.x;
             const y             = args.y;
             const numEdges      = args.numEdges;
@@ -161,7 +200,7 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
                 this.vertexSpacialIndex.add(vertex);
                 this.onVertexAdded.notify({ data: data, x: x, y: y });
  
-                for(let i = 0; i < args.numEdges; i++)
+                for(let i = 0; i < numEdges; i++)
                     this.undo(this.indirectEdgeRemoveCommands);
             }
         },
@@ -188,12 +227,13 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
          */
         removeVertex(args={})
         {
-            this.assertArgs(args, ['symbol', 'x', 'y', 'numEdges',
-                                   'returnSymbol', 'getSymbol'], 
+            this.assertArgs(args, ['symbol', 'x', 'y', 'numEdges'],
+                                //    'returnSymbol', 'getSymbol'], 
                                    'Missing arguments for removeVertex command');
 
+            // const returnSymbol = args.returnSymbol;
+
             const data         = args.symbol;
-            const returnSymbol = args.returnSymbol;
             const removed      = this.adjList.getVertex(data);
 
             // Clean up edges
@@ -215,7 +255,7 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
 
             this.adjList.deleteVertex(data);
             this.vertexSpacialIndex.remove(removed);
-            returnSymbol(data);
+            this.returnSymbol(data);
 
             if(this.selectedVertex)
             {
@@ -508,11 +548,6 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
 
 //====================== Spatial Index API (Graph -> Model -> Spatial) ===========================//
 
-        saveCurrentGraph()
-        {
-            return this.userCommands.serialize();
-        },
-
         /**
          *  Searches the Vertex Spatial Index for an vertex object
          *  clicked at this x, y point. Will return the vertex object
@@ -607,7 +642,24 @@ function(Event, AdjacencyList, Vertex, Edge, SpacialIndex, CommandLog)
             this.cellWidth  = this.width / this.cellRatio;
             this.height     = height;
             this.cellHeight = this.height / this.cellRatio;
-        }
+        },
+
+//====================== Symbol Pool Methods  ===========================//
+
+        getSymbol()
+        {
+            return this.symbols.pop();  
+        },
+
+        peekSymbol()
+        {
+            return this.symbols[this.symbols.length - 1];
+        },
+
+        returnSymbol(symbol)
+        {
+            this.symbols.push(symbol);
+        },
     };
 
     return GraphModel;
