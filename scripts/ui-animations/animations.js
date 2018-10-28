@@ -16,7 +16,6 @@ define(['ui-animations/anime','utils/Util'], function(Anime,Util)
     let white = "#fff";
 
     return {
-
         start()
         {
             //Sets specific buttons as variables, set default delay at 0.
@@ -32,100 +31,12 @@ define(['ui-animations/anime','utils/Util'], function(Anime,Util)
                 delay = delay + 100;
             });
 
-            //Hide/Show tools menu
-            let createGraph = document.getElementsByClassName('creategraph');
-            for(let i = 0; i<createGraph.length; i++) {
-                createGraph[i].addEventListener('mouseenter',function () {
-                    document.getElementById('creategraphbutton').style.stroke = (eduModeStyle) ? lightGray : lightOrange;
-                });
-
-                createGraph[i].addEventListener('mouseleave',function () {
-                    document.getElementById('creategraphbutton').style.stroke = (eduModeStyle) ? darkGray : darkOrange;
-                });
-            }
-
-            let selectGraph = document.getElementsByClassName('selectgraph');
-            for(let i = 0; i<selectGraph.length; i++) {
-                selectGraph[i].addEventListener('mouseenter',function () {
-                    document.getElementById('selectgraphbutton').style.stroke = (eduModeStyle) ? lightGray : lightOrange;
-                });
-
-                selectGraph[i].addEventListener('mouseleave',function () {
-                    document.getElementById('selectgraphbutton').style.stroke = (eduModeStyle) ? darkGray : darkOrange;
-                });
-            }
+            setHighlights();
 
             let eduMode = document.getElementsByClassName('eduMode');
-
-
             for(let i = 0; i<eduMode.length; i++) {
                 eduMode[i].addEventListener('click',function () {
                     swapStyleSheet('graphedu.css');
-                });
-
-                eduMode[i].addEventListener('mouseenter',function () {
-                    document.getElementById('eduModeButton').style.stroke = (eduModeStyle) ? lightGray : lightOrange;
-                });
-
-                eduMode[i].addEventListener('mouseleave',function () {
-                    document.getElementById('eduModeButton').style.stroke = (eduModeStyle) ? darkGray : darkOrange;
-                });
-            }
-
-
-            //Tool Menu Highlights
-            let addVertex = document.getElementsByClassName('addVertexButton');
-            for(let i = 0; i<addVertex.length; i++) {
-                addVertex[i].addEventListener('mouseenter',function () {
-                    document.getElementById('add-vertex').style.stroke = (eduModeStyle) ? lightGray : lightOrange;
-                });
-
-                addVertex[i].addEventListener('mouseleave',function () {
-                    document.getElementById('add-vertex').style.stroke = (eduModeStyle) ? darkGray : darkOrange;
-                });
-            }
-
-            let addEdge = document.getElementsByClassName('addEdgeButton');
-            for(let i = 0; i<addEdge.length; i++) {
-                addEdge[i].addEventListener('mouseenter',function () {
-                    document.getElementById('add-edge').style.stroke = (eduModeStyle) ? lightGray : lightOrange;
-                });
-
-                addEdge[i].addEventListener('mouseleave',function () {
-                    document.getElementById('add-edge').style.stroke = (eduModeStyle) ? darkGray : darkOrange;
-                });
-            }
-
-            let addWeight = document.getElementsByClassName('addWeightButton');
-            for(let i = 0; i<addWeight.length; i++) {
-                addWeight[i].addEventListener('mouseenter',function () {
-                    document.getElementById('edit-edge').style.stroke = (eduModeStyle) ? lightGray : lightOrange;
-                });
-
-                addWeight[i].addEventListener('mouseleave',function () {
-                    document.getElementById('edit-edge').style.stroke = (eduModeStyle) ? darkGray : darkOrange;
-                });
-            }
-
-            let undo = document.getElementsByClassName('undoButton');
-            for(let i = 0; i<undo.length; i++) {
-                undo[i].addEventListener('mouseenter',function () {
-                    document.getElementById('undo').style.stroke = (eduModeStyle) ? lightGray : lightOrange;
-                });
-
-                undo[i].addEventListener('mouseleave',function () {
-                    document.getElementById('undo').style.stroke = (eduModeStyle) ? darkGray : darkOrange;
-                });
-            }
-
-            let redo = document.getElementsByClassName('redoButton');
-            for(let i = 0; i<redo.length; i++) {
-                redo[i].addEventListener('mouseenter',function () {
-                    document.getElementById('redo').style.stroke = (eduModeStyle) ? lightGray : lightOrange;
-                });
-
-                redo[i].addEventListener('mouseleave',function () {
-                    document.getElementById('redo').style.stroke = (eduModeStyle) ? darkGray : darkOrange;
                 });
             }
 
@@ -283,7 +194,6 @@ define(['ui-animations/anime','utils/Util'], function(Anime,Util)
             });
 
             //StyleSheet Switch
-
             function swapStyleSheet() {
                 let ui = document.getElementsByClassName('ui');
 
@@ -292,7 +202,6 @@ define(['ui-animations/anime','utils/Util'], function(Anime,Util)
                     for(let i = 0; i<ui.length; i++) {
                         ui[i].style.stroke = darkOrange;
                     }
-                    //.engine.config.backgroundColor = '#262626';
                     eduModeStyle = false;
                 } else {
                     document.getElementById('pagestyle').setAttribute('href', 'css/graphedu.css');
@@ -303,7 +212,30 @@ define(['ui-animations/anime','utils/Util'], function(Anime,Util)
                 }
             }
 
+            function setHighlights() {
+                let elements = ['creategraph','selectgraph','eduMode','addVertexButton','addEdgeButton',
+                    'addWeightButton','undoButton','redoButton','deleteButton','createButton','extraButton'];
+                let elementIds = ['creategraphbutton','selectgraphbutton','eduModeButton',
+                    'add-vertex','add-edge','edit-edge','undo','redo','deleteModeButton','createModeButton',
+                    'extraModeButton'];
+
+                let arrayOfElements;
+                for(let i = 0; i<elements.length; i++) {
+                    arrayOfElements = document.getElementsByClassName(elements[i]);
+                    for(let j = 0; j<arrayOfElements.length; j++) {
+                        arrayOfElements[j].addEventListener('mouseenter',function () {
+                            document.getElementById(elementIds[i]).style.stroke = (eduModeStyle) ? lightGray : lightOrange;
+                        });
+
+                        arrayOfElements[j].addEventListener('mouseleave',function () {
+                            document.getElementById(elementIds[i]).style.stroke = (eduModeStyle) ? darkGray : darkOrange;
+                        });
+                    }
+                }
+            }
+
         }, swapColors(graph,primary,secondary,bg) {
+            //Change graph colors on click
             graph.config.backgroundColor[0] = bg;
             graph.config.vertexOutlineColor[0] = primary;
             graph.config.vertexTextColor[0] = primary;

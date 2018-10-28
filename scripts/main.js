@@ -21,6 +21,15 @@ function(Graph, Animations)
      let darkGray = "#262626";
      let white = "#fff";
      let eduModeActive = false;
+     let elementIds = ['addVertexButton','addEdgeButton','eraseButton',
+         'undoButton','redoButton'];
+     let functionArray = ['createMode','edgeMode','eraseMode','undo','redo'];
+     let graph = newGraph({undirected: false});
+     let createNewBtn  = document.getElementsByClassName('creategraph');
+     let selectGraphBtn  = document.getElementsByClassName('selectgraph');
+
+     addFunctionality();
+
 
      for(let i = 0; i<eduMode.length; i++) {
          eduMode[i].addEventListener('click',function () {
@@ -36,57 +45,24 @@ function(Graph, Animations)
          });
      }
 
-    let graph = newGraph
-    ({
-        undirected: false
-    }); 
-
-
-    const createNewBtn  = document.getElementsByClassName('creategraph');
-    const selectGraphBtn  = document.getElementsByClassName('selectgraph');
-
-    const createBtn     = document.getElementsByClassName('addVertexButton');
-    const addEdgeBtn    = document.getElementsByClassName('addEdgeButton');
-    const eraseBtn      = document.getElementsByClassName('eraseButton');
-    const undoBtn       = document.getElementsByClassName('undoButton');
-    const redoBtn       = document.getElementsByClassName('redoButton');
-
-    for(let i = 0; i<createNewBtn.length; i++) {
-        createNewBtn[i].addEventListener('click', function(){graph.save();});//newGraph);
-    }
-
-    for(let i = 0; i<selectGraphBtn.length; i++) {
-        selectGraphBtn[i].addEventListener('click', function(){graph.load();});//newGraph);
-    }
-
-     for(let i = 0; i<createBtn.length; i++) {
-         createBtn[i].addEventListener('click',function () {
-             graph.createMode();
-         })
+     for(let i = 0; i<createNewBtn.length; i++) {
+         createNewBtn[i].addEventListener('click', function(){graph.save();});//newGraph);
      }
 
-     for(let i = 0; i<addEdgeBtn.length; i++) {
-         addEdgeBtn[i].addEventListener('click',function () {
-             graph.edgeMode();
-         })
+     for(let i = 0; i<selectGraphBtn.length; i++) {
+         selectGraphBtn[i].addEventListener('click', function(){graph.load();});//newGraph);
      }
 
-     for(let i = 0; i<eraseBtn.length; i++) {
-         eraseBtn[i].addEventListener('click',function () {
-             graph.eraseMode();
-         })
-     }
-
-     for(let i = 0; i<undoBtn.length; i++) {
-         undoBtn[i].addEventListener('click',function () {
-             graph.undo();
-         })
-     }
-
-     for(let i = 0; i<redoBtn.length; i++) {
-         redoBtn[i].addEventListener('click',function () {
-             graph.redo();
-         })
+     function addFunctionality() {
+         let elements;
+         for(let i = 0; i<elementIds.length; i++){
+             elements = document.getElementsByClassName(elementIds[i]);
+             for(let j = 0; j<elements.length; j++){
+                 elements[j].addEventListener('click',function () {
+                 graph[functionArray[i]]();
+             })
+             }
+         }
      }
 
      function newGraph(config={}) {
