@@ -10,9 +10,8 @@
  requirejs(['tests/start-tests', 
             'classes/graph/Graph', 
             'ui-animations/animations'], 
-function(Tests, Graph, Animations)
+function(Graph, Animations)
  {
-    Tests.run();
     Animations.start();
 
      let eduMode = document.getElementsByClassName('eduMode');
