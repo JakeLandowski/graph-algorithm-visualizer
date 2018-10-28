@@ -7,8 +7,7 @@
  */
 
 'use strict';
- requirejs(['tests/start-tests', 
-            'classes/graph/Graph', 
+ requirejs(['classes/graph/Graph', 
             'ui-animations/animations'], 
 function(Graph, Animations)
  {
