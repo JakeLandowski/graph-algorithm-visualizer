@@ -8,39 +8,37 @@
  */
 
 'use strict';
-define(function()
+
+const Entity = function(context, engine, level)
 {
-    const Entity = function(context, engine, level)
+    this.context = context;
+    this.engine  = engine;
+    this.level   = level;
+    this.styles  = Object.create(null);
+};
+
+Entity.prototype = 
+{
+    delete()
     {
-        this.context = context;
-        this.engine  = engine;
-        this.level   = level;
-        this.styles  = Object.create(null);
-    };
-
-    Entity.prototype = 
-    {
-        delete()
-        {
-            this.engine.deleteEntity(this.id);
-        },
-        
-        sendToLayer(newLevel)
-        {
-            this.engine.moveEntityToLayer(this.id, this.level, newLevel);
-            this.level = newLevel;
-        },
-
-        sendToFront()
-        {
-            this.sendToLayer(this.engine.maxLayer());
-        },
-
-        sendToBack()
-        {
-            this.sendToLayer(0);
-        }
-    };
+        this.engine.deleteEntity(this.id);
+    },
     
-    return Entity;
-});
+    sendToLayer(newLevel)
+    {
+        this.engine.moveEntityToLayer(this.id, this.level, newLevel);
+        this.level = newLevel;
+    },
+
+    sendToFront()
+    {
+        this.sendToLayer(this.engine.maxLayer());
+    },
+
+    sendToBack()
+    {
+        this.sendToLayer(0);
+    }
+};
+
+export default Entity;

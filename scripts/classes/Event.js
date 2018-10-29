@@ -7,58 +7,56 @@
  */
 
 'use strict';
-define(function()
+
+const Event = function(sender)
 {
-    const Event = function(sender)
+    this.sender = sender;
+    this.listeners = Object.create(null);
+    this.enable();
+    this.canNotify = true;
+};
+
+Event.prototype = 
+{
+    attach(name, listener)
     {
-        this.sender = sender;
-        this.listeners = Object.create(null);
-        this.enable();
-        this.canNotify = true;
-    };
+        this.listeners[name] = listener;
+    },
 
-    Event.prototype = 
+    detach(name)
     {
-        attach(name, listener)
-        {
-            this.listeners[name] = listener;
-        },
+        if(this.listeners[name]) delete this.listeners[name];
+    },
 
-        detach(name)
+    notify(args)
+    {
+        if(this.canNotify)
         {
-            if(this.listeners[name]) delete this.listeners[name];
-        },
-
-        notify(args)
-        {
-            if(this.canNotify)
+            if(this.enabled)
             {
-                if(this.enabled)
+                for(const listener in this.listeners)
                 {
-                    for(const listener in this.listeners)
-                    {
-                        this.listeners[listener](this.sender, args);
-                    }
+                    this.listeners[listener](this.sender, args);
                 }
             }
-            else this.canNotify = true;
-        },
-
-        disable()
-        {
-            this.enabled = false;
-        },
-
-        enable()
-        {
-            this.enabled = true;
-        },
-
-        stopNextNotify()
-        {
-            this.canNotify = false;
         }
-    };
+        else this.canNotify = true;
+    },
 
-    return Event;
-});
+    disable()
+    {
+        this.enabled = false;
+    },
+
+    enable()
+    {
+        this.enabled = true;
+    },
+
+    stopNextNotify()
+    {
+        this.canNotify = false;
+    }
+};
+
+export default Event;
