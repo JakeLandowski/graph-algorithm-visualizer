@@ -7,49 +7,47 @@
  */
 
 'use strict';
-define(function()
+
+const CommandLog = function()
 {
-    const CommandLog = function()
-    {
-        this.undoLog = [];
-        this.redoLog = [];
+    this.undoLog = [];
+    this.redoLog = [];
 
-    }; // end constructor
+}; // end constructor
+
+CommandLog.prototype = 
+{
+    record(command, clearRedo)
+    {
+        this.undoLog.push(command);
+        if(clearRedo) this.redoLog = [];
+    },
+
+    undo() 
+    {
+        const command = this.undoLog.pop();
+        if(command) this.redoLog.push(command);
+        return command;
+    },
     
-    CommandLog.prototype = 
+    redo()
     {
-        record(command, clearRedo)
-        {
-            this.undoLog.push(command);
-            if(clearRedo) this.redoLog = [];
-        },
+        return this.redoLog.pop();
+    },
 
-        undo() 
-        {
-            const command = this.undoLog.pop();
-            if(command) this.redoLog.push(command);
-            return command;
-        },
-        
-        redo()
-        {
-            return this.redoLog.pop();
-        },
+    serialize()
+    {
+        console.log(this);
+        console.log(JSON.parse(JSON.stringify(this)));
+        return JSON.stringify(this);
+    },
 
-        serialize()
-        {
-            console.log(this);
-            console.log(JSON.parse(JSON.stringify(this)));
-            return JSON.stringify(this);
-        },
+    parse(jsonData)
+    {
+        const data = JSON.parse(jsonData);
+        this.undoLog = data.undoLog;
+        this.redoLog = data.redoLog;
+    }
+};
 
-        parse(jsonData)
-        {
-            const data = JSON.parse(jsonData);
-            this.undoLog = data.undoLog;
-            this.redoLog = data.redoLog;
-        }
-    };
-
-    return CommandLog;
-});
+export default CommandLog;

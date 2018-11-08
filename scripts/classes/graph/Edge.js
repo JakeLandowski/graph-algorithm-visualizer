@@ -7,44 +7,42 @@
  */
 
 'use strict';
-define(function()
+
+const Edge = function(from, to, boxSize, weight=0)
 {
-   const Edge = function(from, to, boxSize, weight=0)
-   {
-        this.from    = from;
-        this.to      = to;
-        this.weight  = weight;
-        this.id      = '' + from + ',' + to,
-        this.boxSize = boxSize;
-        this.setPoints();
-   };
- 
-    Edge.prototype = 
+    this.from    = from;
+    this.to      = to;
+    this.weight  = weight;
+    this.id      = '' + from + ',' + to,
+    this.boxSize = boxSize;
+    this.setPoints();
+};
+
+Edge.prototype = 
+{
+    setPoints()
     {
-        setPoints()
-        {
-            // HitBox Coordinates
-            this.x = (this.fromVertex.x + this.toVertex.x) / 2;
-            this.y = (this.fromVertex.y + this.toVertex.y) / 2;
-            this.setBounds(); 
-        },
-        
-        setBounds()
-        {
-            this.upperLeft  = { x: this.x - this.boxSize, y: this.y - this.boxSize };
-            this.lowerRight = { x: this.x + this.boxSize, y: this.y + this.boxSize };
-        },
+        // HitBox Coordinates
+        this.x = (this.fromVertex.x + this.toVertex.x) / 2;
+        this.y = (this.fromVertex.y + this.toVertex.y) / 2;
+        this.setBounds(); 
+    },
+    
+    setBounds()
+    {
+        this.upperLeft  = { x: this.x - this.boxSize, y: this.y - this.boxSize };
+        this.lowerRight = { x: this.x + this.boxSize, y: this.y + this.boxSize };
+    },
 
-        get fromVertex()
-        {
-            return Edge.adjList.getVertex(this.from);
-        },
+    get fromVertex()
+    {
+        return Edge.adjList.getVertex(this.from);
+    },
 
-        get toVertex()
-        {
-            return Edge.adjList.getVertex(this.to);
-        }
-    };
+    get toVertex()
+    {
+        return Edge.adjList.getVertex(this.to);
+    }
+};
 
-   return Edge;
-});
+export default Edge;
