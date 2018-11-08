@@ -41,13 +41,16 @@ AdjacencyList.prototype =
     insertEdge(edge)
     {
         const from = edge.from;
-        const to   = edge.to;;
+        const to   = edge.to;
         
         this.vertexMap[from].pointToNeighbor(to);
-        this.vertexMap[to].pointFromNeighbor(from);            
-
         this.registerEdge(from, to, edge);
-        if(this.undirected) this.registerEdge(to, from, edge);
+        
+        if(this.undirected) 
+        {
+            this.registerEdge(to, from, edge);
+            this.vertexMap[to].pointFromNeighbor(from);
+        }            
     },
 
     registerEdge(from, to, edge)
