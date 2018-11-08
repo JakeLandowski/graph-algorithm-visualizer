@@ -31,7 +31,6 @@ function(Tests, Graph, Animations)
 
      addFunctionality();
 
-
      for(let i = 0; i<eduMode.length; i++) {
          eduMode[i].addEventListener('click',function () {
              if(eduModeActive){

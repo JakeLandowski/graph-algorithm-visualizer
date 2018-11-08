@@ -3,6 +3,26 @@ html, body {
     background-color: #262626;
 }
 
+.menuRectangleButton {
+    top: 5px;
+    transition: 0.3s;
+    border-radius: 15px;
+    stroke-width: 2px;
+    stroke: #ff9a00;
+}
+
+.menuRectangleButton:hover {
+    transition: 0.3s;
+    transform: scale(1.05);
+}
+
+#menuBox {
+    position: absolute;
+    left: 50px;
+    bottom: 50px;
+    fill: transparent;
+}
+
 #main
 {
     position: absolute;
@@ -87,7 +107,7 @@ html, body {
 .toolMenu {
     z-index: 2;
     position: absolute;
-    display: none;
+
 }
 
 

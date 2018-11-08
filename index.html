@@ -76,6 +76,27 @@
         </svg>
     </div>
 
+    <div id="menuBox">
+        <svg width="250" height="75">
+            <g>
+                <rect class="menuRectangleButton" x="2" y="2" width="50" height="50" rx="10px" ry="10px"/>
+                <text x="7" y="30" fill="orange">Create</text>
+            </g>
+            <g>
+                <rect class="menuRectangleButton" x="62" y="2"width="50" height="50" rx="10px" ry="10px"/>
+                <text x="67" y="30" fill="orange">Delete</text>
+            </g>
+            <g>
+                <rect class="menuRectangleButton" x="122" y="2" width="50" height="50" rx="10px" ry="10px"/>
+                <text x="129" y="30" fill="orange">Undo</text>
+            </g>
+            <g>
+                <rect class="menuRectangleButton" x="182" y="2" width="50" height="50" rx="10px" ry="10px"/>
+                <text x="190" y="30" fill="orange">Redo</text>
+            </g>
+        </svg>
+    </div>
+
     <div id="toolbar" class="ui-component noselect ">
         <svg id="toolbuttons" class="toolMenu" width="300" height="300">
             <defs>
@@ -118,6 +139,49 @@
                   font-family="Exo 2" font-size="14">REDO</text>
         </svg>
     </div>
+
+    <!--<div id="toolbar" class="ui-component noselect ">-->
+        <!--<svg id="toolbuttons" class="toolMenu" width="300" height="300">-->
+            <!--<defs>-->
+                <!--<filter id="shadow">-->
+                    <!--<feGaussianBlur result="blurOut" in="offOut" stdDeviation="3"></feGaussianBlur>-->
+                    <!--<feBlend in="SourceGraphic" in2="blurOut" mode="normal"></feBlend>-->
+                <!--</filter>-->
+            <!--</defs>-->
+
+            <!--<circle id="createModeButton" filter="url(#shadow)" class="future createButton ui" cx="150" cy="150" r="35"-->
+                    <!--stroke-width="3"></circle>-->
+            <!--<circle id="deleteModeButton" filter="url(#shadow)" class="future deleteButton ui" cx="150" cy="150" r="35"-->
+                    <!--stroke-width="3"></circle>-->
+            <!--<circle id="extraModeButton" filter="url(#shadow)" class="future extraButton ui" cx="150" cy="150" r="35"-->
+                    <!--stroke-width="3"></circle>-->
+            <!--<circle id="undoModeButton" filter="url(#shadow)" class="future undoButton ui" cx="150" cy="150" r="35"-->
+                    <!--stroke-width="3"></circle>-->
+            <!--<circle id="redoModeButton" filter="url(#shadow)" class="future redoButton ui" cx="150" cy="150" r="35"-->
+                    <!--stroke-width="3"></circle>-->
+
+
+            <!--&lt;!&ndash; ADD VERTEX BUTTON &ndash;&gt;-->
+            <!--<text id="add-vertex" class="future addVertexButton toolText ui-text" x="125" y="60"-->
+                  <!--font-family="Exo 2" font-size="14">CREATE</text>-->
+
+            <!--&lt;!&ndash; ADD EDGE BUTTON &ndash;&gt;-->
+            <!--<text id="add-edge" class="future addEdgeButton toolText ui-text" x="18" y="135"-->
+                  <!--font-family="Exo 2" font-size="14">UNUSED</text>-->
+
+            <!--&lt;!&ndash; ADD WEIGHT BUTTON &ndash;&gt;-->
+            <!--<text id="erase" class="future eraseButton toolText ui-text" x="230" y="135"-->
+                  <!--font-family="Exo 2" font-size="14">DELETE</text>-->
+
+            <!--&lt;!&ndash; UNDO BUTTON &ndash;&gt;-->
+            <!--<text id="undo" class="future undoButton toolText ui-text" x="80" y="245"-->
+                  <!--font-family="Exo 2" font-size="14">UNDO</text>-->
+
+            <!--&lt;!&ndash; REDO BUTTON &ndash;&gt;-->
+            <!--<text id="redo" class="future redoButton toolText ui-text" x="182" y="245"-->
+                  <!--font-family="Exo 2" font-size="14">REDO</text>-->
+        <!--</svg>-->
+    <!--</div>-->
 
     <!-- Graph Canvas div -->
     <div id="main"></div>

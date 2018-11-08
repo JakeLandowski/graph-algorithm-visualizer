@@ -7,7 +7,7 @@
  */
 
 'use strict';
-define(['ui-animations/anime','utils/Util'], function(Anime,Util)
+define(['../../../Portfolio/js/anime','utils/Util'], function(Anime,Util)
 {
     let lightOrange = "#ffcb48";
     let darkOrange = "#ff9a00";
@@ -26,11 +26,12 @@ define(['ui-animations/anime','utils/Util'], function(Anime,Util)
             let openTools = true;
             let eduModeStyle = false;
 
+            document.onmousemove = findDocumentCoords;
+
             menu.forEach(function (element) {
                 generateUI(element,200,200,50,delay);
                 delay = delay + 100;
             });
-
             setHighlights();
 
             let eduMode = document.getElementsByClassName('eduMode');
@@ -40,24 +41,19 @@ define(['ui-animations/anime','utils/Util'], function(Anime,Util)
                 });
             }
 
-            function findDocumentCoords(mouseEvent)
-            {
-                if (mouseEvent)
-                {
+            drawLine('.menuRectangleButton',reverse,500);
+
+            function findDocumentCoords(mouseEvent) {
+                if (mouseEvent) {
                     //FireFox
                     xpos = mouseEvent.pageX;
                     ypos = mouseEvent.pageY;
-                }
-                else
-                {
+                } else {
                     //IE
                     xpos = window.event.x + document.body.scrollLeft - 2;
                     ypos = window.event.y + document.body.scrollTop - 2;
                 }
             }
-
-            document.onmousemove = findDocumentCoords;
-
 
             window.addEventListener('keydown', Util.throttle(function(e)
             {
@@ -70,7 +66,6 @@ define(['ui-animations/anime','utils/Util'], function(Anime,Util)
                     toolButtons.style.scale = .5;
                     toolButtons.style.left = xpos - 150;
                     toolButtons.style.top = ypos - 150;
-
                     toolButtons.style.display = 'block';
 
                     toolText.forEach(function(text) {
@@ -99,7 +94,6 @@ define(['ui-animations/anime','utils/Util'], function(Anime,Util)
                     }, 200);
                 }
             }, 500));
-
 
             window.addEventListener('keyup', Util.throttle(function(e)
             {
