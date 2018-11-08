@@ -41,15 +41,18 @@ AdjacencyList.prototype =
     insertEdge(edge)
     {
         const from = edge.from;
-        const to   = edge.to;
-        this.vertexMap[from].toNeighbors[to] = to;
-        this.vertexMap[to].fromNeighbors[from] = from;
-        this.vertexMap[from].numEdges++;
-        this.vertexMap[to].numEdges++;            
+        const to   = edge.to;;
+        
+        this.vertexMap[from].pointToNeighbor(to);
+        this.vertexMap[to].pointFromNeighbor(from);            
 
-        this.edgeMap[ [from, to] ] = edge;
-        if(this.undirected) 
-            this.edgeMap[ [to, from] ] = edge;
+        this.registerEdge(from, to, edge);
+        if(this.undirected) this.registerEdge(to, from, edge);
+    },
+
+    registerEdge(from, to, edge)
+    {
+        this.edgeMap[[from, to]] = edge;
     },
 
     getEdge(from, to)
@@ -69,14 +72,16 @@ AdjacencyList.prototype =
      */
     deleteEdge(from, to)
     { 
-        delete this.edgeMap[ [from, to] ];
-        if(this.undirected)
-            delete this.edgeMap[ [to, from] ];
+        this.unreferenceEdge(from, to);
+        if(this.undirected) this.unreferenceEdge(to, from);
 
-        delete this.vertexMap[from].toNeighbors[to];
-        delete this.vertexMap[to].fromNeighbors[from];
-        this.vertexMap[from].numEdges--;
-        this.vertexMap[to].numEdges--;
+        this.vertexMap[from].unreferenceToNeighbor(to);
+        this.vertexMap[to].unreferenceFromNeighbor(from);
+    },
+
+    unreferenceEdge(from, to)
+    {
+        delete this.edgeMap[[from, to]];
     },
 
     edgeExists(from, to)

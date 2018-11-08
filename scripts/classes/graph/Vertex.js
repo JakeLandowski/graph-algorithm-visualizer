@@ -10,7 +10,6 @@
 
 const Vertex = function(data, x, y, options={})
 {
-    // this.id = 'vertex' + Vertex.vertexId++,
     this.id            = data;
     this.data          = data,
     this.options       = options;
@@ -20,9 +19,37 @@ const Vertex = function(data, x, y, options={})
     this.setPoints(x, y);
 };
 
-// Vertex.vertexId = 0;
 Vertex.prototype = 
 {
+    unreferenceToNeighbor(neighbor)
+    {
+        delete this.toNeighbors[neighbor];
+        this.decrementEdges();
+    },
+
+    unreferenceFromNeighbor(neighbor)
+    {
+        delete this.fromNeighbors[neighbor];
+        this.decrementEdges();
+    },
+
+    decrementEdges()
+    {
+        if(this.numEdges > 0) this.numEdges--;
+    },
+
+    pointToNeighbor(neighbor)
+    {
+        this.toNeighbors[neighbor] = neighbor;
+        this.numEdges++;
+    },
+
+    pointFromNeighbor(neighbor)
+    {
+        this.fromNeighbors[neighbor] = neighbor;
+        this.numEdges++;
+    },
+
     setPoints(x, y)
     {
         const radius = this.options.vertexSize + this.options.vertexOutlineSize;
