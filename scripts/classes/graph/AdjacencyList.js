@@ -44,13 +44,13 @@ AdjacencyList.prototype =
         const to   = edge.to;
         
         this.vertexMap[from].pointToNeighbor(to);
+        this.vertexMap[to].pointFromNeighbor(from);
         this.registerEdge(from, to, edge);
         
         if(this.undirected) 
         {
             this.registerEdge(to, from, edge);
-            this.vertexMap[to].pointFromNeighbor(from);
-        }            
+        }
     },
 
     registerEdge(from, to, edge)
@@ -60,7 +60,7 @@ AdjacencyList.prototype =
 
     getEdge(from, to)
     {
-        return this.edgeMap[ [from, to] ];
+        return this.edgeMap[[from, to]];
     },
 
     /**
@@ -89,7 +89,7 @@ AdjacencyList.prototype =
 
     edgeExists(from, to)
     {
-        const edge = this.edgeMap[ [from, to] ];
+        const edge = this.edgeMap[[from, to]];
         return edge !== undefined && edge !== null;
     },
 

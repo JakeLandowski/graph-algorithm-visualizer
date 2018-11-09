@@ -57,17 +57,25 @@ describe('Testing Adjancency List undirected/directed', () =>
 
     test('insertEdge(edge) works', () => 
     {   
-        const directedMock = jest.fn();
+        const directedMockOne = jest.fn();
         directedAdj.vertexMap['A'] = 
         {
-            pointToNeighbor: directedMock
+            pointToNeighbor: directedMockOne
+        };
+
+        const directedMockTwo = jest.fn();
+        directedAdj.vertexMap['B'] = 
+        {
+            pointFromNeighbor: directedMockTwo
         };
 
         directedAdj.insertEdge(edge);
         expect(directedAdj.edgeMap[['A', 'B']]).toBe(edge);
         expect(directedAdj.edgeMap[['B', 'A']]).toBeUndefined();
-        expect(directedMock).toHaveBeenCalledTimes(1);
-        expect(directedMock).toHaveBeenCalledWith('B');
+        expect(directedMockOne).toHaveBeenCalledTimes(1);
+        expect(directedMockOne).toHaveBeenCalledWith('B');
+        expect(directedMockTwo).toHaveBeenCalledTimes(1);
+        expect(directedMockTwo).toHaveBeenCalledWith('A');
 
         const undirectedMockOne = jest.fn();
         undirectedAdj.vertexMap['A'] = 
