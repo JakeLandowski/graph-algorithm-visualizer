@@ -13,180 +13,115 @@
 </head>
 
 <body>
-    <div id="menuoptions" class="ui-component noselect">
-        <svg id="buttons" class="mainmenu menuoptions">
+    <div id="toolbar" class="ui-component noselect ">
+        <!-- Inner Menu Circle -->
+        <svg id="toolMenuSVG" class="toolMenu" width="700" height="700">
             <defs>
                 <filter id="shadow">
                     <feGaussianBlur result="blurOut" in="offOut" stdDeviation="3"></feGaussianBlur>
                     <feBlend in="SourceGraphic" in2="blurOut" mode="normal"></feBlend>
                 </filter>
             </defs>
-            <!-- CREATE NEW GRAPH BUTTON -->
-            <path filter="url(#shadow)" id="creategraphbutton" class="future creategraph ui" stroke-width="4"
-                  fill="transparent" stroke-dasharray="25 5" d="
-                                M 160, 45
-                                m -30, 0
-                                a 30,30 0 0,0 60,0
-                                a 30,30 0 0,0 -60,0
-            "></path>
-            <text class="future creategraph menubutton ui-text" x="144" y="50" font-family="Exo 2" font-size="14">SAVE</text>
-
-            <!-- SELECT GRAPH BUTTON -->
-            <path filter="url(#shadow)" id="selectgraphbutton" class="future selectgraph ui"
-                  stroke-width="4" fill="transparent" stroke-dasharray="25 5" d="
-                                M 130, 130
-                                m -30, 0
-                                a 30,30 0 0,0 60,0
-                                a 30,30 0 0,0 -60,0
-            "></path>
-            <text class="future selectgraph ui-text" x="112" y="135" font-family="Exo 2" font-size="14">LOAD</text>
-
-            <!-- SELECT ALGORITHM BUTTON -->
-            <path filter="url(#shadow)" id="eduModeButton" class="future eduMode ui"
-                  stroke-width="4" fill="transparent" stroke-dasharray="25 5" d="
-                                M 45, 160
-                                m -30, 0
-                                a 30,30 0 0,0 60,0
-                                a 30,30 0 0,0 -60,0
-            "></path>
-            <text class="future eduMode ui-text" x="33" y="165" font-family="Exo 2" font-size="14">EDU</text>
-        </svg>
-    </div>
-    <div class="ui-component noselect">
-        <svg id="outer" class="mainmenu ui" style="width:120px;height:120px">
-            <path filter="url(#shadow)" class="future ui" stroke-width="3" fill="transparent"
-                  stroke-dasharray="40 20" d="
-                    M 60, 60
-                    m -40, 0
-                    a 40,40 0 0,0 80,0
-                    a 40,40 0 0,0 -80,0
+            <path id="inner-circle" filter="url(#shadow)" class="future ui" stroke-width="1" d="
+                    M 350, 350
+                    m -175, 0
+                    a 175,175 0 1,0 350,0
+                    a 175,175 0 1,0 -350,0
                     "></path>
         </svg>
-        <svg id="inner" class="mainmenu ui" style="width:120px;height:120px">
-            <path filter="url(#shadow)" class="future ui" stroke-width="4" fill="transparent"
-                  stroke-dasharray="15 5 2" d="
-                                M 60, 60
-                                m -30, 0
-                                a 30,30 0 0,0 60,0
-                                a 30,30 0 0,0 -60,0
-            "></path>
-        </svg>
-        <svg id="hide-ui" class="mainmenu" style="width:120px;height:120px">
-            <text class="future ui-text" x="40" y="65" font-family="Exo 2" font-size="16">Menu</text>
-        </svg>
-    </div>
 
-    <div id="menuBox">
-        <svg width="250" height="75">
-            <g>
-                <rect class="menuRectangleButton" x="2" y="2" width="50" height="50" rx="10px" ry="10px"/>
-                <text x="7" y="30" fill="orange">Create</text>
-            </g>
-            <g>
-                <rect class="menuRectangleButton" x="62" y="2"width="50" height="50" rx="10px" ry="10px"/>
-                <text x="67" y="30" fill="orange">Delete</text>
-            </g>
-            <g>
-                <rect class="menuRectangleButton" x="122" y="2" width="50" height="50" rx="10px" ry="10px"/>
-                <text x="129" y="30" fill="orange">Undo</text>
-            </g>
-            <g>
-                <rect class="menuRectangleButton" x="182" y="2" width="50" height="50" rx="10px" ry="10px"/>
-                <text x="190" y="30" fill="orange">Redo</text>
-            </g>
-        </svg>
-    </div>
-
-    <div id="toolbar" class="ui-component noselect ">
-        <svg id="toolbuttons" class="toolMenu" width="300" height="300">
+        <!-- Outer Menu Circle -->
+        <svg class="toolMenu" width="700" height="700">
             <defs>
                 <filter id="shadow">
                     <feGaussianBlur result="blurOut" in="offOut" stdDeviation="3"></feGaussianBlur>
                     <feBlend in="SourceGraphic" in2="blurOut" mode="normal"></feBlend>
                 </filter>
             </defs>
+            <path id="outer-circle" filter="url(#shadow)" class="future ui" stroke-width="1" d="
+                    M 350, 350
+                    m -240, 0
+                    a 240,240 0 1,0 480,0
+                    a 240,240 0 1,0 -480,0"
+            ></path>
+        </svg>
 
-            <circle id="createModeButton" filter="url(#shadow)" class="future createButton ui" cx="150" cy="150" r="35"
-                    stroke-width="3"></circle>
-            <circle id="deleteModeButton" filter="url(#shadow)" class="future deleteButton ui" cx="150" cy="150" r="35"
-                    stroke-width="3"></circle>
-            <circle id="extraModeButton" filter="url(#shadow)" class="future extraButton ui" cx="150" cy="150" r="35"
-                    stroke-width="3"></circle>
-            <circle id="undoModeButton" filter="url(#shadow)" class="future undoButton ui" cx="150" cy="150" r="35"
-                    stroke-width="3"></circle>
-            <circle id="redoModeButton" filter="url(#shadow)" class="future redoButton ui" cx="150" cy="150" r="35"
-                    stroke-width="3"></circle>
-
-
-            <!-- ADD VERTEX BUTTON -->
-            <text id="add-vertex" class="future addVertexButton toolText ui-text" x="125" y="60"
+        <!-- Create Mode Button -->
+        <svg class="toolMenu" width="700" height="700">
+            <circle id="createModeButton" filter="url(#shadow)" class="future createButton ui menuCircleButton allButtons"
+                    cx="587" cy="390" r="30" stroke-width="1"></circle>
+            <text id="add-vertex" class="future addVertexButton toolText ui-text" x="562" y="395"
                   font-family="Exo 2" font-size="14">CREATE</text>
+        </svg>
 
-            <!-- ADD EDGE BUTTON -->
-            <text id="add-edge" class="future addEdgeButton toolText ui-text" x="18" y="135"
-                  font-family="Exo 2" font-size="14">UNUSED</text>
-
-            <!-- ADD WEIGHT BUTTON -->
-            <text id="erase" class="future eraseButton toolText ui-text" x="230" y="135"
+        <!-- Delete Mode Button -->
+        <svg class="toolMenu" width="700" height="700">
+            <circle id="deleteModeButton" filter="url(#shadow)" class="future eraseButton ui menuCircleButton allButtons"
+                    cx="553" cy="480" r="30" stroke-width="1"></circle>
+            <text id="erase" class="future eraseButton toolText ui-text" x="528" y="485"
                   font-family="Exo 2" font-size="14">DELETE</text>
+        </svg>
 
-            <!-- UNDO BUTTON -->
-            <text id="undo" class="future undoButton toolText ui-text" x="80" y="245"
+        <!-- Undo Button -->
+        <svg class="toolMenu" width="700" height="700">
+            <circle id="undoModeButton" filter="url(#shadow)" class="future undoButton ui menuCircleButton allButtons"
+                    cx="480" cy="553" r="30" stroke-width="1"></circle>
+            <text id="undo" class="undoButton toolText ui-text" x="461" y="557"
                   font-family="Exo 2" font-size="14">UNDO</text>
+        </svg>
 
-            <!-- REDO BUTTON -->
-            <text id="redo" class="future redoButton toolText ui-text" x="182" y="245"
+        <!-- Redo Button -->
+        <svg class="toolMenu" width="700" height="700">
+            <circle id="redoModeButton" filter="url(#shadow)" class="future redoButton ui menuCircleButton allButtons"
+                    cx="390" cy="590" r="30" stroke-width="1"></circle>
+            <text id="redo" class="future redoButton toolText ui-text" x="373" y="594"
                   font-family="Exo 2" font-size="14">REDO</text>
         </svg>
     </div>
 
-    <!--<div id="toolbar" class="ui-component noselect ">-->
-        <!--<svg id="toolbuttons" class="toolMenu" width="300" height="300">-->
-            <!--<defs>-->
-                <!--<filter id="shadow">-->
-                    <!--<feGaussianBlur result="blurOut" in="offOut" stdDeviation="3"></feGaussianBlur>-->
-                    <!--<feBlend in="SourceGraphic" in2="blurOut" mode="normal"></feBlend>-->
-                <!--</filter>-->
-            <!--</defs>-->
+    <div id="menuoptions" class="ui-component noselect">
+        <!-- Save Graph Button-->
+        <svg width="600" height="600" class="buttons">
+            <circle filter="url(#shadow)" id="creategraphbutton" class="future creategraph ui menuCircleButton allButtons" stroke-width="1"
+                 cx="465" cy="350" r="30"></circle>
+            <text class="creategraph menubutton ui-text" x="450" y="355" font-family="Exo 2" font-size="14">SAVE</text>
+        </svg>
 
-            <!--<circle id="createModeButton" filter="url(#shadow)" class="future createButton ui" cx="150" cy="150" r="35"-->
-                    <!--stroke-width="3"></circle>-->
-            <!--<circle id="deleteModeButton" filter="url(#shadow)" class="future deleteButton ui" cx="150" cy="150" r="35"-->
-                    <!--stroke-width="3"></circle>-->
-            <!--<circle id="extraModeButton" filter="url(#shadow)" class="future extraButton ui" cx="150" cy="150" r="35"-->
-                    <!--stroke-width="3"></circle>-->
-            <!--<circle id="undoModeButton" filter="url(#shadow)" class="future undoButton ui" cx="150" cy="150" r="35"-->
-                    <!--stroke-width="3"></circle>-->
-            <!--<circle id="redoModeButton" filter="url(#shadow)" class="future redoButton ui" cx="150" cy="150" r="35"-->
-                    <!--stroke-width="3"></circle>-->
+        <!-- Load Graph Button -->
+        <svg width="600" height="600" class="buttons">
+            <circle filter="url(#shadow)" id="selectgraphbutton" class="future selectgraph ui menuCircleButton allButtons"
+                    stroke-width="1" cx="425" cy="425" r="30"></circle>
+            <text class="selectgraph ui-text" x="408" y="430" font-family="Exo 2" font-size="14">LOAD</text>
+        </svg>
 
+        <!-- EDU Mode Button -->
+        <svg width="600" height="600" class="buttons">
+            <circle filter="url(#shadow)" id="eduModeButton" class="future eduMode ui menuCircleButton allButtons"
+                  stroke-width="1" cx="350" cy="465" r="30"></circle>
+            <text class="future eduMode ui-text" x="337" y="470" font-family="Exo 2" font-size="14">EDU</text>
+        </svg>
+    </div>
 
-            <!--&lt;!&ndash; ADD VERTEX BUTTON &ndash;&gt;-->
-            <!--<text id="add-vertex" class="future addVertexButton toolText ui-text" x="125" y="60"-->
-                  <!--font-family="Exo 2" font-size="14">CREATE</text>-->
+    <!-- Menu Button -->
+    <div class="ui-component noselect" id="menu">
+        <!-- Outer Spinning Circle -->
+        <svg id="outer" class="mainmenu ui" style="width:120px;height:120px">
+            <circle filter="url(#shadow)" class="future allButtons" stroke-width="1" fill="transparent"
+                  stroke-dasharray="35 6" cx="60" cy="60" r="35"></circle>
+        </svg>
 
-            <!--&lt;!&ndash; ADD EDGE BUTTON &ndash;&gt;-->
-            <!--<text id="add-edge" class="future addEdgeButton toolText ui-text" x="18" y="135"-->
-                  <!--font-family="Exo 2" font-size="14">UNUSED</text>-->
-
-            <!--&lt;!&ndash; ADD WEIGHT BUTTON &ndash;&gt;-->
-            <!--<text id="erase" class="future eraseButton toolText ui-text" x="230" y="135"-->
-                  <!--font-family="Exo 2" font-size="14">DELETE</text>-->
-
-            <!--&lt;!&ndash; UNDO BUTTON &ndash;&gt;-->
-            <!--<text id="undo" class="future undoButton toolText ui-text" x="80" y="245"-->
-                  <!--font-family="Exo 2" font-size="14">UNDO</text>-->
-
-            <!--&lt;!&ndash; REDO BUTTON &ndash;&gt;-->
-            <!--<text id="redo" class="future redoButton toolText ui-text" x="182" y="245"-->
-                  <!--font-family="Exo 2" font-size="14">REDO</text>-->
-        <!--</svg>-->
-    <!--</div>-->
+        <!-- Inner Spinning Circle -->
+        <svg id="inner" class="mainmenu ui" style="width:120px;height:120px">
+            <circle filter="url(#shadow)" class="future ui allButtons" stroke-width="2" fill="transparent"
+                  stroke-dasharray="15 5 2" cx="60" cy="60" r="45"></circle>
+        </svg>
+        <svg id="hide-ui" class="mainmenu all" style="width:120px;height:120px">
+            <text class="future ui-text" x="39" y="65" font-family="Exo 2" font-size="16">MENU</text>
+        </svg>
+    </div>
 
     <!-- Graph Canvas div -->
     <div id="main"></div>
-
-    <!-- <script src="scripts/require.js" data-main="scripts/main"></script> -->
     <script type="module" src="scripts/main.js"></script>
 </body>
 </html>
