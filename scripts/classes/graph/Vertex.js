@@ -21,13 +21,13 @@ const Vertex = function(data, x, y, options={})
 
 Vertex.prototype = 
 {
-    unreferenceToNeighbor(neighbor)
+    unregisterToNeighbor(neighbor)
     {
         delete this.toNeighbors[neighbor];
         this.decrementEdges();
     },
 
-    unreferenceFromNeighbor(neighbor)
+    unregisterFromNeighbor(neighbor)
     {
         delete this.fromNeighbors[neighbor];
         this.decrementEdges();

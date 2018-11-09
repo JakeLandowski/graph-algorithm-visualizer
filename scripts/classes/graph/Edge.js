@@ -8,7 +8,7 @@
 
 'use strict';
 
-const Edge = function(from, to, boxSize, weight=0)
+const Edge = function(from, to, boxSize=0, weight=0)
 {
     this.from    = from;
     this.to      = to;

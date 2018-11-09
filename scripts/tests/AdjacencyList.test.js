@@ -7,7 +7,6 @@ beforeEach(() =>
     undirectedAdj = new AdjacencyList(true);
     directedAdj   = new AdjacencyList(false);
     vertex = { data: 'A' };
-
     edge = { from: 'A', to: 'B' };
 });
 
@@ -15,10 +14,11 @@ describe('Testing Adjancency List undirected/directed', () =>
 {
     test('expect vertexMap and edgeMap to be empty at start', () => 
     {
-        expect(directedAdj.vertexMap).toEqual(Object.create(null));
-        expect(undirectedAdj.vertexMap).toEqual(Object.create(null));
-        expect(directedAdj.edgeMap).toEqual(Object.create(null));
-        expect(undirectedAdj.edgeMap).toEqual(Object.create(null));
+        const emptyObject = Object.create(null);
+        expect(directedAdj.vertexMap).toEqual(emptyObject);
+        expect(undirectedAdj.vertexMap).toEqual(emptyObject);
+        expect(directedAdj.edgeMap).toEqual(emptyObject);
+        expect(undirectedAdj.edgeMap).toEqual(emptyObject);
     });
 
     test('vertexExists() and insertVertex(vertex) works', () =>
@@ -55,50 +55,59 @@ describe('Testing Adjancency List undirected/directed', () =>
         expect(directedAdj.vertexMap).toEqual(Object.create(null));
     });
 
-    test('insertEdge(edge) works', () => 
+    test('insertEdge() works', () => 
     {   
-        const directedMockOne = jest.fn();
-        directedAdj.vertexMap['A'] = 
+        const testList = (list, undirected) => 
         {
-            pointToNeighbor: directedMockOne
+            // Mocks
+            const mockPointToNeighbor = jest.fn();
+            const mockPointFromNeighbor = jest.fn();
+            const mockVertex = 
+            {
+                pointToNeighbor: mockPointToNeighbor,
+                pointFromNeighbor: mockPointFromNeighbor
+            };
+
+            list.vertexMap['A'] = mockVertex;
+            list.vertexMap['B'] = mockVertex;
+
+            // Test
+            list.insertEdge(edge);
+            expect(list.edgeMap[['A', 'B']]).toBe(edge);
+
+            const expectBtoA = expect(undirectedAdj.edgeMap[['B', 'A']]);
+            const expectToMock = expect(mockPointToNeighbor);
+            const expectFromMock = expect(mockPointFromNeighbor); 
+            
+            if(undirected)
+            {
+                expectBtoA.toBe(edge);
+                expectToMock.toHaveBeenCalledWith('A');
+                expectFromMock.toHaveBeenCalledWith('B');
+            }
+            else
+            {
+                expectBtoA.toBeUndefined();
+            }
+            
+            expectToMock.toHaveBeenCalledTimes(undirected ? 2:1);
+            expectFromMock.toHaveBeenCalledTimes(undirected ? 2:1);
+
+            expectToMock.toHaveBeenCalledWith('B');
+            expectFromMock.toHaveBeenCalledWith('A');
         };
 
-        const directedMockTwo = jest.fn();
-        directedAdj.vertexMap['B'] = 
-        {
-            pointFromNeighbor: directedMockTwo
-        };
-
-        directedAdj.insertEdge(edge);
-        expect(directedAdj.edgeMap[['A', 'B']]).toBe(edge);
-        expect(directedAdj.edgeMap[['B', 'A']]).toBeUndefined();
-        expect(directedMockOne).toHaveBeenCalledTimes(1);
-        expect(directedMockOne).toHaveBeenCalledWith('B');
-        expect(directedMockTwo).toHaveBeenCalledTimes(1);
-        expect(directedMockTwo).toHaveBeenCalledWith('A');
-
-        const undirectedMockOne = jest.fn();
-        undirectedAdj.vertexMap['A'] = 
-        {
-            pointToNeighbor: undirectedMockOne
-        };
-
-        const undirectedMockTwo = jest.fn();
-        undirectedAdj.vertexMap['B'] = 
-        {
-            pointFromNeighbor: undirectedMockTwo
-        };
-
-        undirectedAdj.insertEdge(edge);
-        expect(undirectedAdj.edgeMap[['A', 'B']]).toBe(edge);
-        expect(undirectedAdj.edgeMap[['B', 'A']]).toBe(edge);
-        expect(undirectedMockOne).toHaveBeenCalledTimes(1);
-        expect(undirectedMockOne).toHaveBeenCalledWith('B');
-        expect(undirectedMockTwo).toHaveBeenCalledTimes(1);
-        expect(undirectedMockTwo).toHaveBeenCalledWith('A');
+        testList(directedAdj, false);
+        testList(undirectedAdj, true);
     });
 
     test('getEdge() works', () => 
+    {
+        directedAdj.edgeMap[['A', 'B']] = edge;
+        expect(directedAdj.getEdge('A', 'B')).toBe(edge);   
+    });
+
+    test('deleteEdge() works', () => 
     {
 
     });
