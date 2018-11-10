@@ -20,8 +20,7 @@ let white = "#fff";
 //TODO: Ensure button functionality
 //TODO: FIX THE CIRCLE SHIT
 export default {
-    start()
-    {
+    start() {
         //Sets specific buttons as variables, set default delay at 0.
         let opacity;
         let toolDelay = 0;
@@ -29,14 +28,14 @@ export default {
         let menuShown = false;
         let toolTipShown = false;
         let eduModeStyle = false;
+        let menuButton = document.getElementById('menu');
+        let toolTipButton = document.getElementById('question-mark');
         let buttons = document.getElementsByClassName('buttons');
         let tools = document.getElementsByClassName('toolMenu');
-
         //alert(localStorage.getItem("graph"));
 
-        let menuButton = document.getElementById('menu');
         menuButton.onclick = function () {
-            if(menuShown){
+            if (menuShown) {
                 hideMenu();
                 menuShown = false;
             } else {
@@ -44,13 +43,9 @@ export default {
                 menuShown = true;
             }
         };
-        setHighlights();
-
-
-        let toolTipButton = document.getElementById('question-mark');
 
         toolTipButton.onclick = function () {
-            if(toolTipShown){
+            if (toolTipShown) {
                 console.log('hidetooltip');
                 toolTipDraw.reverse();
                 toolTipDraw.play();
@@ -65,7 +60,7 @@ export default {
         let toolTipDraw = Anime({
             opacity: 1,
             targets: '#tool-tip-box',
-            strokeDashoffset: [Anime.setDashoffset,0],
+            strokeDashoffset: [Anime.setDashoffset, 0],
             easing: 'easeInOutSine',
             duration: 500,
             direction: 'alternate',
@@ -96,7 +91,7 @@ export default {
         //TODO: USE THIS CODE TO CREATE LOOP FOR ANIMATIONS AND FIX BUTTON FUNCTIONALITY
         //console.log(document.getElementsByTagName('circle'));
         function hideMenu() {
-            for(let i = 0; i<buttons.length; i++) {
+            for (let i = 0; i < buttons.length; i++) {
                 let rotateMenu = Anime({
                     opacity: 0,
                     targets: buttons[i],
@@ -108,7 +103,7 @@ export default {
                 menuDelay += 100;
             }
 
-            for(let i = 0; i<tools.length; i++) {
+            for (let i = 0; i < tools.length; i++) {
                 let rotateTools = Anime({
                     opacity: 0,
                     targets: tools[i],
@@ -130,9 +125,8 @@ export default {
         }
 
 
-
         function showMenu() {
-            for(let i = 0; i<buttons.length; i++) {
+            for (let i = 0; i < buttons.length; i++) {
                 let rotateMenu = Anime({
                     opacity: 1,
                     targets: buttons[i],
@@ -144,7 +138,7 @@ export default {
                 menuDelay += 100;
             }
 
-            for(let i = 0; i<tools.length; i++) {
+            for (let i = 0; i < tools.length; i++) {
                 let rotateTools = Anime({
                     opacity: 1,
                     targets: tools[i],
@@ -183,72 +177,6 @@ export default {
             direction: 'reverse',
             easing: 'linear'
         });
-
-        //StyleSheet Switch
-        function swapStyleSheet() {
-            let ui = document.getElementsByClassName('ui');
-
-            if(eduModeStyle) {
-                document.getElementById('pagestyle').setAttribute('href', 'css/graphvis.css');
-                for(let i = 0; i<ui.length; i++) {
-                    ui[i].style.stroke = primary;
-                }
-                eduModeStyle = false;
-            } else {
-                document.getElementById('pagestyle').setAttribute('href', 'css/graphedu.css');
-                for(let i = 0; i<ui.length; i++) {
-                    ui[i].style.stroke = darkGray;
-                }
-                eduModeStyle = true;
-            }
-        }
-
-        function setHighlights() {
-            let elements = ['creategraph','selectgraph','eduMode','addVertexButton','addEdgeButton',
-                'undoButton','redoButton','eraseButton','createButton'];
-            let elementIds = ['creategraphbutton','selectgraphbutton','eduModeButton',
-                'add-vertex','add-edge','undoModeButton','redoModeButton','deleteModeButton','createModeButton'];
-
-            let arrayOfElements;
-            for(let i = 0; i<elements.length; i++) {
-                arrayOfElements = document.getElementsByClassName(elements[i]);
-                for(let j = 0; j<arrayOfElements.length; j++) {
-                    arrayOfElements[j].addEventListener('mouseenter',function () {
-                        document.getElementById(elementIds[i]).style.stroke = (eduModeStyle) ? darkGray : secondary;
-                    });
-
-                    arrayOfElements[j].addEventListener('mouseleave',function () {
-                        document.getElementById(elementIds[i]).style.stroke = (eduModeStyle) ? lightGray : primary;
-                    });
-                }
-            }
-
-            let menuButton = document.getElementsByClassName('mainButton');
-            for(let i = 0; i<menuButton.length; i++) {
-                menuButton[i].addEventListener('mouseenter',function () {
-                    document.getElementById('outer-spin-circle').style.stroke = (eduModeStyle) ? darkGray : secondary;
-                    document.getElementById('inner-spin-circle').style.stroke = (eduModeStyle) ? darkGray : secondary;
-                });
-
-                menuButton[i].addEventListener('mouseleave',function () {
-                    document.getElementById('outer-spin-circle').style.stroke = (eduModeStyle) ? lightGray : primary;
-                    document.getElementById('inner-spin-circle').style.stroke = (eduModeStyle) ? lightGray : primary;
-                });
-            }
-        }
-
-    }, swapColors(graph,primary,secondary,bg) {
-        //Change graph colors on click
-        graph.config.backgroundColor[0] = bg;
-        graph.config.vertexOutlineColor[0] = primary;
-        graph.config.vertexTextColor[0] = primary;
-        graph.config.vertexHoverColor[0] = secondary;
-        graph.config.vertexSelectColor[0] = secondary;
-        graph.config.edgeLineColor[0] = primary;
-        graph.config.edgeTextColor[0] = primary;
-        graph.config.edgeArrowColor[0] = primary;
-        graph.config.edgeHoverColor[0] = secondary;
-        graph.config.trackingEdgeColor[0] = secondary;
     }
 };
 // });
