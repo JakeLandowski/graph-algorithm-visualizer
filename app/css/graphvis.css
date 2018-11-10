@@ -113,7 +113,6 @@ svg {
     bottom: 15px;
     right: 15px;
     transform: perspective(1px);
-
 }
 
 #question-mark:hover {
@@ -122,6 +121,7 @@ svg {
 }
 
 #tool-tip-box {
+    opacity: 0;
     z-index: 4;
     stroke: #6ba2dc;
     border-radius: 5px;

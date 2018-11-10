@@ -23,13 +23,11 @@ export default {
     start()
     {
         //Sets specific buttons as variables, set default delay at 0.
-        let xpos;
-        let ypos;
-        let menu = document.querySelectorAll('.menubtn');
-        let delay = 0;
+        let opacity;
         let toolDelay = 0;
         let menuDelay = 0;
         let menuShown = true;
+        let toolTipShown = false;
         let eduModeStyle = false;
         let buttons = document.getElementsByClassName('buttons');
         let tools = document.getElementsByClassName('toolMenu');
@@ -50,19 +48,33 @@ export default {
 
 
         let toolTipButton = document.getElementById('question-mark');
+
         toolTipButton.onclick = function () {
-            let toolTipDraw = Anime({
-                targets: '#tool-tip-box',
-                strokeDashoffset: [Anime.setDashoffset,0],
-                easing: 'easeInOutSine',
-                duration: 1000,
-                direction: 'alternate',
-                loop: false
-            });
+            if(toolTipShown){
+                console.log('hidetooltip');
+                toolTipDraw.reverse();
+                toolTipDraw.play();
+            } else {
+                console.log('showtooltip');
+                toolTipDraw.reset();
+                toolTipDraw.play();
+            }
+            toolTipShown = !toolTipShown;
         };
 
+        let toolTipDraw = Anime({
+            opacity: 1,
+            targets: '#tool-tip-box',
+            strokeDashoffset: [Anime.setDashoffset,0],
+            easing: 'easeInOutSine',
+            duration: 500,
+            direction: 'alternate',
+            loop: false,
+            autoplay: false
+        });
+
         //TODO: USE THIS CODE TO CREATE LOOP FOR ANIMATIONS AND FIX BUTTON FUNCTIONALITY
-        console.log(document.getElementsByTagName('circle'));
+        //console.log(document.getElementsByTagName('circle'));
         function hideMenu() {
             for(let i = 0; i<buttons.length; i++) {
                 let rotateMenu = Anime({
