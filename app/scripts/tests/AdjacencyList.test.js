@@ -109,6 +109,61 @@ describe('Testing Adjancency List undirected/directed', () =>
 
     test('deleteEdge() works', () => 
     {
+        const testList = (list) =>
+        {
+            const mockUnregisterToNeighbor = jest.fn();
+            const mockUnregisterFromNeighbor = jest.fn();
+            const mockVertex =
+            {
+                unregisterToNeighbor: mockUnregisterToNeighbor,
+                unregisterFromNeighbor: mockUnregisterFromNeighbor
+            };
 
+            list.vertexMap['A'] = mockVertex;
+            list.vertexMap['B'] = mockVertex;
+            list.edgeMap[['A', 'B']] = edge;
+
+            expect(list.edgeMap[['A', 'B']]).toBe(edge);
+            list.deleteEdge('A', 'B');
+            expect(list.edgeMap[['A', 'B']]).toBeUndefined();
+
+            expect(mockUnregisterToNeighbor).toHaveBeenCalledTimes(1);
+            expect(mockUnregisterFromNeighbor).toHaveBeenCalledTimes(1);
+            expect(mockUnregisterToNeighbor).toHaveBeenCalledWith('B');
+            expect(mockUnregisterFromNeighbor).toHaveBeenCalledWith('A');
+        };
+
+        testList(directedAdj);
+        testList(undirectedAdj);
+
+        expect(undirectedAdj.edgeMap[['B', 'A']]).toBeUndefined();
+    });
+
+    test('edgeExists() works', () => 
+    {
+        expect(directedAdj.edgeExists('A', 'B')).toBe(false);
+        directedAdj.edgeMap[['A', 'B']] = edge;
+        expect(directedAdj.edgeExists('A', 'B')).toBe(true);
+        expect(directedAdj.edgeExists('B', 'A')).toBe(false);
+    });
+
+    test('forEachVertex() works', () => 
+    {
+        const testSymbols = ['A', 'B', 'C'];
+
+        testSymbols.forEach((symbol) => 
+        {
+             directedAdj.vertexMap[symbol] = symbol; 
+        });
+    
+        const testFunction = jest.fn();
+        directedAdj.forEachVertex(testFunction);
+
+        expect(testFunction).toHaveBeenCalledTimes(testSymbols.length);
+        
+        testSymbols.forEach((symbol) => 
+        {
+            expect(testFunction).toHaveBeenCalledWith(symbol); 
+        });
     });
 });
