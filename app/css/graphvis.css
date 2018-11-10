@@ -106,7 +106,7 @@ svg {
 }
 
 #tool-tip {
-    position: absolute;
+    position: fixed;
     bottom: -5.15rem;
     right: -4.04rem;
     transform: rotate(180deg);
@@ -116,7 +116,7 @@ svg {
 #question-mark {
     color: #6ba2dc;
     z-index: 5;
-    position: absolute;
+    position: fixed;
     bottom: 1rem;
     right: 1rem;
     transform: perspective(1px);
@@ -127,16 +127,24 @@ svg {
     color: #2054a0;
 }
 
+@media only screen and (max-width: 600px) {
+    #question-mark {
+        display: none;
+    }
+}
+
 #tool-tip-box {
     opacity: 0;
-    z-index: 4;
+    pointer-events: none;
+    z-index: 6;
     stroke: #6ba2dc;
     border-radius: 5px;
-    fill: transparent;
+    fill: rgba(0,0,0,.8);
     stroke-width: 1;
 }
 
 .tooltip-text {
+    z-index: 7;
     opacity: 0;
     transform: rotate(180deg);
 }
