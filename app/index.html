@@ -2,18 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Graph Algorithm Visualizer</title>
     <link rel="icon" href="favicon.ico">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link id="pagestyle" rel="stylesheet" href="css/graphvis.css">
     <link href="https://fonts.googleapis.com/css?family=Exo+2" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 </head>
 
 <body>
-    <div id="toolbar" class="ui-component noselect ">
+    <div id="toolbar" class="ui-component noselect">
         <!-- Inner Menu Circle -->
         <svg id="toolMenuSVG" class="toolMenu" width="700" height="700">
             <defs>
@@ -46,59 +45,55 @@
             ></path>
         </svg>
 
-        <!-- Create Mode Button -->
+        <!-- New Graph Button -->
         <svg class="toolMenu" width="700" height="700">
-            <circle id="createModeButton" filter="url(#shadow)" class="future createButton ui menuCircleButton allButtons"
+            <circle id="newGraphButton" filter="url(#shadow)" class="future newButton ui menuCircleButton allButtons"
                     cx="587" cy="390" r="30" stroke-width="1"></circle>
-            <text id="add-vertex" class="future addVertexButton toolText ui-text" x="562" y="395"
-                  font-family="Exo 2" font-size="14">CREATE</text>
+            <text class="future newButton ui-text" x="569" y="395">NEW</text>
+        </svg>
+
+        <!-- Add Mode Button -->
+        <svg class="toolMenu" width="700" height="700">
+            <circle id="addModeButton" filter="url(#shadow)" class="future addButton ui menuCircleButton allButtons"
+                    cx="553" cy="480" r="30" stroke-width="1"></circle>
+            <text class="future addButton ui-text" x="537" y="485">ADD</text>
         </svg>
 
         <!-- Delete Mode Button -->
         <svg class="toolMenu" width="700" height="700">
-            <circle id="deleteModeButton" filter="url(#shadow)" class="future eraseButton ui menuCircleButton allButtons"
-                    cx="553" cy="480" r="30" stroke-width="1"></circle>
-            <text id="erase" class="future eraseButton toolText ui-text" x="528" y="485"
-                  font-family="Exo 2" font-size="14">DELETE</text>
-        </svg>
-
-        <!-- Undo Button -->
-        <svg class="toolMenu" width="700" height="700">
-            <circle id="undoModeButton" filter="url(#shadow)" class="future undoButton ui menuCircleButton allButtons"
+            <circle id="deleteModeButton" filter="url(#shadow)" class="future deleteButton ui menuCircleButton allButtons"
                     cx="480" cy="553" r="30" stroke-width="1"></circle>
-            <text id="undo" class="undoButton toolText ui-text" x="461" y="557"
-                  font-family="Exo 2" font-size="14">UNDO</text>
+            <text class="future deleteButton ui-text" x="458" y="557">ERASE</text>
         </svg>
 
         <!-- Redo Button -->
         <svg class="toolMenu" width="700" height="700">
             <circle id="redoModeButton" filter="url(#shadow)" class="future redoButton ui menuCircleButton allButtons"
                     cx="390" cy="590" r="30" stroke-width="1"></circle>
-            <text id="redo" class="future redoButton toolText ui-text" x="373" y="594"
-                  font-family="Exo 2" font-size="14">REDO</text>
+            <text class="future redoButton ui-text" x="371" y="594">REDO</text>
         </svg>
     </div>
 
     <div id="menuoptions" class="ui-component noselect">
         <!-- Save Graph Button-->
         <svg width="600" height="600" class="buttons">
-            <circle filter="url(#shadow)" id="creategraphbutton" class="future creategraph ui menuCircleButton allButtons" stroke-width="1"
+            <circle id="saveGraphButton" filter="url(#shadow)" class="future saveButton ui menuCircleButton allButtons" stroke-width="1"
                  cx="465" cy="350" r="30"></circle>
-            <text class="creategraph ui-text" x="450" y="355" font-family="Exo 2" font-size="14">SAVE</text>
+            <text class="future saveButton ui-text" x="447" y="355">SAVE</text>
         </svg>
 
         <!-- Load Graph Button -->
         <svg width="600" height="600" class="buttons">
-            <circle filter="url(#shadow)" id="selectgraphbutton" class="future selectgraph ui menuCircleButton allButtons"
+            <circle id="loadGraphButton" filter="url(#shadow)" class="future loadButton ui menuCircleButton allButtons"
                     stroke-width="1" cx="425" cy="425" r="30"></circle>
-            <text class="selectgraph ui-text" x="408" y="430" font-family="Exo 2" font-size="14">LOAD</text>
+            <text class="future loadButton ui-text" x="406.5" y="430">LOAD</text>
         </svg>
 
         <!-- EDU Mode Button -->
         <svg width="600" height="600" class="buttons">
-            <circle filter="url(#shadow)" id="eduModeButton" class="future eduMode ui menuCircleButton allButtons"
+            <circle id="eduModeButton" filter="url(#shadow)" class="future eduButton ui menuCircleButton allButtons"
                   stroke-width="1" cx="350" cy="465" r="30"></circle>
-            <text class="future eduMode ui-text" x="337" y="470" font-family="Exo 2" font-size="14">EDU</text>
+            <text class="future eduButton ui-text" x="335" y="470">EDU</text>
         </svg>
     </div>
 
@@ -106,7 +101,7 @@
     <div class="ui-component noselect" id="menu">
         <!-- Outer Spinning Circle -->
         <svg id="outer" class="mainmenu ui" style="width:120px;height:120px">
-            <circle id="outer-spin-circle" filter="url(#shadow)" class="future allButtons mainButton" stroke-width="1" fill="transparent"
+            <circle id="outer-spin-circle" filter="url(#shadow)" class="future ui allButtons mainButton" stroke-width="1" fill="transparent"
                   stroke-dasharray="35 6" cx="60" cy="60" r="35"></circle>
         </svg>
 
@@ -116,14 +111,17 @@
                   stroke-dasharray="15 5 2" cx="60" cy="60" r="45"></circle>
         </svg>
         <svg id="hide-ui" class="mainmenu allButtons" style="width:120px;height:120px">
-            <text class="future ui-text menuButton mainButton" x="39" y="65" font-family="Exo 2" font-size="16">MENU</text>
+            <text class="future ui-text menuButton mainButton" x="39" y="65" font-size="16">MENU</text>
         </svg>
     </div>
 
-    <i id="question-mark" class="fa fa-question-circle" style="font-size:36px"></i>
+    <div id="tooltip-button">
+        <i id="question-mark" class="fa fa-question-circle" style="font-size:36px"></i>
+    </div>
+
     <div id="tool-tip">
         <svg width="300" height="400">
-            <path class="shadow future" id="tool-tip-box"
+            <path filter="url(#shadow)" class="shadow future" id="tool-tip-box"
                   d="
                   M100,100
                   h100 a20,20 0 0 1 20,20

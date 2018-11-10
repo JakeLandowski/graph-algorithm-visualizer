@@ -17,6 +17,10 @@ html, body {
     z-index: 2;
 }
 
+.mainButton {
+    z-index: 5;
+}
+
 .mainmenu:hover {
     cursor: pointer;
 }
@@ -103,17 +107,18 @@ svg {
 
 #tool-tip {
     position: absolute;
-    bottom: -82.25px;
-    right: -64.5px;
+    bottom: -5.15rem;
+    right: -4.04rem;
     transform: rotate(180deg);
 }
+
 
 #question-mark {
     color: #6ba2dc;
     z-index: 5;
     position: absolute;
-    bottom: 15px;
-    right: 15px;
+    bottom: 1rem;
+    right: 1rem;
     transform: perspective(1px);
 }
 

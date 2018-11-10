@@ -1,6 +1,6 @@
 html, body {
     overflow: hidden;
-    background-color: #ffffff;
+    background-color: #efefef;
 }
 
 #main
@@ -17,6 +17,10 @@ html, body {
     z-index: 2;
 }
 
+.mainButton {
+    z-index: 5;
+}
+
 .mainmenu:hover {
     cursor: pointer;
 }
@@ -26,6 +30,7 @@ html, body {
     top: -300px;
     left: -300px;
     z-index: 2;
+    opacity: 0;
 }
 
 .future {
@@ -37,9 +42,6 @@ html, body {
     font-family: 'Exo 2', sans-serif;
 }
 
-.future:focus {
-    outline: none;
-}
 
 .future:hover {
     cursor: pointer;
@@ -51,10 +53,10 @@ html, body {
     overflow: hidden;
     background-color:rgba(0, 0, 0, 0.8);
     box-shadow:
-            inset 0 0 10px #262626,
-            0 0 12px #262626,
-            -5px 0 20px #262626,
-            5px 0 20px #262626;
+            inset 0 0 10px #9d9b98,
+            0 0 12px #9d9b98,
+            -5px 0 20px #9d9b98,
+            5px 0 20px #9d9b98;
 }
 
 .shadow {
@@ -73,15 +75,12 @@ html, body {
                                   supported by Chrome and Opera */
 }
 
-/*#creategraphbutton:hover {*/
-/*stroke: #ffcb48;*/
-/*}*/
-
 .toolMenu {
     z-index: 2;
     position: absolute;
     top: -350px;
     left: -350px;
+    opacity: 0;
 }
 
 .ui {
@@ -95,7 +94,7 @@ html, body {
 }
 
 .menuCircleButton {
-    fill: #ffff;
+    fill: #efefef;
 }
 
 .allButtons {
@@ -104,4 +103,35 @@ html, body {
 
 svg {
     pointer-events: none;
+}
+
+#tool-tip {
+    position: absolute;
+    bottom: -5.15rem;
+    right: -4.04rem;
+    transform: rotate(180deg);
+}
+
+
+#question-mark {
+    color: #262626;
+    z-index: 5;
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    transform: perspective(1px);
+}
+
+#question-mark:hover {
+    cursor: pointer;
+    color: #9d9b98;
+}
+
+#tool-tip-box {
+    opacity: 0;
+    z-index: 4;
+    stroke: #262626;
+    border-radius: 5px;
+    fill: transparent;
+    stroke-width: 1;
 }
