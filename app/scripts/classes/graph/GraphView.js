@@ -1,4 +1,4 @@
-/**
+ /**
  *  @author Jake Landowski
  *  7/16/18
  *  GraphView.js
@@ -19,9 +19,12 @@ const GraphView = function(container, model, config)
     this.config    = config;
     this.engine    = new RenderingEngine(config);
 
-    this.VERTEX_LAYER   = 1;
-    this.EDGE_LAYER     = 0;
-    this.TRACKING_LAYER = 0;
+    this.VERTEX_LAYER      = 4;
+    this.WEIGHT_TEXT_LAYER = 3;
+    this.ARROW_LAYER       = 2;
+    this.WEIGHT_BOX_LAYER  = 1;
+    this.EDGE_LAYER        = 0;
+    this.TRACKING_LAYER    = 0;
 
     // For mapping data in model to their view shape equivalent
     this.vertexMap = Object.create(null);
@@ -197,10 +200,6 @@ GraphView.prototype =
         // Edge Added
         this.model.onEdgeAdded.attach('createEdge', function(_, params)
         {
-            // let grd = this.engine.context.createRadialGradient(params.center.x, params.center.y, 10, params.center.x,
-            //     params.center.y, 20);
-            // grd.addColorStop(.5, this.config.backgroundColor);
-
             // Set other existing edge to curve
             const otherEdge = this.edgeMap[ [params.to, params.from] ];
             const directedAndOtherEdge = !this.config.undirected && otherEdge;
@@ -245,38 +244,42 @@ GraphView.prototype =
             const edgeCenterY = directedAndOtherEdge ? edge.line.curveCenterY : params.center.y;
 
             edge.box = this.engine.createCircle(edgeCenterX, edgeCenterY,
-            this.config.edgeBoxSize, this.EDGE_LAYER,
+            this.config.edgeBoxSize, this.WEIGHT_BOX_LAYER,
             {
                 strokeStyle: this.config.edgeBoxOutlineColor,
                 fillStyle:   this.config.backgroundColor,
             });
 
             edge.text = this.engine.createText(params.weight, edgeCenterX,
-            edgeCenterY, this.EDGE_LAYER,
+            edgeCenterY, this.WEIGHT_TEXT_LAYER,
             {
                 fillStyle:   this.config.edgeTextColor,
                 font:        '16px monospace'
             });
 
-            const arrowFromX = directedAndOtherEdge ? edge.line.curveArrowX : params.fromPoint.x;
-            const arrowFromY = directedAndOtherEdge ? edge.line.curveArrowY : params.fromPoint.y;
-            
-            edge.arrow = this.engine.createArrow(arrowFromX, arrowFromY, 
-            params.toPoint.x, params.toPoint.y, this.EDGE_LAYER,
+            if(!this.config.undirected)
             {
-                leftCurveDirection:  otherEdge ? -90 : 0, // the angle, 0 = none
-                rightCurveDirection: otherEdge ? -90 : 0, // the angle, 0 = none
-                leftCurveOffset:     5,
-                rightCurveOffset:    5,
-                length:              30,
-                angle:               30,
-                endOfLine:           true,
-                offset:              this.config.vertexSize,
-                strokeStyle:         this.config.edgeArrowColor,
-                lineWidth:           this.config.edgeWidth,
-                shadowBlur:          16,
-                shadowColor:         this.config.edgeArrowColor
-            });
+                const arrowFromX = directedAndOtherEdge ? edge.line.curveArrowX : params.fromPoint.x;
+                const arrowFromY = directedAndOtherEdge ? edge.line.curveArrowY : params.fromPoint.y;
+                
+                edge.arrow = this.engine.createArrow(arrowFromX, arrowFromY, 
+                params.toPoint.x, params.toPoint.y, this.ARROW_LAYER,
+                {
+                    leftCurveDirection:  otherEdge ? -90 : 0, // the angle, 0 = none
+                    rightCurveDirection: otherEdge ? -90 : 0, // the angle, 0 = none
+                    leftCurveOffset:     5,
+                    rightCurveOffset:    5,
+                    length:              15,
+                    angle:               30,
+                    endOfLine:           true,
+                    offset:              this.config.vertexSize,
+                    strokeStyle:         this.config.edgeArrowColor,
+                    lineWidth:           this.config.edgeWidth,
+                    shadowBlur:          16,
+                    shadowColor:         this.config.edgeArrowColor
+                });
+            }
+
 
             this.edgeMap[ [params.from, params.to] ] = edge;
 
@@ -298,7 +301,7 @@ GraphView.prototype =
             edge.line.delete();
             edge.box.delete();
             edge.text.delete();
-            edge.arrow.delete();
+            if(!this.config.undirected) edge.arrow.delete();
             delete this.edgeMap[ [params.from, params.to] ];
 
             const otherEdge = this.edgeMap[ [params.to, params.from] ];
@@ -342,7 +345,7 @@ GraphView.prototype =
             const fromX = directedAndOtherEdge ? edge.line.curveArrowX : params.fromPoint.x;
             const fromY = directedAndOtherEdge ? edge.line.curveArrowY : params.fromPoint.y;
 
-            edge.arrow.calcArrowPoints(fromX, fromY, params.toPoint.x, params.toPoint.y);
+            if(!this.config.undirected) edge.arrow.calcArrowPoints(fromX, fromY, params.toPoint.x, params.toPoint.y);
 
             if(directedAndOtherEdge)
                 this.onEdgeCurveChanged.notify
