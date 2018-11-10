@@ -192,21 +192,37 @@ AdjacencyList.prototype =
             action(map[vertexData]);
     },
 
+    /**
+     * Executes a given function for each stored Edge object.
+     * Gets passed the Edge Object.
+     * @param {function} action - the function to execute
+     * @example
+     * adjList.forEachEdge((edge) => 
+     * {
+     *     // do stuff with edge
+     * });
+     */
     forEachEdge(action)
     {
-        const map = this.vertexMap;
-        let vertex, toNeighbors, edge;
-
-        for(const symbol in map)
+        const seenEdges = Object.create(null);
+        
+        for(const key in this.edgeMap)
         {
-            vertex = map[symbol];
-            toNeighbors = vertex.toNeighbors;
-
-            for(const neighbor in toNeighbors)
+            const edge = this.edgeMap[key];
+            const reverseKey = [edge.to, edge.from]; 
+            
+            if(this.undirected)
             {
-                edge = this.edgeMap[ [vertex.data, neighbor] ];
-                if(edge.to === neighbor && edge.from === symbol)
+                if(!seenEdges[key] && !seenEdges[reverseKey])
+                {
                     action(edge);
+                    seenEdges[key] = true;
+                    seenEdges[reverseKey] = true;    
+                }
+            }
+            else
+            {
+                action(edge);
             }
         }
     },
