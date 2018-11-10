@@ -26,7 +26,7 @@ export default {
         let opacity;
         let toolDelay = 0;
         let menuDelay = 0;
-        let menuShown = true;
+        let menuShown = false;
         let toolTipShown = false;
         let eduModeStyle = false;
         let buttons = document.getElementsByClassName('buttons');
@@ -73,11 +73,32 @@ export default {
             autoplay: false
         });
 
+        let hideInnerCircle = Anime({
+            opacity: 1,
+            strokeDashoffset: [0, Anime.setDashoffset],
+            targets: '#inner-circle',
+            easing: 'linear',
+            direction: 'alternate',
+            duration: 2000,
+            loop: false,
+        });
+
+        let hideOuterCircle = Anime({
+            opacity: 1,
+            strokeDashoffset: [0, Anime.setDashoffset],
+            targets: '#outer-circle',
+            easing: 'linear',
+            direction: 'alternate',
+            duration: 1800,
+            loop: false,
+        });
+
         //TODO: USE THIS CODE TO CREATE LOOP FOR ANIMATIONS AND FIX BUTTON FUNCTIONALITY
         //console.log(document.getElementsByTagName('circle'));
         function hideMenu() {
             for(let i = 0; i<buttons.length; i++) {
                 let rotateMenu = Anime({
+                    opacity: 0,
                     targets: buttons[i],
                     rotate: '90',
                     duration: 1000,
@@ -89,6 +110,7 @@ export default {
 
             for(let i = 0; i<tools.length; i++) {
                 let rotateTools = Anime({
+                    opacity: 0,
                     targets: tools[i],
                     rotate: '90',
                     duration: 900,
@@ -98,31 +120,21 @@ export default {
                 toolDelay += 90;
             }
 
-            let hideInnerCircle = Anime({
-                strokeDashoffset: [0, Anime.setDashoffset],
-                targets: '#inner-circle',
-                easing: 'linear',
-                direction: 'alternate',
-                duration: 2000,
-                loop: false,
-            });
-
-            let hideOuterCircle = Anime({
-                strokeDashoffset: [0, Anime.setDashoffset],
-                targets: '#outer-circle',
-                easing: 'linear',
-                direction: 'alternate',
-                duration: 1800,
-                loop: false,
-            });
+            hideInnerCircle.reset();
+            hideOuterCircle.reset();
+            hideInnerCircle.play();
+            hideOuterCircle.play();
 
             menuDelay = 0;
             toolDelay = 0;
         }
 
+
+
         function showMenu() {
             for(let i = 0; i<buttons.length; i++) {
                 let rotateMenu = Anime({
+                    opacity: 1,
                     targets: buttons[i],
                     rotate: '0',
                     duration: 900,
@@ -134,6 +146,7 @@ export default {
 
             for(let i = 0; i<tools.length; i++) {
                 let rotateTools = Anime({
+                    opacity: 1,
                     targets: tools[i],
                     rotate: '0',
                     duration: 800,
@@ -143,25 +156,11 @@ export default {
                 toolDelay += 90;
             }
 
-            let showInnerCircle = Anime({
-                strokeDashoffset: [0, Anime.setDashoffset],
-                targets: '#inner-circle',
-                easing: 'easeOutExpo',
-                direction: 'reverse',
-                duration: 1000,
-                loop: false,
-                delay: 1000
-            });
+            hideInnerCircle.reverse();
+            hideInnerCircle.play();
 
-            let showOuterCircle = Anime({
-                strokeDashoffset: [0, Anime.setDashoffset],
-                targets: '#outer-circle',
-                easing: 'easeOutExpo',
-                direction: 'reverse',
-                duration: 900,
-                loop: false,
-                delay: 1000
-            });
+            hideOuterCircle.reverse();
+            hideOuterCircle.play();
             toolDelay = 0;
             menuDelay = 0;
         }

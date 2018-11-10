@@ -26,6 +26,7 @@ html, body {
     top: -300px;
     left: -300px;
     z-index: 2;
+    opacity: 0;
 }
 
 .future {
@@ -75,6 +76,7 @@ html, body {
     position: absolute;
     top: -350px;
     left: -350px;
+    opacity: 0;
 }
 
 .ui {
