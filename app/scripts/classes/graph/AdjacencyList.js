@@ -192,45 +192,39 @@ AdjacencyList.prototype =
             action(map[vertexData]);
     },
 
+    /**
+     * Executes a given function for each stored Edge object.
+     * Gets passed the Edge Object.
+     * @param {function} action - the function to execute
+     * @example
+     * adjList.forEachEdge((edge) => 
+     * {
+     *     // do stuff with edge
+     * });
+     */
     forEachEdge(action)
     {
         const seenEdges = Object.create(null);
-        let seen, key, reverseKey;
-
-        for(const edge in this.edgeMap)
+        
+        for(const key in this.edgeMap)
         {
-            key = [edge.from, edge.to];
-            reverseKey = [edge.to, edge.from];
-
-            // notSeen = this.undirected ? 
-            //     !seenEdges[reverseKey] && !seenEdges[key] : !seenEdges[key];
-
-            // TODO: directed only runs once, need to fix boolean logic
-            seen = seenEdges[key] || seenEdges[reverseKey];
-
-            if(!seen)
+            const edge = this.edgeMap[key];
+            const reverseKey = [edge.to, edge.from]; 
+            
+            if(this.undirected)
+            {
+                if(!seenEdges[key] && !seenEdges[reverseKey])
+                {
+                    action(edge);
+                    seenEdges[key] = true;
+                    seenEdges[reverseKey] = true;    
+                }
+            }
+            else
             {
                 action(edge);
-                seenEdges[key] = true;
-                seenEdges[reverseKey] = true;
             }
         }
-
-        // const map = this.vertexMap;
-        // let vertex, toNeighbors, edge;
-
-        // for(const symbol in map)
-        // {
-        //     vertex = map[symbol];
-        //     toNeighbors = vertex.toNeighbors;
-
-        //     for(const neighbor in toNeighbors)
-        //     {
-        //         edge = this.edgeMap[ [vertex.data, neighbor] ];
-        //         if(edge.to === neighbor && edge.from === symbol)
-        //             action(edge);
-        //     }
-        // }
     },
 
     //=========== Private ===========//
