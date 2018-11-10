@@ -98,3 +98,33 @@ html, body {
 svg {
     pointer-events: none;
 }
+
+#tool-tip {
+    position: absolute;
+    bottom: -82.25px;
+    right: -64.5px;
+    transform: rotate(180deg);
+}
+
+#question-mark {
+    color: #6ba2dc;
+    z-index: 5;
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    transform: perspective(1px);
+
+}
+
+#question-mark:hover {
+    cursor: pointer;
+    color: #2054a0;
+}
+
+#tool-tip-box {
+    z-index: 4;
+    stroke: #6ba2dc;
+    border-radius: 5px;
+    fill: transparent;
+    stroke-width: 1;
+}

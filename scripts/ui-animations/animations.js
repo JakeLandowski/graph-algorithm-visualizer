@@ -17,7 +17,6 @@ let lightGray = "#9d9b98";
 let darkGray = "#262626";
 let white = "#fff";
 
-//TODO: Create hover effect on all button outlines but not text
 //TODO: Ensure button functionality
 //TODO: FIX THE CIRCLE SHIT
 export default {
@@ -49,6 +48,18 @@ export default {
         };
         setHighlights();
 
+
+        let toolTipButton = document.getElementById('question-mark');
+        toolTipButton.onclick = function () {
+            let toolTipDraw = Anime({
+                targets: '#tool-tip-box',
+                strokeDashoffset: [Anime.setDashoffset,0],
+                easing: 'easeInOutSine',
+                duration: 1000,
+                direction: 'alternate',
+                loop: false
+            });
+        };
 
         //TODO: USE THIS CODE TO CREATE LOOP FOR ANIMATIONS AND FIX BUTTON FUNCTIONALITY
         console.log(document.getElementsByTagName('circle'));
@@ -199,6 +210,19 @@ export default {
                         document.getElementById(elementIds[i]).style.stroke = (eduModeStyle) ? lightGray : primary;
                     });
                 }
+            }
+
+            let menuButton = document.getElementsByClassName('mainButton');
+            for(let i = 0; i<menuButton.length; i++) {
+                menuButton[i].addEventListener('mouseenter',function () {
+                    document.getElementById('outer-spin-circle').style.stroke = (eduModeStyle) ? darkGray : secondary;
+                    document.getElementById('inner-spin-circle').style.stroke = (eduModeStyle) ? darkGray : secondary;
+                });
+
+                menuButton[i].addEventListener('mouseleave',function () {
+                    document.getElementById('outer-spin-circle').style.stroke = (eduModeStyle) ? lightGray : primary;
+                    document.getElementById('inner-spin-circle').style.stroke = (eduModeStyle) ? lightGray : primary;
+                });
             }
         }
 

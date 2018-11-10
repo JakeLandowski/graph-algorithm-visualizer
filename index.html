@@ -84,7 +84,7 @@
         <svg width="600" height="600" class="buttons">
             <circle filter="url(#shadow)" id="creategraphbutton" class="future creategraph ui menuCircleButton allButtons" stroke-width="1"
                  cx="465" cy="350" r="30"></circle>
-            <text class="creategraph menubutton ui-text" x="450" y="355" font-family="Exo 2" font-size="14">SAVE</text>
+            <text class="creategraph ui-text" x="450" y="355" font-family="Exo 2" font-size="14">SAVE</text>
         </svg>
 
         <!-- Load Graph Button -->
@@ -106,20 +106,34 @@
     <div class="ui-component noselect" id="menu">
         <!-- Outer Spinning Circle -->
         <svg id="outer" class="mainmenu ui" style="width:120px;height:120px">
-            <circle filter="url(#shadow)" class="future allButtons" stroke-width="1" fill="transparent"
+            <circle id="outer-spin-circle" filter="url(#shadow)" class="future allButtons mainButton" stroke-width="1" fill="transparent"
                   stroke-dasharray="35 6" cx="60" cy="60" r="35"></circle>
         </svg>
 
         <!-- Inner Spinning Circle -->
         <svg id="inner" class="mainmenu ui" style="width:120px;height:120px">
-            <circle filter="url(#shadow)" class="future ui allButtons" stroke-width="2" fill="transparent"
+            <circle id="inner-spin-circle" filter="url(#shadow)" class="future ui allButtons mainButton" stroke-width="2" fill="transparent"
                   stroke-dasharray="15 5 2" cx="60" cy="60" r="45"></circle>
         </svg>
-        <svg id="hide-ui" class="mainmenu all" style="width:120px;height:120px">
-            <text class="future ui-text" x="39" y="65" font-family="Exo 2" font-size="16">MENU</text>
+        <svg id="hide-ui" class="mainmenu allButtons" style="width:120px;height:120px">
+            <text class="future ui-text menuButton mainButton" x="39" y="65" font-family="Exo 2" font-size="16">MENU</text>
         </svg>
     </div>
 
+    <i id="question-mark" class="fa fa-question-circle" style="font-size:36px"></i>
+    <div id="tool-tip">
+        <svg width="300" height="400">
+            <path class="shadow future" id="tool-tip-box"
+                  d="
+                  M100,100
+                  h100 a20,20 0 0 1 20,20
+                  v200 a20,20 0 0 1 -20,20
+                  h-100 a20,20 0 0 1 -20,-20
+                  v-200 a20,20 0 0 1 20,-20 z"
+                  fill="none" stroke="black" stroke-width="3">
+            </path>
+        </svg>
+    </div>
     <!-- Graph Canvas div -->
     <div id="main"></div>
     <script type="module" src="scripts/main.js"></script>
