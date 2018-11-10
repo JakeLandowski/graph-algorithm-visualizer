@@ -1,0 +1,114 @@
+import AdjacencyList from '../classes/graph/AdjacencyList.js';
+
+let undirectedAdj, directedAdj, vertex, edge;
+
+beforeEach(() => 
+{
+    undirectedAdj = new AdjacencyList(true);
+    directedAdj   = new AdjacencyList(false);
+    vertex = { data: 'A' };
+    edge = { from: 'A', to: 'B' };
+});
+
+describe('Testing Adjancency List undirected/directed', () => 
+{
+    test('expect vertexMap and edgeMap to be empty at start', () => 
+    {
+        const emptyObject = Object.create(null);
+        expect(directedAdj.vertexMap).toEqual(emptyObject);
+        expect(undirectedAdj.vertexMap).toEqual(emptyObject);
+        expect(directedAdj.edgeMap).toEqual(emptyObject);
+        expect(undirectedAdj.edgeMap).toEqual(emptyObject);
+    });
+
+    test('vertexExists() and insertVertex(vertex) works', () =>
+    {
+        expect(directedAdj.vertexExists('')).toBe(false);
+        expect(directedAdj.vertexExists('A')).toBe(false);
+        
+        directedAdj.insertVertex(vertex);
+        expect(directedAdj.vertexExists('A')).toBe(true);
+
+        expect(vertex.data).toBeDefined();
+        expect(vertex).toBe(vertex);
+        expect(vertex.data).toBe('A');
+    });
+
+    test('getVertex() works', () => 
+    {
+        expect(directedAdj.getVertex('A')).toBeUndefined();
+        
+        directedAdj.insertVertex(vertex);
+
+        expect(directedAdj.getVertex('A')).toBeDefined();
+        expect(directedAdj.getVertex('A')).toBe(vertex);
+    });
+
+    test('deleteVertex() works', () => 
+    {   
+        directedAdj.insertVertex(vertex);
+        expect(directedAdj.getVertex('A')).toBeDefined();
+
+        directedAdj.deleteVertex('A');
+        expect(directedAdj.getVertex('A')).toBeUndefined;
+        expect(directedAdj.vertexMap['A']).toBeUndefined;
+        expect(directedAdj.vertexMap).toEqual(Object.create(null));
+    });
+
+    test('insertEdge() works', () => 
+    {   
+        const testList = (list, undirected) => 
+        {
+            // Mocks
+            const mockPointToNeighbor = jest.fn();
+            const mockPointFromNeighbor = jest.fn();
+            const mockVertex = 
+            {
+                pointToNeighbor: mockPointToNeighbor,
+                pointFromNeighbor: mockPointFromNeighbor
+            };
+
+            list.vertexMap['A'] = mockVertex;
+            list.vertexMap['B'] = mockVertex;
+
+            // Test
+            list.insertEdge(edge);
+            expect(list.edgeMap[['A', 'B']]).toBe(edge);
+
+            const expectBtoA = expect(undirectedAdj.edgeMap[['B', 'A']]);
+            const expectToMock = expect(mockPointToNeighbor);
+            const expectFromMock = expect(mockPointFromNeighbor); 
+            
+            if(undirected)
+            {
+                expectBtoA.toBe(edge);
+                expectToMock.toHaveBeenCalledWith('A');
+                expectFromMock.toHaveBeenCalledWith('B');
+            }
+            else
+            {
+                expectBtoA.toBeUndefined();
+            }
+            
+            expectToMock.toHaveBeenCalledTimes(undirected ? 2:1);
+            expectFromMock.toHaveBeenCalledTimes(undirected ? 2:1);
+
+            expectToMock.toHaveBeenCalledWith('B');
+            expectFromMock.toHaveBeenCalledWith('A');
+        };
+
+        testList(directedAdj, false);
+        testList(undirectedAdj, true);
+    });
+
+    test('getEdge() works', () => 
+    {
+        directedAdj.edgeMap[['A', 'B']] = edge;
+        expect(directedAdj.getEdge('A', 'B')).toBe(edge);   
+    });
+
+    test('deleteEdge() works', () => 
+    {
+
+    });
+});
