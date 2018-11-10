@@ -8,7 +8,7 @@
     <link rel="icon" href="favicon.ico">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link id="pagestyle" rel="stylesheet" href="css/graphvis.css">
-    <link href="https://fonts.googleapis.com/css?family=Exo+2" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Orbitron" rel="stylesheet">
 </head>
 
 <body>
@@ -49,28 +49,28 @@
         <svg class="toolMenu" width="700" height="700">
             <circle id="newGraphButton" filter="url(#shadow)" class="future newButton ui menuCircleButton allButtons"
                     cx="587" cy="390" r="30" stroke-width="1"></circle>
-            <text class="future newButton ui-text" x="569" y="395">NEW</text>
+            <text class="future newButton ui-text" x="568" y="395">New</text>
         </svg>
 
         <!-- Add Mode Button -->
         <svg class="toolMenu" width="700" height="700">
             <circle id="addModeButton" filter="url(#shadow)" class="future addButton ui menuCircleButton allButtons"
                     cx="553" cy="480" r="30" stroke-width="1"></circle>
-            <text class="future addButton ui-text" x="537" y="485">ADD</text>
+            <text class="future addButton ui-text" x="536" y="485">Add</text>
         </svg>
 
         <!-- Delete Mode Button -->
         <svg class="toolMenu" width="700" height="700">
             <circle id="deleteModeButton" filter="url(#shadow)" class="future deleteButton ui menuCircleButton allButtons"
                     cx="480" cy="553" r="30" stroke-width="1"></circle>
-            <text class="future deleteButton ui-text" x="458" y="557">ERASE</text>
+            <text class="future deleteButton ui-text" x="465.5" y="558">Del</text>
         </svg>
 
         <!-- Redo Button -->
         <svg class="toolMenu" width="700" height="700">
             <circle id="redoModeButton" filter="url(#shadow)" class="future redoButton ui menuCircleButton allButtons"
                     cx="390" cy="590" r="30" stroke-width="1"></circle>
-            <text class="future redoButton ui-text" x="371" y="594">REDO</text>
+            <text class="future redoButton ui-text" x="368" y="594"></text>
         </svg>
     </div>
 
@@ -79,21 +79,21 @@
         <svg width="600" height="600" class="buttons">
             <circle id="saveGraphButton" filter="url(#shadow)" class="future saveButton ui menuCircleButton allButtons" stroke-width="1"
                  cx="465" cy="350" r="30"></circle>
-            <text class="future saveButton ui-text" x="447" y="355">SAVE</text>
+            <text class="future saveButton ui-text" x="442.5" y="355">Save</text>
         </svg>
 
         <!-- Load Graph Button -->
         <svg width="600" height="600" class="buttons">
             <circle id="loadGraphButton" filter="url(#shadow)" class="future loadButton ui menuCircleButton allButtons"
                     stroke-width="1" cx="425" cy="425" r="30"></circle>
-            <text class="future loadButton ui-text" x="406.5" y="430">LOAD</text>
+            <text class="future loadButton ui-text" x="403" y="430">Load</text>
         </svg>
 
         <!-- EDU Mode Button -->
         <svg width="600" height="600" class="buttons">
             <circle id="eduModeButton" filter="url(#shadow)" class="future eduButton ui menuCircleButton allButtons"
                   stroke-width="1" cx="350" cy="465" r="30"></circle>
-            <text class="future eduButton ui-text" x="335" y="470">EDU</text>
+            <text class="future eduButton ui-text" x="334" y="470">Edu</text>
         </svg>
     </div>
 
@@ -111,7 +111,7 @@
                   stroke-dasharray="15 5 2" cx="60" cy="60" r="45"></circle>
         </svg>
         <svg id="hide-ui" class="mainmenu allButtons" style="width:120px;height:120px">
-            <text class="future ui-text menuButton mainButton" x="39" y="65" font-size="16">MENU</text>
+            <text class="future ui-text menuButton mainButton" x="38" y="65" font-size="16">Menu</text>
         </svg>
     </div>
 
@@ -130,6 +130,9 @@
                   v-200 a20,20 0 0 1 20,-20 z"
                   fill="none" stroke="black" stroke-width="3">
             </path>
+
+            <text class="future ui-text tooltip-text" x="-197" y="-300" font-size="14">Undo: Ctrl-Z</text>
+            <text class="future ui-text tooltip-text" x="-197" y="-275" font-size="14">Redo: Ctrl-Y</text>
         </svg>
     </div>
     <!-- Graph Canvas div -->

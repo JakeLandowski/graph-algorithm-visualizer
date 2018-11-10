@@ -39,7 +39,7 @@ html, body {
             0 0 10px #262626;
     background-color:rgba(0, 0, 0, 0.65);
     border: 1px solid #262626;
-    font-family: 'Exo 2', sans-serif;
+    font-family: 'Orbitron 2', sans-serif;
 }
 
 
@@ -56,7 +56,7 @@ html, body {
             inset 0 0 10px #9d9b98,
             0 0 12px #9d9b98,
             -5px 0 20px #9d9b98,
-            5px 0 20px #9d9b98;
+            5px 0 20px #262626;
 }
 
 .shadow {

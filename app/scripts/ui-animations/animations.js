@@ -46,16 +46,30 @@ export default {
 
         toolTipButton.onclick = function () {
             if (toolTipShown) {
-                console.log('hidetooltip');
                 toolTipDraw.reverse();
                 toolTipDraw.play();
+
+                let toolTipText = Anime({
+                    opacity: 0,
+                    targets: ".tooltip-text",
+                    duration: 250,
+                    delay: 250,
+                });
             } else {
-                console.log('showtooltip');
                 toolTipDraw.reset();
                 toolTipDraw.play();
+
+                let toolTipText = Anime({
+                    opacity: 1,
+                    targets: ".tooltip-text",
+                    duration: 250,
+                    delay: 250,
+                });
             }
             toolTipShown = !toolTipShown;
         };
+
+
 
         let toolTipDraw = Anime({
             opacity: 1,
