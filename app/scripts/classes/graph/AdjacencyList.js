@@ -194,21 +194,43 @@ AdjacencyList.prototype =
 
     forEachEdge(action)
     {
-        const map = this.vertexMap;
-        let vertex, toNeighbors, edge;
+        const seenEdges = Object.create(null);
+        let seen, key, reverseKey;
 
-        for(const symbol in map)
+        for(const edge in this.edgeMap)
         {
-            vertex = map[symbol];
-            toNeighbors = vertex.toNeighbors;
+            key = [edge.from, edge.to];
+            reverseKey = [edge.to, edge.from];
 
-            for(const neighbor in toNeighbors)
+            // notSeen = this.undirected ? 
+            //     !seenEdges[reverseKey] && !seenEdges[key] : !seenEdges[key];
+
+            // TODO: directed only runs once, need to fix boolean logic
+            seen = seenEdges[key] || seenEdges[reverseKey];
+
+            if(!seen)
             {
-                edge = this.edgeMap[ [vertex.data, neighbor] ];
-                if(edge.to === neighbor && edge.from === symbol)
-                    action(edge);
+                action(edge);
+                seenEdges[key] = true;
+                seenEdges[reverseKey] = true;
             }
         }
+
+        // const map = this.vertexMap;
+        // let vertex, toNeighbors, edge;
+
+        // for(const symbol in map)
+        // {
+        //     vertex = map[symbol];
+        //     toNeighbors = vertex.toNeighbors;
+
+        //     for(const neighbor in toNeighbors)
+        //     {
+        //         edge = this.edgeMap[ [vertex.data, neighbor] ];
+        //         if(edge.to === neighbor && edge.from === symbol)
+        //             action(edge);
+        //     }
+        // }
     },
 
     //=========== Private ===========//

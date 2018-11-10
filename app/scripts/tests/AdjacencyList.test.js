@@ -149,7 +149,7 @@ describe('Testing Adjancency List undirected/directed', () =>
 
     test('forEachVertex() works', () => 
     {
-        const testSymbols = ['A', 'B', 'C'];
+        const testSymbols = ['A', 'B', 'C', 'D', 'E', 'F'];
 
         testSymbols.forEach((symbol) => 
         {
@@ -164,6 +164,41 @@ describe('Testing Adjancency List undirected/directed', () =>
         testSymbols.forEach((symbol) => 
         {
             expect(testFunction).toHaveBeenCalledWith(symbol); 
+        });
+    });
+
+    test('forEachEdge() works', () => 
+    {
+        const edges = 
+        [
+            {from: 'A', to: 'B'},
+            {from: 'B', to: 'C'},
+            {from: 'C', to: 'D'}
+        ];
+
+        edges.forEach((edge) => 
+        {
+            directedAdj.edgeMap[[edge.from, edge.to]] = edge;
+            undirectedAdj.edgeMap[[edge.from, edge.to]] = edge;
+            undirectedAdj.edgeMap[[edge.to, edge.from]] = edge;
+        });
+
+        const directedCallBackMock = jest.fn();
+        const undirectedCallBackMock = jest.fn();
+
+        directedAdj.forEachEdge(directedCallBackMock);
+        undirectedAdj.forEachEdge(undirectedCallBackMock);
+
+        const expectDirected = expect(directedCallBackMock);
+        const expectUndirected = expect(undirectedCallBackMock); 
+
+        expectDirected.toHaveBeenCalledTimes(edges.length);
+        expectUndirected.toHaveBeenCalledTimes(edges.length);
+
+        edges.forEach((edge) => 
+        {
+            expectDirected.toHaveBeenCalledWith(edge);
+            expectUndirected.toHaveBeenCalledWith(edge);
         });
     });
 });
