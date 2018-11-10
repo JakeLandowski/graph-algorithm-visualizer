@@ -15,8 +15,8 @@ import Util from '../../utils/Util.js';
 
 const Graph = function(container, config={})
 {
-    let primaryColor = "#ff9a00";
-    let secondaryColor = "#ffcb48";
+    let primaryColor = "#6ba2dc";
+    let secondaryColor = "#2054a0";
     let background = "#262626";
 
     if(!container) throw 'Need to provide a containing element for Graph to render in.';
@@ -28,8 +28,8 @@ const Graph = function(container, config={})
         undirected:             config.undirected             !== undefined ? config.undirected               : true,
         weighted:               config.weighted               !== undefined ? config.weighted                 : true,
         vertexSize:             config.vertexSize             !== undefined ? config.vertexSize               : 25,
-        vertexOutlineSize:      config.vertexOutlineSize      !== undefined ? config.vertexOutlineSize        : 3,
-        edgeWidth:              config.edgeWidth              !== undefined ? config.edgeWidth                : 5,
+        vertexOutlineSize:      config.vertexOutlineSize      !== undefined ? config.vertexOutlineSize        : 1,
+        edgeWidth:              config.edgeWidth              !== undefined ? config.edgeWidth                : 2,
         edgeBoxSize:            config.edgeBoxSize            !== undefined ? config.edgeBoxSize              : 15,
         edgeCurveOffset:        config.edgeCurveOffset        !== undefined ? config.edgeCurveOffset          : 100,
         vertexOutlineColor:     config.vertexOutlineColor     !== undefined ? [config.vertexOutlineColor]     : [primaryColor], 

@@ -1,6 +1,6 @@
 html, body {
     overflow: hidden;
-    background-color: #fff;
+    background-color: #ffffff;
 }
 
 #main
@@ -12,6 +12,8 @@ html, body {
 
 .mainmenu {
     position: absolute;
+    top: 0;
+    left: 0;
     z-index: 2;
 }
 
@@ -19,16 +21,11 @@ html, body {
     cursor: pointer;
 }
 
-#buttons {
-    width: 200px;
-    height: 200px;
-}
-
-.menu {
-    left: -250px;
+.buttons {
     position: absolute;
-    z-index: 1;
-    list-style: none;
+    top: -300px;
+    left: -300px;
+    z-index: 2;
 }
 
 .future {
@@ -60,14 +57,10 @@ html, body {
             5px 0 20px #262626;
 }
 
-.ui-component {
-    z-index: 2;
-}
-
 .shadow {
     /* Use -webkit- only if supporting: Chrome < 54, iOS < 9.3, Android < 4.4.4 */
-    -webkit-filter: drop-shadow(0px 0px 5px #262626);
-    filter: drop-shadow(0px 0px 5px #262626);
+    -webkit-filter: drop-shadow(0px 5px 5px #262626);
+    filter: drop-shadow(0px 5px 5px #262626);
 }
 
 .noselect {
@@ -87,9 +80,9 @@ html, body {
 .toolMenu {
     z-index: 2;
     position: absolute;
-    display: none;
+    top: -350px;
+    left: -350px;
 }
-
 
 .ui {
     stroke: #262626;
@@ -98,5 +91,17 @@ html, body {
 
 .ui-text {
     color: #262626;
-    background: #fff;
+    fill: #262626;
+}
+
+.menuCircleButton {
+    fill: #ffff;
+}
+
+.allButtons {
+    pointer-events: all;
+}
+
+svg {
+    pointer-events: none;
 }
