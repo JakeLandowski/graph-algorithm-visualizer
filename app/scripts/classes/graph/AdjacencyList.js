@@ -57,7 +57,6 @@ AdjacencyList.prototype =
      * @example
      * let vertex = new Vertex('A', 0, 0);
      * adjList.insertVertex(vertex);
-     * 
      * let sameVertex = adjList.getVertex('A');
      * console.log(vertex === sameVertex); // true   
      */
@@ -74,7 +73,6 @@ AdjacencyList.prototype =
      * let vertex = new Vertex('A', 0, 0);
      * adjList.insertVertex(vertex);
      * console.log(adjList.vertexExists('A')); // true
-     * 
      * adjList.deleteVertex('A');
      * console.log(adjList.vertexExists('A')); // false 
      */
@@ -91,21 +89,20 @@ AdjacencyList.prototype =
      * @throws {ReferenceError} if the AdjacencyList doesn't have
      * the edge's to and from vertices stored
      * @example
-     * 
      * let adjList = new AdjacencyList(false); // directed
-     * 
+     * //
      * let vertexOne = new Vertex('A', 0, 0);
      * let vertexTwo = new Vertex('B', 0, 0);
      * adjList.insertVertex(vertexOne);
      * adjList.insertVertex(vertexTwo);
-     * 
+     * //
      * let edge = new Edge('A', 'B');
      * adjList.insertEdge(edge);
-     * 
+     * //
      * console.log(adjList.getEdge('A', 'B')); // Edge {from: "A", to: "B"}
      * console.log(vertexOne.toNeighbors); // {"B" : vertexTwo}
      * console.log(vertexTwo.fromNeighbors); // {"A" : vertexOne}
-     * 
+     * //
      * let invalidEdge = new Edge('A', 'C');
      * adjList.insert(invalidEdge); // throw ReferenceError 
      */
@@ -145,7 +142,6 @@ AdjacencyList.prototype =
      * @example
      * adjList.insertEdge('A', 'B');
      * adjList.edgeExists('A', 'B'); // true
-     * 
      * adjList.deleteEdge('A', 'B');
      * adjList.edgeExists('A', 'B'); // false
      */
@@ -158,12 +154,37 @@ AdjacencyList.prototype =
         this.vertexMap[to].unregisterFromNeighbor(from);
     },
 
+    /**
+     * Tests to see if an Edge object with the given to and from
+     * vertex symbols is stored.
+     * @param {string} from - the from vertex symbol
+     * @param {string} to - the to vertex symbol
+     * @returns {boolean} true if the Edge is stored
+     * @example
+     * // for insertEdge() to work
+     * adjList.insertVertex(new Vertex('A', 0, 0));
+     * adjList.insertVertex(new Vertex('B', 0, 0));
+     * //
+     * console.log(adjList.edgeExists('A', 'B')); // false
+     * adjList.insertEdge(new Edge('A', 'B'));
+     * console.log(adjList.edgeExists('A', 'B')); // true
+     */
     edgeExists(from, to)
     {
         const edge = this.edgeMap[[from, to]];
         return edge !== undefined && edge !== null;
     },
 
+    /**
+     * Executes a given function for each stored Vertex object.
+     * Gets passed the Vertex Object.
+     * @param {function} action - the function to execute
+     * @example
+     * adjList.forEachVertex((vertex) => 
+     * {
+     *     // do stuff with vertex
+     * }); 
+     */
     forEachVertex(action)
     {
         const map = this.vertexMap;
