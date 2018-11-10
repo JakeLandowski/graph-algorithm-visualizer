@@ -14,8 +14,8 @@ import Animations from './ui-animations/animations.js';
 Animations.start();
 
 let eduMode = document.getElementsByClassName('eduMode');
-let lightOrange = "#ffcb48";
-let darkOrange = "#ff9a00";
+let primary = "#6ba2dc";
+let secondary = "#2054a0";
 let lightGray = "#9d9b98";
 let darkGray = "#262626";
 let white = "#fff";
@@ -31,9 +31,9 @@ addFunctionality();
 
 
 for(let i = 0; i<eduMode.length; i++) {
-    eduMode[i].addEventListener('click',function () {
+    eduMode[i].onclick = function () {
         if(eduModeActive){
-            Animations.swapColors(graph,darkOrange,lightOrange,darkGray);
+            Animations.swapColors(graph,primary,secondary,darkGray);
             window.localStorage.setItem('eduModeOn','false');
             eduModeActive = false;
         } else {
@@ -41,7 +41,7 @@ for(let i = 0; i<eduMode.length; i++) {
             window.localStorage.setItem('eduModeOn','true');
             eduModeActive = true;
         }
-    });
+    };
 }
 
 for(let i = 0; i<createNewBtn.length; i++) {

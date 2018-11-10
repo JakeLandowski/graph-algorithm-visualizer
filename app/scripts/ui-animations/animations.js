@@ -11,12 +11,14 @@
 import Anime from './anime.js';
 import Util from '../utils/Util.js';
 
-let lightOrange = "#ffcb48";
-let darkOrange = "#ff9a00";
+let primary = "#6ba2dc";
+let secondary = "#2054a0";
 let lightGray = "#9d9b98";
 let darkGray = "#262626";
 let white = "#fff";
 
+//TODO: Ensure button functionality
+//TODO: FIX THE CIRCLE SHIT
 export default {
     start()
     {
@@ -25,170 +27,146 @@ export default {
         let ypos;
         let menu = document.querySelectorAll('.menubtn');
         let delay = 0;
-        let openTools = true;
+        let toolDelay = 0;
+        let menuDelay = 0;
+        let menuShown = true;
         let eduModeStyle = false;
+        let buttons = document.getElementsByClassName('buttons');
+        let tools = document.getElementsByClassName('toolMenu');
 
-        menu.forEach(function (element) {
-            generateUI(element,200,200,50,delay);
-            delay = delay + 100;
-        });
+        //alert(localStorage.getItem("graph"));
 
+        let menuButton = document.getElementById('menu');
+        menuButton.onclick = function () {
+            if(menuShown){
+                hideMenu();
+                menuShown = false;
+            } else {
+                showMenu();
+                menuShown = true;
+            }
+        };
         setHighlights();
 
-        let eduMode = document.getElementsByClassName('eduMode');
-        for(let i = 0; i<eduMode.length; i++) {
-            eduMode[i].addEventListener('click',function () {
-                swapStyleSheet('graphedu.css');
+
+        let toolTipButton = document.getElementById('question-mark');
+        toolTipButton.onclick = function () {
+            let toolTipDraw = Anime({
+                targets: '#tool-tip-box',
+                strokeDashoffset: [Anime.setDashoffset,0],
+                easing: 'easeInOutSine',
+                duration: 1000,
+                direction: 'alternate',
+                loop: false
             });
+        };
+
+        //TODO: USE THIS CODE TO CREATE LOOP FOR ANIMATIONS AND FIX BUTTON FUNCTIONALITY
+        console.log(document.getElementsByTagName('circle'));
+        function hideMenu() {
+            for(let i = 0; i<buttons.length; i++) {
+                let rotateMenu = Anime({
+                    targets: buttons[i],
+                    rotate: '90',
+                    duration: 1000,
+                    easing: 'easeInExpo',
+                    delay: menuDelay
+                });
+                menuDelay += 100;
+            }
+
+            for(let i = 0; i<tools.length; i++) {
+                let rotateTools = Anime({
+                    targets: tools[i],
+                    rotate: '90',
+                    duration: 900,
+                    easing: 'easeInExpo',
+                    delay: toolDelay
+                });
+                toolDelay += 90;
+            }
+
+            let hideInnerCircle = Anime({
+                strokeDashoffset: [0, Anime.setDashoffset],
+                targets: '#inner-circle',
+                easing: 'linear',
+                direction: 'alternate',
+                duration: 2000,
+                loop: false,
+            });
+
+            let hideOuterCircle = Anime({
+                strokeDashoffset: [0, Anime.setDashoffset],
+                targets: '#outer-circle',
+                easing: 'linear',
+                direction: 'alternate',
+                duration: 1800,
+                loop: false,
+            });
+
+            menuDelay = 0;
+            toolDelay = 0;
         }
 
-        function findDocumentCoords(mouseEvent)
-        {
-            if (mouseEvent)
-            {
-                //FireFox
-                xpos = mouseEvent.pageX;
-                ypos = mouseEvent.pageY;
-            }
-            else
-            {
-                //IE
-                xpos = window.event.x + document.body.scrollLeft - 2;
-                ypos = window.event.y + document.body.scrollTop - 2;
-            }
-        }
-
-        document.onmousemove = findDocumentCoords;
-
-
-        window.addEventListener('keydown', Util.throttle(function(e)
-        {
-            let key = e.keyCode ? e.keyCode : e.which;
-            let toolButtons = document.querySelector("#toolbuttons");
-            let toolText = document.querySelectorAll(".toolText");
-
-            if (key === 17 && openTools && !e.repeat) {
-                openTools = false;
-                toolButtons.style.scale = .5;
-                toolButtons.style.left = xpos - 150;
-                toolButtons.style.top = ypos - 150;
-
-                toolButtons.style.display = 'block';
-
-                toolText.forEach(function(text) {
-                    text.style.display = 'none';
-                });
-
+        function showMenu() {
+            for(let i = 0; i<buttons.length; i++) {
                 let rotateMenu = Anime({
-                    targets: '#toolbuttons',
-                    rotate: '-90',
-                    duration: 250,
-                    direction: 'reverse',
-                    easing: 'linear'
-                });
-
-                expandTools("#createModeButton",0,-95);
-                expandTools("#deleteModeButton",105,-20);
-                expandTools("#extraModeButton",-105,-20);
-                expandTools("#undoModeButton",-50,90);
-                expandTools("#redoModeButton",50,90);
-
-                setTimeout(function () {
-                    openTools = true;
-                    toolText.forEach(function(text) {
-                        text.style.display = 'block';
-                    });
-                }, 200);
-            }
-        }, 500));
-
-
-        window.addEventListener('keyup', Util.throttle(function(e)
-        {
-            let key = e.keyCode ? e.keyCode : e.which;
-            let toolButtons = document.querySelector("#toolbuttons");
-            let toolText = document.querySelectorAll(".toolText");
-
-            if (key === 17) {
-                toolText.forEach(function (text) {
-                    text.style.display = 'none';
-                });
-
-                let rotateMenu = Anime({
-                    targets: '#toolbuttons',
+                    targets: buttons[i],
                     rotate: '0',
-                    direction: 'normal',
-                    easing: 'linear'
+                    duration: 900,
+                    easing: 'easeInExpo',
+                    delay: menuDelay
                 });
-
-                expandTools("#createModeButton",0,0);
-                expandTools("#deleteModeButton",0,0);
-                expandTools("#extraModeButton",0,0);
-                expandTools("#undoModeButton",0,0);
-                expandTools("#redoModeButton",0,0);
-                setTimeout(function () {
-                    toolButtons.style.display = 'none';
-                }, 200);
+                menuDelay += 100;
             }
-        }, 500));
+
+            for(let i = 0; i<tools.length; i++) {
+                let rotateTools = Anime({
+                    targets: tools[i],
+                    rotate: '0',
+                    duration: 800,
+                    easing: 'easeInExpo',
+                    delay: toolDelay
+                });
+                toolDelay += 90;
+            }
+
+            let showInnerCircle = Anime({
+                strokeDashoffset: [0, Anime.setDashoffset],
+                targets: '#inner-circle',
+                easing: 'easeOutExpo',
+                direction: 'reverse',
+                duration: 1000,
+                loop: false,
+                delay: 1000
+            });
+
+            let showOuterCircle = Anime({
+                strokeDashoffset: [0, Anime.setDashoffset],
+                targets: '#outer-circle',
+                easing: 'easeOutExpo',
+                direction: 'reverse',
+                duration: 900,
+                loop: false,
+                delay: 1000
+            });
+            toolDelay = 0;
+            menuDelay = 0;
+        }
+
 
         //ANIMATION FUNCTIONS
-        function drawLine(target,direction,duration) {
-            let lineDrawing = Anime({
-                targets: target,
-                strokeDashoffset: [Anime.setDashoffset, 0],
-                easing: 'easeInOutSine',
-                duration: duration,
-                delay: function(el, i) { return i * 250 },
-                direction: direction,
-            });
-        }
-
-        function generateUI(component,direction,width,height,delay) {
-            let enterUI = Anime ({
-                targets: component,
-                width: width,
-                height: height,
-                translateX: direction,
-                easing: 'easeInOutExpo',
-                delay: delay
-            })
-        }
-
-        function enlargeOption(target, scale, moveX, moveY, width) {
-            let enlarge = Anime({
-                translateX: moveX,
-                translateY: moveY,
-                targets: target,
-                width: width,
-                duration: 250,
-                scale: scale,
-                loop: false,
-                easing: 'easeInOutQuart'
-            });
-        }
-
-        function expandTools(target, moveX, moveY) {
-            let expandTool = Anime({
-                targets: target,
-                translateX: moveX,
-                translateY: moveY,
-                easing: 'easeInOutQuart',
-                duration: 250
-            });
-        }
-
         let rotateOuter = Anime({
             targets: '#outer',
-            rotate: '1turn',
+            rotate: '360',
             loop: true,
             duration: 10000,
             easing: 'linear'
         });
 
-        let rotateMenu = Anime({
+        let rotateInner = Anime({
             targets: '#inner',
-            rotate: '1turn',
+            rotate: '360',
             loop: true,
             duration: 15000,
             direction: 'reverse',
@@ -202,7 +180,7 @@ export default {
             if(eduModeStyle) {
                 document.getElementById('pagestyle').setAttribute('href', 'css/graphvis.css');
                 for(let i = 0; i<ui.length; i++) {
-                    ui[i].style.stroke = darkOrange;
+                    ui[i].style.stroke = primary;
                 }
                 eduModeStyle = false;
             } else {
@@ -216,23 +194,35 @@ export default {
 
         function setHighlights() {
             let elements = ['creategraph','selectgraph','eduMode','addVertexButton','addEdgeButton',
-                'addWeightButton','undoButton','redoButton','deleteButton','createButton','extraButton'];
+                'undoButton','redoButton','eraseButton','createButton'];
             let elementIds = ['creategraphbutton','selectgraphbutton','eduModeButton',
-                'add-vertex','add-edge','edit-edge','undo','redo','deleteModeButton','createModeButton',
-                'extraModeButton'];
+                'add-vertex','add-edge','undoModeButton','redoModeButton','deleteModeButton','createModeButton'];
 
             let arrayOfElements;
             for(let i = 0; i<elements.length; i++) {
                 arrayOfElements = document.getElementsByClassName(elements[i]);
                 for(let j = 0; j<arrayOfElements.length; j++) {
                     arrayOfElements[j].addEventListener('mouseenter',function () {
-                        document.getElementById(elementIds[i]).style.stroke = (eduModeStyle) ? lightGray : lightOrange;
+                        document.getElementById(elementIds[i]).style.stroke = (eduModeStyle) ? darkGray : secondary;
                     });
 
                     arrayOfElements[j].addEventListener('mouseleave',function () {
-                        document.getElementById(elementIds[i]).style.stroke = (eduModeStyle) ? darkGray : darkOrange;
+                        document.getElementById(elementIds[i]).style.stroke = (eduModeStyle) ? lightGray : primary;
                     });
                 }
+            }
+
+            let menuButton = document.getElementsByClassName('mainButton');
+            for(let i = 0; i<menuButton.length; i++) {
+                menuButton[i].addEventListener('mouseenter',function () {
+                    document.getElementById('outer-spin-circle').style.stroke = (eduModeStyle) ? darkGray : secondary;
+                    document.getElementById('inner-spin-circle').style.stroke = (eduModeStyle) ? darkGray : secondary;
+                });
+
+                menuButton[i].addEventListener('mouseleave',function () {
+                    document.getElementById('outer-spin-circle').style.stroke = (eduModeStyle) ? lightGray : primary;
+                    document.getElementById('inner-spin-circle').style.stroke = (eduModeStyle) ? lightGray : primary;
+                });
             }
         }
 
