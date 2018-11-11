@@ -1,6 +1,6 @@
-import Edge from '../classes/graph/Edge.js';
+import EdgeFactory from '../classes/graph/EdgeFactory.js';
 
-let edge, mockGetVertex;
+let edgeFactory, edge, adjList, mockGetVertex;
 
 beforeEach(() => 
 {
@@ -9,18 +9,20 @@ beforeEach(() =>
         return { x: 5, y : 5 };
     });
 
-    Edge.adjList = 
+    adjList = 
     {
         getVertex : mockGetVertex
     };
 
-    edge = new Edge('A', 'B', 10, 10);
+    edgeFactory = new EdgeFactory(adjList);
+    edge = edgeFactory.create('A', 'B', 10, 10);
 });
 
 describe('Testing Edge Class', () =>
 {
     test('construction works', () => 
     {
+        expect(edgeFactory.adjList).toBe(adjList);
         expect(edge.from).toBe('A');
         expect(edge.to).toBe('B');
         expect(edge.boxSize).toBe(10);

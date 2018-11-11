@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: classes/SpacialIndex.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: classes/SpacialIndex.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ *  @author Jake Landowski
+ *  7/22/18
+ *  SpacialIndex.js
+ * 
+ *  2D Matrix Spatial Hash for click detection on shapes.
+ *  Interface REQUIRES Objects given to have properties:
+ *      upperLeft:  {x, y},
+ *      lowerRIght: {x, y}
+ */
+
+'use strict';
+
+const SpacialIndex = function(cellWidth, cellHeight, cellRatio)
+{
+    this.cellWidth  = cellWidth;
+    this.cellHeight = cellHeight;
+    this.cellRatio  = cellRatio;
+    this.initIndex();
+};
+
+SpacialIndex.prototype = 
+{
+    /**
+     *  Create the 2D Array representing the Grid of cell objects. 
+     */
+    initIndex()
+    {
+        this.index = new Array(this.cellRatio);
+
+        // Create 2D Grid of empty arrays
+        for(let i = 0; i &lt; this.cellRatio; i++)
+        {
+            this.index[i] = new Array(this.cellRatio);
+            for(let j = 0; j &lt; this.cellRatio; j++)
+            {
+                this.index[i][j] = Object.create(null);
+            }
+        }
+    },
+
+    /**
+     *  Register the entity in this spacialIndex, registers to each
+     *  cell it lies on. Requires the rectangle shape to have an 
+     *  upperLeft/lowerRight bound set.  
+     */
+    add(entity)
+    {
+        const startX = this.cellRow(entity.upperLeft.x);
+        const startY = this.cellCol(entity.upperLeft.y);
+        const endX   = this.cellRow(entity.lowerRight.x);
+        const endY   = this.cellCol(entity.lowerRight.y);
+
+        // For removing from cells later
+        if(!entity.cells) entity.cells = [];
+
+        let cell;
+        
+        for(let x = startX; x &lt;= endX; x++)
+        {
+            for(let y = startY; y &lt;= endY; y++)
+            {
+                cell = this.cellFromIndex(x, y); 
+                
+                if(cell) 
+                {
+                    cell[entity.id] = entity;
+                    entity.cells.push(cell);
+                }
+            }   
+        }
+    },
+
+    /**
+     *  Unregister the entity in this SpacialIndex 
+     */
+    remove(entity)
+    {
+        if(entity.cells)
+        {
+            entity.cells.forEach(function(cell)
+            {   
+                if(cell[entity.id]) delete cell[entity.id];
+
+            }.bind(this));
+
+            entity.cells = [];
+        }
+    },
+
+    /**
+     *  Update the location of the entity in this SpacialIndex 
+     */
+    update(entity)
+    {
+        this.remove(entity);
+        this.add(entity);
+    },
+
+    /**
+     *  See if this x/y touched a shape, if so return it, else return null
+     */
+    getEntity(x, y)
+    {
+        const cell = this.cell(x, y);
+
+        let entity, upperLeft, lowerRight;
+
+        for(const entityId in cell)
+        {
+            entity     = cell[entityId];
+            upperLeft  = entity.upperLeft;
+            lowerRight = entity.lowerRight;
+            
+            // calculate point in rectangle here
+            if(x > upperLeft.x &amp;&amp; x &lt; lowerRight.x &amp;&amp;
+                y > upperLeft.y &amp;&amp; y &lt; lowerRight.y)
+            {
+                return entity;
+            }
+        }
+        
+        return null;
+    },
+
+    cell(x, y)
+    {
+        // this will fail for the point at the max width, max height fyi
+        return this.index[this.cellRow(x)][this.cellCol(y)];
+    },
+
+    /**
+     *  Get the cell located at x/y point given. Hashed 
+     */
+    cellFromIndex(x, y)
+    {
+        return x >= this.cellRatio || y >= this.cellRatio || x &lt; 0 || y &lt; 0 ? undefined : this.index[x][y];
+    },
+
+    /**
+     *  Get a string id of the cell index at x/y 
+     */
+    cellId(x, y)
+    {
+        return '' + this.cellRow(x) + this.cellCol(y);
+    },
+
+    /**
+     *  Hash an x coordinate to a cell index 
+     */
+    cellRow(x)
+    {
+        return Math.floor(x / this.cellWidth);
+    },
+
+    /**
+     *  Hash an y coordinate to a cell index 
+     */
+    cellCol(y)
+    {
+        return Math.floor(y / this.cellHeight);
+    }
+};
+
+export default SpacialIndex;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AdjacencyList.html">AdjacencyList</a></li><li><a href="Edge.html">Edge</a></li><li><a href="EdgeFactory.html">EdgeFactory</a></li><li><a href="Vertex.html">Vertex</a></li><li><a href="VertexFactory.html">VertexFactory</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sat Nov 10 2018 23:49:38 GMT-0800 (PST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
