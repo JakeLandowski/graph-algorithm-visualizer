@@ -1,3 +1,11 @@
+/**
+ *  @author Jake Landowski
+ *  11/10/18
+ *  VertexFactory.test.js
+ * 
+ *  Unit tests for VertexFactory.js
+ */
+
 import VertexFactory from '../classes/graph/VertexFactory.js';
 
 let vertexFactory, vertex, mockConfig, adjList;

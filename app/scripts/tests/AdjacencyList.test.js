@@ -1,3 +1,11 @@
+/**
+ *  @author Jake Landowski
+ *  11/9/18
+ *  AdjacencyList.test.js
+ * 
+ *  Unit tests for AdjacencyList.js
+ */
+
 import AdjacencyList from '../classes/graph/AdjacencyList.js';
 
 let undirectedAdj, directedAdj, vertex, edge;

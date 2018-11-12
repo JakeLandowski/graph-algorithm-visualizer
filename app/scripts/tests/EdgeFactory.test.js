@@ -1,3 +1,11 @@
+/**
+ *  @author Jake Landowski
+ *  11/10/18
+ *  EdgeFactory.test.js
+ * 
+ *  Unit tests for EdgeFactory.js
+ */
+
 import EdgeFactory from '../classes/graph/EdgeFactory.js';
 
 let edgeFactory, edge, adjList, mockGetVertex;

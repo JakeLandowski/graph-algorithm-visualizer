@@ -77,7 +77,7 @@ GraphModel.prototype =
         if(this[command.type])
         {
             this[command.type](command.data);
-            if(log) log.record(command, true);
+            if(log) log.record(command);
         }
         else throw 'Tried to run non-existant command ' + command.type;
     },
@@ -102,7 +102,7 @@ GraphModel.prototype =
         if(command && this[command.type])
         {
             this[command.type](command.data);
-            log.record(command, false);
+            log.recordPreserveRedo(command);
         }
     },
 
