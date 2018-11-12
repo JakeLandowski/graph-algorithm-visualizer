@@ -8,6 +8,12 @@
 
 'use strict';
 
+/**
+ * Creates a new Event for others to observe and be notified.
+ * @class
+ * @constructor
+ * @param {object} sender - the object/class creating this
+ */
 const Event = function(sender)
 {
     this.sender = sender;
@@ -18,16 +24,33 @@ const Event = function(sender)
 
 Event.prototype = 
 {
+    /**
+     * Attaches a callback with an associatad name.
+     * @param {string} name - the name to associate 
+     * with the callback
+     * @param {function} listener - the callback to 
+     * execute
+     */
     attach(name, listener)
     {
         this.listeners[name] = listener;
     },
 
+    /**
+     * Removes a callback identified by a name.
+     * @param {stirng} name - the name associated with 
+     * a callback 
+     */
     detach(name)
     {
         if(this.listeners[name]) delete this.listeners[name];
     },
 
+    /**
+     * Notifies all listeners with given data arguments,
+     * executes all callbacks.
+     * @param {object} args - the data to send to listeners 
+     */
     notify(args)
     {
         if(this.canNotify)
