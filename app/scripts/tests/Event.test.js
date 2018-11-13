@@ -22,7 +22,7 @@ describe('Testing Event class', () =>
     {
         expect(event.enabled).toBe(true);
         expect(event.canNotify).toBe(true);
-        expect(event.listeners.length).toBe(0);
+        expect(Object.keys(event.listeners).length).toBe(0);
         expect(event.sender).toBe(sender);
     });
 
@@ -52,20 +52,72 @@ describe('Testing Event class', () =>
     {
         const args = {};
 
-        mockCallbacks = 
+        const mockCallbacks = 
         [
             jest.fn(),
             jest.fn(),
             jest.fn()
         ];
 
-        for(let i = 0; i < mockCallbacks; i++)
+        for(let i = 0; i < mockCallbacks.length; i++)
             event.attach(i, mockCallbacks[i]);
         
-        mockCallbacks.forEach(callback => 
+        event.notify(args);
+
+        mockCallbacks.forEach((callback) => 
         {
             expect(callback).toHaveBeenCalledTimes(1);
-            expect(callback).toHaveBeenCalledWith(args);
+            expect(callback).toHaveBeenCalledWith(sender, args);
         });
+    });
+
+    function attachMock()
+    {
+        const mockCallback = jest.fn();
+        event.attach('name', mockCallback);
+        return mockCallback;
+    }
+
+    test('disable() works', () => 
+    {
+        const mockCallback = attachMock();
+
+        event.notify(sender, {});
+
+        expect(mockCallback).toHaveBeenCalledTimes(1);
+
+        event.disable();
+        event.notify(sender, {});
+
+        expect(mockCallback).toHaveBeenCalledTimes(1);
+    });
+
+    test('enable() works', () => 
+    {
+        const mockCallback = attachMock();
+        
+        event.notify(sender, {});
+        
+        event.disable();
+        event.notify(sender, {});
+        
+        event.enable();
+        event.notify(sender, {});
+
+        expect(mockCallback).toHaveBeenCalledTimes(2);
+    });
+
+    test('stopNextNotify() works', () => 
+    {
+        const mockCallback = attachMock();
+        
+        event.notify(sender, {});
+
+        event.stopNextNotify();
+
+        event.notify(sender, {});
+        event.notify(sender, {});
+
+        expect(mockCallback).toHaveBeenCalledTimes(2);
     });
 });

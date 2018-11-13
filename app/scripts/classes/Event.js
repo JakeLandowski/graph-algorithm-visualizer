@@ -38,7 +38,7 @@ Event.prototype =
 
     /**
      * Removes a callback identified by a name.
-     * @param {stirng} name - the name associated with 
+     * @param {string} name - the name associated with 
      * a callback 
      */
     detach(name)
@@ -66,16 +66,26 @@ Event.prototype =
         else this.canNotify = true;
     },
 
+    /**
+     * Disables this event, preventing it from notifying
+     * listeners.
+     */
     disable()
     {
         this.enabled = false;
     },
 
+    /**
+     * Enables this event, allowing it to notify listeners.
+     */
     enable()
     {
         this.enabled = true;
     },
 
+    /**
+     * Prevents the next call to notify() from doing anything.
+     */
     stopNextNotify()
     {
         this.canNotify = false;
