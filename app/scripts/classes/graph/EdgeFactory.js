@@ -32,7 +32,7 @@ const Edge = function(from, to, boxSize, weight, adjList)
 Edge.prototype = 
 {
     /**
-     * Sets the center point x and y based on the position
+     * Updates the center point x and y based on the position
      * of the from and to vertices.
      * @example
      * edge.setPoints();
