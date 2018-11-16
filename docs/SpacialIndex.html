@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>Edge - Documentation</title>
+    <title>SpacialIndex - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -31,7 +31,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">Edge</h1>
+    <h1 class="page-title">SpacialIndex</h1>
     
 
     
@@ -44,7 +44,7 @@
 <header>
     
         <h2>
-        Edge
+        SpacialIndex
         </h2>
         
     
@@ -58,7 +58,7 @@
 
     
 
-    <h4 class="name" id="Edge"><span class="type-signature"></span>new Edge<span class="signature">(from, to, boxSize, weight, adjList)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="SpacialIndex"><span class="type-signature"></span>new SpacialIndex<span class="signature">(label, cellWidth, cellHeight, cellRatio)</span><span class="type-signature"></span></h4>
 
     
 
@@ -70,7 +70,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="classes_graph_EdgeFactory.js.html">classes/graph/EdgeFactory.js</a>, <a href="classes_graph_EdgeFactory.js.html#line21">line 21</a>
+        <a href="classes_SpacialIndex.js.html">classes/SpacialIndex.js</a>, <a href="classes_SpacialIndex.js.html#line25">line 25</a>
     </li></ul></dd>
     
 
@@ -110,7 +110,9 @@
 
 
 <div class="description">
-    <p>Object to represent Edges in the Graph class.</p>
+    <p>Class to manage a logical 2D grid of cells for
+registering basic rectangle bounding boxes to 
+query hit/click detection.</p>
 </div>
 
 
@@ -148,7 +150,7 @@
 
         <tr>
             
-                <td class="name"><code>from</code></td>
+                <td class="name"><code>label</code></td>
             
 
             <td class="type">
@@ -164,37 +166,14 @@
 
             
 
-            <td class="description last"><p>the from vertex symbol</p></td>
+            <td class="description last"><p>the unique label for this spacial index</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>to</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>the to vertex symbol</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>boxSize</code></td>
+                <td class="name"><code>cellWidth</code></td>
             
 
             <td class="type">
@@ -210,14 +189,14 @@
 
             
 
-            <td class="description last"><p>the size of the edge weight box</p></td>
+            <td class="description last"><p>width of each cell</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>weight</code></td>
+                <td class="name"><code>cellHeight</code></td>
             
 
             <td class="type">
@@ -233,20 +212,20 @@
 
             
 
-            <td class="description last"><p>the edge weight value</p></td>
+            <td class="description last"><p>height of each cell</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>adjList</code></td>
+                <td class="name"><code>cellRatio</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="AdjacencyList.html">AdjacencyList</a></span>
+<span class="param-type">number</span>
 
 
             
@@ -256,7 +235,7 @@
 
             
 
-            <td class="description last"><p>the AdjacencyList to query</p></td>
+            <td class="description last"><p>number of cells per row/column</p></td>
         </tr>
 
     
@@ -293,146 +272,6 @@
     
 
     
-        <h3 class="subsection-title">Members</h3>
-
-        
-            
-<h4 class="name" id="fromVertex"><span class="type-signature"></span>fromVertex<span class="type-signature"></span></h4>
-
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="classes_graph_EdgeFactory.js.html">classes/graph/EdgeFactory.js</a>, <a href="classes_graph_EdgeFactory.js.html#line54">line 54</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    <p>Gets the Vertex associated with this Edge's origin.</p>
-</div>
-
-
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>let vertex = edge.fromVertex;</code></pre>
-
-
-
-        
-            
-<h4 class="name" id="toVertex"><span class="type-signature"></span>toVertex<span class="type-signature"></span></h4>
-
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="classes_graph_EdgeFactory.js.html">classes/graph/EdgeFactory.js</a>, <a href="classes_graph_EdgeFactory.js.html#line65">line 65</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    <p>Gets the Vertex associated with this Edge's destination.</p>
-</div>
-
-
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>let vertex = edge.toVertex;</code></pre>
-
-
-
-        
-    
 
     
         <h3 class="subsection-title">Methods</h3>
@@ -442,7 +281,7 @@
 
     
 
-    <h4 class="name" id="setPoints"><span class="type-signature"></span>setPoints<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="add"><span class="type-signature"></span>add<span class="signature">(entity)</span><span class="type-signature"></span></h4>
 
     
 
@@ -454,7 +293,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="classes_graph_EdgeFactory.js.html">classes/graph/EdgeFactory.js</a>, <a href="classes_graph_EdgeFactory.js.html#line40">line 40</a>
+        <a href="classes_SpacialIndex.js.html">classes/SpacialIndex.js</a>, <a href="classes_SpacialIndex.js.html#line51">line 51</a>
     </li></ul></dd>
     
 
@@ -494,8 +333,8 @@
 
 
 <div class="description">
-    <p>Sets the center point x and y based on the position
-of the from and to vertices.</p>
+    <p>Register the entity, registers to each cell it lies on. 
+Requires an upperLeft/lowerRight bound set.</p>
 </div>
 
 
@@ -508,7 +347,680 @@ of the from and to vertices.</p>
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>edge.setPoints();</code></pre>
+    <pre class="prettyprint"><code>let entity = {
+    id: 'vertex1',
+    upperLeft: {x: 0, y: 0},
+    lowerRight: {x: 10, y: 10}
+};
+//
+spacialIndex.add(entity); </code></pre>
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>entity</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>the object to register</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Throws:</h5>
+
+        
+
+<dl>
+    <dt>
+        <div class="param-desc">
+        <p>if entity given is missing 
+upperLeft/lowerRight bounding box properties</p>
+        </div>
+    </dt>
+    <dd></dd>
+    <dt>
+        <dl class="param-type">
+            <dt>
+                Type
+            </dt>
+            <dd>
+                
+<span class="param-type">TypeError</span>
+
+
+            </dd>
+        </dl>
+    </dt>
+    <dd></dd>
+</dl>
+
+
+    
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="cellCol"><span class="type-signature"></span>cellCol<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="classes_SpacialIndex.js.html">classes/SpacialIndex.js</a>, <a href="classes_SpacialIndex.js.html#line178">line 178</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Hash an y coordinate to a cell index</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="cellFromIndex"><span class="type-signature"></span>cellFromIndex<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="classes_SpacialIndex.js.html">classes/SpacialIndex.js</a>, <a href="classes_SpacialIndex.js.html#line154">line 154</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Get the cell located at x/y point given. Hashed</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="cellId"><span class="type-signature"></span>cellId<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="classes_SpacialIndex.js.html">classes/SpacialIndex.js</a>, <a href="classes_SpacialIndex.js.html#line162">line 162</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Get a string id of the cell index at x/y</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="cellRow"><span class="type-signature"></span>cellRow<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="classes_SpacialIndex.js.html">classes/SpacialIndex.js</a>, <a href="classes_SpacialIndex.js.html#line170">line 170</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Hash an x coordinate to a cell index</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="getEntity"><span class="type-signature"></span>getEntity<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="classes_SpacialIndex.js.html">classes/SpacialIndex.js</a>, <a href="classes_SpacialIndex.js.html#line122">line 122</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>See if this x/y touched a shape, if so return it, else return null</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="remove"><span class="type-signature"></span>remove<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="classes_SpacialIndex.js.html">classes/SpacialIndex.js</a>, <a href="classes_SpacialIndex.js.html#line85">line 85</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Unregister the entity in this SpacialIndex</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="update"><span class="type-signature"></span>update<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="classes_SpacialIndex.js.html">classes/SpacialIndex.js</a>, <a href="classes_SpacialIndex.js.html#line113">line 113</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Update the location of the entity in this SpacialIndex</p>
+</div>
+
+
+
+
+
+
+
 
 
 

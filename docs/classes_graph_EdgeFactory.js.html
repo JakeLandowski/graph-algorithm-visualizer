@@ -1,23 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    
     <meta charset="utf-8">
-    <title>JSDoc: Source: classes/graph/EdgeFactory.js</title>
-
-    <script src="scripts/prettify/prettify.js"> </script>
-    <script src="scripts/prettify/lang-css.js"> </script>
+    <title>classes/graph/EdgeFactory.js - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
-    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-
 <body>
 
-<div id="main">
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
 
-    <h1 class="page-title">Source: classes/graph/EdgeFactory.js</h1>
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AdjacencyList.html">AdjacencyList</a><ul class='methods'><li data-type='method'><a href="AdjacencyList.html#deleteEdge">deleteEdge</a></li><li data-type='method'><a href="AdjacencyList.html#deleteVertex">deleteVertex</a></li><li data-type='method'><a href="AdjacencyList.html#edgeExists">edgeExists</a></li><li data-type='method'><a href="AdjacencyList.html#forEachEdge">forEachEdge</a></li><li data-type='method'><a href="AdjacencyList.html#forEachVertex">forEachVertex</a></li><li data-type='method'><a href="AdjacencyList.html#getEdge">getEdge</a></li><li data-type='method'><a href="AdjacencyList.html#getVertex">getVertex</a></li><li data-type='method'><a href="AdjacencyList.html#insertEdge">insertEdge</a></li><li data-type='method'><a href="AdjacencyList.html#insertVertex">insertVertex</a></li><li data-type='method'><a href="AdjacencyList.html#vertexExists">vertexExists</a></li></ul></li><li><a href="CommandLog.html">CommandLog</a><ul class='methods'><li data-type='method'><a href="CommandLog.html#parse">parse</a></li><li data-type='method'><a href="CommandLog.html#record">record</a></li><li data-type='method'><a href="CommandLog.html#recordPreserveRedo">recordPreserveRedo</a></li><li data-type='method'><a href="CommandLog.html#redo">redo</a></li><li data-type='method'><a href="CommandLog.html#serialize">serialize</a></li><li data-type='method'><a href="CommandLog.html#undo">undo</a></li></ul></li><li><a href="Edge.html">Edge</a><ul class='methods'><li data-type='method'><a href="Edge.html#setPoints">setPoints</a></li></ul></li><li><a href="EdgeFactory.html">EdgeFactory</a><ul class='methods'><li data-type='method'><a href="EdgeFactory.html#create">create</a></li></ul></li><li><a href="Event.html">Event</a><ul class='methods'><li data-type='method'><a href="Event.html#attach">attach</a></li><li data-type='method'><a href="Event.html#detach">detach</a></li><li data-type='method'><a href="Event.html#disable">disable</a></li><li data-type='method'><a href="Event.html#enable">enable</a></li><li data-type='method'><a href="Event.html#notify">notify</a></li><li data-type='method'><a href="Event.html#stopNextNotify">stopNextNotify</a></li></ul></li><li><a href="SpacialIndex.html">SpacialIndex</a><ul class='methods'><li data-type='method'><a href="SpacialIndex.html#add">add</a></li><li data-type='method'><a href="SpacialIndex.html#cellCol">cellCol</a></li><li data-type='method'><a href="SpacialIndex.html#cellFromIndex">cellFromIndex</a></li><li data-type='method'><a href="SpacialIndex.html#cellId">cellId</a></li><li data-type='method'><a href="SpacialIndex.html#cellRow">cellRow</a></li><li data-type='method'><a href="SpacialIndex.html#getEntity">getEntity</a></li><li data-type='method'><a href="SpacialIndex.html#remove">remove</a></li><li data-type='method'><a href="SpacialIndex.html#update">update</a></li></ul></li><li><a href="Vertex.html">Vertex</a><ul class='methods'><li data-type='method'><a href="Vertex.html#forEachEdge">forEachEdge</a></li><li data-type='method'><a href="Vertex.html#forEachIncomingEdge">forEachIncomingEdge</a></li><li data-type='method'><a href="Vertex.html#forEachOutgoingEdge">forEachOutgoingEdge</a></li><li data-type='method'><a href="Vertex.html#pointFromNeighbor">pointFromNeighbor</a></li><li data-type='method'><a href="Vertex.html#pointToNeighbor">pointToNeighbor</a></li><li data-type='method'><a href="Vertex.html#setPoints">setPoints</a></li><li data-type='method'><a href="Vertex.html#unregisterFromNeighbor">unregisterFromNeighbor</a></li><li data-type='method'><a href="Vertex.html#unregisterToNeighbor">unregisterToNeighbor</a></li></ul></li><li><a href="VertexFactory.html">VertexFactory</a><ul class='methods'><li data-type='method'><a href="VertexFactory.html#create">create</a></li></ul></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">classes/graph/EdgeFactory.js</h1>
+    
 
     
 
@@ -151,19 +166,19 @@ export default EdgeFactory;</code></pre>
 
 
 
+    
+    
 </div>
-
-<nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AdjacencyList.html">AdjacencyList</a></li><li><a href="Edge.html">Edge</a></li><li><a href="EdgeFactory.html">EdgeFactory</a></li><li><a href="Vertex.html">Vertex</a></li><li><a href="VertexFactory.html">VertexFactory</a></li></ul>
-</nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sat Nov 10 2018 23:49:38 GMT-0800 (PST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
-<script> prettyPrint(); </script>
-<script src="scripts/linenumber.js"> </script>
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+
+
 </body>
 </html>

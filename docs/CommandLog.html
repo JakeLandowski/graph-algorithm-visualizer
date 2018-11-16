@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>Edge - Documentation</title>
+    <title>CommandLog - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -31,7 +31,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">Edge</h1>
+    <h1 class="page-title">CommandLog</h1>
     
 
     
@@ -44,7 +44,7 @@
 <header>
     
         <h2>
-        Edge
+        CommandLog
         </h2>
         
     
@@ -58,7 +58,7 @@
 
     
 
-    <h4 class="name" id="Edge"><span class="type-signature"></span>new Edge<span class="signature">(from, to, boxSize, weight, adjList)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="CommandLog"><span class="type-signature"></span>new CommandLog<span class="signature">()</span><span class="type-signature"></span></h4>
 
     
 
@@ -70,7 +70,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="classes_graph_EdgeFactory.js.html">classes/graph/EdgeFactory.js</a>, <a href="classes_graph_EdgeFactory.js.html#line21">line 21</a>
+        <a href="classes_CommandLog.js.html">classes/CommandLog.js</a>, <a href="classes_CommandLog.js.html#line16">line 16</a>
     </li></ul></dd>
     
 
@@ -110,7 +110,111 @@
 
 
 <div class="description">
-    <p>Object to represent Edges in the Graph class.</p>
+    <p>Class to manage recording of commands for undoing and redoing.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+        </div>
+    
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id="parse"><span class="type-signature"></span>parse<span class="signature">(jsonData)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="classes_CommandLog.js.html">classes/CommandLog.js</a>, <a href="classes_CommandLog.js.html#line84">line 84</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Restores the state of this CommandLog 
+from the given stringified CommandLog.</p>
 </div>
 
 
@@ -148,7 +252,7 @@
 
         <tr>
             
-                <td class="name"><code>from</code></td>
+                <td class="name"><code>jsonData</code></td>
             
 
             <td class="type">
@@ -164,99 +268,7 @@
 
             
 
-            <td class="description last"><p>the from vertex symbol</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>to</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>the to vertex symbol</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>boxSize</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>the size of the edge weight box</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>weight</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>the edge weight value</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>adjList</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="AdjacencyList.html">AdjacencyList</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>the AdjacencyList to query</p></td>
+            <td class="description last"></td>
         </tr>
 
     
@@ -279,26 +291,176 @@
 
 
         
+            
+
+    
+
+    <h4 class="name" id="record"><span class="type-signature"></span>record<span class="signature">(command)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="classes_CommandLog.js.html">classes/CommandLog.js</a>, <a href="classes_CommandLog.js.html#line30">line 30</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Records a command for saving and future undoing, clears
+the redo stack.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>command</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>command to log</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Throws:</h5>
+
+        
+
+<dl>
+    <dt>
+        <div class="param-desc">
+        <p>if command given is not an object</p>
         </div>
-    
+    </dt>
+    <dd></dd>
+    <dt>
+        <dl class="param-type">
+            <dt>
+                Type
+            </dt>
+            <dd>
+                
+<span class="param-type">TypeError</span>
+
+
+            </dd>
+        </dl>
+    </dt>
+    <dd></dd>
+</dl>
+
 
     
 
-    
 
-    
 
-     
-
-    
-
-    
-        <h3 class="subsection-title">Members</h3>
 
         
             
-<h4 class="name" id="fromVertex"><span class="type-signature"></span>fromVertex<span class="type-signature"></span></h4>
 
+    
+
+    <h4 class="name" id="recordPreserveRedo"><span class="type-signature"></span>recordPreserveRedo<span class="signature">(command)</span><span class="type-signature"></span></h4>
+
+    
 
 
 
@@ -308,7 +470,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="classes_graph_EdgeFactory.js.html">classes/graph/EdgeFactory.js</a>, <a href="classes_graph_EdgeFactory.js.html#line54">line 54</a>
+        <a href="classes_CommandLog.js.html">classes/CommandLog.js</a>, <a href="classes_CommandLog.js.html#line43">line 43</a>
     </li></ul></dd>
     
 
@@ -348,7 +510,8 @@
 
 
 <div class="description">
-    <p>Gets the Vertex associated with this Edge's origin.</p>
+    <p>Records a command for saving and future undoing, preserves
+the redo stack.</p>
 </div>
 
 
@@ -357,16 +520,110 @@
 
 
 
-    <h5>Example</h5>
+
+
+
+
+    <h5>Parameters:</h5>
     
-    <pre class="prettyprint"><code>let vertex = edge.fromVertex;</code></pre>
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>command</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>command to log</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Throws:</h5>
+
+        
+
+<dl>
+    <dt>
+        <div class="param-desc">
+        <p>if command given is not an object</p>
+        </div>
+    </dt>
+    <dd></dd>
+    <dt>
+        <dl class="param-type">
+            <dt>
+                Type
+            </dt>
+            <dd>
+                
+<span class="param-type">TypeError</span>
+
+
+            </dd>
+        </dl>
+    </dt>
+    <dd></dd>
+</dl>
+
+
+    
+
 
 
 
         
             
-<h4 class="name" id="toVertex"><span class="type-signature"></span>toVertex<span class="type-signature"></span></h4>
 
+    
+
+    <h4 class="name" id="redo"><span class="type-signature"></span>redo<span class="signature">()</span><span class="type-signature"> &rarr; {object}</span></h4>
+
+    
 
 
 
@@ -376,7 +633,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="classes_graph_EdgeFactory.js.html">classes/graph/EdgeFactory.js</a>, <a href="classes_graph_EdgeFactory.js.html#line65">line 65</a>
+        <a href="classes_CommandLog.js.html">classes/CommandLog.js</a>, <a href="classes_CommandLog.js.html#line65">line 65</a>
     </li></ul></dd>
     
 
@@ -416,7 +673,7 @@
 
 
 <div class="description">
-    <p>Gets the Vertex associated with this Edge's destination.</p>
+    <p>Returns the last undone command.</p>
 </div>
 
 
@@ -425,24 +682,52 @@
 
 
 
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>let vertex = edge.toVertex;</code></pre>
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
 
         
-    
+<div class="param-desc">
+    <p>the last undone command</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">object</span>
+
+
+    </dd>
+</dl>
 
     
-        <h3 class="subsection-title">Methods</h3>
+
 
         
             
 
     
 
-    <h4 class="name" id="setPoints"><span class="type-signature"></span>setPoints<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="serialize"><span class="type-signature"></span>serialize<span class="signature">()</span><span class="type-signature"> &rarr; {string}</span></h4>
 
     
 
@@ -454,7 +739,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="classes_graph_EdgeFactory.js.html">classes/graph/EdgeFactory.js</a>, <a href="classes_graph_EdgeFactory.js.html#line40">line 40</a>
+        <a href="classes_CommandLog.js.html">classes/CommandLog.js</a>, <a href="classes_CommandLog.js.html#line74">line 74</a>
     </li></ul></dd>
     
 
@@ -494,8 +779,7 @@
 
 
 <div class="description">
-    <p>Sets the center point x and y based on the position
-of the from and to vertices.</p>
+    <p>Stringifies this CommandLog for saving.</p>
 </div>
 
 
@@ -506,9 +790,104 @@ of the from and to vertices.</p>
 
 
 
-    <h5>Example</h5>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>the stringified data</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+
+
+    </dd>
+</dl>
+
     
-    <pre class="prettyprint"><code>edge.setPoints();</code></pre>
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="undo"><span class="type-signature"></span>undo<span class="signature">()</span><span class="type-signature"> &rarr; {object}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="classes_CommandLog.js.html">classes/CommandLog.js</a>, <a href="classes_CommandLog.js.html#line54">line 54</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Returns the last recorded command, and
+if there was one, record it for future redos.</p>
+</div>
 
 
 
@@ -525,6 +904,35 @@ of the from and to vertices.</p>
 
 
 
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>the last recorded command</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">object</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
         
