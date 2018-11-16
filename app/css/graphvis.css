@@ -1,6 +1,8 @@
 html, body {
     overflow: hidden;
     background-color: #262626;
+    margin: 0;
+    padding: 0;
 }
 
 #main
@@ -8,6 +10,39 @@ html, body {
     position: absolute;
     top: 0; bottom: 0; right: 0; left: 0;
     z-index: 1;
+}
+
+#create-dialog {
+    display: none;
+    position: fixed;
+    top: 0;
+    left:0;
+    height: 100%;
+    width: 100%;
+    z-index: 10;
+    background-color: rgba(10,10,10,.6);
+}
+#undirected {
+    margin-bottom: 15px;
+}
+.select-graph-type-button {
+    display: block;
+    margin: 0 auto;
+    background: rgba(10,10,10,.6);
+    border: 1px solid #6ba2dc;
+    width: 150px;
+    height: 50px;
+    color: #6ba2dc;
+    border-radius: 10px;
+    z-index: 11;
+    top: 40%;
+    position: relative;
+}
+
+.select-graph-type-button:hover {
+    border: 1px solid #2054a0;
+    color: #2054a0;
+    cursor: pointer;
 }
 
 .mainmenu {
@@ -91,6 +126,7 @@ html, body {
 .ui-text {
     color: #6ba2dc;
     fill: #6ba2dc;
+    font-family: 'Orbitron', sans-serif;
 }
 
 .menuCircleButton {

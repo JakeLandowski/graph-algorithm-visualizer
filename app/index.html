@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="height=device-height,width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Graph Algorithm Visualizer</title>
+    <title>Graph Visualizer</title>
     <link rel="icon" href="favicon.ico">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link id="pagestyle" rel="stylesheet" href="css/graphvis.css">
@@ -12,6 +12,10 @@
 </head>
 
 <body>
+    <div id="create-dialog">
+        <button class="select-graph-type-button shadow" id="undirected"><span class="ui-text">Undirected</span></button>
+        <button class="select-graph-type-button shadow" id="directed"><span class="ui-text">Directed</span></button>
+    </div>
     <div id="toolbar" class="ui-component noselect">
         <!-- Inner Menu Circle -->
         <svg id="toolMenuSVG" class="toolMenu" width="700" height="700">
