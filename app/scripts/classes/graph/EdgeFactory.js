@@ -42,7 +42,16 @@ Edge.prototype =
         // HitBox Coordinates
         this.x = (this.fromVertex.x + this.toVertex.x) / 2;
         this.y = (this.fromVertex.y + this.toVertex.y) / 2;
-        this._setBounds(); 
+        this.setBounds(); 
+    },
+
+    /**
+     * Updates the bounding box corner points.
+     */
+    setBounds()
+    {
+        this.upperLeft  = { x: this.x - this.boxSize, y: this.y - this.boxSize };
+        this.lowerRight = { x: this.x + this.boxSize, y: this.y + this.boxSize };
     },
 
     /**
@@ -66,14 +75,9 @@ Edge.prototype =
     {
         return this.adjList.getVertex(this.to);
     },
+    
 
     //=========== Private ===========//
-
-    _setBounds()
-    {
-        this.upperLeft  = { x: this.x - this.boxSize, y: this.y - this.boxSize };
-        this.lowerRight = { x: this.x + this.boxSize, y: this.y + this.boxSize };
-    },
 
     // Stop adjList from being stringified
     _storeAdjacencyList(adjList)

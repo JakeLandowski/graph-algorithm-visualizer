@@ -25,8 +25,8 @@ const GraphModel = function(width, height, config, cellRatio=5)
     this.edgeFactory = new EdgeFactory(this.adjList);
     this.vertexFactory = new VertexFactory(this.adjList);
     
-    this.edgeSpacialIndex   = new SpacialIndex(this.cellWidth, this.cellHeight, this.cellRatio);
-    this.vertexSpacialIndex = new SpacialIndex(this.cellWidth, this.cellHeight, this.cellRatio);
+    this.edgeSpacialIndex   = new SpacialIndex('edge', this.cellWidth, this.cellHeight, this.cellRatio);
+    this.vertexSpacialIndex = new SpacialIndex('vertex', this.cellWidth, this.cellHeight, this.cellRatio);
 
     this.onVertexAdded          = new Event(this);
     this.onVertexRemoved        = new Event(this);
