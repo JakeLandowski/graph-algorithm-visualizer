@@ -11,7 +11,7 @@
 
 'use strict';
 
-import {isUndefined} from '../utils/Utilities.js';
+import { isUndefined } from '../utils/Utilities.js';
 
 /**
  * Class to manage a logical 2D grid of cells for
@@ -54,10 +54,10 @@ SpacialIndex.prototype =
     {
         this._assertBoundingBox(entity);
 
-        const startX = this.cellRow(entity.upperLeft.x);
-        const startY = this.cellCol(entity.upperLeft.y);
-        const endX   = this.cellRow(entity.lowerRight.x);
-        const endY   = this.cellCol(entity.lowerRight.y);
+        const startX = this._cellRow(entity.upperLeft.x);
+        const startY = this._cellCol(entity.upperLeft.y);
+        const endX   = this._cellRow(entity.lowerRight.x);
+        const endY   = this._cellCol(entity.lowerRight.y);
 
         const cellsProp = this.cellsLabel;
 
@@ -70,7 +70,7 @@ SpacialIndex.prototype =
         {
             for(let y = startY; y <= endY; y++)
             {
-                cell = this.cellFromIndex(x, y);
+                cell = this._cellFromIndex(x, y);
                 
                 if(cell) 
                 {
@@ -95,7 +95,7 @@ SpacialIndex.prototype =
 
             cells = cells.filter(function(cellIndices)
             {
-                cell = this.cellFromIndex(cellIndices.x, cellIndices.y);   
+                cell = this._cellFromIndex(cellIndices.x, cellIndices.y);   
                 if(cell && cell[entity.id]) 
                 {
                     delete cell[entity.id];
@@ -123,7 +123,7 @@ SpacialIndex.prototype =
      */
     getEntity(x, y)
     {
-        const cell = this.cell(x, y);
+        const cell = this._cell(x, y);
 
         let entity, upperLeft, lowerRight;
 
@@ -144,45 +144,27 @@ SpacialIndex.prototype =
         return null;
     },
 
-    cell(x, y)
+    //=========== Private ===========//
+
+    _cell(x, y)
     {
         // this will fail for the point at the max width, max height fyi
-        return this.index[this.cellRow(x)][this.cellCol(y)];
+        return this._cellFromIndex(this._cellRow(x), this._cellCol(y));
     },
-
-    /**
-     *  Get the cell located at x/y point given. Hashed 
-     */
-    cellFromIndex(x, y)
+    _cellFromIndex(x, y)
     {
         return x >= this.cellRatio || y >= this.cellRatio || x < 0 || y < 0 ? undefined : this.index[x][y];
     },
 
-    /**
-     *  Get a string id of the cell index at x/y 
-     */
-    cellId(x, y)
-    {
-        return '' + this.cellRow(x) + this.cellCol(y);
-    },
-
-    /**
-     *  Hash an x coordinate to a cell index 
-     */
-    cellRow(x)
+    _cellRow(x)
     {
         return Math.floor(x / this.cellWidth);
     },
 
-    /**
-     *  Hash an y coordinate to a cell index 
-     */
-    cellCol(y)
+    _cellCol(y)
     {
         return Math.floor(y / this.cellHeight);
     },
-
-    //=========== Private ===========//
 
     _assertBoundingBox(entity)
     {

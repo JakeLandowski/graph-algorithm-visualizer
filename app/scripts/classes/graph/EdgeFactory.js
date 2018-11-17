@@ -6,7 +6,7 @@
 
 'use strict';
 
-import {nonEnumerableProperty} from '../../utils/Utilities.js';
+import { nonEnumerableProperty } from '../../utils/Utilities.js';
 
 /**
  * Object to represent Edges in the Graph class.
