@@ -8,6 +8,8 @@
 
 'use strict';
 
+import Util from '../../utils/Util.js';
+
 /**
  * @class
  * @constructor
@@ -153,7 +155,7 @@ Vertex.prototype =
     // Stop adjList from being stringified
     _storeAdjacencyList(adjList)
     {
-        Object.defineProperty(this, 'adjList', {value: adjList, enumerable : false});
+        Util.nonEnumerableProperty(this, 'adjList', adjList);
     }
 };
 

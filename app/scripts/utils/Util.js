@@ -88,6 +88,10 @@ export default {
     toRadians(angle)   
     { 
         return angle * (Math.PI / 180); 
-    }
+    },
 
+    nonEnumerableProperty(obj, prop, value)
+    {
+        Object.defineProperty(obj, prop, {value: value, enumerable: false});
+    }
 }; 

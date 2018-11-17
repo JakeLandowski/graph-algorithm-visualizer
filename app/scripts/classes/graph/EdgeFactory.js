@@ -8,6 +8,8 @@
 
 'use strict';
 
+import Util from '../../utils/Util.js';
+
 /**
  * Object to represent Edges in the Graph class.
  * @class
@@ -82,7 +84,7 @@ Edge.prototype =
     // Stop adjList from being stringified
     _storeAdjacencyList(adjList)
     {
-        Object.defineProperty(this, 'adjList', {value: adjList, enumerable : false});
+        Util.nonEnumerableProperty(this, 'adjList', adjList);
     }
 };
 
