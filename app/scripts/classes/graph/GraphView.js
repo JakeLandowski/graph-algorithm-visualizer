@@ -10,7 +10,7 @@
 
 import RenderingEngine from '../engine/RenderingEngine.js'
 import Event from '../Event.js';
-import Util from '../../utils/Util.js';
+import { appendHtml, stagger } from '../../utils/Utilities.js';
 
 const GraphView = function(container, model, config)
 {
@@ -399,7 +399,7 @@ GraphView.prototype =
                                 '<input id="edit-edge-weight-field" type="text"/>' +
                                 '<input type="submit" value="Done" />' +
                                 '</form>'; 
-                Util.appendHtml(container, form);
+                appendHtml(container, form);
 
                 const field = container.querySelector('#edit-edge-weight-field');
                 this.edgeEditForm = container.querySelector('#edit-edge-form');
@@ -493,7 +493,7 @@ GraphView.prototype =
 
     initResize()
     {
-        window.addEventListener('resize', Util.stagger(function(event)
+        window.addEventListener('resize', stagger(function(event)
         {
             event.preventDefault();
             this.engine.resize();

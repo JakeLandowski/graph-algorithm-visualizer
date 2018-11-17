@@ -9,7 +9,7 @@
 'use strict';
 
 import Entity from './Entity.js';
-import Util from '../../utils/Util.js';
+import { calcAngle, toDegrees, toRadians} from '../../utils/Utilities.js';
 
 const Line = function(x1, y1, x2, y2, styles={}, context, engine, level)
 {
@@ -71,14 +71,14 @@ Object.assign(Line.prototype, // mixin normal Line methods
         if(this.changed && this.styles.curveDirection !== 0)
         {
             this.changed = false;
-            const theta = Util.toDegrees(Util.calcAngle(this.x1, this.y1, this.x2, this.y2));
+            const theta = toDegrees(calcAngle(this.x1, this.y1, this.x2, this.y2));
 
-            this.curveOffsetX = this.cx + (this.styles.curveOffset * Math.cos(Util.toRadians(theta + this.styles.curveDirection)));
-            this.curveOffsetY = this.cy + (this.styles.curveOffset * Math.sin(Util.toRadians(theta + this.styles.curveDirection)));
-            this.curveCenterX = this.cx + (this.styles.curveOffset * 0.5  * Math.cos(Util.toRadians(theta + this.styles.curveDirection)));
-            this.curveCenterY = this.cy + (this.styles.curveOffset * 0.5  * Math.sin(Util.toRadians(theta + this.styles.curveDirection)));
-            this.curveArrowX  = this.cx + (this.styles.curveOffset * 0.75 * Math.cos(Util.toRadians(theta + this.styles.curveDirection)));
-            this.curveArrowY  = this.cy + (this.styles.curveOffset * 0.75 * Math.sin(Util.toRadians(theta + this.styles.curveDirection)));   
+            this.curveOffsetX = this.cx + (this.styles.curveOffset * Math.cos(toRadians(theta + this.styles.curveDirection)));
+            this.curveOffsetY = this.cy + (this.styles.curveOffset * Math.sin(toRadians(theta + this.styles.curveDirection)));
+            this.curveCenterX = this.cx + (this.styles.curveOffset * 0.5  * Math.cos(toRadians(theta + this.styles.curveDirection)));
+            this.curveCenterY = this.cy + (this.styles.curveOffset * 0.5  * Math.sin(toRadians(theta + this.styles.curveDirection)));
+            this.curveArrowX  = this.cx + (this.styles.curveOffset * 0.75 * Math.cos(toRadians(theta + this.styles.curveDirection)));
+            this.curveArrowY  = this.cy + (this.styles.curveOffset * 0.75 * Math.sin(toRadians(theta + this.styles.curveDirection)));   
         }
     },
 

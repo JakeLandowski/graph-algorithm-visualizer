@@ -9,7 +9,6 @@
 'use strict';
 
 import Anime from './anime.js';
-import Util from '../utils/Util.js';
 
 let primary = "#6ba2dc";
 let secondary = "#2054a0";

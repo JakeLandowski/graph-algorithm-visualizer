@@ -1,14 +1,12 @@
 /**
- *  @author Jake Landowski
- *  7/30/18
- *  EdgeFactory.js
- * 
- *  Represents the data structure for the Edge class..
+ * @file EdgeFactory.js : Represents the data structure for the Edge class..
+ * @author Jake Landowski <jakelandowski@gmail.com>
+ * 7/30/18
  */
 
 'use strict';
 
-import Util from '../../utils/Util.js';
+import {nonEnumerableProperty} from '../../utils/Utilities.js';
 
 /**
  * Object to represent Edges in the Graph class.
@@ -84,7 +82,7 @@ Edge.prototype =
     // Stop adjList from being stringified
     _storeAdjacencyList(adjList)
     {
-        Util.nonEnumerableProperty(this, 'adjList', adjList);
+        nonEnumerableProperty(this, 'adjList', adjList);
     }
 };
 

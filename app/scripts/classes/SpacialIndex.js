@@ -11,6 +11,8 @@
 
 'use strict';
 
+import {isUndefined} from '../utils/Utilities.js';
+
 /**
  * Class to manage a logical 2D grid of cells for
  * registering basic rectangle bounding boxes to 
@@ -184,23 +186,18 @@ SpacialIndex.prototype =
 
     _assertBoundingBox(entity)
     {
-        if(this._undefined(entity.upperLeft)    ||
-           this._undefined(entity.upperLeft.x)  ||
-           this._undefined(entity.upperLeft.y)  ||
-           this._undefined(entity.lowerRight)   ||
-           this._undefined(entity.lowerRight.x) ||
-           this._undefined(entity.lowerRight.y))
+        if(isUndefined(entity.upperLeft)    ||
+           isUndefined(entity.upperLeft.x)  ||
+           isUndefined(entity.upperLeft.y)  ||
+           isUndefined(entity.lowerRight)   ||
+           isUndefined(entity.lowerRight.x) ||
+           isUndefined(entity.lowerRight.y))
         {
             throw new TypeError('entity given is missing bounding properties.');
         }
 
-        if(this._undefined(entity.id))
+        if(isUndefined(entity.id))
             throw new TypeError('entity given is missing a unique id property.');
-    },
-
-    _undefined(thing)
-    {
-        return typeof thing === 'undefined';
     },
 
     _initIndex()

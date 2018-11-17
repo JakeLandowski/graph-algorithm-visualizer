@@ -11,7 +11,7 @@
 
 import GraphModel from './GraphModel.js';
 import GraphView from './GraphView.js';
-import Util from '../../utils/Util.js';
+import { rand, throttle } from '../../utils/Utilities.js';
 
 const Graph = function(container, config={})
 {
@@ -146,7 +146,7 @@ Graph.prototype =
                             {
                                 from:   selected.data, 
                                 to:     vertex.data,
-                                weight: Util.rand(1, 20)     
+                                weight: rand(1, 20)     
                             },
                             undo: 'removeEdge'
                         });
@@ -284,7 +284,7 @@ Graph.prototype =
 
     enableHover()
     {
-        this.view.onCanvasMouseMove.attach('hoverEntity', Util.throttle(function(_, params)
+        this.view.onCanvasMouseMove.attach('hoverEntity', throttle(function(_, params)
         {
             const vertex = this.model.vertexAt(params.x, params.y);
 

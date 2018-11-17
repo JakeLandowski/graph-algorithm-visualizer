@@ -24,9 +24,11 @@ const GraphModel = function(width, height, config, cellRatio=5)
     this.adjList   = new AdjacencyList(this.config.undirected)
     this.edgeFactory = new EdgeFactory(this.adjList);
     this.vertexFactory = new VertexFactory(this.adjList);
-    
-    this.edgeSpacialIndex   = new SpacialIndex('edge', this.cellWidth, this.cellHeight, this.cellRatio);
-    this.vertexSpacialIndex = new SpacialIndex('vertex', this.cellWidth, this.cellHeight, this.cellRatio);
+
+    this.edgeSpacialLabel   = 'edge';
+    this.vertexSpacialLabel = 'vertex';
+    this.edgeSpacialIndex   = new SpacialIndex(this.edgeSpacialLabel, this.cellWidth, this.cellHeight, this.cellRatio);
+    this.vertexSpacialIndex = new SpacialIndex(this.vertexSpacialLabel, this.cellWidth, this.cellHeight, this.cellRatio);
 
     this.onVertexAdded          = new Event(this);
     this.onVertexRemoved        = new Event(this);
@@ -617,14 +619,14 @@ GraphModel.prototype =
     {
         this.setDimensions(width, height);
 
-        this.vertexSpacialIndex = new SpacialIndex(width, height, this.cellRatio);
+        this.vertexSpacialIndex = new SpacialIndex(this.vertexSpacialLabel, width, height, this.cellRatio);
         this.adjList.forEachVertex(function(vertex)
         {
             this.vertexSpacialIndex.add(vertex);
 
         }.bind(this));
 
-        this.edgeSpacialIndex = new SpacialIndex(width, height, this.cellRatio);
+        this.edgeSpacialIndex = new SpacialIndex(this.edgeSpacialLabel, width, height, this.cellRatio);
         this.adjList.forEachEdge(function(edge)
         {
             this.edgeSpacialIndex.add(edge);

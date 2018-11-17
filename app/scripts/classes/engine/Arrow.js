@@ -9,7 +9,7 @@
 'use strict';
 
 import Entity from './Entity.js';
-import Util from '../../utils/Util.js';
+import { calcAngle, toDegrees, toRadians } from '../../utils/Utilities.js';
 
 const Arrow = function(x1, y1, x2, y2, styles={}, context, engine, level)
 {
@@ -46,17 +46,17 @@ Object.assign(Arrow.prototype, // mixin normal Arrow methods
         const length = this.styles.length;
         const angle  = this.styles.angle;
         const offset = this.styles.offset;
-        const theta  = Util.toDegrees(Util.calcAngle(x1, y1, x2, y2));
+        const theta  = toDegrees(calcAngle(x1, y1, x2, y2));
 
-        const centerX = (end ? x2 : x1) + (offset * Math.cos(Util.toRadians(theta)));
-        const centerY = (end ? y2 : y1) + (offset * Math.sin(Util.toRadians(theta)));
+        const centerX = (end ? x2 : x1) + (offset * Math.cos(toRadians(theta)));
+        const centerY = (end ? y2 : y1) + (offset * Math.sin(toRadians(theta)));
 
-        this.lx = centerX + (length * Math.cos(Util.toRadians(theta - angle)));
-        this.ly = centerY + (length * Math.sin(Util.toRadians(theta - angle)));  
+        this.lx = centerX + (length * Math.cos(toRadians(theta - angle)));
+        this.ly = centerY + (length * Math.sin(toRadians(theta - angle)));  
         this.cx = centerX; 
         this.cy = centerY;
-        this.rx = centerX + (length * Math.cos(Util.toRadians(theta + angle)));
-        this.ry = centerY + (length * Math.sin(Util.toRadians(theta + angle)));
+        this.rx = centerX + (length * Math.cos(toRadians(theta + angle)));
+        this.ry = centerY + (length * Math.sin(toRadians(theta + angle)));
     },
 
     getCenter()
@@ -103,20 +103,20 @@ Object.assign(Arrow.prototype, // mixin normal Arrow methods
             
             if(this.styles.leftCurveDirection !== 0)
             {
-                const theta = Util.toDegrees(Util.calcAngle(this.cx, this.cy, this.lx, this.ly));
+                const theta = toDegrees(calcAngle(this.cx, this.cy, this.lx, this.ly));
                 const centerX = (this.cx + this.lx) / 2;
                 const centerY = (this.cy + this.ly) / 2;
-                this.leftCurveOffsetX = centerX + (this.styles.leftCurveOffset * Math.cos(Util.toRadians(theta + this.styles.leftCurveDirection)));
-                this.leftCurveOffsetY = centerY + (this.styles.leftCurveOffset * Math.sin(Util.toRadians(theta + this.styles.leftCurveDirection)));   
+                this.leftCurveOffsetX = centerX + (this.styles.leftCurveOffset * Math.cos(toRadians(theta + this.styles.leftCurveDirection)));
+                this.leftCurveOffsetY = centerY + (this.styles.leftCurveOffset * Math.sin(toRadians(theta + this.styles.leftCurveDirection)));   
             }
 
             if(this.styles.rightCurveDirection !== 0)
             {
-                const theta = Util.toDegrees(Util.calcAngle(this.cx, this.cy, this.rx, this.ry));
+                const theta = toDegrees(calcAngle(this.cx, this.cy, this.rx, this.ry));
                 const centerX = (this.cx + this.rx) / 2;
                 const centerY = (this.cy + this.ry) / 2;
-                this.rightCurveOffsetX = centerX + (this.styles.rightCurveOffset * Math.cos(Util.toRadians(theta + this.styles.rightCurveDirection)));
-                this.rightCurveOffsetY = centerY + (this.styles.rightCurveOffset * Math.sin(Util.toRadians(theta + this.styles.rightCurveDirection)));   
+                this.rightCurveOffsetX = centerX + (this.styles.rightCurveOffset * Math.cos(toRadians(theta + this.styles.rightCurveDirection)));
+                this.rightCurveOffsetY = centerY + (this.styles.rightCurveOffset * Math.sin(toRadians(theta + this.styles.rightCurveDirection)));   
             }
         }
     },
