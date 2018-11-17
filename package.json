@@ -1,9 +1,12 @@
 {
 	"scripts": {
-		"test": "jest"
+		"test": "jest",
+        "docs": "jsdoc -r app -d docs",
+        "generate-docs" : "node_modules/.bin/jsdoc -c jsdoc.json"
 	},
 	"dependencies": {
 		"babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
+		"docdash": "^1.0.0",
 		"jest": "^23.6.0"
 	}
 }
