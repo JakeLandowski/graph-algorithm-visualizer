@@ -28,6 +28,13 @@ beforeEach(() =>
 
 describe('Testing Edge Class', () =>
 {
+    test('default construction works', () => 
+    {
+        const defaultEdge = edgeFactory.create('B', 'A');
+        expect(defaultEdge.boxSize).toBe(0);
+        expect(defaultEdge.weight).toBe(0);
+    });
+
     test('construction works', () => 
     {
         expect(edgeFactory.adjList).toBe(adjList);
@@ -44,12 +51,20 @@ describe('Testing Edge Class', () =>
         expect(typeof edge.lowerRight.x).toBe('number');
         expect(typeof edge.lowerRight.y).toBe('number');
         expect(mockGetVertex).toBeCalledTimes(4);
-    }); 
+    });
+    
+    test('toVertex and fromVertex getter properties work', () => 
+    {
+        expect(edge.toVertex.x).toBe(5);
+        expect(edge.toVertex.y).toBe(5);
+        expect(edge.fromVertex.x).toBe(5);
+        expect(edge.fromVertex.y).toBe(5);
+    });
     
     test('setPoints() works', () => 
     {
         const mockSetBounds = jest.fn();
-        edge._setBounds = mockSetBounds
+        edge.setBounds = mockSetBounds
         edge.setPoints();
         expect(mockSetBounds).toBeCalledTimes(1);
     }); 
