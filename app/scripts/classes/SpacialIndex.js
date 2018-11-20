@@ -82,7 +82,11 @@ SpacialIndex.prototype =
     },
 
     /**
-     *  Unregister the entity in this SpacialIndex 
+     * Unregisters a previously registered entity. Cleans up
+     * the injected cell reference in the entity object. 
+     * @param {object} entity - the registered entity
+     * @example
+     * spacialIndex.remove(entity);
      */
     remove(entity)
     {
@@ -90,27 +94,28 @@ SpacialIndex.prototype =
 
         if(cells)
         {
-            let cell;
-            let keep;
-
-            cells = cells.filter(function(cellIndices)
+            let cell, exists;
+            
+            entity[this.cellsLabel] = cells.filter(function(cellIndices)
             {
-                cell = this._cellFromIndex(cellIndices.x, cellIndices.y);   
-                if(cell && cell[entity.id]) 
+                cell = this._cellFromIndex(cellIndices.x, cellIndices.y);
+                exists = cell && cell[entity.id]; 
+                
+                if(exists)
                 {
                     delete cell[entity.id];
-                    keep = false;
                 }
-
-                return keep;
-
+                
+                return !exists;
+                
             }.bind(this));
-
         }
     },
 
     /**
-     *  Update the location of the entity in this SpacialIndex 
+     * Updates an existing entity by removing it and adding it again
+     * for when the size constraints of this SpacialIndex has changed.
+     * @param {object} entity - the entity being updated 
      */
     update(entity)
     {
@@ -119,23 +124,33 @@ SpacialIndex.prototype =
     },
 
     /**
-     *  See if this x/y touched a shape, if so return it, else return null
+     * Returns the entity residing on the x, y point given. 
+     * If multiple entities exist at this point, returns the 
+     * first entity iterated on.
+     * @param {number} x - x coordinate in spacial grid 
+     * @param {number} y - y coordinate in spacial grid
+     * @returns {object} the entity at this point
+     * @example
+     * let spacialIndex = new SpacialIndex()
+     * let entity = {
+     *     id: 'vertex1',
+     *     upperLeft: {x: 0, y: 0},
+     *     lowerRight: {x: 10, y: 10}
+     * };
+     * //
+     * spacialIndex.add(entity);
      */
     getEntity(x, y)
     {
         const cell = this._cell(x, y);
 
-        let entity, upperLeft, lowerRight;
+        let entity;
 
         for(const entityId in cell)
         {
-            entity     = cell[entityId];
-            upperLeft  = entity.upperLeft;
-            lowerRight = entity.lowerRight;
+            entity = cell[entityId];
             
-            // calculate point in rectangle here
-            if(x > upperLeft.x && x < lowerRight.x &&
-                y > upperLeft.y && y < lowerRight.y)
+            if(this._pointInsideBounds(entity, x, y))
             {
                 return entity;
             }
@@ -146,14 +161,20 @@ SpacialIndex.prototype =
 
     //=========== Private ===========//
 
+    _pointInsideBounds(entity, x, y)
+    {
+        return x > entity.upperLeft.x && x < entity.lowerRight.x &&
+               y > entity.upperLeft.y && y < entity.lowerRight.y;
+    },
+
     _cell(x, y)
     {
         // this will fail for the point at the max width, max height fyi
         return this._cellFromIndex(this._cellRow(x), this._cellCol(y));
     },
-    _cellFromIndex(x, y)
+    _cellFromIndex(row, col)
     {
-        return x >= this.cellRatio || y >= this.cellRatio || x < 0 || y < 0 ? undefined : this.index[x][y];
+        return row >= this.cellRatio || col >= this.cellRatio || row < 0 || col < 0 ? undefined : this.index[row][col];
     },
 
     _cellRow(x)
