@@ -148,7 +148,12 @@ AdjacencyList.prototype =
     deleteEdge(from, to)
     { 
         this._unregisterEdge(from, to);
-        if(this.undirected) this._unregisterEdge(to, from);
+        if(this.undirected) 
+        {
+            this._unregisterEdge(to, from);
+            this.vertexMap[from].unregisterFromNeighbor(to);
+            this.vertexMap[to].unregisterToNeighbor(from);
+        }
 
         this.vertexMap[from].unregisterToNeighbor(to);
         this.vertexMap[to].unregisterFromNeighbor(from);
