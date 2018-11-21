@@ -139,6 +139,9 @@ SpacialIndex.prototype =
      * };
      * //
      * spacialIndex.add(entity);
+     * //
+     * console.log(spacialIndex.get(5, 5)); // entity
+     * console.log(spacialIndex.get(11, 5)); // null
      */
     getEntity(x, y)
     {
@@ -163,8 +166,8 @@ SpacialIndex.prototype =
 
     _pointInsideBounds(entity, x, y)
     {
-        return x > entity.upperLeft.x && x < entity.lowerRight.x &&
-               y > entity.upperLeft.y && y < entity.lowerRight.y;
+        return x >= entity.upperLeft.x && x <= entity.lowerRight.x &&
+               y >= entity.upperLeft.y && y <= entity.lowerRight.y;
     },
 
     _cell(x, y)

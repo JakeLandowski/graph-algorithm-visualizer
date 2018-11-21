@@ -181,3 +181,25 @@ describe('Testing update() method', () =>
         });
     });
 });
+
+describe('Testing getEntity() method', () => 
+{
+    test('Adding entities and clicking on an empty cell should return null.', () => 
+    {
+        addAllEntities();
+
+        expect(spacial.getEntity(415, 451)).toBe(null);
+        expect(spacial.getEntity(550, 550)).toBe(null);
+        expect(spacial.getEntity(4, 14)).toBe(null);
+    });
+
+    test('Adding entities and clicking on an full cell should retrieve a valid entity.', () => 
+    {
+        addAllEntities();
+
+        expect([oneCellEntity, allCellEntity]).toContain(spacial.getEntity(25, 50));
+        expect([twoCellEntity, allCellEntity]).toContain(spacial.getEntity(180, 135));
+        expect([fourCellEntity, allCellEntity]).toContain(spacial.getEntity(210, 399));
+        expect(spacial.getEntity(405, 250)).toBe(allCellEntity);
+    });
+});
