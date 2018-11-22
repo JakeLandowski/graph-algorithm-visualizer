@@ -299,32 +299,37 @@ describe('Testing deleteEdge() method', () =>
 
 describe('Testing edgeExists() method', () => 
 {
-    test('edgeExists() works', () => 
+    test('Edge A -> B should not exist if nothing has been added.', () => 
     {
         expect(directedAdj.edgeExists('A', 'B')).toBe(false);
+    });
+
+    test('Edge A -> B should exist if internal edgeMap contains it.', () => 
+    {
         directedAdj.edgeMap[['A', 'B']] = edge;
         expect(directedAdj.edgeExists('A', 'B')).toBe(true);
-        expect(directedAdj.edgeExists('B', 'A')).toBe(false);
     });
 });
 
 describe('Testing forEachVertex() method', () => 
 {
-    test('forEachVertex() works', () => 
-    {
-        const testSymbols = ['A', 'B', 'C', 'D', 'E', 'F'];
-
-        testSymbols.forEach((symbol) => 
-        {
-             directedAdj.vertexMap[symbol] = symbol; 
-        });
+    const testSymbols = ['A', 'B', 'C', 'D', 'E', 'F'];
+    const testFunction = jest.fn();
     
-        const testFunction = jest.fn();
+    beforeAll(() => 
+    {
+        testSymbols.forEach(symbol => directedAdj.vertexMap[symbol] = symbol); 
         directedAdj.forEachVertex(testFunction);
-
-        expect(testFunction).toHaveBeenCalledTimes(testSymbols.length);
+    });
         
-        testSymbols.forEach((symbol) => 
+    test(`Callback should have been called ${testSymbols.length} times.`, () => 
+    {
+        expect(testFunction).toHaveBeenCalledTimes(testSymbols.length);
+    });
+
+    test(`Callback should have been called with each ${testSymbols.toString()}.`, () => 
+    { 
+        testSymbols.forEach(symbol => 
         {
             expect(testFunction).toHaveBeenCalledWith(symbol); 
         });
@@ -333,15 +338,18 @@ describe('Testing forEachVertex() method', () =>
 
 describe('Testing forEachEdge() method', () => 
 {
-    test('forEachEdge() works', () => 
-    {
-        const edges = 
-        [
-            {from: 'A', to: 'B'},
-            {from: 'B', to: 'C'},
-            {from: 'C', to: 'D'}
-        ];
+    const edges = 
+    [
+        {from: 'A', to: 'B'},
+        {from: 'B', to: 'C'},
+        {from: 'C', to: 'D'}
+    ];
 
+    const directedCallBackMock = jest.fn();
+    const undirectedCallBackMock = jest.fn();
+
+    beforeAll(() => 
+    {
         edges.forEach((edge) => 
         {
             directedAdj.edgeMap[[edge.from, edge.to]] = edge;
@@ -349,22 +357,23 @@ describe('Testing forEachEdge() method', () =>
             undirectedAdj.edgeMap[[edge.to, edge.from]] = edge;
         });
 
-        const directedCallBackMock = jest.fn();
-        const undirectedCallBackMock = jest.fn();
-
         directedAdj.forEachEdge(directedCallBackMock);
         undirectedAdj.forEachEdge(undirectedCallBackMock);
+    });
+        
+    test(`Callback should have been called ${edges.length} times ` + 
+    `for both directed and undirected lists.`, () => 
+    {
+        expect(directedCallBackMock).toHaveBeenCalledTimes(edges.length);
+        expect(undirectedCallBackMock).toHaveBeenCalledTimes(edges.length);
+    });
 
-        const expectDirected = expect(directedCallBackMock);
-        const expectUndirected = expect(undirectedCallBackMock); 
-
-        expectDirected.toHaveBeenCalledTimes(edges.length);
-        expectUndirected.toHaveBeenCalledTimes(edges.length);
-
+    test(`Callback should have been called with each original edge.`, () => 
+    { 
         edges.forEach((edge) => 
         {
-            expectDirected.toHaveBeenCalledWith(edge);
-            expectUndirected.toHaveBeenCalledWith(edge);
+            expect(directedCallBackMock).toHaveBeenCalledWith(edge);
+            expect(undirectedCallBackMock).toHaveBeenCalledWith(edge);
         });
     });
 });
