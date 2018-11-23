@@ -108,6 +108,7 @@ describe('Testing add() method', () =>
     test('Adding invalid object should throw error.', () => 
     {
         expect( () => spacial.add({}) ).toThrow();
+        expect( () => spacial.add(spacialEntity(undefined, 0, 0, 0, 0)) ).toThrow();
     });
 
     test('All cells store appropriate entities after adding', () => 
@@ -129,15 +130,36 @@ describe('Testing add() method', () =>
 
         addEntitiesThenTestCellsFor(entityHasCellRef);
     });
+
+    test(`Adding an entity with incorrect bounds doesn't break and ' + 
+    'doesn't get cell references.`, () => 
+    {
+        const fakeEntity = spacialEntity('fake', -100, 0, -100, 0);
+        spacial.add(fakeEntity);
+
+        expect(fakeEntity[injectedCellsName]).toBeUndefined();
+    });
+
+    test(`Adding an entity with existing cell references doesn't add a new array.`, () => 
+    {
+        const fakeEntity = spacialEntity('fake', -100, 0, -100, 0);
+        fakeEntity[injectedCellsName] = true;
+        spacial.add(fakeEntity);
+
+        expect(fakeEntity[injectedCellsName]).not.toEqual([]);
+    });
 });
 
 describe('Testing remove() method', () => 
 {
-    test('remove() removes entities from internal cells.', () => 
+    beforeEach(() => 
     {
         addAllEntities();
         removeAllEntities();
+    });
 
+    test('remove() removes entities from internal cells.', () => 
+    {
         entities.forEach(entity => 
         { 
             for(let i = 0; i < spacial.index.length; i++)
@@ -152,13 +174,20 @@ describe('Testing remove() method', () =>
 
     test('remove() removes injected cell references in the entities.', () => 
     {
-        addAllEntities();
-        removeAllEntities();
-
         entities.forEach(entity => 
         { 
             expect(entity[injectedCellsName].length).toBe(0);
         });
+    });
+
+    test(`Removing an entity with incorrect cell references doesn't break`, () => 
+    {
+        const fakeEntity = {id: 'fake'};
+        fakeEntity[injectedCellsName] = [{x: -1, y: -1}];
+
+        spacial.remove(fakeEntity);
+
+        expect(fakeEntity[injectedCellsName].length).toBe(0);
     });
 });
 
@@ -184,10 +213,10 @@ describe('Testing update() method', () =>
 
 describe('Testing getEntity() method', () => 
 {
+    beforeEach(() => addAllEntities());
+
     test('Adding entities and clicking on an empty cell should return null.', () => 
     {
-        addAllEntities();
-
         expect(spacial.getEntity(415, 451)).toBe(null);
         expect(spacial.getEntity(550, 550)).toBe(null);
         expect(spacial.getEntity(4, 14)).toBe(null);
@@ -195,8 +224,6 @@ describe('Testing getEntity() method', () =>
 
     test('Adding entities and clicking on an full cell should retrieve a valid entity.', () => 
     {
-        addAllEntities();
-
         expect([oneCellEntity, allCellEntity]).toContain(spacial.getEntity(25, 50));
         expect([twoCellEntity, allCellEntity]).toContain(spacial.getEntity(180, 135));
         expect([fourCellEntity, allCellEntity]).toContain(spacial.getEntity(210, 399));

@@ -59,11 +59,6 @@ SpacialIndex.prototype =
         const endX   = this._cellRow(entity.lowerRight.x);
         const endY   = this._cellCol(entity.lowerRight.y);
 
-        const cellsProp = this.cellsLabel;
-
-        // For removing from cells later
-        if(!entity[cellsProp]) entity[cellsProp] = [];
-
         let cell;
         
         for(let x = startX; x <= endX; x++)
@@ -71,11 +66,12 @@ SpacialIndex.prototype =
             for(let y = startY; y <= endY; y++)
             {
                 cell = this._cellFromIndex(x, y);
-                
+
                 if(cell) 
                 {
+                    this._injectCellsArray(entity);
                     cell[entity.id] = entity;
-                    entity[cellsProp].push({x: x, y: y});
+                    entity[this.cellsLabel].push({x: x, y: y});
                 }
             }   
         }
@@ -100,13 +96,12 @@ SpacialIndex.prototype =
             {
                 cell = this._cellFromIndex(cellIndices.x, cellIndices.y);
                 exists = cell && cell[entity.id]; 
-                
                 if(exists)
                 {
                     delete cell[entity.id];
                 }
                 
-                return !exists;
+                return false;
                 
             }.bind(this));
         }
@@ -172,7 +167,6 @@ SpacialIndex.prototype =
 
     _cell(x, y)
     {
-        // this will fail for the point at the max width, max height fyi
         return this._cellFromIndex(this._cellRow(x), this._cellCol(y));
     },
     _cellFromIndex(row, col)
@@ -188,6 +182,11 @@ SpacialIndex.prototype =
     _cellCol(y)
     {
         return Math.floor(y / this.cellHeight);
+    },
+
+    _injectCellsArray(entity)
+    {
+        if(!entity[this.cellsLabel]) entity[this.cellsLabel] = [];
     },
 
     _assertBoundingBox(entity)
