@@ -8,19 +8,22 @@
 
 import VertexFactory from '../classes/graph/VertexFactory.js';
 
+const vertexRadius = 30;
+const centerX = 150;
+const centerY = 250;
 let vertexFactory, vertex, mockConfig, adjList;
 
 beforeEach(() => 
 {
     mockConfig = 
     {
-        vertexSize: 0, 
-        vertexOutlineSize: 0
+        vertexSize: 25, 
+        vertexOutlineSize: 5
     };
 
     adjList = {};
     vertexFactory = new VertexFactory(adjList);
-    vertex = vertexFactory.create('A', 0, 0, mockConfig);
+    vertex = vertexFactory.create('A', centerX, centerY, mockConfig);
 });
 
 describe('Testing construction.', () =>
@@ -29,6 +32,12 @@ describe('Testing construction.', () =>
     ' one passed in on construction.', () => 
     {
         expect(vertexFactory.adjList).toBe(adjList);
+    });
+
+    test('Internal config object should be initialized with ' +
+    'empty object by default if not provided one on construction.', () => 
+    {
+        expect(vertexFactory.create('A', 0, 0).options).toEqual({});
     });
 
     test('Vertex fields are correct after contruction.', () => 
@@ -44,15 +53,15 @@ describe('Testing construction.', () =>
     test('Center, upperLeft, and lowerRight points are ' + 
     'correct after setPoints() is called.', () => 
     {
-        expect(vertex.x).toBe(0);
-        expect(vertex.y).toBe(0);
+        expect(vertex.x).toBe(centerX);
+        expect(vertex.y).toBe(centerY);
 
         expect(typeof vertex.upperLeft).toBe('object');
         expect(typeof vertex.lowerRight).toBe('object');
-        expect(typeof vertex.upperLeft.x).toBe('number');
-        expect(typeof vertex.upperLeft.y).toBe('number');
-        expect(typeof vertex.lowerRight.x).toBe('number');
-        expect(typeof vertex.lowerRight.y).toBe('number');
+        expect(vertex.upperLeft.x).toBe(centerX - vertexRadius);
+        expect(vertex.upperLeft.y).toBe(centerY - vertexRadius);
+        expect(vertex.lowerRight.x).toBe(centerX + vertexRadius);
+        expect(vertex.lowerRight.y).toBe(centerY + vertexRadius);
     });
 });
 
@@ -160,10 +169,29 @@ describe('Testing vertex reference methods.', () =>
 
 describe('Testing forEachEdge()', () =>
 {
+    const fromSymbols = ['B', 'C', 'D', 'E'];
+    const toSymbols = ['B', 'G', 'H'];
+    const totalEdges = fromSymbols.length + toSymbols.length;
+    const edgeIds = 
+    [
+        ...fromSymbols.map(symbol => `${symbol},A`), 
+        ...toSymbols.map(symbol => `A,${symbol}`)
+    ];
+    
     const mockAdjList = 
     {
-        edgeExists: jest.fn(() => true),
+        edgeExists: jest.fn((from, to) => 
+        {
+            return (fromSymbols.includes(from) && to === 'A') ||
+                   (toSymbols.includes(to)     && from === 'A');  
+        }),
+
         getEdge: jest.fn((first, second) => `${first},${second}`)
+    };
+
+    const addSymbols = (symbols, neighbors) => 
+    {
+        symbols.forEach(symbol => neighbors[symbol] = symbol);
     };
 
     let mockCallBack;
@@ -172,22 +200,25 @@ describe('Testing forEachEdge()', () =>
     {
         vertex = new VertexFactory(mockAdjList).create('A', 0, 0, mockConfig);
         
-        vertex.toNeighbors['B'] = 'B';
-        vertex.fromNeighbors['B'] = 'B';
-        vertex.fromNeighbors['C'] = 'C';
+        addSymbols(fromSymbols, vertex.fromNeighbors);
+        addSymbols(toSymbols, vertex.toNeighbors);
+        vertex.fromNeighbors['F'] = 'F'; // shouldn't be looped over
         mockCallBack = jest.fn();
         vertex.forEachEdge(mockCallBack);
     });
-
-    test('Callback should have been called 3 times.', () => 
+    
+    test(`Callback should have been called ${totalEdges} times.`, () => 
     {   
-        expect(mockCallBack).toHaveBeenCalledTimes(3);
+        expect(mockCallBack).toHaveBeenCalledTimes(totalEdges);
     });
 
-    test('Callback should have been called with parameters A,B | B,A | C,A.', () => 
+    test(`Callback should have been called with parameters ` + 
+    `${edgeIds.join(' | ')}`, () => 
     {   
-        expect(mockCallBack).toHaveBeenCalledWith('A,B');
-        expect(mockCallBack).toHaveBeenCalledWith('B,A');
-        expect(mockCallBack).toHaveBeenCalledWith('C,A');
+        edgeIds.forEach(edge => 
+            expect(mockCallBack).toHaveBeenCalledWith(edge));
+        
+        expect(mockCallBack).not.toHaveBeenCalledWith('F,A');
+        expect(mockCallBack).not.toHaveBeenCalledWith('A,F');
     });
 });
