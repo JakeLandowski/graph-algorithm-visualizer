@@ -8,10 +8,9 @@
 'use strict';
 
 /**
- *  Inclusive random integer between min and max; 
- * 
- *  @param min  
- *  @param max 
+ * Returns a random int between min and max given, inclusive.
+ * @param {number} min - lower bound number
+ * @param {number} max - upper bound number
  */
 export function rand(min, max) 
 {
@@ -19,10 +18,11 @@ export function rand(min, max)
 }
 
 /**
- *  Stagger a callback to only trigger on last event call based on delay given 
- * 
- *  @param callback function to run at the last trigger
- *  @param delay    how long to wait before triggering
+ * Stagger a callback to only trigger on last event call 
+ * based on delay given. 
+ * @param {function} callback - function to run at the last trigger
+ * @param {number} delay - how long to wait before triggering
+ * @returns {function} - callback decorated with a setTimeout closure
  */
 export function stagger(callback, delay)
 {
@@ -35,7 +35,14 @@ export function stagger(callback, delay)
     };
 }
 
-export function throttle(fn, cooldown) 
+/**
+ * Throttles a function to only be called once per however many
+ * milliseconds is given.
+ * @param {*} callback - the function to run 
+ * @param {*} cooldown - the amount of time before callback 
+ * can be ran again
+ */
+export function throttle(callback, cooldown) 
 {
     let activate = true;
 
@@ -43,7 +50,7 @@ export function throttle(fn, cooldown)
     {
         if(activate) 
         {
-            fn.apply(this, arguments);
+            callback.apply(this, arguments);
             activate = false;
             setTimeout(function()
             {
