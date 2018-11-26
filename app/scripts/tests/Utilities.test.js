@@ -8,7 +8,7 @@
 
 import * as Utilities from '../utils/Utilities.js';
 
-describe('Testing rand(min, max).', () => 
+describe('Testing rand().', () => 
 {
     test('rand(1, 1) returns 1 because the max is inclusive.', () => 
     {
@@ -16,10 +16,9 @@ describe('Testing rand(min, max).', () =>
     });
 
     describe.each([[1], [5], [10], [25]])
-    ('Testing random distribution for each amount of numbers.', (numSlots) => 
+    ('Random distribution is approximately spread out evenly when', (numSlots) => 
     {
-        test(`Random distribution is approximately spread ` + 
-        `out evenly among ${numSlots} slots.`, () => 
+        test(`Testing with ${numSlots} slots`, () => 
         {
             const numTries = 100000
             const slots = new Array(numSlots).fill(0);
@@ -38,18 +37,18 @@ describe('Testing rand(min, max).', () =>
     });
 });
 
-describe('Testing stagger(callback, delay).', () => 
+describe('Testing callback utility functions.', () => 
 {
-    const executeCallbackEvery100ms = (staggerDelay, param) => 
+    const executeCallbackEvery100ms = (delay, decoration, param) => 
     {
         const callback = jest.fn();
-        const staggeredCallback = Utilities.stagger(callback, staggerDelay);
+        const decoratedCallback = Utilities[decoration](callback, delay);
 
         let count = 0;
         let stop = 10;
         const interval = setInterval(() => 
         {
-            staggeredCallback(param);
+            decoratedCallback(param);
             count++;
             if(count == stop) clearInterval(interval);
 
@@ -61,24 +60,33 @@ describe('Testing stagger(callback, delay).', () =>
     };
 
     beforeEach(() => jest.useFakeTimers());
-
-    test('Staggered callback with a 101ms delay threshold' + 
-    ' only runs once after being called 10 times every 100ms.', () => 
+    
+    test('Event param is successfully passed to staggered callback.', () => 
     {
-        const callback = executeCallbackEvery100ms(101);
-        expect(callback).toHaveBeenCalledTimes(1);
-    });
-
-    test('Staggered callback with a 99ms delay threshold' + 
-    ' only runs 10 times after being called 10 times every 100ms.', () => 
-    {
-        const callback = executeCallbackEvery100ms(99);
-        expect(callback).toHaveBeenCalledTimes(10);
-    });
-
-    test('Event param is successfully passed to wrapped callback.', () => 
-    {
-        const callback = executeCallbackEvery100ms(100, 'Theoretical Event');
+        const callback = executeCallbackEvery100ms(100, 'stagger', 'Theoretical Event');
         expect(callback).toHaveBeenCalledWith('Theoretical Event');
+    });
+
+    test('Event param is successfully passed to throttled callback.', () => 
+    {
+        const callback = executeCallbackEvery100ms(100, 'throttle', 'Theoretical Event');
+        expect(callback).toHaveBeenCalledWith('Theoretical Event');
+    });
+    
+    const describeEachCallbackTest = describe.each(
+    [
+        ['stagger', 101, 1],  ['stagger', 99, 10],
+        ['throttle', 99, 10], ['throttle', 100, 1], ['throttle', 500, 1]
+    ]);
+    
+    describeEachCallbackTest('Called 10 times every 100ms', 
+    (decoration, delay, timesRan) => 
+    {
+        test(`${decoration} callback with a ${delay}ms cooldown ` + 
+        `was called ${timesRan} times.`, () => 
+        {
+            const callback = executeCallbackEvery100ms(delay, 'throttle');
+            expect(callback).toHaveBeenCalledTimes(timesRan);
+        });
     });
 });

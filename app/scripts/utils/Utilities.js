@@ -22,7 +22,7 @@ export function rand(min, max)
  * based on delay given. 
  * @param {function} callback - function to run at the last trigger
  * @param {number} delay - how long to wait before triggering
- * @returns {function} - callback decorated with a setTimeout closure
+ * @returns {function} callback decorated with a setTimeout closure
  */
 export function stagger(callback, delay)
 {
@@ -36,13 +36,14 @@ export function stagger(callback, delay)
 }
 
 /**
- * Throttles a function to only be called once per however many
- * milliseconds is given.
- * @param {*} callback - the function to run 
- * @param {*} cooldown - the amount of time before callback 
- * can be ran again
+ * Throttles a function to freeze after being called,
+ * unfreezes when not called for the allotted time given.
+ * @param {function} callback - the function to call 
+ * @param {number} cooldown - time in milliseconds function
+ * must not be called before it unfreezes
+ * @returns {function} callback decorated with a setTimeout closure
  */
-export function throttle(callback, cooldown) 
+export function throttle(callback, freezeDuration) 
 {
     let activate = true;
 
@@ -55,7 +56,7 @@ export function throttle(callback, cooldown)
             setTimeout(function()
             {
                 activate = true;
-            }, cooldown);
+            }, freezeDuration);
         }
     };
 }
