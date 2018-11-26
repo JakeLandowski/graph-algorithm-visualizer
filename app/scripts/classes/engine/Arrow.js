@@ -9,7 +9,7 @@
 'use strict';
 
 import Entity from './Entity.js';
-import { calcAngle, toDegrees, toRadians } from '../../utils/Utilities.js';
+import { calcFlippedAngle, calcAngle, toDegrees, toRadians } from '../../utils/Utilities.js';
 
 const Arrow = function(x1, y1, x2, y2, styles={}, context, engine, level)
 {
@@ -46,7 +46,7 @@ Object.assign(Arrow.prototype, // mixin normal Arrow methods
         const length = this.styles.length;
         const angle  = this.styles.angle;
         const offset = this.styles.offset;
-        const theta  = toDegrees(calcAngle(x1, y1, x2, y2));
+        const theta  = toDegrees(calcFlippedAngle(x1, y1, x2, y2));
 
         const centerX = (end ? x2 : x1) + (offset * Math.cos(toRadians(theta)));
         const centerY = (end ? y2 : y1) + (offset * Math.sin(toRadians(theta)));

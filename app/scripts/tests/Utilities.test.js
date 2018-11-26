@@ -90,3 +90,116 @@ describe('Testing callback utility functions.', () =>
         });
     });
 });
+
+describe('Testing copy().', () => 
+{
+    test('Copied object is a new object with same properties.', () => 
+    {
+        const toBeCopied = {prop1: true, prop2: 'text', prop3: 5};
+        expect(Utilities.copy(toBeCopied)).not.toBe(toBeCopied);
+        expect(Utilities.copy(toBeCopied)).toEqual(toBeCopied);
+    });
+});
+
+describe('Testing appendHtml().', () => 
+{
+    const appendingString = 'Blah';
+    
+    const callFunctionAndTestInnerHTML = (element) => 
+    {
+        Utilities.appendHtml(element, appendingString);
+        expect(element.innerHTML).toBe(appendingString);
+        return element;
+    };
+
+    test('Successfully appends a string to a DOM element.', () => 
+    {
+        callFunctionAndTestInnerHTML(document.createElement('div'));
+    });
+
+    test('Element without insertAdjacentHTML() method uses innerHTML property.', () => 
+    {
+        callFunctionAndTestInnerHTML({ innerHTML: '' });
+    });
+
+    test('Element with insertAdjacentHTML() method uses the method.', () => 
+    {
+        const mockWithMethod = callFunctionAndTestInnerHTML(
+        { 
+            innerHTML: '',
+            insertAdjacentHTML: jest.fn(function(_, string){ this.innerHTML += string; })  
+        });
+        
+        expect(mockWithMethod.insertAdjacentHTML).toHaveBeenCalledTimes(1);
+        expect(mockWithMethod.insertAdjacentHTML).toHaveBeenCalledWith('beforeend', appendingString);
+    });
+});
+
+describe.each([['calcAngle', 45, 15, 15],['calcFlippedAngle', 135, -15, -15]])
+('Testing %s() with 2 points that have %d degree angle.', (fn, deg, x, y) => 
+{
+    test('Should calculate ~0.785398 radians.', () => 
+    {
+        expect(Utilities[fn](0, 0, x, y)).toBeCloseTo(0.785398, 6);
+    });
+});
+
+describe('Testing toDegrees()', () => 
+{
+    test('0.785398 radians should convert to ~45 degrees.', () => 
+    {
+        expect(Utilities.toDegrees(0.785398)).toBeCloseTo(45, 2);
+    });
+
+    test('-0.785398 radians should convert to ~315 degrees.', () => 
+    {
+        expect(Utilities.toDegrees(-0.785398)).toBeCloseTo(315, 2);
+    });
+});
+
+describe('Testing toRadians()', () => 
+{
+    test('45 degrees should convert to ~0.785398 radians.', () => 
+    {
+        expect(Utilities.toRadians(45)).toBeCloseTo(0.785398, 6);
+    });
+});
+
+describe('Testing nonEnumerableProperty()', () => 
+{
+    let object;
+    beforeEach(() => 
+    {
+        object = {};
+        Utilities.nonEnumerableProperty(object, 'prop', 5);
+    });
+
+    test('Successfully assigns properties and nothing else.', () => 
+    {
+        expect(object).toBe(object);
+        expect(object.prop).toBe(5);
+    });
+
+    test(`Property assign doesn't get looped over.`, () => 
+    {
+        for(const prop in object)
+        {
+            delete object[prop];
+        }
+
+        expect(object.prop).toBeDefined();
+    });
+});
+
+describe('Testing isUndefined()', () => 
+{
+    test('Passing undefined returns true.', () => 
+    {
+        expect(Utilities.isUndefined(undefined)).toBe(true);
+    });
+
+    test('Passing 5 returns false.', () => 
+    {
+        expect(Utilities.isUndefined(5)).toBe(false);
+    });
+});
