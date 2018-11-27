@@ -59,7 +59,7 @@ Event.prototype =
             {
                 for(const listener in this.listeners)
                 {
-                    this.listeners[listener](this.sender, args);
+                    this.listeners[listener](args, this.sender);
                 }
             }
         }

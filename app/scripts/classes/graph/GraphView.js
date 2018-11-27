@@ -60,7 +60,7 @@ GraphView.prototype =
 //========= Vertex Listeners ===========//
 
         // Vertex Added
-        this.model.onVertexAdded.attach('createVertex', function(_, params)
+        this.model.onVertexAdded.attach('createVertex', function(params)
         {
             const vertex = this.engine.createCircle(params.x, params.y, this.config.vertexSize, this.VERTEX_LAYER, 
             {
@@ -88,7 +88,7 @@ GraphView.prototype =
         }.bind(this));
 
         // Vertex Removed
-        this.model.onVertexRemoved.attach('deleteVertex', function(_, params)
+        this.model.onVertexRemoved.attach('deleteVertex', function(params)
         {
             if(this.vertexMap[params.data])
             {
@@ -102,7 +102,7 @@ GraphView.prototype =
         }.bind(this));
 
         // Vertex Moved
-        this.model.onVertexMoved.attach('moveVertex', function(_, params)
+        this.model.onVertexMoved.attach('moveVertex', function(params)
         {
             const vertex = this.vertexMap[params.data];
             if(vertex)
@@ -114,7 +114,7 @@ GraphView.prototype =
         }.bind(this));
 
         // Vertex Selected
-        this.model.onVertexSelected.attach('selectVertex', function(_, params)
+        this.model.onVertexSelected.attach('selectVertex', function(params)
         {
             const vertex = this.vertexMap[params.data];
             if(vertex)
@@ -126,7 +126,7 @@ GraphView.prototype =
         }.bind(this));
 
         // Vertex Deselected
-        this.model.onVertexDeselected.attach('deselectVertex', function(_, params)
+        this.model.onVertexDeselected.attach('deselectVertex', function(params)
         {
             const vertex = this.vertexMap[params.data];
             if(vertex)
@@ -138,7 +138,7 @@ GraphView.prototype =
         }.bind(this));
 
         // Vertex Hovered
-        this.model.onVertexHovered.attach('hoverVertex', function(_, params)
+        this.model.onVertexHovered.attach('hoverVertex', function(params)
         {
             const vertex = this.vertexMap[params.data]; 
             if(vertex)
@@ -151,7 +151,7 @@ GraphView.prototype =
         }.bind(this));
 
         // Vertex Not Hovered
-        this.model.onVertexNotHovered.attach('unhoverVertex', function(_, params)
+        this.model.onVertexNotHovered.attach('unhoverVertex', function(params)
         {
             const vertex = this.vertexMap[params.data]; 
             if(vertex)
@@ -166,7 +166,7 @@ GraphView.prototype =
         //========= Edge Listeners ===========//
 
         // Tracking Edge Added
-        this.model.onTrackingEdgeAdded.attach('trackingEdgeAdded', function(_, params)
+        this.model.onTrackingEdgeAdded.attach('trackingEdgeAdded', function(params)
         {
             const start = params.start;
             const end   = params.end;
@@ -180,14 +180,14 @@ GraphView.prototype =
         }.bind(this));
 
         // Tracking Edge Moved
-        this.model.onTrackingEdgeMoved.attach('trackingEdgeMoved', function(_, params)
+        this.model.onTrackingEdgeMoved.attach('trackingEdgeMoved', function(params)
         {
             this.trackingEdge.setEnd(params.x, params.y);
 
         }.bind(this));
 
         // Tracking Edge Removed
-        this.model.onTrackingEdgeRemoved.attach('trackingEdgeRemoved', function(_, params)
+        this.model.onTrackingEdgeRemoved.attach('trackingEdgeRemoved', function(params)
         {
             if(this.trackingEdge)
             {
@@ -198,7 +198,7 @@ GraphView.prototype =
         }.bind(this));
 
         // Edge Added
-        this.model.onEdgeAdded.attach('createEdge', function(_, params)
+        this.model.onEdgeAdded.attach('createEdge', function(params)
         {
             // Set other existing edge to curve
             const otherEdge = this.edgeMap[ [params.to, params.from] ];
@@ -295,7 +295,7 @@ GraphView.prototype =
         }.bind(this));
 
         // Edge Removed
-        this.model.onEdgeRemoved.attach('removeEdge', function(_, params)
+        this.model.onEdgeRemoved.attach('removeEdge', function(params)
         {                
             const edge = this.edgeMap[ [params.from, params.to] ];
             edge.line.delete();
@@ -329,7 +329,7 @@ GraphView.prototype =
         }.bind(this));
 
         // Edge Moved
-        this.model.onEdgeMoved.attach('moveEdge', function(_, params)
+        this.model.onEdgeMoved.attach('moveEdge', function(params)
         {
             const edge = this.edgeMap[ [params.from, params.to] ];
             const otherEdge = this.edgeMap[ [params.to, params.from] ];
@@ -359,7 +359,7 @@ GraphView.prototype =
         }.bind(this));
         
         // Edge Hovered
-        this.model.onEdgeHovered.attach('hoverEdge', function(_, params)
+        this.model.onEdgeHovered.attach('hoverEdge', function(params)
         {
             const edge = this.edgeMap[ [params.from, params.to] ]; 
             if(edge)
@@ -374,7 +374,7 @@ GraphView.prototype =
         }.bind(this));
         
         // Edge Not Hovered
-        this.model.onEdgeNotHovered.attach('unhoverEdge', function(_, params)
+        this.model.onEdgeNotHovered.attach('unhoverEdge', function(params)
         {
             const edge = this.edgeMap[ [params.from, params.to] ];
             if(edge)
@@ -389,7 +389,7 @@ GraphView.prototype =
         }.bind(this));
 
         // Edge Edit Started
-        this.model.onEdgeEditStarted.attach('startEdittingEdge', function(_, params)
+        this.model.onEdgeEditStarted.attach('startEdittingEdge', function(params)
         {
             const edge = this.edgeMap[ [params.from, params.to] ];
             if(edge)
@@ -417,7 +417,7 @@ GraphView.prototype =
         }.bind(this));
 
         // Edge Weight Editted
-        this.model.onEdgeWeightEditted.attach('changeEdgeWeight', function(_, params)
+        this.model.onEdgeWeightEditted.attach('changeEdgeWeight', function(params)
         {
             const edge = this.edgeMap[ [params.from, params.to] ];
             if(edge) edge.text.content = params.weight;
@@ -425,7 +425,7 @@ GraphView.prototype =
         }.bind(this));
         
         // Edge Weight Editted
-        this.model.onEdgeEditingFinished.attach('clearEdgeEdit', function(_, params)
+        this.model.onEdgeEditingFinished.attach('clearEdgeEdit', function(params)
         {
             this.container.removeChild(this.edgeEditForm);
             this.edgeEditForm = null;
