@@ -19,7 +19,9 @@ const Graph = function(container, config={})
     let secondaryColor = "#2054a0";
     let background = "#262626";
 
-    if(!container) throw 'Need to provide a containing element for Graph to render in.';
+    if(!container.clientWidth || !container.clientHeight) 
+        throw new TypeError('Need to provide a containing element for Graph to render in.');
+    
     this.container = container;
     
     this.config = 
@@ -46,28 +48,11 @@ const Graph = function(container, config={})
     }; // these are arrays because it makes the colors pointers that cascade down and canvas render automatically extacts the values
         //from the array so if you decide to change the color you will need to access the array [0] and change that color
 
-    // overrideWithParams(defaults, params)
-    // {
-    //     for(const prop in defaults)
-    //     {
-    //         if(params[prop] !== undefined)
-    //         {
-    //             defaults[prop] = params[prop];
-    //         }
-    //     }
-    // }
-
     this.model = new GraphModel(container.clientWidth, container.clientHeight, this.config);
     this.view  = new GraphView(container, this.model, this.config);
 
-    this.view.onUndo.attach('undo', function(_, params) { this.undo(); }.bind(this));
-    this.view.onRedo.attach('redo', function(_, params) { this.redo(); }.bind(this));
-    
-    // this.symbols = ['Z', 'Y', 'X', 'W', 'V', 'U', 
-    //                 'T', 'S', 'R', 'Q', 'P', 'O', 
-    //                 'N', 'M', 'L', 'K', 'J', 'I', 
-    //                 'H', 'G', 'F', 'E', 'D', 'C', 
-    //                 'B', 'A'];
+    this.view.onUndo.attach('undo', function(params) { this.undo(); }.bind(this));
+    this.view.onRedo.attach('redo', function(params) { this.redo(); }.bind(this));
     
     this.mouseEventsLogged  = [];
     this.hoverThrottleDelay = 30;
@@ -77,34 +62,205 @@ const Graph = function(container, config={})
 
 Graph.prototype = 
 {
+    //=========== Handlers ===========//
 
-//====================== Graph Interaction Modes ===========================//
+    editEdgeWeight(params)
+    {
+        let weight = Number.parseInt(params.weight);
+
+        if(!isNaN(weight))
+        {
+            weight = weight < 0 ? 0 : (weight > 20 ? 20 : weight);
+            this.model.editEdgeWeight(weight);
+            this.model.clearEdgeEdit();
+        } 
+
+    },
+
+    edgeSpatialCurve(params)
+    {
+        const edge = this.model.adjList.getEdge(params.from, params.to);
+        edge.x = params.centerX;
+        edge.y = params.centerY;
+        edge.setBounds(); // for spatial
+        this.model.updateEdgeSpatial(edge);
+    },
+    
+    clickEntity(params)
+    {
+        this.model.clearEdgeEdit();
+
+        // see if clicked on vertex here using model
+        // if clicked on vertex tell model to delete
+        const vertex   = this.model.vertexAt(params.x, params.y);
+        const selected = this.model.selectedVertex; 
+
+        if(vertex)
+        {
+            if(selected)
+            {
+                // If not the same vertex
+                // and edge doesnt exist
+                // create edge
+                if(selected.data !== vertex.data && 
+                    !this.model.adjList.edgeExists(selected.data, vertex.data))
+                {
+                    this.model.dispatch(this.model.userCommands,
+                    {
+                        type: 'addEdge',
+                        data: 
+                        {
+                            from:   selected.data, 
+                            to:     vertex.data,
+                            weight: rand(1, 20)     
+                        },
+                        undo: 'removeEdge'
+                    });
+
+                    // Edge hopping
+                    this.model.deselectVertex();
+                    this.model.selectVertex(vertex);
+                    this.trackEdgeToCursor(params.x, params.y);
+                }
+                else // if same vertex or edge exists already
+                {
+                    this.model.deselectVertex();
+                }
+            }
+            else // no vertex selected, selected it
+            {
+                this.model.selectVertex(vertex);
+                this.trackEdgeToCursor(params.x, params.y);
+            }
+        }
+        else if(selected) // no vertex clicked
+        {
+            this.model.deselectVertex();
+        }
+        else
+        {
+            const edge = this.model.edgeAt(params.x, params.y);
+            
+            if(edge) // edit edge
+            {
+                this.model.startEditingEdge(edge);
+            }
+            else if(this.model.symbols.length > 0) // symbols left? Add vertex!
+            {   
+                this.model.dispatch(this.model.userCommands,
+                { 
+                    type: 'addVertex',
+                    data: 
+                    {
+                        symbol:        this.model.peekSymbol(),
+                        x:             params.x,
+                        y:             params.y,
+                        numEdges:      0
+                    },
+                    undo: 'removeVertex'
+                });
+            }
+        }
+
+    },
+
+    dragVertex(params)
+    {
+        // locate vertex at location
+        const vertex = this.model.vertexAt(params.x, params.y);
+
+        if(vertex && !this.model.selectedVertex)
+        {
+            const offsetX = vertex.x - params.x;
+            const offsetY = vertex.y - params.y;
+
+            function stickVertexToCursor(point)
+            {
+                // Mostly visual move
+                this.model.moveVertex(vertex, point.x + offsetX, point.y + offsetY);
+            }
+
+            function releaseVertexFromCursor(point)
+            {
+                // Final movement, updates spatial information
+                this.view.onCanvasMouseDrag.detach('stickVertexToCursor');
+                this.view.onCanvasMouseUp.detach('releaseVertexFromCursor');
+                this.model.moveVertex(vertex, point.x + offsetX, point.y + offsetY);
+                this.model.updateVertexSpatial(vertex);
+            }
+
+            this.view.onCanvasMouseDrag.attach('stickVertexToCursor', stickVertexToCursor.bind(this));
+            this.view.onCanvasMouseUp.attach('releaseVertexFromCursor', releaseVertexFromCursor.bind(this));
+        }
+
+    },
+
+    removeEntity(params)
+    {
+        const vertex = this.model.vertexAt(params.x, params.y);
+
+        if(vertex) // REMOVE
+        {
+            this.model.dispatch(this.model.userCommands, 
+            {
+                type: 'removeVertex',
+                data: 
+                {
+                    symbol:       vertex.data,
+                    x:            params.x,
+                    y:            params.y,
+                    numEdges:     vertex.numEdges
+                },
+                undo: 'addVertex',
+            });
+        }
+        else
+        {
+            const edge = this.model.edgeAt(params.x, params.y);
+
+            if(edge)
+            {
+                this.model.dispatch(this.model.userCommands,
+                {
+                    type: 'removeEdge',
+                    data: 
+                    {
+                        from:   edge.from, 
+                        to:     edge.to,
+                        weight: edge.weight
+                    },
+                    undo: 'addEdge'
+                });
+            }
+        }
+
+    },
+
+    hoverEntity(params)
+    {
+        const vertex = this.model.vertexAt(params.x, params.y);
+
+        if(vertex)
+        {
+            this.model.hoverVertex(vertex);
+        }
+        else
+        {
+            const edge = this.model.edgeAt(params.x, params.y);
+
+            if(edge) this.model.hoverEdge(edge);
+            else     this.model.hoverNothing();
+        }
+
+    },
+
+    //=========== Graph Interaction Modes ===========//
 
     initAlwaysOnFeatures()
     {
         this.enableHover();
-        
-        this.view.onEdgeFormSubmitted.attach('editEdgeWeight', function(_, params)
-        {
-            let weight = Number.parseInt(params.weight);
-
-            if(!isNaN(weight))
-            {
-                weight = weight < 0 ? 0 : (weight > 20 ? 20 : weight);
-                this.model.editEdgeWeight(weight);
-                this.model.clearEdgeEdit();
-            } 
-
-        }.bind(this));
-
-        this.view.onEdgeCurveChanged.attach('edgeSpatialCurve', function(_, params)
-        {
-            const edge = this.model.adjList.getEdge(params.from, params.to);
-            edge.x = params.centerX;
-            edge.y = params.centerY;
-            edge.setBounds(); // for spatial
-            this.model.updateEdgeSpatial(edge);
-        }.bind(this));
+        this.view.onEdgeFormSubmitted.attach('editEdgeWeight', this.editEdgeWeight.bind(this));
+        this.view.onEdgeCurveChanged.attach('edgeSpatialCurve', this.edgeSpatialCurve.bind(this));
     },
 
     createMode()
@@ -120,117 +276,10 @@ Graph.prototype =
         }
 
         this.mouseEventsLogged.push('clickEntity');
-        this.view.onCanvasMouseClick.attach('clickEntity', function(_, params)
-        {
-            this.model.clearEdgeEdit();
-
-            // see if clicked on vertex here using model
-            // if clicked on vertex tell model to delete
-            const vertex   = this.model.vertexAt(params.x, params.y);
-            const selected = this.model.selectedVertex; 
-
-            if(vertex)
-            {
-                if(selected)
-                {
-                    // If not the same vertex
-                    // and edge doesnt exist
-                    // create edge
-                    if(selected.data !== vertex.data && 
-                        !this.model.adjList.edgeExists(selected.data, vertex.data))
-                    {
-                        this.model.dispatch(this.model.userCommands,
-                        {
-                            type: 'addEdge',
-                            data: 
-                            {
-                                from:   selected.data, 
-                                to:     vertex.data,
-                                weight: rand(1, 20)     
-                            },
-                            undo: 'removeEdge'
-                        });
-
-                        // Edge hopping
-                        this.model.deselectVertex();
-                        this.model.selectVertex(vertex);
-                        this.trackEdgeToCursor(params.x, params.y);
-                    }
-                    else // if same vertex or edge exists already
-                    {
-                        this.model.deselectVertex();
-                    }
-                }
-                else // no vertex selected, selected it
-                {
-                    this.model.selectVertex(vertex);
-                    this.trackEdgeToCursor(params.x, params.y);
-                }
-            }
-            else if(selected) // no vertex clicked
-            {
-                this.model.deselectVertex();
-            }
-            else
-            {
-                const edge = this.model.edgeAt(params.x, params.y);
-                
-                if(edge) // edit edge
-                {
-                    this.model.startEditingEdge(edge);
-                }
-                else if(this.model.symbols.length > 0) // symbols left? Add vertex!
-                {   
-                    this.model.dispatch(this.model.userCommands,
-                    { 
-                        type: 'addVertex',
-                        data: 
-                        {
-                            symbol:        this.model.peekSymbol(),
-                            x:             params.x,
-                            y:             params.y,
-                            numEdges:      0, 
-                            // returnSymbol:  this.returnSymbol.bind(this),   
-                            // getSymbol:     this.getSymbol.bind(this)
-                        },
-                        undo: 'removeVertex'
-                    });
-                }
-            }
-
-        }.bind(this));
+        this.view.onCanvasMouseClick.attach('clickEntity', this.clickEntity.bind(this));
         
         this.mouseEventsLogged.push('dragVertex');
-        this.view.onCanvasMouseDown.attach('dragVertex', function(_, params)
-        {
-            // locate vertex at location
-            const vertex = this.model.vertexAt(params.x, params.y);
-
-            if(vertex && !this.model.selectedVertex)
-            {
-                const offsetX = vertex.x - params.x;
-                const offsetY = vertex.y - params.y;
-
-                function stickVertexToCursor(_, point)
-                {
-                    // Mostly visual move
-                    this.model.moveVertex(vertex, point.x + offsetX, point.y + offsetY);
-                }
-
-                function releaseVertexFromCursor(_, point)
-                {
-                    // Final movement, updates spatial information
-                    this.view.onCanvasMouseDrag.detach('stickVertexToCursor');
-                    this.view.onCanvasMouseUp.detach('releaseVertexFromCursor');
-                    this.model.moveVertex(vertex, point.x + offsetX, point.y + offsetY);
-                    this.model.updateVertexSpatial(vertex);
-                }
-
-                this.view.onCanvasMouseDrag.attach('stickVertexToCursor', stickVertexToCursor.bind(this));
-                this.view.onCanvasMouseUp.attach('releaseVertexFromCursor', releaseVertexFromCursor.bind(this));
-            }
-
-        }.bind(this));
+        this.view.onCanvasMouseDown.attach('dragVertex', this.dragVertex.bind(this));
     },
 
     eraseMode()
@@ -238,81 +287,24 @@ Graph.prototype =
         this.clearMouseEvents();
         
         this.mouseEventsLogged.push('removeEntity');
-        this.view.onCanvasMouseClick.attach('removeEntity', function(_, params)
-        {
-            const vertex = this.model.vertexAt(params.x, params.y);
-
-            if(vertex) // REMOVE
-            {
-                this.model.dispatch(this.model.userCommands, 
-                {
-                    type: 'removeVertex',
-                    data: 
-                    {
-                        symbol:       vertex.data,
-                        x:            params.x,
-                        y:            params.y,
-                        numEdges:     vertex.numEdges,
-                        // returnSymbol: this.returnSymbol.bind(this),
-                        // getSymbol:    this.getSymbol.bind(this)
-                    },
-                    undo: 'addVertex',
-                });
-            }
-            else
-            {
-                const edge = this.model.edgeAt(params.x, params.y);
-
-                if(edge)
-                {
-                    this.model.dispatch(this.model.userCommands,
-                    {
-                        type: 'removeEdge',
-                        data: 
-                        {
-                            from:   edge.from, 
-                            to:     edge.to,
-                            weight: edge.weight
-                        },
-                        undo: 'addEdge'
-                    });
-                }
-            }
-
-        }.bind(this));
+        this.view.onCanvasMouseClick.attach('removeEntity', this.removeEntity.bind(this));
     },
 
     enableHover()
     {
-        this.view.onCanvasMouseMove.attach('hoverEntity', throttle(function(_, params)
-        {
-            const vertex = this.model.vertexAt(params.x, params.y);
-
-            if(vertex)
-            {
-                this.model.hoverVertex(vertex);
-            }
-            else
-            {
-                const edge = this.model.edgeAt(params.x, params.y);
-
-                if(edge) this.model.hoverEdge(edge);
-                else     this.model.hoverNothing();
-            }
-
-        }.bind(this), this.hoverThrottleDelay));
+        this.view.onCanvasMouseMove.attach('hoverEntity', throttle(this.hoverEntity.bind(this), this.hoverThrottleDelay));
     },
 
     trackEdgeToCursor(x, y)
     {
         this.model.addTrackingEdge(x, y);
 
-        function stickEdgeToCursor(_, point)
+        function stickEdgeToCursor(point)
         {
             this.model.updateTrackingEdge(point.x, point.y);
         }
 
-        function releaseEdgeFromCursor(_, point)
+        function releaseEdgeFromCursor(point)
         {
             this.view.onCanvasMouseMove.detach('stickEdgeToCursor');
             this.model.onVertexDeselected.detach('releaseEdgeFromCursor');
@@ -323,7 +315,7 @@ Graph.prototype =
         this.model.onVertexDeselected.attach('releaseEdgeFromCursor', releaseEdgeFromCursor.bind(this));
     },
 
-//====================== Methods ===========================//
+    //=========== Other ===========//
 
     save()
     {

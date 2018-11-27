@@ -6,6 +6,8 @@
  *  Unit tests for EdgeFactory.js
  */
 
+'use strict';
+
 import EdgeFactory from '../classes/graph/EdgeFactory.js';
 
 let edgeFactory, edge, adjList, mockGetVertex;

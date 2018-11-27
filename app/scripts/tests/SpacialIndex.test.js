@@ -6,6 +6,8 @@
  *  Unit tests for SpacialIndex.js
  */
 
+'use strict';
+
 import SpacialIndex from '../classes/SpacialIndex.js';
 
 // 0-99 | 100-199 | 200-299 | 300-399 | 400-499 

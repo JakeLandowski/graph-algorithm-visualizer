@@ -7,6 +7,8 @@
  *  Unit tests for AdjacencyList.js
  */
 
+ 'use strict';
+
 import AdjacencyList from '../classes/graph/AdjacencyList.js';
 
 let undirectedAdj, directedAdj, vertex, edge;

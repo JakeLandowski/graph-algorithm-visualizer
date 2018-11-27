@@ -5,6 +5,7 @@
  * 
  *  Unit tests for CommandLog.js
  */
+'use strict';
 
 import CommandLog from '../classes/CommandLog.js';
 

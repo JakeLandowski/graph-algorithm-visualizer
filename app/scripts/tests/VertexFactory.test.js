@@ -6,6 +6,8 @@
  *  Unit tests for VertexFactory.js
  */
 
+'use strict';
+
 import VertexFactory from '../classes/graph/VertexFactory.js';
 
 const vertexRadius = 30;

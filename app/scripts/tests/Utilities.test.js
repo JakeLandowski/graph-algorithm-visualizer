@@ -6,6 +6,8 @@
  *  Unit tests for Utilities.js
  */
 
+'use strict';
+
 import * as Utilities from '../utils/Utilities.js';
 
 describe('Testing rand().', () => 
