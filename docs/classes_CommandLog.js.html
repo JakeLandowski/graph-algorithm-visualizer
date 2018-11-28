@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>EdgeFactory - Documentation</title>
+    <title>classes/CommandLog.js - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -31,421 +31,118 @@
 
 <div id="main">
     
-    <h1 class="page-title">EdgeFactory</h1>
-    
-
-    
-
-
-
-
-<section>
-
-<header>
-    
-        <h2>
-        EdgeFactory
-        </h2>
-        
-    
-</header>
-
-<article>
-    
-        <div class="container-overview">
-        
-            
-
-    
-
-    <h4 class="name" id="EdgeFactory"><span class="type-signature"></span>new EdgeFactory<span class="signature">(adjacencyList)</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="classes_graph_EdgeFactory.js.html">classes/graph/EdgeFactory.js</a>, <a href="classes_graph_EdgeFactory.js.html#line94">line 94</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    <p>Factory for creating Edge objects, subscribes to a given
-AdjacencyList for querying Vertex objects for convenience.</p>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>adjacencyList</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="AdjacencyList.html">AdjacencyList</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>the AdjacencyList to query from</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-        </div>
-    
-
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-
-    
-        <h3 class="subsection-title">Methods</h3>
-
-        
-            
-
-    
-
-    <h4 class="name" id="create"><span class="type-signature"></span>create<span class="signature">(from, to, boxSize, weight)</span><span class="type-signature"> &rarr; {<a href="Edge.html">Edge</a>}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="classes_graph_EdgeFactory.js.html">classes/graph/EdgeFactory.js</a>, <a href="classes_graph_EdgeFactory.js.html#line113">line 113</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    <p>Factory function to create an Edge object.</p>
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>let adjList = new AdjacencyList();
-let edgeFactory = new EdgeFactory(adjList);
-let edge = edgeFactory.create('A', 'B', 10, 10); </code></pre>
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>from</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>the from vertex symbol</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>to</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>the to vertex symbol</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>boxSize</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>the size of the edge weight box</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>weight</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>the edge weight value</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>the created Edge object</p>
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="Edge.html">Edge</a></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-        
-    
-
-    
-
-    
-</article>
-
-</section>
+    <h1 class="page-title">classes/CommandLog.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ *  @author Jake Landowski
+ *  7/16/18
+ *  CommandLog.js
+ * 
+ *  Manages the recording of commands for undoing and redoing.
+ */
+
+'use strict';
+
+/**
+ * Class to manage recording of commands for undoing and redoing.
+ * @class
+ * @constructor
+ */
+const CommandLog = function()
+{
+    this.undoLog = [];
+    this.redoLog = [];
+};
+
+CommandLog.prototype = 
+{
+    /**
+     * Records a command for saving and future undoing, clears
+     * the redo stack.
+     * @param {object} command - command to log
+     * @throws {TypeError} if command given is not an object 
+     */
+    record(command)
+    {
+        this._assertCommandGiven(command);
+        this.undoLog.push(command);
+        this.redoLog = [];
+    },
+
+    /**
+     * Records a command for saving and future undoing, preserves
+     * the redo stack.
+     * @param {object} command - command to log
+     * @throws {TypeError} if command given is not an object 
+     */
+    recordPreserveRedo(command)
+    {
+        this._assertCommandGiven(command);
+        this.undoLog.push(command);
+    },
+
+    /**
+     * Returns the last recorded command, and
+     * if there was one, record it for future redos.
+     * @returns {object} the last recorded command
+     */
+    undo() 
+    {
+        const command = this.undoLog.pop();
+        if(command) this.redoLog.push(command);
+        return command;
+    },
+    
+    /**
+     * Returns the last undone command.
+     * @returns {object} the last undone command 
+     */
+    redo()
+    {
+        return this.redoLog.pop();
+    },
+
+    /**
+     * Stringifies this CommandLog for saving.
+     * @returns {string} the stringified data
+     */
+    serialize()
+    {
+        return JSON.stringify(this);
+    },
+
+    /**
+     * Restores the state of this CommandLog 
+     * from the given stringified CommandLog.
+     * @param {string} jsonData 
+     */
+    parse(jsonData)
+    {
+        const data = JSON.parse(jsonData);
+        this.undoLog = data.undoLog;
+        this.redoLog = data.redoLog;
+    },
+
+    //=========== Private ===========//
+
+    _assertCommandGiven(command)
+    {
+        if(typeof command !== 'object')
+            throw new TypeError('Recorded Command in CommandLog was not an object.');
+    }
+};
+
+export default CommandLog;</code></pre>
+        </article>
+    </section>
 
 
 

@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>EdgeFactory - Documentation</title>
+    <title>classes/Event.js - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -31,421 +31,113 @@
 
 <div id="main">
     
-    <h1 class="page-title">EdgeFactory</h1>
-    
-
-    
-
-
-
-
-<section>
-
-<header>
-    
-        <h2>
-        EdgeFactory
-        </h2>
-        
-    
-</header>
-
-<article>
-    
-        <div class="container-overview">
-        
-            
-
-    
-
-    <h4 class="name" id="EdgeFactory"><span class="type-signature"></span>new EdgeFactory<span class="signature">(adjacencyList)</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="classes_graph_EdgeFactory.js.html">classes/graph/EdgeFactory.js</a>, <a href="classes_graph_EdgeFactory.js.html#line94">line 94</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    <p>Factory for creating Edge objects, subscribes to a given
-AdjacencyList for querying Vertex objects for convenience.</p>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>adjacencyList</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="AdjacencyList.html">AdjacencyList</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>the AdjacencyList to query from</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-        </div>
-    
-
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-
-    
-        <h3 class="subsection-title">Methods</h3>
-
-        
-            
-
-    
-
-    <h4 class="name" id="create"><span class="type-signature"></span>create<span class="signature">(from, to, boxSize, weight)</span><span class="type-signature"> &rarr; {<a href="Edge.html">Edge</a>}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="classes_graph_EdgeFactory.js.html">classes/graph/EdgeFactory.js</a>, <a href="classes_graph_EdgeFactory.js.html#line113">line 113</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    <p>Factory function to create an Edge object.</p>
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>let adjList = new AdjacencyList();
-let edgeFactory = new EdgeFactory(adjList);
-let edge = edgeFactory.create('A', 'B', 10, 10); </code></pre>
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>from</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>the from vertex symbol</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>to</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>the to vertex symbol</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>boxSize</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>the size of the edge weight box</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>weight</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>the edge weight value</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>the created Edge object</p>
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="Edge.html">Edge</a></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-        
-    
-
-    
-
-    
-</article>
-
-</section>
+    <h1 class="page-title">classes/Event.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ *  @author Jake Landowski
+ *  7/16/18
+ *  Event.js
+ * 
+ *  For creating custom events to be used by Model.js and View.js
+ */
+
+'use strict';
+
+/**
+ * Creates a new Event for others to observe and be notified.
+ * @class
+ * @constructor
+ * @param {object} sender - the object/class creating this
+ */
+const Event = function(sender)
+{
+    this.sender = sender;
+    this.listeners = Object.create(null);
+    this.enable();
+    this.canNotify = true;
+};
+
+Event.prototype = 
+{
+    /**
+     * Attaches a callback with an associatad name.
+     * @param {string} name - the name to associate 
+     * with the callback
+     * @param {function} listener - the callback to 
+     * execute
+     */
+    attach(name, listener)
+    {
+        this.listeners[name] = listener;
+    },
+
+    /**
+     * Removes a callback identified by a name.
+     * @param {string} name - the name associated with 
+     * a callback 
+     */
+    detach(name)
+    {
+        if(this.listeners[name]) delete this.listeners[name];
+    },
+
+    /**
+     * Notifies all listeners with given data arguments,
+     * executes all callbacks.
+     * @param {object} args - the data to send to listeners 
+     */
+    notify(args)
+    {
+        if(this.canNotify)
+        {
+            if(this.enabled)
+            {
+                for(const listener in this.listeners)
+                {
+                    this.listeners[listener](this.sender, args);
+                }
+            }
+        }
+        else this.canNotify = true;
+    },
+
+    /**
+     * Disables this event, preventing it from notifying
+     * listeners.
+     */
+    disable()
+    {
+        this.enabled = false;
+    },
+
+    /**
+     * Enables this event, allowing it to notify listeners.
+     */
+    enable()
+    {
+        this.enabled = true;
+    },
+
+    /**
+     * Prevents the next call to notify() from doing anything.
+     */
+    stopNextNotify()
+    {
+        this.canNotify = false;
+    }
+};
+
+export default Event;</code></pre>
+        </article>
+    </section>
 
 
 

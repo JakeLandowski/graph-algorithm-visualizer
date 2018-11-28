@@ -1,9 +1,13 @@
 {
 	"scripts": {
-		"test": "jest"
+		"test": "jest",
+        "docs": "jsdoc -r app -d docs",
+        "generate-docs": "node_modules/.bin/jsdoc -c jsdoc.json",
+        "coverage-report": "node_modules/jest/bin/jest.js --coverage" 
 	},
 	"dependencies": {
 		"babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
-		"jest": "^23.6.0"
+		"docdash": "^1.0.0",
+        "jest": "^23.6.0"
 	}
 }

@@ -9,7 +9,6 @@
 'use strict';
 
 import Anime from './anime.js';
-import Util from '../utils/Util.js';
 
 let primary = "#6ba2dc";
 let secondary = "#2054a0";
@@ -32,7 +31,13 @@ export default {
         let toolTipButton = document.getElementById('question-mark');
         let buttons = document.getElementsByClassName('buttons');
         let tools = document.getElementsByClassName('toolMenu');
+        let newGraph = document.getElementsByClassName('newGraphButton');
+        let createDialog = document.getElementById('create-dialog');
         //alert(localStorage.getItem("graph"));
+
+        newGraph.onclick = function () {
+            createDialog.style.display = "block";
+        };
 
         menuButton.onclick = function () {
             if (menuShown) {

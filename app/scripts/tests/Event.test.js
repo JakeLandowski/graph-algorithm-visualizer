@@ -6,6 +6,8 @@
  *  Unit tests for Event.js
  */
 
+'use strict';
+
 import Event from '../classes/Event.js';
 
 let event, sender;
@@ -50,7 +52,7 @@ describe('Testing Event class', () =>
 
     test('notify() works', () => 
     {
-        const args = {};
+        const args = {x:5};
 
         const mockCallbacks = 
         [
@@ -67,7 +69,7 @@ describe('Testing Event class', () =>
         mockCallbacks.forEach((callback) => 
         {
             expect(callback).toHaveBeenCalledTimes(1);
-            expect(callback).toHaveBeenCalledWith(sender, args);
+            expect(callback).toHaveBeenCalledWith(args, sender);
         });
     });
 

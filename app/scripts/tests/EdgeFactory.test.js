@@ -6,6 +6,8 @@
  *  Unit tests for EdgeFactory.js
  */
 
+'use strict';
+
 import EdgeFactory from '../classes/graph/EdgeFactory.js';
 
 let edgeFactory, edge, adjList, mockGetVertex;
@@ -26,31 +28,66 @@ beforeEach(() =>
     edge = edgeFactory.create('A', 'B', 10, 10);
 });
 
-describe('Testing Edge Class', () =>
+describe('Testing edge construction.', () =>
 {
-    test('construction works', () => 
+    test('Default construction works.', () => 
+    {
+        const defaultEdge = edgeFactory.create('B', 'A');
+        expect(defaultEdge.boxSize).toBe(0);
+        expect(defaultEdge.weight).toBe(0);
+    });
+
+    test(`Factory's internal adjacency list is the one passed in.`, () => 
     {
         expect(edgeFactory.adjList).toBe(adjList);
+    });
+
+    test(`Edge's parameters are the ones passed to the factory create() call.`, () => 
+    {
         expect(edge.from).toBe('A');
         expect(edge.to).toBe('B');
         expect(edge.boxSize).toBe(10);
         expect(edge.weight).toBe(10);
-        expect(typeof edge.x).toBe('number');
-        expect(typeof edge.y).toBe('number');
+    });
+
+    test('Center, upperLeft, and lowerRight were set with correct calculations.', () => 
+    {
+        expect(edge.x).toBe(5);
+        expect(edge.y).toBe(5);
         expect(typeof edge.upperLeft).toBe('object');
         expect(typeof edge.lowerRight).toBe('object');
-        expect(typeof edge.upperLeft.x).toBe('number');
-        expect(typeof edge.upperLeft.y).toBe('number');
-        expect(typeof edge.lowerRight.x).toBe('number');
-        expect(typeof edge.lowerRight.y).toBe('number');
+        expect(edge.upperLeft.x).toBe(-5);
+        expect(edge.upperLeft.y).toBe(-5);
+        expect(edge.lowerRight.x).toBe(15);
+        expect(edge.lowerRight.y).toBe(15);
+    });
+
+    test(`Internal adjacency list's getVertex() method was called 4 times.`, () => 
+    {
         expect(mockGetVertex).toBeCalledTimes(4);
-    }); 
+    });
+
     
-    test('setPoints() works', () => 
+});
+
+describe('Testing getters.', () => 
+{
+    test('toVertex and fromVertex getter properties return vertices correctly.', () => 
+    {
+        expect(edge.toVertex.x).toBe(5);
+        expect(edge.toVertex.y).toBe(5);
+        expect(edge.fromVertex.x).toBe(5);
+        expect(edge.fromVertex.y).toBe(5);
+    });
+});
+
+describe('Testing setters.', () => 
+{
+    test('setPoints() calls internal method setBounds() 1 time.', () => 
     {
         const mockSetBounds = jest.fn();
-        edge._setBounds = mockSetBounds
+        edge.setBounds = mockSetBounds
         edge.setPoints();
         expect(mockSetBounds).toBeCalledTimes(1);
-    }); 
+    });
 });

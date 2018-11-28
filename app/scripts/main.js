@@ -23,10 +23,12 @@ let white = "#fff";
 let eduModeActive = false;
 let elementIds = ['addButton','addEdgeButton','deleteButton'];
 let functionArray = ['createMode','edgeMode','eraseMode'];
-let graph = newGraph({undirected: false});
+let graph = newGraph({undirected: true});
 let newBtn = document.getElementsByClassName('newButton');
 let saveBtn  = document.getElementsByClassName('saveButton');
 let loadBtn  = document.getElementsByClassName('loadButton');
+let undirected  = document.getElementById('undirected');
+let directed  = document.getElementById('directed');
 
 addFunctionality();
 setHighlights();
@@ -104,8 +106,19 @@ function swapColors(graph,primary,secondary,bg) {
 
 
 for(let i = 0; i<newBtn.length; i++) {
-    newBtn[i].addEventListener('click', function(){graph = newGraph({undirected: true})});
+    newBtn[i].addEventListener('click', function(){document.getElementById('create-dialog').style.display = "block"});
 }
+
+directed.onclick = function () {
+    graph = newGraph({undirected: false});
+    document.getElementById('create-dialog').style.display = "none";
+};
+
+undirected.onclick = function () {
+    graph = newGraph({undirected: true});
+    document.getElementById('create-dialog').style.display = "none";
+};
+
 
 for(let i = 0; i<saveBtn.length; i++) {
     saveBtn[i].addEventListener('click', function(){graph.save();});

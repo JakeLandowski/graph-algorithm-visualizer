@@ -1,23 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    
     <meta charset="utf-8">
-    <title>JSDoc: Class: AdjacencyList</title>
-
-    <script src="scripts/prettify/prettify.js"> </script>
-    <script src="scripts/prettify/lang-css.js"> </script>
+    <title>AdjacencyList - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
-    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-
 <body>
 
-<div id="main">
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
 
-    <h1 class="page-title">Class: AdjacencyList</h1>
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AdjacencyList.html">AdjacencyList</a><ul class='methods'><li data-type='method'><a href="AdjacencyList.html#deleteEdge">deleteEdge</a></li><li data-type='method'><a href="AdjacencyList.html#deleteVertex">deleteVertex</a></li><li data-type='method'><a href="AdjacencyList.html#edgeExists">edgeExists</a></li><li data-type='method'><a href="AdjacencyList.html#forEachEdge">forEachEdge</a></li><li data-type='method'><a href="AdjacencyList.html#forEachVertex">forEachVertex</a></li><li data-type='method'><a href="AdjacencyList.html#getEdge">getEdge</a></li><li data-type='method'><a href="AdjacencyList.html#getVertex">getVertex</a></li><li data-type='method'><a href="AdjacencyList.html#insertEdge">insertEdge</a></li><li data-type='method'><a href="AdjacencyList.html#insertVertex">insertVertex</a></li><li data-type='method'><a href="AdjacencyList.html#vertexExists">vertexExists</a></li></ul></li><li><a href="CommandLog.html">CommandLog</a><ul class='methods'><li data-type='method'><a href="CommandLog.html#parse">parse</a></li><li data-type='method'><a href="CommandLog.html#record">record</a></li><li data-type='method'><a href="CommandLog.html#recordPreserveRedo">recordPreserveRedo</a></li><li data-type='method'><a href="CommandLog.html#redo">redo</a></li><li data-type='method'><a href="CommandLog.html#serialize">serialize</a></li><li data-type='method'><a href="CommandLog.html#undo">undo</a></li></ul></li><li><a href="Edge.html">Edge</a><ul class='methods'><li data-type='method'><a href="Edge.html#setPoints">setPoints</a></li></ul></li><li><a href="EdgeFactory.html">EdgeFactory</a><ul class='methods'><li data-type='method'><a href="EdgeFactory.html#create">create</a></li></ul></li><li><a href="Event.html">Event</a><ul class='methods'><li data-type='method'><a href="Event.html#attach">attach</a></li><li data-type='method'><a href="Event.html#detach">detach</a></li><li data-type='method'><a href="Event.html#disable">disable</a></li><li data-type='method'><a href="Event.html#enable">enable</a></li><li data-type='method'><a href="Event.html#notify">notify</a></li><li data-type='method'><a href="Event.html#stopNextNotify">stopNextNotify</a></li></ul></li><li><a href="SpacialIndex.html">SpacialIndex</a><ul class='methods'><li data-type='method'><a href="SpacialIndex.html#add">add</a></li><li data-type='method'><a href="SpacialIndex.html#cellCol">cellCol</a></li><li data-type='method'><a href="SpacialIndex.html#cellFromIndex">cellFromIndex</a></li><li data-type='method'><a href="SpacialIndex.html#cellId">cellId</a></li><li data-type='method'><a href="SpacialIndex.html#cellRow">cellRow</a></li><li data-type='method'><a href="SpacialIndex.html#getEntity">getEntity</a></li><li data-type='method'><a href="SpacialIndex.html#remove">remove</a></li><li data-type='method'><a href="SpacialIndex.html#update">update</a></li></ul></li><li><a href="Vertex.html">Vertex</a><ul class='methods'><li data-type='method'><a href="Vertex.html#forEachEdge">forEachEdge</a></li><li data-type='method'><a href="Vertex.html#forEachIncomingEdge">forEachIncomingEdge</a></li><li data-type='method'><a href="Vertex.html#forEachOutgoingEdge">forEachOutgoingEdge</a></li><li data-type='method'><a href="Vertex.html#pointFromNeighbor">pointFromNeighbor</a></li><li data-type='method'><a href="Vertex.html#pointToNeighbor">pointToNeighbor</a></li><li data-type='method'><a href="Vertex.html#setPoints">setPoints</a></li><li data-type='method'><a href="Vertex.html#unregisterFromNeighbor">unregisterFromNeighbor</a></li><li data-type='method'><a href="Vertex.html#unregisterToNeighbor">unregisterToNeighbor</a></li></ul></li><li><a href="VertexFactory.html">VertexFactory</a><ul class='methods'><li data-type='method'><a href="VertexFactory.html#create">create</a></li></ul></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">AdjacencyList</h1>
+    
 
     
 
@@ -28,29 +43,77 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>AdjacencyList<span class="signature">(undirected)</span><span class="type-signature"></span></h2>
+        <h2>
+        AdjacencyList
+        </h2>
         
     
 </header>
 
 <article>
-    <div class="container-overview">
     
+        <div class="container-overview">
         
+            
 
     
 
-    
     <h4 class="name" id="AdjacencyList"><span class="type-signature"></span>new AdjacencyList<span class="signature">(undirected)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="classes_graph_AdjacencyList.js.html">classes/graph/AdjacencyList.js</a>, <a href="classes_graph_AdjacencyList.js.html#line17">line 17</a>
+    </li></ul></dd>
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
 
 
 
 <div class="description">
-    Abstraction of an adjacency list for the Graph class
+    <p>Abstraction of an adjacency list for the Graph class</p>
 </div>
+
+
 
 
 
@@ -101,7 +164,7 @@
 
             
 
-            <td class="description last">whether the AdjacencyList is undirected</td>
+            <td class="description last"><p>whether the AdjacencyList is undirected</p></td>
         </tr>
 
     
@@ -113,8 +176,18 @@
 
 
 
-<dl class="details">
 
+
+
+
+
+
+
+
+
+
+        
+        </div>
     
 
     
@@ -123,65 +196,7 @@
 
     
 
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="classes_graph_AdjacencyList.js.html">classes/graph/AdjacencyList.js</a>, <a href="classes_graph_AdjacencyList.js.html#line17">line 17</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    </div>
-
-    
-
-    
-
-    
-
-    
-
-    
+     
 
     
 
@@ -195,22 +210,75 @@
 
     
 
-    
     <h4 class="name" id="deleteEdge"><span class="type-signature"></span>deleteEdge<span class="signature">(from, to)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="classes_graph_AdjacencyList.js.html">classes/graph/AdjacencyList.js</a>, <a href="classes_graph_AdjacencyList.js.html#line148">line 148</a>
+    </li></ul></dd>
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
 
 
 
 <div class="description">
-    Deletes all references being used to represent this edge.
+    <p>Deletes all references being used to represent this edge.</p>
 </div>
 
 
 
 
 
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>adjList.insertEdge('A', 'B');
+adjList.edgeExists('A', 'B'); // true
+adjList.deleteEdge('A', 'B');
+adjList.edgeExists('A', 'B'); // false</code></pre>
 
 
 
@@ -256,7 +324,7 @@
 
             
 
-            <td class="description last">data value of the from vertex</td>
+            <td class="description last"><p>data value of the from vertex</p></td>
         </tr>
 
     
@@ -279,7 +347,7 @@
 
             
 
-            <td class="description last">data value of the to vertex</td>
+            <td class="description last"><p>data value of the to vertex</p></td>
         </tr>
 
     
@@ -291,45 +359,6 @@
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="classes_graph_AdjacencyList.js.html">classes/graph/AdjacencyList.js</a>, <a href="classes_graph_AdjacencyList.js.html#line148">line 148</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
 
 
 
@@ -337,22 +366,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>adjList.insertEdge('A', 'B');
-adjList.edgeExists('A', 'B'); // true
-adjList.deleteEdge('A', 'B');
-adjList.edgeExists('A', 'B'); // false</code></pre>
 
 
 
@@ -361,105 +374,14 @@ adjList.edgeExists('A', 'B'); // false</code></pre>
 
     
 
-    
     <h4 class="name" id="deleteVertex"><span class="type-signature"></span>deleteVertex<span class="signature">(symbol)</span><span class="type-signature"></span></h4>
-    
 
     
-
-
-
-<div class="description">
-    Deletes the reference to a stored Vertex object
-with a given symbol.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>symbol</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">the symbol of the stored Vertex</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
 
 
 
 
 <dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
 
     
     <dt class="tag-source">Source:</dt>
@@ -473,15 +395,40 @@ with a given symbol.
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
 </dl>
 
 
 
 
 
-
-
-
+<div class="description">
+    <p>Deletes the reference to a stored Vertex object
+with a given symbol.</p>
+</div>
 
 
 
@@ -501,28 +448,148 @@ console.log(adjList.vertexExists('A')); // false </code></pre>
 
 
 
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>symbol</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>the symbol of the stored Vertex</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         
             
 
     
 
-    
     <h4 class="name" id="edgeExists"><span class="type-signature"></span>edgeExists<span class="signature">(from, to)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="classes_graph_AdjacencyList.js.html">classes/graph/AdjacencyList.js</a>, <a href="classes_graph_AdjacencyList.js.html#line172">line 172</a>
+    </li></ul></dd>
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
 
 
 
 <div class="description">
-    Tests to see if an Edge object with the given to and from
-vertex symbols is stored.
+    <p>Tests to see if an Edge object with the given to and from
+vertex symbols is stored.</p>
 </div>
 
 
 
 
 
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>// for insertEdge() to work
+adjList.insertVertex(new Vertex('A', 0, 0));
+adjList.insertVertex(new Vertex('B', 0, 0));
+//
+console.log(adjList.edgeExists('A', 'B')); // false
+adjList.insertEdge(new Edge('A', 'B'));
+console.log(adjList.edgeExists('A', 'B')); // true</code></pre>
 
 
 
@@ -568,7 +635,7 @@ vertex symbols is stored.
 
             
 
-            <td class="description last">the from vertex symbol</td>
+            <td class="description last"><p>the from vertex symbol</p></td>
         </tr>
 
     
@@ -591,57 +658,13 @@ vertex symbols is stored.
 
             
 
-            <td class="description last">the to vertex symbol</td>
+            <td class="description last"><p>the to vertex symbol</p></td>
         </tr>
 
     
     </tbody>
 </table>
 
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="classes_graph_AdjacencyList.js.html">classes/graph/AdjacencyList.js</a>, <a href="classes_graph_AdjacencyList.js.html#line172">line 172</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
 
 
 
@@ -659,12 +682,12 @@ vertex symbols is stored.
 
         
 <div class="param-desc">
-    true if the Edge is stored
+    <p>true if the Edge is stored</p>
 </div>
 
 
 
-<dl>
+<dl class="param-type">
     <dt>
         Type
     </dt>
@@ -679,124 +702,19 @@ vertex symbols is stored.
     
 
 
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>// for insertEdge() to work
-adjList.insertVertex(new Vertex('A', 0, 0));
-adjList.insertVertex(new Vertex('B', 0, 0));
-//
-console.log(adjList.edgeExists('A', 'B')); // false
-adjList.insertEdge(new Edge('A', 'B'));
-console.log(adjList.edgeExists('A', 'B')); // true</code></pre>
-
-
-
         
             
 
     
 
-    
     <h4 class="name" id="forEachEdge"><span class="type-signature"></span>forEachEdge<span class="signature">(action)</span><span class="type-signature"></span></h4>
-    
 
     
-
-
-
-<div class="description">
-    Executes a given function for each stored Edge object.
-Gets passed the Edge Object.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>action</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">the function to execute</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
 
 
 
 
 <dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
 
     
     <dt class="tag-source">Source:</dt>
@@ -810,15 +728,40 @@ Gets passed the Edge Object.
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
 </dl>
 
 
 
 
 
-
-
-
+<div class="description">
+    <p>Executes a given function for each stored Edge object.
+Gets passed the Edge Object.</p>
+</div>
 
 
 
@@ -837,28 +780,145 @@ Gets passed the Edge Object.
 
 
 
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>action</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>the function to execute</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         
             
 
     
 
-    
     <h4 class="name" id="forEachVertex"><span class="type-signature"></span>forEachVertex<span class="signature">(action)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="classes_graph_AdjacencyList.js.html">classes/graph/AdjacencyList.js</a>, <a href="classes_graph_AdjacencyList.js.html#line188">line 188</a>
+    </li></ul></dd>
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
 
 
 
 <div class="description">
-    Executes a given function for each stored Vertex object.
-Gets passed the Vertex Object.
+    <p>Executes a given function for each stored Vertex object.
+Gets passed the Vertex Object.</p>
 </div>
 
 
 
 
 
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>adjList.forEachVertex((vertex) => 
+{
+    // do stuff with vertex
+}); </code></pre>
 
 
 
@@ -904,7 +964,7 @@ Gets passed the Vertex Object.
 
             
 
-            <td class="description last">the function to execute</td>
+            <td class="description last"><p>the function to execute</p></td>
         </tr>
 
     
@@ -916,37 +976,59 @@ Gets passed the Vertex Object.
 
 
 
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="getEdge"><span class="type-signature"></span>getEdge<span class="signature">(from, to)</span><span class="type-signature"> &rarr; {<a href="Edge.html">Edge</a>}</span></h4>
+
+    
+
+
+
+
 <dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="classes_graph_AdjacencyList.js.html">classes/graph/AdjacencyList.js</a>, <a href="classes_graph_AdjacencyList.js.html#line188">line 188</a>
+        <a href="classes_graph_AdjacencyList.js.html">classes/graph/AdjacencyList.js</a>, <a href="classes_graph_AdjacencyList.js.html#line133">line 133</a>
     </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
     
 
     
@@ -960,44 +1042,12 @@ Gets passed the Vertex Object.
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>adjList.forEachVertex((vertex) => 
-{
-    // do stuff with vertex
-}); </code></pre>
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="getEdge"><span class="type-signature"></span>getEdge<span class="signature">(from, to)</span><span class="type-signature"> &rarr; {<a href="Edge.html">Edge</a>}</span></h4>
-    
-
-    
-
-
-
 <div class="description">
-    Retrieve a stored Edge object from the given
-from and to vertex symbols as its key.
+    <p>Retrieve a stored Edge object from the given
+from and to vertex symbols as its key.</p>
 </div>
+
+
 
 
 
@@ -1048,7 +1098,7 @@ from and to vertex symbols as its key.
 
             
 
-            <td class="description last">the from vertex symbol</td>
+            <td class="description last"><p>the from vertex symbol</p></td>
         </tr>
 
     
@@ -1071,57 +1121,13 @@ from and to vertex symbols as its key.
 
             
 
-            <td class="description last">the to vertex symbol</td>
+            <td class="description last"><p>the to vertex symbol</p></td>
         </tr>
 
     
     </tbody>
 </table>
 
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="classes_graph_AdjacencyList.js.html">classes/graph/AdjacencyList.js</a>, <a href="classes_graph_AdjacencyList.js.html#line133">line 133</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
 
 
 
@@ -1139,12 +1145,12 @@ from and to vertex symbols as its key.
 
         
 <div class="param-desc">
-    the Edge object stored or undefined
+    <p>the Edge object stored or undefined</p>
 </div>
 
 
 
-<dl>
+<dl class="param-type">
     <dt>
         Type
     </dt>
@@ -1159,30 +1165,80 @@ from and to vertex symbols as its key.
     
 
 
-
-
-
         
             
 
     
 
-    
     <h4 class="name" id="getVertex"><span class="type-signature"></span>getVertex<span class="signature">(symbol)</span><span class="type-signature"> &rarr; {<a href="Vertex.html">Vertex</a>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="classes_graph_AdjacencyList.js.html">classes/graph/AdjacencyList.js</a>, <a href="classes_graph_AdjacencyList.js.html#line63">line 63</a>
+    </li></ul></dd>
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
 
 
 
 <div class="description">
-    Retrieves the stored Vertex object with the given symbol as a key.
+    <p>Retrieves the stored Vertex object with the given symbol as a key.</p>
 </div>
 
 
 
 
 
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>let vertex = new Vertex('A', 0, 0);
+adjList.insertVertex(vertex);
+let sameVertex = adjList.getVertex('A');
+console.log(vertex === sameVertex); // true   </code></pre>
 
 
 
@@ -1228,57 +1284,13 @@ from and to vertex symbols as its key.
 
             
 
-            <td class="description last">the symbol of the wanted Vertex</td>
+            <td class="description last"><p>the symbol of the wanted Vertex</p></td>
         </tr>
 
     
     </tbody>
 </table>
 
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="classes_graph_AdjacencyList.js.html">classes/graph/AdjacencyList.js</a>, <a href="classes_graph_AdjacencyList.js.html#line63">line 63</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
 
 
 
@@ -1296,12 +1308,12 @@ from and to vertex symbols as its key.
 
         
 <div class="param-desc">
-    the stored Vertex object with this symbol or undefined
+    <p>the stored Vertex object with this symbol or undefined</p>
 </div>
 
 
 
-<dl>
+<dl class="param-type">
     <dt>
         Type
     </dt>
@@ -1316,40 +1328,94 @@ from and to vertex symbols as its key.
     
 
 
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>let vertex = new Vertex('A', 0, 0);
-adjList.insertVertex(vertex);
-let sameVertex = adjList.getVertex('A');
-console.log(vertex === sameVertex); // true   </code></pre>
-
-
-
         
             
 
     
 
-    
     <h4 class="name" id="insertEdge"><span class="type-signature"></span>insertEdge<span class="signature">(edge)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="classes_graph_AdjacencyList.js.html">classes/graph/AdjacencyList.js</a>, <a href="classes_graph_AdjacencyList.js.html#line109">line 109</a>
+    </li></ul></dd>
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
 
 
 
 <div class="description">
-    Inserts an Edge object, will access the stored to and 
+    <p>Inserts an Edge object, will access the stored to and 
 from vertices for this edge and have them reference each other.
-If undirected, will register this edge in both directions.
+If undirected, will register this edge in both directions.</p>
 </div>
 
 
 
 
 
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>let adjList = new AdjacencyList(false); // directed
+//
+let vertexOne = new Vertex('A', 0, 0);
+let vertexTwo = new Vertex('B', 0, 0);
+adjList.insertVertex(vertexOne);
+adjList.insertVertex(vertexTwo);
+//
+let edge = new Edge('A', 'B');
+adjList.insertEdge(edge);
+//
+console.log(adjList.getEdge('A', 'B')); // Edge {from: "A", to: "B"}
+console.log(vertexOne.toNeighbors); // {"B" : vertexTwo}
+console.log(vertexTwo.fromNeighbors); // {"A" : vertexOne}
+//
+let invalidEdge = new Edge('A', 'C');
+adjList.insert(invalidEdge); // throw ReferenceError </code></pre>
 
 
 
@@ -1395,57 +1461,13 @@ If undirected, will register this edge in both directions.
 
             
 
-            <td class="description last">the Edge object to insert</td>
+            <td class="description last"><p>the Edge object to insert</p></td>
         </tr>
 
     
     </tbody>
 </table>
 
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="classes_graph_AdjacencyList.js.html">classes/graph/AdjacencyList.js</a>, <a href="classes_graph_AdjacencyList.js.html#line109">line 109</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
 
 
 
@@ -1464,13 +1486,13 @@ If undirected, will register this edge in both directions.
 <dl>
     <dt>
         <div class="param-desc">
-        if the AdjacencyList doesn't have
-the edge's to and from vertices stored
+        <p>if the AdjacencyList doesn't have
+the edge's to and from vertices stored</p>
         </div>
     </dt>
     <dd></dd>
     <dt>
-        <dl>
+        <dl class="param-type">
             <dt>
                 Type
             </dt>
@@ -1491,50 +1513,78 @@ the edge's to and from vertices stored
 
 
 
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>let adjList = new AdjacencyList(false); // directed
-//
-let vertexOne = new Vertex('A', 0, 0);
-let vertexTwo = new Vertex('B', 0, 0);
-adjList.insertVertex(vertexOne);
-adjList.insertVertex(vertexTwo);
-//
-let edge = new Edge('A', 'B');
-adjList.insertEdge(edge);
-//
-console.log(adjList.getEdge('A', 'B')); // Edge {from: "A", to: "B"}
-console.log(vertexOne.toNeighbors); // {"B" : vertexTwo}
-console.log(vertexTwo.fromNeighbors); // {"A" : vertexOne}
-//
-let invalidEdge = new Edge('A', 'C');
-adjList.insert(invalidEdge); // throw ReferenceError </code></pre>
-
-
-
         
             
 
     
 
-    
     <h4 class="name" id="insertVertex"><span class="type-signature"></span>insertVertex<span class="signature">(vertex)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="classes_graph_AdjacencyList.js.html">classes/graph/AdjacencyList.js</a>, <a href="classes_graph_AdjacencyList.js.html#line48">line 48</a>
+    </li></ul></dd>
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
 
 
 
 <div class="description">
-    Inserts a Vertex object using its symbol as a key.
+    <p>Inserts a Vertex object using its symbol as a key.</p>
 </div>
 
 
 
 
 
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>let vertex = new Vertex('A', 0, 0);
+adjList.insertVertex(vertex);</code></pre>
 
 
 
@@ -1580,7 +1630,7 @@ adjList.insert(invalidEdge); // throw ReferenceError </code></pre>
 
             
 
-            <td class="description last">the Vertex object to insert</td>
+            <td class="description last"><p>the Vertex object to insert</p></td>
         </tr>
 
     
@@ -1592,37 +1642,59 @@ adjList.insert(invalidEdge); // throw ReferenceError </code></pre>
 
 
 
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="vertexExists"><span class="type-signature"></span>vertexExists<span class="signature">(symbol)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+
 <dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="classes_graph_AdjacencyList.js.html">classes/graph/AdjacencyList.js</a>, <a href="classes_graph_AdjacencyList.js.html#line48">line 48</a>
+        <a href="classes_graph_AdjacencyList.js.html">classes/graph/AdjacencyList.js</a>, <a href="classes_graph_AdjacencyList.js.html#line35">line 35</a>
     </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
     
 
     
@@ -1636,9 +1708,9 @@ adjList.insert(invalidEdge); // throw ReferenceError </code></pre>
 
 
 
-
-
-
+<div class="description">
+    <p>Tests if a vertex indentified by a given symbol exists.</p>
+</div>
 
 
 
@@ -1650,32 +1722,9 @@ adjList.insert(invalidEdge); // throw ReferenceError </code></pre>
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>let vertex = new Vertex('A', 0, 0);
-adjList.insertVertex(vertex);</code></pre>
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="vertexExists"><span class="type-signature"></span>vertexExists<span class="signature">(symbol)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Tests if a vertex indentified by a given symbol exists.
-</div>
-
-
-
-
-
+    <pre class="prettyprint"><code>adjList.insertVertex('A');
+adjList.vertexExists('A'); // true
+adjList.vertexExists('B'); // false</code></pre>
 
 
 
@@ -1721,57 +1770,13 @@ adjList.insertVertex(vertex);</code></pre>
 
             
 
-            <td class="description last">symbol for this vertex</td>
+            <td class="description last"><p>symbol for this vertex</p></td>
         </tr>
 
     
     </tbody>
 </table>
 
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="classes_graph_AdjacencyList.js.html">classes/graph/AdjacencyList.js</a>, <a href="classes_graph_AdjacencyList.js.html#line35">line 35</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
 
 
 
@@ -1789,12 +1794,12 @@ adjList.insertVertex(vertex);</code></pre>
 
         
 <div class="param-desc">
-    true if this vertex exists
+    <p>true if this vertex exists</p>
 </div>
 
 
 
-<dl>
+<dl class="param-type">
     <dt>
         Type
     </dt>
@@ -1807,16 +1812,6 @@ adjList.insertVertex(vertex);</code></pre>
 </dl>
 
     
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>adjList.insertVertex('A');
-adjList.vertexExists('A'); // true
-adjList.vertexExists('B'); // false</code></pre>
-
 
 
         
@@ -1832,19 +1827,19 @@ adjList.vertexExists('B'); // false</code></pre>
 
 
 
+    
+    
 </div>
-
-<nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AdjacencyList.html">AdjacencyList</a></li><li><a href="Edge.html">Edge</a></li><li><a href="EdgeFactory.html">EdgeFactory</a></li><li><a href="Vertex.html">Vertex</a></li><li><a href="VertexFactory.html">VertexFactory</a></li></ul>
-</nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sat Nov 10 2018 23:49:38 GMT-0800 (PST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
-<script> prettyPrint(); </script>
-<script src="scripts/linenumber.js"> </script>
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+
+
 </body>
 </html>

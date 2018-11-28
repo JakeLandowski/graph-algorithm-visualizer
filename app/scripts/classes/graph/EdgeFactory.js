@@ -1,12 +1,12 @@
 /**
- *  @author Jake Landowski
- *  7/30/18
- *  EdgeFactory.js
- * 
- *  Represents the data structure for the Edge class..
+ * @file EdgeFactory.js : Represents the data structure for the Edge class..
+ * @author Jake Landowski <jakelandowski@gmail.com>
+ * 7/30/18
  */
 
 'use strict';
+
+import { nonEnumerableProperty } from '../../utils/Utilities.js';
 
 /**
  * Object to represent Edges in the Graph class.
@@ -32,7 +32,7 @@ const Edge = function(from, to, boxSize, weight, adjList)
 Edge.prototype = 
 {
     /**
-     * Sets the center point x and y based on the position
+     * Updates the center point x and y based on the position
      * of the from and to vertices.
      * @example
      * edge.setPoints();
@@ -42,7 +42,16 @@ Edge.prototype =
         // HitBox Coordinates
         this.x = (this.fromVertex.x + this.toVertex.x) / 2;
         this.y = (this.fromVertex.y + this.toVertex.y) / 2;
-        this._setBounds(); 
+        this.setBounds(); 
+    },
+
+    /**
+     * Updates the bounding box corner points.
+     */
+    setBounds()
+    {
+        this.upperLeft  = { x: this.x - this.boxSize, y: this.y - this.boxSize };
+        this.lowerRight = { x: this.x + this.boxSize, y: this.y + this.boxSize };
     },
 
     /**
@@ -66,19 +75,14 @@ Edge.prototype =
     {
         return this.adjList.getVertex(this.to);
     },
+    
 
     //=========== Private ===========//
-
-    _setBounds()
-    {
-        this.upperLeft  = { x: this.x - this.boxSize, y: this.y - this.boxSize };
-        this.lowerRight = { x: this.x + this.boxSize, y: this.y + this.boxSize };
-    },
 
     // Stop adjList from being stringified
     _storeAdjacencyList(adjList)
     {
-        Object.defineProperty(this, 'adjList', {value: adjList, enumerable : false});
+        nonEnumerableProperty(this, 'adjList', adjList);
     }
 };
 

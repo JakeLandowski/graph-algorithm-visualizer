@@ -1,12 +1,12 @@
 /**
- *  @author Jake Landowski
- *  7/27/18
- *  VertexFactory.js
- * 
- *  Represents the data structure for the Vertex class..
+ * @file VertexFactory.js : Represents the data structure for the Vertex class..
+ * @author Jake Landowski <jakelandowski@gmail.com>
+ * 7/27/18
  */
 
 'use strict';
+
+import { nonEnumerableProperty } from '../../utils/Utilities.js';
 
 /**
  * @class
@@ -153,7 +153,7 @@ Vertex.prototype =
     // Stop adjList from being stringified
     _storeAdjacencyList(adjList)
     {
-        Object.defineProperty(this, 'adjList', {value: adjList, enumerable : false});
+        nonEnumerableProperty(this, 'adjList', adjList);
     }
 };
 
