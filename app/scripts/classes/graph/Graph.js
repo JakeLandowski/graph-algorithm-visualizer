@@ -74,12 +74,11 @@ Graph.prototype =
             this.model.editEdgeWeight(weight);
             this.model.clearEdgeEdit();
         } 
-
     },
 
     edgeSpatialCurve(params)
     {
-        const edge = this.model.adjList.getEdge(params.from, params.to);
+        const edge = this.model.getEdge(params.from, params.to);
         edge.x = params.centerX;
         edge.y = params.centerY;
         edge.setBounds(); // for spatial

@@ -665,6 +665,13 @@ GraphModel.prototype =
     {
         this.symbols.push(symbol);
     },
+
+//====================== Adjacency List Methods  ===========================//
+
+    getEdge(from, to)
+    {
+        return this.adjList.getEdge(from, to);
+    }
 };
 
 export default GraphModel;
