@@ -237,30 +237,34 @@ describe('Testing forEach on rows/cells.', () =>
 {
     const checkRowOrColumn = (arr, marked, colIndex) => 
     {
-        console.log(colIndex);
         arr.forEach(slot => 
         {
             if(typeof colIndex !== 'undefined') slot = slot[colIndex];
             expect(slot.marked).toBe(marked);
+            console.log(marked);
         });
     };
 
     const checkColumn = (marked, colIndex=0) => checkRowOrColumn(spacial.index, marked, colIndex);
-    const checkRow    = (marked) => checkRowOrColumn(spacial.index[0], marked);
+    const checkRow    = (marked, rowIndex=0) => checkRowOrColumn(spacial.index[rowIndex], marked);
 
     describe.each(
     [
-        ['forEachCellInRow', 'row',    checkRow,    (cell) => cell.marked    = true], 
-        ['forEachCellInCol', 'column', checkColumn, (cell) => cell[0].marked = true]
+        ['forEachCellInRow', 'row',    checkRow], 
+        ['forEachCellInCol', 'column', checkColumn]
     ])
-    ('%s()', (method, thing, check, callback) => 
+    ('%s()', (method, thing, check) => 
     {
         beforeEach(() => 
         {
-            spacial[method](0, callback);
+            spacial.index.forEach(row => 
+            {
+                row.forEach(cell => cell.marked = false);
+            });
+            spacial[method](0, (cell) => cell.marked = true);
         });
         
-        test(`should only touch each cell in a ${thing} given.`, () => 
+        test(`should touch each cell in a ${thing} given.`, () => 
         {
             check(true);
         });

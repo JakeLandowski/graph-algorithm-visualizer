@@ -77,6 +77,25 @@ SpacialIndex.prototype =
         }
     },
 
+    forEachCellInRow(rowIndex, action)
+    {
+        if(rowIndex >= 0 && rowIndex < this.index.length)
+        {
+            this.index[rowIndex].forEach(cell => action(cell));
+        }   
+    },
+
+    forEachCellInCol(colIndex, action)
+    {
+        if(colIndex >= 0 && colIndex < this.index[0].length)
+        {
+            this.index.forEach(row => 
+            {
+                action(row[colIndex]);
+            });
+        }
+    },
+
     /**
      * Unregisters a previously registered entity. Cleans up
      * the injected cell reference in the entity object. 
@@ -169,6 +188,7 @@ SpacialIndex.prototype =
     {
         return this._cellFromIndex(this._cellRow(x), this._cellCol(y));
     },
+
     _cellFromIndex(row, col)
     {
         return row >= this.cellRatio || col >= this.cellRatio || row < 0 || col < 0 ? undefined : this.index[row][col];
