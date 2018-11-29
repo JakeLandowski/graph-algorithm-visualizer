@@ -77,6 +77,12 @@ SpacialIndex.prototype =
         }
     },
 
+    /**
+     * Executes a callback on each cell in a row based on the
+     * row index given.
+     * @param {number} rowIndex - the index of the row
+     * @param {function} action - the callback to execute on each cell
+     */
     forEachCellInRow(rowIndex, action)
     {
         if(rowIndex >= 0 && rowIndex < this.index.length)
@@ -85,6 +91,12 @@ SpacialIndex.prototype =
         }   
     },
 
+    /**
+     * Executes a callback on each cell in a col based on the
+     * col index given.
+     * @param {number} colIndex - the index of the col
+     * @param {function} action - the callback to execute on each cell
+     */
     forEachCellInCol(colIndex, action)
     {
         if(colIndex >= 0 && colIndex < this.index[0].length)
