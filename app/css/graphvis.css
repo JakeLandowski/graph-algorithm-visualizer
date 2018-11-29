@@ -175,7 +175,7 @@ svg {
     z-index: 6;
     stroke: #6ba2dc;
     border-radius: 5px;
-    fill: rgba(0,0,0,.8);
+    fill: rgba(20,20,20,.75);
     stroke-width: 1;
 }
 
