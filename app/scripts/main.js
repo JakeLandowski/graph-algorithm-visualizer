@@ -21,6 +21,7 @@ let lightGray = "#9d9b98";
 let darkGray = "#262626";
 let white = "#fff";
 let eduModeActive = false;
+let randomDialogActive = false;
 let elementIds = ['addButton','addEdgeButton','deleteButton'];
 let functionArray = ['createMode','edgeMode','eraseMode'];
 let graph = newGraph({undirected: true});
@@ -29,6 +30,10 @@ let saveBtn  = document.getElementsByClassName('saveButton');
 let loadBtn  = document.getElementsByClassName('loadButton');
 let undirected  = document.getElementById('undirected');
 let directed  = document.getElementById('directed');
+let randomBtn = document.getElementsByClassName('randomButton');
+let randomGraphDialog = document.getElementById('random-graph-dialog');
+let createRandomGraph = document.getElementById('generate-random-graph');
+let randomProperties = {vertexNum:13,vertexDensity:50,edgeDensity:50};
 
 addFunctionality();
 setHighlights();
@@ -58,8 +63,8 @@ for(let i = 0; i<eduMode.length; i++) {
 
 function setHighlights() {
     let elements = [
-        'newButton', 'addButton', 'loadButton', 'eduButton', 'redoButton', 'deleteButton', 'saveButton'];
-    let elementIds = ['newGraphButton', 'addModeButton', 'loadGraphButton', 'eduModeButton', 'redoModeButton',
+        'newButton', 'addButton', 'loadButton', 'eduButton', 'randomButton', 'deleteButton', 'saveButton'];
+    let elementIds = ['newGraphButton', 'addModeButton', 'loadGraphButton', 'eduModeButton', 'randomModeButton',
         'deleteModeButton', 'saveGraphButton'];
 
     let arrayOfElements;
@@ -104,6 +109,33 @@ function swapColors(graph,primary,secondary,bg) {
     graph.config.trackingEdgeColor[0] = secondary;
 }
 
+//Slider for vertex density
+let numVertexSlider = document.getElementById("vertex-number-slider");
+let numVertex = document.getElementById("vertex-number");
+numVertex.innerHTML = numVertexSlider.value;
+numVertexSlider.oninput = function() {
+    randomProperties.vertexNum = this.value;
+    numVertex.innerHTML = this.value;
+};
+
+//Slider for vertex density
+let vertexSlider = document.getElementById("vertex-density-slider");
+let vertexDensity = document.getElementById("vertex-density");
+vertexDensity.innerHTML = vertexSlider.value + "%";
+vertexSlider.oninput = function() {
+    randomProperties.vertexDensity = this.value;
+    vertexDensity.innerHTML = this.value + "%";
+};
+
+//Slider for vertex density
+let edgeSlider = document.getElementById("edge-density-slider");
+let edgeDensity = document.getElementById("edge-density");
+edgeDensity.innerHTML = vertexSlider.value + "%";
+edgeSlider.oninput = function() {
+    randomProperties.edgeDensity = this.value;
+    edgeDensity.innerHTML = this.value + "%";
+};
+
 
 for(let i = 0; i<newBtn.length; i++) {
     newBtn[i].addEventListener('click', function(){document.getElementById('create-dialog').style.display = "block"});
@@ -128,6 +160,19 @@ for(let i = 0; i<loadBtn.length; i++) {
     loadBtn[i].addEventListener('click', function(){graph.load();});
 }
 
+for(let i = 0; i<randomBtn.length; i++) {
+    randomBtn[i].addEventListener('click', function(){
+        randomDialogActive ? randomGraphDialog.style.display = 'none' :
+                randomGraphDialog.style.display = 'block';
+        randomDialogActive = !randomDialogActive;
+    });
+}
+
+createRandomGraph.addEventListener('click',function() {
+    graph.randomize(randomProperties[0],randomProperties[1],randomProperties[2]);
+});
+
+
 function addFunctionality() {
     let elements;
     for(let i = 0; i<elementIds.length; i++){
@@ -138,7 +183,6 @@ function addFunctionality() {
         })}
     }
 }
-
 function newGraph(config={}) {
     document.getElementById("main").innerHTML = "";
     return new Graph(document.getElementById('main'), config);

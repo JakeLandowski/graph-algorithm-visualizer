@@ -72,9 +72,9 @@
 
         <!-- Redo Button -->
         <svg class="toolMenu" width="700" height="700">
-            <circle id="redoModeButton" filter="url(#shadow)" class="future redoButton ui menuCircleButton allButtons"
-                    cx="390" cy="590" r="30" stroke-width="1"></circle>
-            <text class="future redoButton ui-text" x="368" y="594"></text>
+            <circle id="randomModeButton" filter="url(#shadow)" class="future randomButton ui menuCircleButton allButtons"
+                    cx="386" cy="590" r="30" stroke-width="1"></circle>
+            <text class="future randomButton ui-text" x="368" y="594">Rnd</text>
         </svg>
     </div>
 
@@ -138,6 +138,48 @@
             <text class="future ui-text tooltip-text" x="-197" y="-300" font-size="14">Undo: Ctrl-Z</text>
             <text class="future ui-text tooltip-text" x="-197" y="-275" font-size="14">Redo: Ctrl-Y</text>
         </svg>
+    </div>
+
+    <div id="random-graph" style="display: none;">
+        <svg width="300" height="500" id="random-graph-selector">
+            <path filter="url(#shadow)" class="shadow future" id="random-graph-button"
+                  d="
+                  M100,100
+                  h100 a20,20 0 0 1 20,20
+                  v300 a20,20 0 0 1 -20,20
+                  h-100 a20,20 0 0 1 -20,-20
+                  v-300 a20,20 0 0 1 20,-20 z">
+            </path>
+
+            <path filter="url(#shadow)" class="shadow future random-gen" id="random-graph-button"
+                  d="
+                  M120,375
+                  h60 a20,20 0 0 1 20,20
+                  v10 a20,20 0 0 1 -20,20
+                  h-60 a20,20 0 0 1 -20,-20
+                  v-10 a20,20 0 0 1 20,-20 z">
+            </path>
+            <text class="future ui-text random-graph-text random-gen" x="120" y="403" font-size="12">Generate</text>
+            <text class="future ui-text random-graph-text" x="90" y="150" font-size="14">Vertex Density</text>
+            <div class="slidecontainer">
+                <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
+            </div>
+            <text class="future ui-text random-graph-text" x="97" y="200" font-size="14">Edge Density</text>
+        </svg>
+    </div>
+
+    <div id="random-graph-dialog">
+        <input type="range" min="1" max="26" value="13" class="slider" id="vertex-number-slider">
+        <p class="ui-text random-text">Total Vertices: <span id="vertex-number"></span></p>
+
+        <input type="range" min="1" max="100" value="50" class="slider" id="vertex-density-slider">
+        <p class="ui-text random-text">Vertex Density: <span id="vertex-density"></span></p>
+
+        <input type="range" min="1" max="100" value="50" class="slider" id="edge-density-slider">
+        <p class="ui-text random-text">Edge Density: <span id="edge-density"></span></p>
+
+        <br>
+        <button class="select-graph-type-button ui-text" id="generate-random-graph">Generate</button>
     </div>
     <!-- Graph Canvas div -->
     <div id="main"></div>
