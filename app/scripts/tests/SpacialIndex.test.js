@@ -101,10 +101,10 @@ describe('Testing add() method', () =>
             }
         };
 
-        expectForCells(oneCellEntity, 0, 0, 0, 0);
-        expectForCells(twoCellEntity, 1, 2, 1, 1);
+        expectForCells(oneCellEntity,  0, 0, 0, 0);
+        expectForCells(twoCellEntity,  1, 2, 1, 1);
         expectForCells(fourCellEntity, 1, 2, 2, 3);
-        expectForCells(allCellEntity, 0, 4, 0, 4);
+        expectForCells(allCellEntity,  0, 4, 0, 4);
     };
 
     test('Adding invalid object should throw error.', () => 
@@ -230,5 +230,49 @@ describe('Testing getEntity() method', () =>
         expect([twoCellEntity, allCellEntity]).toContain(spacial.getEntity(180, 135));
         expect([fourCellEntity, allCellEntity]).toContain(spacial.getEntity(210, 399));
         expect(spacial.getEntity(405, 250)).toBe(allCellEntity);
+    });
+});
+
+describe('Testing forEach on rows/cells.', () => 
+{
+    const markRowOrColumn = (arr, isCol) => 
+    {
+        arr.forEach(slot => 
+        {
+            if(isCol) slot = slot[0];
+            slot.marked = true;
+        });
+    };
+
+    const markColumn = () => markRowOrColumn(spacial.index,    true);
+    const markRow    = () => markRowOrColumn(spacial.index[0], false);
+
+    describe.each([['forEachCellInRow', markRow, 'row'], 
+    ['forEachCellInCol', markColumn, 'column']])
+    ('%s()', (method, setup, thing) => 
+    {
+        beforeEach(() => 
+        {
+            setup();
+        });
+
+        test(`should only touch each cell in a ${thing} given.`, () => 
+        {
+            spacial[method](0, (cell) => 
+            {
+                expect(cell.marked).toBe(true);
+            });
+        });
+
+        test(`should not touch any other ${thing}.`, () => 
+        {
+            for(let i = 1; i < spacial.index.length; i++)
+            {
+                spacial[method](i, (cell) => 
+                {
+                    expect(cell.marked).toBe(false);
+                });
+            }
+        });
     });
 });
