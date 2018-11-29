@@ -237,9 +237,10 @@ describe('Testing forEach on rows/cells.', () =>
 {
     const checkRowOrColumn = (arr, marked, colIndex) => 
     {
+        console.log(colIndex);
         arr.forEach(slot => 
         {
-            if(colIndex !== 'undefined') slot = slot[colIndex];
+            if(typeof colIndex !== 'undefined') slot = slot[colIndex];
             expect(slot.marked).toBe(marked);
         });
     };
