@@ -235,43 +235,40 @@ describe('Testing getEntity() method', () =>
 
 describe('Testing forEach on rows/cells.', () => 
 {
-    const markRowOrColumn = (arr, isCol) => 
+    const checkRowOrColumn = (arr, marked, colIndex) => 
     {
         arr.forEach(slot => 
         {
-            if(isCol) slot = slot[0];
-            slot.marked = true;
+            if(colIndex !== 'undefined') slot = slot[colIndex];
+            expect(slot.marked).toBe(marked);
         });
     };
 
-    const markColumn = () => markRowOrColumn(spacial.index,    true);
-    const markRow    = () => markRowOrColumn(spacial.index[0], false);
+    const checkColumn = (marked, colIndex=0) => checkRowOrColumn(spacial.index, marked, colIndex);
+    const checkRow    = (marked) => checkRowOrColumn(spacial.index[0], marked);
 
-    describe.each([['forEachCellInRow', markRow, 'row'], 
-    ['forEachCellInCol', markColumn, 'column']])
-    ('%s()', (method, setup, thing) => 
+    describe.each(
+    [
+        ['forEachCellInRow', 'row',    checkRow,    (cell) => cell.marked    = true], 
+        ['forEachCellInCol', 'column', checkColumn, (cell) => cell[0].marked = true]
+    ])
+    ('%s()', (method, thing, check, callback) => 
     {
         beforeEach(() => 
         {
-            setup();
+            spacial[method](0, callback);
         });
-
+        
         test(`should only touch each cell in a ${thing} given.`, () => 
         {
-            spacial[method](0, (cell) => 
-            {
-                expect(cell.marked).toBe(true);
-            });
+            check(true);
         });
 
         test(`should not touch any other ${thing}.`, () => 
         {
             for(let i = 1; i < spacial.index.length; i++)
             {
-                spacial[method](i, (cell) => 
-                {
-                    expect(cell.marked).toBe(false);
-                });
+                check(false, i);
             }
         });
     });
