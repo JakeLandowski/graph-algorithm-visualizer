@@ -43,6 +43,7 @@ html, body {
     border: 1px solid #2054a0;
     color: #2054a0;
     cursor: pointer;
+    outline: none;
 }
 
 .mainmenu {
@@ -183,4 +184,84 @@ svg {
     z-index: 7;
     opacity: 0;
     transform: rotate(180deg);
+}
+
+#random-graph {
+    position: absolute;
+    bottom: -50px;
+    left: -65px;
+    opacity: 100;
+    pointer-events: none;
+    z-index: 12;
+    stroke: #6ba2dc;
+    border-radius: 5px;
+    fill: rgba(20,20,20,.75);
+    stroke-width: 1;
+}
+
+.random-gen {
+    z-index: 100;
+
+}
+
+*:focus {
+    outline: 0 !important;
+}
+
+.random-gen:hover {
+    stroke: #6ba2dc;
+    cursor: pointer;
+}
+
+#random-graph-button:hover {
+    cursor: pointer;
+
+}
+
+#random-graph-dialog {
+    display: none;
+    position: absolute;
+    width: 300px;
+    bottom: 2%;
+    z-index: 100;
+    font-size: 11pt;
+}
+
+.random-text {
+    margin-left: 15px;
+}
+
+/* The slider itself */
+.slider {
+    -webkit-appearance: none;  /* Override default CSS styles */
+    appearance: none;
+    width: 100%; /* Full-width */
+    height: 2px; /* Specified height */
+    background: #6ba2dc; /* Grey background */
+    outline: none; /* Remove outline */
+    opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+    -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+    transition: opacity .2s;
+}
+
+/* Mouse-over effects */
+.slider:hover {
+    opacity: 1; /* Fully shown on mouse-over */
+}
+
+/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none; /* Override default look */
+    appearance: none;
+    width: 20px; /* Set a specific slider handle width */
+    height: 10px; /* Slider handle height */
+    background: #2054a0; /* Green background */
+    cursor: pointer; /* Cursor on hover */
+}
+
+.slider::-moz-range-thumb {
+    width: 20px; /* Set a specific slider handle width */
+    height: 10px; /* Slider handle height */
+    background: #2054a0; /* Green background */
+    cursor: pointer; /* Cursor on hover */
 }

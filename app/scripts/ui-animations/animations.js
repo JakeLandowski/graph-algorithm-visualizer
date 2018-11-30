@@ -74,8 +74,6 @@ export default {
             toolTipShown = !toolTipShown;
         };
 
-
-
         let toolTipDraw = Anime({
             opacity: 1,
             targets: '#tool-tip-box',
