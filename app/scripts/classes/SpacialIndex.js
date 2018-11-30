@@ -24,11 +24,11 @@ import { isUndefined } from '../utils/Utilities.js';
  * @param {number} cellHeight - height of each cell
  * @param {number} cellRatio - number of cells per row/column
  */
-const SpacialIndex = function(label, cellWidth, cellHeight, cellRatio)
+const SpacialIndex = function(label, width, height, cellRatio)
 {
     this.cellsLabel = label + '_cells';
-    this.cellWidth  = cellWidth;
-    this.cellHeight = cellHeight;
+    this.cellWidth  = width/cellRatio;
+    this.cellHeight = height/cellRatio;
     this.cellRatio  = cellRatio;
     this._initIndex();
 };
@@ -85,7 +85,7 @@ SpacialIndex.prototype =
      */
     forEachCellInRow(rowIndex, action)
     {
-        if(rowIndex >= 0 && rowIndex < this.index.length)
+        if(this._validIndex(rowIndex, this.index.length))
         {
             this.index[rowIndex].forEach(cell => action(cell));
         }   
@@ -99,13 +99,18 @@ SpacialIndex.prototype =
      */
     forEachCellInCol(colIndex, action)
     {
-        if(colIndex >= 0 && colIndex < this.index[0].length)
+        if(this._validIndex(colIndex, this.index[0].length))
         {
-            this.index.forEach(row => 
+            this.forEachRow(row => 
             {
                 action(row[colIndex]);
             });
         }
+    },
+
+    forEachRow(action)
+    {
+        this.index.forEach((row, index) => action(row, index));
     },
 
     /**
@@ -250,7 +255,12 @@ SpacialIndex.prototype =
                 this.index[i][j] = Object.create(null);
             }
         }
-    }
+    },
+
+    _validIndex(index, max)
+    {
+        return index >= 0 && index < max;
+    },
 };
 
 export default SpacialIndex;
