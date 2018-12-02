@@ -11,6 +11,7 @@
 
 import Graph from './classes/graph/Graph.js';
 import Animations from './ui-animations/animations.js';
+import { stagger } from './utils/Utilities.js'; 
 
 Animations.start();
 
@@ -43,6 +44,8 @@ let randomProperties = {
 
 addFunctionality();
 setHighlights();
+initResize();
+initUndoRedo();
 
 for(let i = 0; i<eduMode.length; i++) {
     eduMode[i].onclick = function () {
@@ -151,7 +154,6 @@ undirected.onclick = function () {
     document.getElementById('create-dialog').style.display = "none";
 };
 
-
 for(let i = 0; i<saveBtn.length; i++) {
     saveBtn[i].addEventListener('click', function(){graph.save();});
 }
@@ -195,4 +197,36 @@ function addFunctionality() {
 function newGraph(config={}) {
     document.getElementById("main").innerHTML = "";
     graph = new Graph(document.getElementById('main'), config);
+}
+
+function initResize()
+{
+    window.addEventListener('resize', stagger(function(event)
+    {
+        event.preventDefault();
+        graph.resize();
+        // this.engine.resize();
+        // this.model.resize(this.engine.canvas.width, this.engine.canvas.height);
+
+    }, 400));
+}
+
+function initUndoRedo()
+{
+    window.addEventListener('keydown', function(event)
+    {
+        // stops ALL keybinds on window
+        // event.preventDefault();
+        const key = event.keyCode;
+
+        if(event.ctrlKey)
+        { 
+            if(key === 90)
+            {
+                if(event.shiftKey) graph.redo(); //this.onRedo.notify();
+                else               graph.undo(); //this.onUndo.notify();
+            }
+            else if(key === 89) graph.redo(); //this.onRedo.notify();
+        }
+    });
 }
