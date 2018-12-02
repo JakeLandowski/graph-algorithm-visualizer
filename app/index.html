@@ -172,11 +172,21 @@
         <input type="range" min="1" max="26" value="13" class="slider" id="vertex-number-slider">
         <p class="ui-text random-text">Total Vertices: <span id="vertex-number"></span></p>
 
-        <input type="range" min="1" max="100" value="50" class="slider" id="vertex-density-slider">
-        <p class="ui-text random-text">Vertex Density: <span id="vertex-density"></span></p>
-
         <input type="range" min="1" max="100" value="50" class="slider" id="edge-density-slider">
         <p class="ui-text random-text">Edge Density: <span id="edge-density"></span></p>
+
+        <div id="radio-selectors">
+            <input id="directed-on" class="toggle toggle-left" name="directed" value="true" type="radio">
+            <label for="directed-on" class="btn ui-text">Directed</label>
+            <input id="directed-off" class="toggle toggle-right" name="directed" value="false" type="radio" checked>
+            <label for="directed-off" class="btn ui-text">Undirected</label>
+            <br>
+            <br>
+            <input id="weighted-on" class="toggle toggle-left" name="weighted" value="true" type="radio">
+            <label for="weighted-on" class="btn ui-text">Weighted</label>
+            <input id="weighted-off" class="toggle toggle-right" name="weighted" value="false" type="radio" checked>
+            <label for="weighted-off" class="btn ui-text">Unweighted</label>
+        </div>
 
         <br>
         <button class="select-graph-type-button ui-text" id="generate-random-graph">Generate</button>
