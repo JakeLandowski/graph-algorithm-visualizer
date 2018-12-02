@@ -10,8 +10,8 @@
 
 import Anime from './anime.js';
 
-let primary = "#6ba2dc";
-let secondary = "#2054a0";
+let primary = "#262626";
+let secondary = "#9d9b98";
 let lightGray = "#9d9b98";
 let darkGray = "#262626";
 let white = "#fff";

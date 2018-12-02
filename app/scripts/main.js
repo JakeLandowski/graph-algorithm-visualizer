@@ -48,8 +48,11 @@ for(let i = 0; i<eduMode.length; i++) {
             for(let j = 0; j<ui.length; j++) {
                 ui[j].style.stroke = primary;
             }
+
             eduModeActive = false;
         } else {
+            primary = darkGray;
+            secondary = lightGray;
             document.getElementById('pagestyle').setAttribute('href', 'css/graphedu.css');
             for(let j = 0; j<ui.length; j++) {
                 ui[j].style.stroke = darkGray;

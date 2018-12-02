@@ -1,6 +1,14 @@
+:root {
+    --main-color: #262626;
+    --secondary-color: #9d9b98;
+    --background-color: #fff;
+    --light-blue: #6ba2dc;
+    --dark-blue: var(--secondary-color);
+}
+
 html, body {
     overflow: hidden;
-    background-color: #262626;
+    background-color: var(--background-color);
     margin: 0;
     padding: 0;
 }
@@ -20,7 +28,8 @@ html, body {
     height: 100%;
     width: 100%;
     z-index: 10;
-    background-color: rgba(10,10,10,.6);
+    background-color: var(--background-color);
+    opacity: .75;
 }
 #undirected {
     margin-bottom: 15px;
@@ -28,11 +37,12 @@ html, body {
 .select-graph-type-button {
     display: block;
     margin: 0 auto;
-    background: rgba(10,10,10,.6);
-    border: 1px solid #6ba2dc;
+    background: var(--background-color);
+    opacity: .8;
+    border: 1px solid var(--main-color);
     width: 150px;
     height: 50px;
-    color: #6ba2dc;
+    color: var(--main-color);
     border-radius: 10px;
     z-index: 11;
     top: 40%;
@@ -40,8 +50,8 @@ html, body {
 }
 
 .select-graph-type-button:hover {
-    border: 1px solid #2054a0;
-    color: #2054a0;
+    border: 1px solid var(--secondary-color);
+    color: var(--secondary-color);
     cursor: pointer;
     outline: none;
 }
@@ -71,10 +81,10 @@ html, body {
 
 .future {
     box-shadow:
-            inset 0 0 10px #2054a0,
-            0 0 10px #2054a0;
-    background-color:rgba(0, 0, 0, 0.65);
-    border: 1px solid #2054a0;
+            inset 0 0 10px var(--secondary-color),
+            0 0 10px var(--secondary-color);
+    background-color:var(--background-color);
+    border: 1px solid var(--secondary-color);
     font-family: 'Orbitron', sans-serif;
 }
 
@@ -87,18 +97,19 @@ html, body {
     transform: perspective(1px) translateZ(0);
     position: relative;
     overflow: hidden;
-    background-color:rgba(0, 0, 0, 0.8);
+    background-color:var(--background-color);
+    opacity: .75;
     box-shadow:
-            inset 0 0 10px #2054a0,
-            0 0 12px #2054a0,
-            -5px 0 20px #2054a0,
-            5px 0 20px #2054a0;
+            inset 0 0 10px var(--secondary-color),
+            0 0 12px var(--secondary-color),
+            -5px 0 20px var(--secondary-color),
+            5px 0 20px var(--secondary-color);
 }
 
 .shadow {
     /* Use -webkit- only if supporting: Chrome < 54, iOS < 9.3, Android < 4.4.4 */
-    -webkit-filter: drop-shadow(0px 5px 5px #2054a0);
-    filter: drop-shadow(0px 5px 5px #2054a0);
+    -webkit-filter: drop-shadow(0px 5px 5px var(--secondary-color));
+    filter: drop-shadow(0px 5px 5px var(--secondary-color));
 }
 
 .noselect {
@@ -120,18 +131,18 @@ html, body {
 }
 
 .ui {
-    stroke: #6ba2dc;
+    stroke: var(--main-color);
     fill: transparent;
 }
 
 .ui-text {
-    color: #6ba2dc;
-    fill: #6ba2dc;
+    color: var(--main-color);
+    fill: var(--main-color);
     font-family: 'Orbitron', sans-serif;
 }
 
 .menuCircleButton {
-    fill: #262626;
+    fill: var(--background-color);
 }
 
 .allButtons {
@@ -151,7 +162,7 @@ svg {
 
 
 #question-mark {
-    color: #6ba2dc;
+    color: var(--main-color);
     z-index: 5;
     position: fixed;
     bottom: 1rem;
@@ -161,7 +172,7 @@ svg {
 
 #question-mark:hover {
     cursor: pointer;
-    color: #2054a0;
+    color: var(--secondary-color);
 }
 
 @media only screen and (max-width: 600px) {
@@ -174,9 +185,10 @@ svg {
     opacity: 0;
     pointer-events: none;
     z-index: 6;
-    stroke: #6ba2dc;
+    stroke: var(--main-color);
     border-radius: 5px;
-    fill: rgba(20,20,20,.75);
+    fill: var(--background-color);
+    fill-opacity: .75;
     stroke-width: 1;
 }
 
@@ -193,9 +205,10 @@ svg {
     opacity: 100;
     pointer-events: none;
     z-index: 12;
-    stroke: #6ba2dc;
+    stroke: var(--main-color);
     border-radius: 5px;
-    fill: rgba(20,20,20,.75);
+    fill: var(--background-color);
+    fill-opacity: .75;
     stroke-width: 1;
 }
 
@@ -209,7 +222,7 @@ svg {
 }
 
 .random-gen:hover {
-    stroke: #6ba2dc;
+    stroke: var(--main-color);
     cursor: pointer;
 }
 
@@ -237,7 +250,7 @@ svg {
     appearance: none;
     width: 100%; /* Full-width */
     height: 2px; /* Specified height */
-    background: #6ba2dc; /* Grey background */
+    background: var(--main-color); /* Grey background */
     outline: none; /* Remove outline */
     opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
     -webkit-transition: .2s; /* 0.2 seconds transition on hover */
@@ -255,13 +268,13 @@ svg {
     appearance: none;
     width: 20px; /* Set a specific slider handle width */
     height: 10px; /* Slider handle height */
-    background: #2054a0; /* Green background */
+    background: var(--secondary-color); /* Green background */
     cursor: pointer; /* Cursor on hover */
 }
 
 .slider::-moz-range-thumb {
     width: 20px; /* Set a specific slider handle width */
-    height: 10px; /* Slider handle height */
-    background: #2054a0; /* Green background */
-    cursor: pointer; /* Cursor on hover */
+    height: 10px;
+    background: var(--secondary-color);
+    cursor: pointer;
 }
