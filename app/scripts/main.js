@@ -11,7 +11,8 @@
 
 import Graph from './classes/graph/Graph.js';
 import Animations from './ui-animations/animations.js';
-import { stagger } from './utils/Utilities.js'; 
+import { stagger } from './utils/Utilities.js';
+import RenderingEngine from "./classes/engine/RenderingEngine";
 
 Animations.start();
 
@@ -82,7 +83,7 @@ function setHighlights() {
         arrayOfElements = document.getElementsByClassName(elements[i]);
         for (let j = 0; j < arrayOfElements.length; j++) {
             arrayOfElements[j].addEventListener('mouseenter', function () {
-                document.getElementById(elementIds[i]).style.stroke = primary;
+                document.getElementById(elementIds[i]).style.stroke = secondary;
             });
 
             arrayOfElements[j].addEventListener('mouseleave', function () {
@@ -139,8 +140,14 @@ edgeSlider.oninput = function() {
 
 
 for(let i = 0; i<newBtn.length; i++) {
-    newBtn[i].addEventListener('click', function(){document.getElementById('create-dialog').style.display = "block"});
+    newBtn[i].addEventListener('click', function(){
+        document.getElementById('create-dialog').style.display = "block"});
 }
+
+document.getElementById('create-dialog').onclick = function() {
+    document.getElementById('create-dialog').style.display = "none";
+};
+
 
 directed.onclick = function () {
     graph = newGraph({undirected: false});
@@ -158,14 +165,6 @@ for(let i = 0; i<saveBtn.length; i++) {
 
 for(let i = 0; i<loadBtn.length; i++) {
     loadBtn[i].addEventListener('click', function(){graph.load();});
-}
-
-for(let i = 0; i<randomBtn.length; i++) {
-    randomBtn[i].addEventListener('click', function(){
-        randomDialogActive ? randomGraphDialog.style.display = 'none' :
-                randomGraphDialog.style.display = 'block';
-        randomDialogActive = !randomDialogActive;
-    });
 }
 
 createRandomGraph.addEventListener('click',function() {
@@ -194,6 +193,7 @@ function addFunctionality() {
 }
 function newGraph(config={}) {
     document.getElementById("main").innerHTML = "";
+    RenderingEngine.deleteInstance();
     graph = new Graph(document.getElementById('main'), config);
 }
 

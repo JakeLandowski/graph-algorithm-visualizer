@@ -2,6 +2,7 @@
     --main-color: #262626;
     --secondary-color: #9d9b98;
     --background-color: #fff;
+    --background-color-transparnecy: rgba(255, 255, 255,.75);
 }
 
 html, body {
@@ -26,10 +27,10 @@ html, body {
     height: 100%;
     width: 100%;
     z-index: 10;
-    background-color: var(--background-color);
-    opacity: .85;
+    background-color: var(--background-color-transparnecy);
 }
 #undirected {
+    color: white;
     margin-bottom: 15px;
     background: var(--background-color);
 }
@@ -233,7 +234,7 @@ svg {
 }
 
 #random-graph-dialog {
-    display: none;
+    opacity: 0;
     position: absolute;
     width: 300px;
     bottom: 2%;
@@ -310,15 +311,6 @@ svg {
 #random-graph-button:hover {
     cursor: pointer;
 
-}
-
-#random-graph-dialog {
-    display: none;
-    position: absolute;
-    width: 300px;
-    bottom: 2%;
-    z-index: 100;
-    font-size: 11pt;
 }
 
 .random-text {
@@ -420,4 +412,10 @@ input[type="radio"].toggle:checked + label {
 }
 input[type="radio"].toggle:checked + label:after {
     left: 0;
+}
+
+#random-graph-svg {
+    position: fixed;
+    bottom: -5.75rem;
+    left: -6rem;
 }

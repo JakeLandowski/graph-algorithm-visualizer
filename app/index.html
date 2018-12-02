@@ -13,6 +13,7 @@
 
 <body>
     <div id="create-dialog">
+
         <button class="select-graph-type-button shadow" id="undirected"><span class="ui-text">Undirected</span></button>
         <button class="select-graph-type-button shadow" id="directed"><span class="ui-text">Directed</span></button>
     </div>
@@ -30,7 +31,8 @@
                     m -175, 0
                     a 175,175 0 1,0 350,0
                     a 175,175 0 1,0 -350,0
-                    "></path>
+                    ">
+            </path>
         </svg>
 
         <!-- Outer Menu Circle -->
@@ -169,6 +171,16 @@
     </div>
 
     <div id="random-graph-dialog">
+        <svg width="500" height="400" id="random-graph-svg">
+            <path filter="url(#shadow)" class="shadow future" id="random-graph-box" d="
+                      M100,4
+                      h350 a20,20 0 0 1 20,20
+                      v250 a20,20 0 0 1 -20,20
+                      h-350 a20,20 0 0 1 -20,-20
+                      v-250 a20,20 0 0 1 20,-20 z"
+                  fill="none" stroke="black" stroke-width="1">
+            </path>
+        </svg>
         <input type="range" min="1" max="26" value="13" class="slider" id="vertex-number-slider">
         <p class="ui-text random-text">Total Vertices: <span id="vertex-number"></span></p>
 

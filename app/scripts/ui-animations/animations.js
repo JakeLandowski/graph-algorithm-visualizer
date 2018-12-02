@@ -10,29 +10,25 @@
 
 import Anime from './anime.js';
 
-let primary = "#262626";
-let secondary = "#9d9b98";
-let lightGray = "#9d9b98";
-let darkGray = "#262626";
-let white = "#fff";
-
-//TODO: Ensure button functionality
-//TODO: FIX THE CIRCLE SHIT
 export default {
     start() {
-        //Sets specific buttons as variables, set default delay at 0.
-        let opacity;
+        //Initial Delay
         let toolDelay = 0;
         let menuDelay = 0;
+
+        //Dialogs shown/not shown
         let menuShown = false;
         let toolTipShown = false;
-        let eduModeStyle = false;
+        let randomDialogShown = false;
+
+        //Buttons
         let menuButton = document.getElementById('menu');
         let toolTipButton = document.getElementById('question-mark');
         let buttons = document.getElementsByClassName('buttons');
         let tools = document.getElementsByClassName('toolMenu');
         let newGraph = document.getElementsByClassName('newGraphButton');
         let createDialog = document.getElementById('create-dialog');
+        let randomBtn = document.getElementsByClassName('randomButton');
         //alert(localStorage.getItem("graph"));
 
         newGraph.onclick = function () {
@@ -175,6 +171,43 @@ export default {
             toolDelay = 0;
             menuDelay = 0;
         }
+
+        for(let i = 0; i<randomBtn.length; i++) {
+            randomBtn[i].addEventListener('click', function () {
+                if (randomDialogShown) {
+                    randomDialogSvg.reverse();
+                    randomDialogSvg.play();
+
+                    let randomStuff = Anime({
+                        opacity: 0,
+                        targets: "#random-graph-dialog",
+                        duration: 250,
+                        delay: 250,
+                    });
+                } else {
+                    randomDialogSvg.reset();
+                    randomDialogSvg.play();
+
+                    let randomStuff = Anime({
+                        opacity: 1,
+                        targets: "#random-graph-dialog",
+                        duration: 250,
+                        delay: 250,
+                    });
+                }
+                randomDialogShown = !randomDialogShown;
+            });
+        }
+
+        let randomDialogSvg = Anime({
+            targets: '#random-graph-box',
+            strokeDashoffset: [Anime.setDashoffset, 0],
+            easing: 'easeInOutSine',
+            duration: 500,
+            direction: 'alternate',
+            loop: false,
+            autoplay: false
+        });
 
 
         //ANIMATION FUNCTIONS
