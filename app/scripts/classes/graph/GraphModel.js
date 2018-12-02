@@ -14,6 +14,7 @@ import VertexFactory from './VertexFactory.js';
 import EdgeFactory from './EdgeFactory.js';
 import SpacialIndex from '../SpacialIndex.js';
 import CommandLog from '../CommandLog.js';
+import { rand } from '../../utils/Utilities.js';
 
 const GraphModel = function(width, height, config, cellRatio=5)
 {
@@ -27,8 +28,8 @@ const GraphModel = function(width, height, config, cellRatio=5)
 
     this.edgeSpacialLabel   = 'edge';
     this.vertexSpacialLabel = 'vertex';
-    this.edgeSpacialIndex   = new SpacialIndex(this.edgeSpacialLabel, this.cellWidth, this.cellHeight, this.cellRatio);
-    this.vertexSpacialIndex = new SpacialIndex(this.vertexSpacialLabel, this.cellWidth, this.cellHeight, this.cellRatio);
+    this.edgeSpacialIndex   = new SpacialIndex(this.edgeSpacialLabel, this.width, this.height, this.cellRatio);
+    this.vertexSpacialIndex = new SpacialIndex(this.vertexSpacialLabel, this.width, this.height, this.cellRatio);
 
     this.onVertexAdded          = new Event(this);
     this.onVertexRemoved        = new Event(this);
@@ -63,6 +64,50 @@ const GraphModel = function(width, height, config, cellRatio=5)
 
 GraphModel.prototype = 
 {
+    randomize()
+    {
+        const grid = new SpacialIndex('randomize', this.width, this.height, 8);
+        grid.index[0][0].marked = true;
+        
+        grid.forEachRow((row, rowIndex) => 
+        {
+            const unMarkedCellIndicies = row.reduce((arr, cell, index) => 
+            {
+                if(!cell.marked) 
+                {
+                    arr.push(index);
+                }
+
+                return arr;
+            }, []);
+
+            const randIndex = unMarkedCellIndicies[rand(0, unMarkedCellIndicies.length-1)];
+            const chosenCell = row[randIndex];
+            chosenCell.vertex = true;
+            
+            grid.forEachCellInCol(randIndex, cell => 
+            {
+                cell.marked = true;
+            });
+
+            const x = (rowIndex + 1) * grid.cellWidth; // need to figure out how to constrain to smaller 
+            const y = (randIndex + 1) * grid.cellHeight; // square in center of canvas
+            console.log();
+
+            this.dispatch(this.userCommands,
+            { 
+                type: 'addVertex',
+                data: 
+                {
+                    symbol:   this.peekSymbol(),
+                    x:        x,
+                    y:        y,
+                    numEdges: 0
+                },
+                undo: 'removeVertex'
+            });
+        });
+    },
 
 //====================== Command Handling ===========================//
 
@@ -619,14 +664,14 @@ GraphModel.prototype =
     {
         this.setDimensions(width, height);
 
-        this.vertexSpacialIndex = new SpacialIndex(this.vertexSpacialLabel, width, height, this.cellRatio);
+        this.vertexSpacialIndex = new SpacialIndex(this.vertexSpacialLabel, this.width, this.height, this.cellRatio);
         this.adjList.forEachVertex(function(vertex)
         {
             this.vertexSpacialIndex.add(vertex);
 
         }.bind(this));
 
-        this.edgeSpacialIndex = new SpacialIndex(this.edgeSpacialLabel, width, height, this.cellRatio);
+        this.edgeSpacialIndex = new SpacialIndex(this.edgeSpacialLabel, this.width, this.height, this.cellRatio);
         this.adjList.forEachEdge(function(edge)
         {
             this.edgeSpacialIndex.add(edge);
@@ -635,18 +680,16 @@ GraphModel.prototype =
     },
 
     /**
-     *  Sets the width/height info in the model, and consequently
-     *  the cell width/height. This should reflect the canvas width/height.
+     *  Sets the width/height info in the model.
+     *  This should reflect the canvas width/height.
      * 
      *  @param width  width desired, should be canvas width 
      *  @param height height desired, should be canvas width
      */
     setDimensions(width, height)
     {
-        this.width      = width;
-        this.cellWidth  = this.width / this.cellRatio;
-        this.height     = height;
-        this.cellHeight = this.height / this.cellRatio;
+        this.width = width;
+        this.height = height;
     },
 
 //====================== Symbol Pool Methods  ===========================//
@@ -671,6 +714,16 @@ GraphModel.prototype =
     getEdge(from, to)
     {
         return this.adjList.getEdge(from, to);
+    },
+
+    edgeExists(from, to)
+    {
+        return this.adjList.edgeExists(from, to);
+    },
+
+    hasSymbols()
+    {
+        return this.symbols.length > 0;
     }
 };
 
