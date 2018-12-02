@@ -33,7 +33,12 @@ let directed  = document.getElementById('directed');
 let randomBtn = document.getElementsByClassName('randomButton');
 let randomGraphDialog = document.getElementById('random-graph-dialog');
 let createRandomGraph = document.getElementById('generate-random-graph');
-let randomProperties = {vertexNum:13,vertexDensity:50,edgeDensity:50};
+let randomProperties = {
+    vertexNum:13,
+    edgeDensity:50,
+    directed:"undirected",
+    weighted:"weighted"
+};
 
 addFunctionality();
 setHighlights();
@@ -119,18 +124,9 @@ numVertexSlider.oninput = function() {
 };
 
 //Slider for vertex density
-let vertexSlider = document.getElementById("vertex-density-slider");
-let vertexDensity = document.getElementById("vertex-density");
-vertexDensity.innerHTML = vertexSlider.value + "%";
-vertexSlider.oninput = function() {
-    randomProperties.vertexDensity = this.value;
-    vertexDensity.innerHTML = this.value + "%";
-};
-
-//Slider for vertex density
 let edgeSlider = document.getElementById("edge-density-slider");
 let edgeDensity = document.getElementById("edge-density");
-edgeDensity.innerHTML = vertexSlider.value + "%";
+edgeDensity.innerHTML = edgeSlider.value + "%";
 edgeSlider.oninput = function() {
     randomProperties.edgeDensity = this.value;
     edgeDensity.innerHTML = this.value + "%";
@@ -169,7 +165,14 @@ for(let i = 0; i<randomBtn.length; i++) {
 }
 
 createRandomGraph.addEventListener('click',function() {
-    graph.randomize(randomProperties[0],randomProperties[1],randomProperties[2]);
+    randomProperties.directed = document.querySelector('input[name="directed"]:checked').value;
+    randomProperties.weighted = document.querySelector('input[name="weighted"]:checked').value;
+
+    graph.randomize(
+        randomProperties.vertexNum,
+        randomProperties.edgeDensity,
+        randomProperties.directed,
+        randomProperties.weighted);
 });
 
 
