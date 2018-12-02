@@ -45,7 +45,7 @@ const spacialEntity = (id, ulx, uly, lrx, lry) =>
 
 beforeEach(() => 
 {
-    spacial = new SpacialIndex(spacialName, cellWidth , cellHeight, ratio);
+    spacial = new SpacialIndex(spacialName, width , height, ratio);
     oneCellEntity  = spacialEntity('A', 5, 15, 80, 90);
     twoCellEntity  = spacialEntity('B', 150, 120, 240, 180);
     fourCellEntity = spacialEntity('C', 100, 280, 280, 399);
@@ -241,7 +241,6 @@ describe('Testing forEach on rows/cells.', () =>
         {
             if(typeof colIndex !== 'undefined') slot = slot[colIndex];
             expect(slot.marked).toBe(marked);
-            console.log(marked);
         });
     };
 
