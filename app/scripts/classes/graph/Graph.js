@@ -51,8 +51,8 @@ const Graph = function(container, config={})
     this.model = new GraphModel(container.clientWidth, container.clientHeight, this.config);
     this.view  = new GraphView(container, this.model, this.config);
 
-    this.view.onUndo.attach('undo', function(params) { this.undo(); }.bind(this));
-    this.view.onRedo.attach('redo', function(params) { this.redo(); }.bind(this));
+    // this.view.onUndo.attach('undo', function(params) { this.undo(); }.bind(this));
+    // this.view.onRedo.attach('redo', function(params) { this.redo(); }.bind(this));
     
     this.mouseEventsLogged  = [];
     this.hoverThrottleDelay = 30;
@@ -263,6 +263,7 @@ Graph.prototype =
         this.enableHover();
         this.view.onEdgeFormSubmitted.attach('editEdgeWeight', this.editEdgeWeight.bind(this));
         this.view.onEdgeCurveChanged.attach('edgeSpatialCurve', this.edgeSpatialCurve.bind(this));
+        this.view.onCanvasResize.attach('resizeModel', this.resizeModel.bind(this));
     },
 
     createMode()
@@ -356,6 +357,16 @@ Graph.prototype =
             view.onCanvasMouseUp.detach(eventName);
         });
     },
+
+    resize()
+    {
+        this.view.resize();   
+    },
+    
+    resizeModel(params)
+    {
+        this.model.resize(params.width, params.height);   
+    }
 };
 
 export default Graph;

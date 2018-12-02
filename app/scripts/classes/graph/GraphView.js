@@ -10,7 +10,7 @@
 
 import RenderingEngine from '../engine/RenderingEngine.js'
 import Event from '../Event.js';
-import { appendHtml, stagger } from '../../utils/Utilities.js';
+import { appendHtml } from '../../utils/Utilities.js';
 
 const GraphView = function(container, model, config)
 {
@@ -30,6 +30,7 @@ const GraphView = function(container, model, config)
     this.vertexMap = Object.create(null);
     this.edgeMap   = Object.create(null);
 
+    this.onCanvasResize      = new Event(this);
     this.onCanvasMouseClick  = new Event(this);
     this.onCanvasMouseDown   = new Event(this);
     this.onCanvasMouseUp     = new Event(this);
@@ -440,7 +441,7 @@ GraphView.prototype =
         this.container = container;
         this.engine.appendTo(container);
         this.initCanvasHandlers();
-        this.initResize();
+        // this.initResize();
         this.engine.start();
     },
 
@@ -472,36 +473,45 @@ GraphView.prototype =
         
         }.bind(this));
 
-        window.addEventListener('keydown', function(event)
-        {
-            // stops ALL keybinds on window
-            // event.preventDefault();
-            const key = event.keyCode;
+        // window.addEventListener('keydown', function(event)
+        // {
+        //     // stops ALL keybinds on window
+        //     // event.preventDefault();
+        //     const key = event.keyCode;
 
-            if(event.ctrlKey)
-            { 
-                if(key === 90)
-                {
-                    if(event.shiftKey) this.onRedo.notify();
-                    else               this.onUndo.notify();
-                }
-                else if(key === 89) this.onRedo.notify();
-            }
+        //     if(event.ctrlKey)
+        //     { 
+        //         if(key === 90)
+        //         {
+        //             if(event.shiftKey) this.onRedo.notify();
+        //             else               this.onUndo.notify();
+        //         }
+        //         else if(key === 89) this.onRedo.notify();
+        //     }
 
-        }.bind(this));
+        // }.bind(this));
     },
 
-    initResize()
+    // initResize()
+    // {
+    //     window.addEventListener('resize', stagger(function(event)
+    //     {
+    //         event.preventDefault();
+    //         this.engine.resize();
+    //         this.model.resize(this.engine.canvas.width, this.engine.canvas.height);
+
+    //     }.bind(this), 400));
+    // }, 
+
+    resize()
     {
-        window.addEventListener('resize', stagger(function(event)
+        this.engine.resize();
+        this.onCanvasResize.notify(
         {
-            event.preventDefault();
-            this.engine.resize();
-            this.model.resize(this.engine.canvas.width, this.engine.canvas.height);
-
-        }.bind(this), 400));
-    }, 
-
+            width: this.engine.canvas.width, 
+            height: this.engine.canvas.height
+        });
+    }
 };
 
 export default GraphView;

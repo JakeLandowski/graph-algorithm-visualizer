@@ -33,7 +33,7 @@ const initMockView = () =>
     ];
 
     let event;
-    keys.forEach((key) => 
+    keys.forEach(key => 
     {
         event = new Event(this);
         jest.spyOn(event, 'attach');
@@ -43,7 +43,33 @@ const initMockView = () =>
 
 const initMockModel = () => 
 {
-    mockModel = {};
+    mockModel = 
+    {
+        userCommands: {}
+    };
+
+    const methods = 
+    [
+        "dispatch",
+        "editEdgeWeight",
+        "clearEdgeEdit",
+        "updateEdgeSpatial",
+        "getEdge",
+        "edgeAt",
+        "edgeExists",
+        "startEditingEdge",
+        "vertexAt",
+        "selectVertex",
+        "deselectVertex",
+        "peekSymbol",
+        "hasSymbols",
+        "addTrackingEdge"
+    ];
+
+    methods.forEach(method => 
+    {
+        mockModel[method] = jest.fn();
+    });
 };
 
 initMockView();
@@ -65,13 +91,13 @@ const mockConfig = {};
 const initialize = (container = mockContainer, config = mockConfig) => 
 {
     initMockView();
-    mockModel = {};
+    initMockModel();
     graph = new Graph(container, config);
 };
 
 beforeEach(() => 
 {
-    GraphView.mockClear();
+    GraphView.mockClear(); // for constructor tests
     GraphModel.mockClear();
     initialize();
 });
@@ -151,12 +177,6 @@ describe('Testing onEdgeFormSubmitted event.', () =>
         }
     };
 
-    beforeEach(() => 
-    {
-        mockModel.editEdgeWeight = jest.fn();
-        mockModel.clearEdgeEdit  = jest.fn();
-    });
-
     test('Number weight passed to model.', () => 
     {
         weight = 20;
@@ -183,21 +203,6 @@ describe('Testing onEdgeCurveChanged event.', () =>
 {
     let mockEdge, from, to, centerX, centerY;
 
-    const expectModelGivenWeight = (called) => 
-    {
-        if(called)
-        {
-            expect(mockModel.editEdgeWeight).toHaveBeenCalledWith(weight);
-            expect(mockModel.editEdgeWeight).toHaveBeenCalledTimes(1);
-            expect(mockModel.clearEdgeEdit).toHaveBeenCalledTimes(1);
-        }
-        else
-        {
-            expect(mockModel.editEdgeWeight).toHaveBeenCalledTimes(0);
-            expect(mockModel.clearEdgeEdit).toHaveBeenCalledTimes(0);
-        }
-    };
-
     beforeEach(() => 
     {
         from    = 'A';
@@ -208,8 +213,7 @@ describe('Testing onEdgeCurveChanged event.', () =>
             setBounds: jest.fn()
         };
         
-        graph.model.updateEdgeSpatial = jest.fn();
-        graph.model.getEdge = jest.fn(() => 
+        graph.model.getEdge.mockImplementation(() => 
         {
             return mockEdge;
         });
@@ -237,5 +241,37 @@ describe('Testing onEdgeCurveChanged event.', () =>
     {
         expect(graph.model.updateEdgeSpatial).toHaveBeenCalledTimes(1);
         expect(graph.model.updateEdgeSpatial).toHaveBeenCalledWith(mockEdge);
+    });
+});
+
+describe('Testing onCanvasMouseClick event.', () => 
+{
+    let mockVertex; // set before each tests that needs it
+
+    beforeEach(() => 
+    {
+        graph.model.vertexAt.mockImplementation(() => 
+        {
+            return mockVertex;
+        });
+    });
+
+    test('model.clearEdgeEdit is called at the beginning.', () =>
+    {
+        graph.clickEntity({x: 5, y: 5});
+        expect(mockModel.clearEdgeEdit).toHaveBeenCalledTimes(1);
+    });
+    
+    describe('If vertex exists, a vertex is selected, and', () => 
+    {
+        mockModel.selectedVertex = { data: 'A' };
+        mockVertex = { data: 'B' };
+        
+        test('they are the not the same, then ', () =>
+        {
+            graph.clickEntity({x: 5, y: 5});
+            expect(mockModel.deselectVertex).toHaveBeenCalledTimes(1);
+            expect(mockModel.selectVertex).toHaveBeenCalledTimes(1);         
+        });
     });
 });
