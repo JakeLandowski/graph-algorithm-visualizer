@@ -1,6 +1,8 @@
 html, body {
     overflow: hidden;
-    background-color: white;
+    background-color: #262626;
+    margin: 0;
+    padding: 0;
 }
 
 #main
@@ -8,6 +10,40 @@ html, body {
     position: absolute;
     top: 0; bottom: 0; right: 0; left: 0;
     z-index: 1;
+}
+
+#create-dialog {
+    display: none;
+    position: fixed;
+    top: 0;
+    left:0;
+    height: 100%;
+    width: 100%;
+    z-index: 10;
+    background-color: rgba(10,10,10,.6);
+}
+#undirected {
+    margin-bottom: 15px;
+}
+.select-graph-type-button {
+    display: block;
+    margin: 0 auto;
+    background: rgba(10,10,10,.6);
+    border: 1px solid #6ba2dc;
+    width: 150px;
+    height: 50px;
+    color: #6ba2dc;
+    border-radius: 10px;
+    z-index: 11;
+    top: 40%;
+    position: relative;
+}
+
+.select-graph-type-button:hover {
+    border: 1px solid #2054a0;
+    color: #2054a0;
+    cursor: pointer;
+    outline: none;
 }
 
 .mainmenu {
@@ -35,10 +71,10 @@ html, body {
 
 .future {
     box-shadow:
-            inset 0 0 10px #262626,
-            0 0 10px #262626;
-    background-color:white;
-    border: 1px solid #262626;
+            inset 0 0 10px #2054a0,
+            0 0 10px #2054a0;
+    background-color:rgba(0, 0, 0, 0.65);
+    border: 1px solid #2054a0;
     font-family: 'Orbitron', sans-serif;
 }
 
@@ -53,16 +89,16 @@ html, body {
     overflow: hidden;
     background-color:rgba(0, 0, 0, 0.8);
     box-shadow:
-            inset 0 0 10px #262626,
-            0 0 12px #262626,
-            -5px 0 20px #262626,
-            5px 0 20px #262626;
+            inset 0 0 10px #2054a0,
+            0 0 12px #2054a0,
+            -5px 0 20px #2054a0,
+            5px 0 20px #2054a0;
 }
 
 .shadow {
     /* Use -webkit- only if supporting: Chrome < 54, iOS < 9.3, Android < 4.4.4 */
-    -webkit-filter: drop-shadow(0px 5px 5px #262626);
-    filter: drop-shadow(0px 5px 5px #262626);
+    -webkit-filter: drop-shadow(0px 5px 5px #2054a0);
+    filter: drop-shadow(0px 5px 5px #2054a0);
 }
 
 .noselect {
@@ -84,17 +120,18 @@ html, body {
 }
 
 .ui {
-    stroke: #262626;
+    stroke: #6ba2dc;
     fill: transparent;
 }
 
 .ui-text {
-    color: #262626;
-    fill: #262626;
+    color: #6ba2dc;
+    fill: #6ba2dc;
+    font-family: 'Orbitron', sans-serif;
 }
 
 .menuCircleButton {
-    fill: white;
+    fill: #262626;
 }
 
 .allButtons {
@@ -114,7 +151,7 @@ svg {
 
 
 #question-mark {
-    color: #262626;
+    color: #6ba2dc;
     z-index: 5;
     position: fixed;
     bottom: 1rem;
@@ -124,7 +161,7 @@ svg {
 
 #question-mark:hover {
     cursor: pointer;
-    color: #404040;
+    color: #2054a0;
 }
 
 @media only screen and (max-width: 600px) {
@@ -137,9 +174,9 @@ svg {
     opacity: 0;
     pointer-events: none;
     z-index: 6;
-    stroke: #262626;
+    stroke: #6ba2dc;
     border-radius: 5px;
-    fill: white;
+    fill: rgba(20,20,20,.75);
     stroke-width: 1;
 }
 
@@ -147,4 +184,146 @@ svg {
     z-index: 7;
     opacity: 0;
     transform: rotate(180deg);
+}
+
+#random-graph {
+    position: absolute;
+    bottom: -50px;
+    left: -65px;
+    opacity: 100;
+    pointer-events: none;
+    z-index: 12;
+    stroke: #6ba2dc;
+    border-radius: 5px;
+    fill: rgba(20,20,20,.75);
+    stroke-width: 1;
+}
+
+.random-gen {
+    z-index: 100;
+
+}
+
+*:focus {
+    outline: 0 !important;
+}
+
+.random-gen:hover {
+    stroke: #6ba2dc;
+    cursor: pointer;
+}
+
+#random-graph-button:hover {
+    cursor: pointer;
+
+}
+
+#random-graph-dialog {
+    display: none;
+    position: absolute;
+    width: 300px;
+    bottom: 2%;
+    z-index: 100;
+    font-size: 11pt;
+}
+
+.random-text {
+    margin-left: 15px;
+}
+
+/* The slider itself */
+.slider {
+    -webkit-appearance: none;  /* Override default CSS styles */
+    appearance: none;
+    width: 100%; /* Full-width */
+    height: 2px; /* Specified height */
+    background: #6ba2dc; /* Grey background */
+    outline: none; /* Remove outline */
+    opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+    -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+    transition: opacity .2s;
+}
+
+/* Mouse-over effects */
+.slider:hover {
+    opacity: 1; /* Fully shown on mouse-over */
+}
+
+/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none; /* Override default look */
+    appearance: none;
+    width: 20px; /* Set a specific slider handle width */
+    height: 10px; /* Slider handle height */
+    background: #2054a0; /* Green background */
+    cursor: pointer; /* Cursor on hover */
+}
+
+.slider::-moz-range-thumb {
+    width: 20px; /* Set a specific slider handle width */
+    height: 10px; /* Slider handle height */
+    background: #2054a0; /* Green background */
+    cursor: pointer; /* Cursor on hover */
+}
+
+
+#radio-selectors{
+    text-align: center;
+}
+.btn {
+    font-size: 12px;
+    border: 1px solid #6ba2dc;
+    display: inline-block;
+    padding: 10px;
+    width: 75px;
+    align-content: center;
+    position: relative;
+    text-align: center;
+    transition: background 600ms ease, color 600ms ease;
+}
+
+input[type="radio"].toggle {
+    display: none;
+}
+input[type="radio"].toggle + label {
+    cursor: pointer;
+    min-width: 60px;
+}
+input[type="radio"].toggle + label:hover {
+    background: none;
+    color: #1a1a1a;
+}
+input[type="radio"].toggle + label:after {
+    background: #1a1a1a;
+    content: "";
+    height: 100%;
+    position: absolute;
+    top: 0;
+    transition: left 200ms cubic-bezier(0.77, 0, 0.175, 1);
+    width: 100%;
+    z-index: -1;
+}
+input[type="radio"].toggle.toggle-left + label {
+    border-right: 0;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+input[type="radio"].toggle.toggle-left + label:after {
+    left: 100%;
+}
+input[type="radio"].toggle.toggle-right + label {
+    margin-left: -5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+input[type="radio"].toggle.toggle-right + label:after {
+    left: -100%;
+}
+input[type="radio"].toggle:checked + label {
+    cursor: default;
+    color: #fff;
+    transition: color 200ms;
+}
+input[type="radio"].toggle:checked + label:after {
+    left: 0;
 }
