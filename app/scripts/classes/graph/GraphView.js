@@ -441,7 +441,6 @@ GraphView.prototype =
         this.container = container;
         this.engine.appendTo(container);
         this.initCanvasHandlers();
-        // this.initResize();
         this.engine.start();
     },
 
@@ -472,36 +471,7 @@ GraphView.prototype =
             this.onCanvasMouseMove.notify({x: event.offsetX, y: event.offsetY});
         
         }.bind(this));
-
-        // window.addEventListener('keydown', function(event)
-        // {
-        //     // stops ALL keybinds on window
-        //     // event.preventDefault();
-        //     const key = event.keyCode;
-
-        //     if(event.ctrlKey)
-        //     { 
-        //         if(key === 90)
-        //         {
-        //             if(event.shiftKey) this.onRedo.notify();
-        //             else               this.onUndo.notify();
-        //         }
-        //         else if(key === 89) this.onRedo.notify();
-        //     }
-
-        // }.bind(this));
     },
-
-    // initResize()
-    // {
-    //     window.addEventListener('resize', stagger(function(event)
-    //     {
-    //         event.preventDefault();
-    //         this.engine.resize();
-    //         this.model.resize(this.engine.canvas.width, this.engine.canvas.height);
-
-    //     }.bind(this), 400));
-    // }, 
 
     resize()
     {

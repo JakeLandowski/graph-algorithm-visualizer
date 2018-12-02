@@ -16,26 +16,41 @@ import Arrow from './Arrow.js';
 
 const RenderingEngine = function(config={}) 
 {
-    this.config = 
-    {
-        backgroundColor: config.backgroundColor || '#fff'
-    };
-
-    this.canvas     = document.createElement('canvas');
-    this.context    = this.canvas.getContext('2d');
+    this.canvas = document.createElement('canvas');
+    this.context = this.canvas.getContext('2d');
     this.calcPixelRatio();
     
     // this.canvas.style.background = this.config.backgroundColor; 
 
     // this.frameCount = 0;
-    this.layers    = []; // Layers
+    this.layers = [];
     this.maxLayerLevel = 0;
 };
+
+RenderingEngine.getInstance = function(config)
+{
+    RenderingEngine.instance = RenderingEngine.instance || new RenderingEngine(config);
+    if(config) RenderingEngine.instance.setConfig(config);
+    return RenderingEngine.instance;
+}
 
 RenderingEngine.prototype = 
 {
     requestAnimationFrame: window.requestAnimationFrame.bind(window) || 
                             function(callback){ window.setTimeout(callback, 16) },
+
+    setConfig(config)
+    {
+        this.config = 
+        {
+            backgroundColor: config.backgroundColor || '#fff'
+        };
+    },
+
+    deleteInstance()
+    {
+        delete RenderingEngine.instance;
+    },
 
     calcPixelRatio()
     {
@@ -177,4 +192,7 @@ RenderingEngine.prototype =
     }
 };
 
-export default RenderingEngine;
+export default function singletonConstructor(config)
+{     
+    return RenderingEngine.getInstance(config);    
+};
