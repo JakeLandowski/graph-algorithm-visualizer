@@ -49,7 +49,7 @@ RenderingEngine.prototype =
 
     clear()
     {
-        delete this.layers = [];
+        this.layers = [];
     },
 
     calcPixelRatio()
