@@ -24,7 +24,8 @@ let eduModeActive = false;
 let randomDialogActive = false;
 let elementIds = ['addButton','addEdgeButton','deleteButton'];
 let functionArray = ['createMode','edgeMode','eraseMode'];
-let graph = newGraph({undirected: true});
+let graph;
+newGraph({undirected: true});
 let newBtn = document.getElementsByClassName('newButton');
 let saveBtn  = document.getElementsByClassName('saveButton');
 let loadBtn  = document.getElementsByClassName('loadButton');
@@ -170,12 +171,14 @@ for(let i = 0; i<randomBtn.length; i++) {
 createRandomGraph.addEventListener('click',function() {
     randomProperties.directed = document.querySelector('input[name="directed"]:checked').value;
     randomProperties.weighted = document.querySelector('input[name="weighted"]:checked').value;
+    newGraph({
+        directed:randomProperties.directed,
+        weighted:randomProperties.weighted
+    });
 
     graph.randomize(
         randomProperties.vertexNum,
-        randomProperties.edgeDensity,
-        randomProperties.directed,
-        randomProperties.weighted);
+        randomProperties.edgeDensity);
 });
 
 
@@ -191,5 +194,5 @@ function addFunctionality() {
 }
 function newGraph(config={}) {
     document.getElementById("main").innerHTML = "";
-    return new Graph(document.getElementById('main'), config);
+    graph = new Graph(document.getElementById('main'), config);
 }
