@@ -12,7 +12,7 @@
 import Graph from './classes/graph/Graph.js';
 import Animations from './ui-animations/animations.js';
 import { stagger } from './utils/Utilities.js';
-import RenderingEngine from "./classes/engine/RenderingEngine";
+import RenderingEngine from "./classes/engine/RenderingEngine.js";
 
 Animations.start();
 
@@ -193,7 +193,7 @@ function addFunctionality() {
 }
 function newGraph(config={}) {
     document.getElementById("main").innerHTML = "";
-    RenderingEngine.deleteInstance();
+    new RenderingEngine().clear();
     graph = new Graph(document.getElementById('main'), config);
 }
 
