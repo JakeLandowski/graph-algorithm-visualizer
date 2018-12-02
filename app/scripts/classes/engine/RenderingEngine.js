@@ -47,9 +47,9 @@ RenderingEngine.prototype =
         };
     },
 
-    deleteInstance()
+    clear()
     {
-        delete RenderingEngine.instance;
+        delete this.layers = [];
     },
 
     calcPixelRatio()
