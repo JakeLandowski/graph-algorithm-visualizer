@@ -28,7 +28,7 @@ const Graph = function(container, config={})
     {  
         backgroundColor:        config.backgroundColor        !== undefined ? [config.backgroundColor]        : [background],
         undirected:             config.undirected             !== undefined ? config.undirected               : true,
-        weighted:               config.weighted               !== undefined ? config.weighted                 : true,
+        weighted:               config.weighted               !== undefined ? config.weighted                 : false,
         vertexSize:             config.vertexSize             !== undefined ? config.vertexSize               : 25,
         vertexOutlineSize:      config.vertexOutlineSize      !== undefined ? config.vertexOutlineSize        : 1,
         edgeWidth:              config.edgeWidth              !== undefined ? config.edgeWidth                : 2,
@@ -62,6 +62,11 @@ const Graph = function(container, config={})
 
 Graph.prototype = 
 {
+    randomize()
+    {
+        this.model.randomize();
+    },
+
     //=========== Handlers ===========//
 
     editEdgeWeight(params)
@@ -102,7 +107,7 @@ Graph.prototype =
                 // and edge doesnt exist
                 // create edge
                 if(selected.data !== vertex.data && 
-                    !this.model.adjList.edgeExists(selected.data, vertex.data))
+                   !this.model.edgeExists(selected.data, vertex.data))
                 {
                     this.model.dispatch(this.model.userCommands,
                     {
@@ -144,23 +149,22 @@ Graph.prototype =
             {
                 this.model.startEditingEdge(edge);
             }
-            else if(this.model.symbols.length > 0) // symbols left? Add vertex!
+            else if(this.model.hasSymbols()) // symbols left? Add vertex!
             {   
                 this.model.dispatch(this.model.userCommands,
                 { 
                     type: 'addVertex',
                     data: 
                     {
-                        symbol:        this.model.peekSymbol(),
-                        x:             params.x,
-                        y:             params.y,
-                        numEdges:      0
+                        symbol:   this.model.peekSymbol(),
+                        x:        params.x,
+                        y:        params.y,
+                        numEdges: 0
                     },
                     undo: 'removeVertex'
                 });
             }
         }
-
     },
 
     dragVertex(params)
@@ -191,7 +195,6 @@ Graph.prototype =
             this.view.onCanvasMouseDrag.attach('stickVertexToCursor', stickVertexToCursor.bind(this));
             this.view.onCanvasMouseUp.attach('releaseVertexFromCursor', releaseVertexFromCursor.bind(this));
         }
-
     },
 
     removeEntity(params)
@@ -205,10 +208,10 @@ Graph.prototype =
                 type: 'removeVertex',
                 data: 
                 {
-                    symbol:       vertex.data,
-                    x:            params.x,
-                    y:            params.y,
-                    numEdges:     vertex.numEdges
+                    symbol:   vertex.data,
+                    x:        params.x,
+                    y:        params.y,
+                    numEdges: vertex.numEdges
                 },
                 undo: 'addVertex',
             });
