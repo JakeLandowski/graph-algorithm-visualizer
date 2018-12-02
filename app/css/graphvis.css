@@ -2,8 +2,6 @@
     --main-color: #262626;
     --secondary-color: #9d9b98;
     --background-color: #fff;
-    --light-blue: #6ba2dc;
-    --dark-blue: var(--secondary-color);
 }
 
 html, body {
@@ -29,16 +27,20 @@ html, body {
     width: 100%;
     z-index: 10;
     background-color: var(--background-color);
-    opacity: .75;
+    opacity: .85;
 }
 #undirected {
     margin-bottom: 15px;
+    background: var(--background-color);
+}
+
+#directed {
+    background: var(--background-color);
 }
 .select-graph-type-button {
     display: block;
     margin: 0 auto;
     background: var(--background-color);
-    opacity: .8;
     border: 1px solid var(--main-color);
     width: 150px;
     height: 50px;

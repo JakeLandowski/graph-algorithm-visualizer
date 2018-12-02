@@ -15,9 +15,9 @@ import { rand, throttle } from '../../utils/Utilities.js';
 
 const Graph = function(container, config={})
 {
-    let primaryColor = "#6ba2dc";
-    let secondaryColor = "#2054a0";
-    let background = "#262626";
+    let primaryColor = "#262626";
+    let secondaryColor = "#9d9b98";
+    let background = "#fff";
 
     if(!container.clientWidth || !container.clientHeight) 
         throw new TypeError('Need to provide a containing element for Graph to render in.');

@@ -16,10 +16,8 @@ import { stagger } from './utils/Utilities.js';
 Animations.start();
 
 let eduMode = document.getElementsByClassName('eduButton');
-let primary = "#6ba2dc";
-let secondary = "#2054a0";
-let lightGray = "#9d9b98";
-let darkGray = "#262626";
+let primary = "#262626";
+let secondary = "#9d9b98";
 let white = "#fff";
 let eduModeActive = false;
 let randomDialogActive = false;
@@ -84,11 +82,11 @@ function setHighlights() {
         arrayOfElements = document.getElementsByClassName(elements[i]);
         for (let j = 0; j < arrayOfElements.length; j++) {
             arrayOfElements[j].addEventListener('mouseenter', function () {
-                document.getElementById(elementIds[i]).style.stroke = (eduModeActive) ? lightGray : secondary;
+                document.getElementById(elementIds[i]).style.stroke = primary;
             });
 
             arrayOfElements[j].addEventListener('mouseleave', function () {
-                document.getElementById(elementIds[i]).style.stroke = (eduModeActive) ? darkGray : primary;
+                document.getElementById(elementIds[i]).style.stroke = primary;
             });
         }
     }
@@ -96,13 +94,13 @@ function setHighlights() {
     let menuButton = document.getElementsByClassName('mainButton');
     for (let i = 0; i < menuButton.length; i++) {
         menuButton[i].addEventListener('mouseenter', function () {
-            document.getElementById('outer-spin-circle').style.stroke = (eduModeActive) ? lightGray : secondary;
-            document.getElementById('inner-spin-circle').style.stroke = (eduModeActive) ? lightGray : secondary;
+            document.getElementById('outer-spin-circle').style.stroke = secondary;
+            document.getElementById('inner-spin-circle').style.stroke = secondary;
         });
 
         menuButton[i].addEventListener('mouseleave', function () {
-            document.getElementById('outer-spin-circle').style.stroke = (eduModeActive) ? darkGray : primary;
-            document.getElementById('inner-spin-circle').style.stroke = (eduModeActive) ? darkGray : primary;
+            document.getElementById('outer-spin-circle').style.stroke = primary;
+            document.getElementById('inner-spin-circle').style.stroke = primary;
         });
     }
 }
