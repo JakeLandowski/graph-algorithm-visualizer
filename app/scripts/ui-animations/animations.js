@@ -29,7 +29,10 @@ export default {
         let newGraph = document.getElementsByClassName('newGraphButton');
         let createDialog = document.getElementById('create-dialog');
         let randomBtn = document.getElementsByClassName('randomButton');
-        //alert(localStorage.getItem("graph"));
+
+        rotateMainMenu('#inner','normal',10000);
+        rotateMainMenu('#outer','reverse',15000);
+        addRandomGraphDialogFunctionality();
 
         newGraph.onclick = function () {
             createDialog.style.display = "block";
@@ -49,60 +52,64 @@ export default {
             if (toolTipShown) {
                 toolTipDraw.reverse();
                 toolTipDraw.play();
-
-                let toolTipText = Anime({
-                    opacity: 0,
-                    targets: ".tooltip-text",
-                    duration: 250,
-                    delay: 250,
-                });
+                showDialog('.tooltip-text',0);
             } else {
                 toolTipDraw.reset();
                 toolTipDraw.play();
-
-                let toolTipText = Anime({
-                    opacity: 1,
-                    targets: ".tooltip-text",
-                    duration: 250,
-                    delay: 250,
-                });
+                showDialog('.tooltip-text',1);
             }
             toolTipShown = !toolTipShown;
         };
 
-        let toolTipDraw = Anime({
-            opacity: 1,
-            targets: '#tool-tip-box',
-            strokeDashoffset: [Anime.setDashoffset, 0],
-            easing: 'easeInOutSine',
-            duration: 500,
-            direction: 'alternate',
-            loop: false,
-            autoplay: false
-        });
+        // //ANIMATION FUNCTIONS
+        function rotateMainMenu(target,direction,duration) {
+            let rotate = Anime({
+                targets: target,
+                rotate: '360',
+                loop: true,
+                duration: duration,
+                direction: direction,
+                easing: 'linear'
+            });
+        }
 
-        let hideInnerCircle = Anime({
-            opacity: 1,
-            strokeDashoffset: [0, Anime.setDashoffset],
-            targets: '#inner-circle',
-            easing: 'linear',
-            direction: 'alternate',
-            duration: 2000,
-            loop: false,
-        });
+        function showDialog(target,opacity) {
+            let showDialog = Anime({
+                opacity: opacity,
+                targets: target,
+                duration: 250,
+                delay: 250,
+            });
+        }
 
-        let hideOuterCircle = Anime({
-            opacity: 1,
-            strokeDashoffset: [0, Anime.setDashoffset],
-            targets: '#outer-circle',
-            easing: 'linear',
-            direction: 'alternate',
-            duration: 1800,
-            loop: false,
-        });
+        function addRandomGraphDialogFunctionality() {
+            for(let i = 0; i<randomBtn.length; i++) {
+                randomBtn[i].addEventListener('click', function () {
+                    if (randomDialogShown) {
+                        randomDialogSvg.reverse();
+                        randomDialogSvg.play();
+                        showDialog('#random-graph-dialog',0);
+                    } else {
+                        randomDialogSvg.reset();
+                        randomDialogSvg.play();
+                        showDialog('#random-graph-dialog',1);
+                    }
+                    randomDialogShown = !randomDialogShown;
+                });
+            }
+        }
 
-        //TODO: USE THIS CODE TO CREATE LOOP FOR ANIMATIONS AND FIX BUTTON FUNCTIONALITY
-        //console.log(document.getElementsByTagName('circle'));
+        function rotateTools(target,duration,delay) {
+            let rotate = Anime({
+                opacity: 1,
+                targets: target,
+                rotate: '0',
+                duration: duration,
+                easing: 'easeInExpo',
+                delay: delay
+            });
+        }
+
         function hideMenu() {
             for (let i = 0; i < buttons.length; i++) {
                 let rotateMenu = Anime({
@@ -140,26 +147,12 @@ export default {
 
         function showMenu() {
             for (let i = 0; i < buttons.length; i++) {
-                let rotateMenu = Anime({
-                    opacity: 1,
-                    targets: buttons[i],
-                    rotate: '0',
-                    duration: 900,
-                    easing: 'easeInExpo',
-                    delay: menuDelay
-                });
+                rotateTools(buttons[i],900,menuDelay);
                 menuDelay += 100;
             }
 
             for (let i = 0; i < tools.length; i++) {
-                let rotateTools = Anime({
-                    opacity: 1,
-                    targets: tools[i],
-                    rotate: '0',
-                    duration: 800,
-                    easing: 'easeInExpo',
-                    delay: toolDelay
-                });
+                rotateTools(tools[i],800,toolDelay);
                 toolDelay += 90;
             }
 
@@ -172,33 +165,6 @@ export default {
             menuDelay = 0;
         }
 
-        for(let i = 0; i<randomBtn.length; i++) {
-            randomBtn[i].addEventListener('click', function () {
-                if (randomDialogShown) {
-                    randomDialogSvg.reverse();
-                    randomDialogSvg.play();
-
-                    let randomStuff = Anime({
-                        opacity: 0,
-                        targets: "#random-graph-dialog",
-                        duration: 250,
-                        delay: 250,
-                    });
-                } else {
-                    randomDialogSvg.reset();
-                    randomDialogSvg.play();
-
-                    let randomStuff = Anime({
-                        opacity: 1,
-                        targets: "#random-graph-dialog",
-                        duration: 250,
-                        delay: 250,
-                    });
-                }
-                randomDialogShown = !randomDialogShown;
-            });
-        }
-
         let randomDialogSvg = Anime({
             targets: '#random-graph-box',
             strokeDashoffset: [Anime.setDashoffset, 0],
@@ -209,24 +175,35 @@ export default {
             autoplay: false
         });
 
-
-        //ANIMATION FUNCTIONS
-        let rotateOuter = Anime({
-            targets: '#outer',
-            rotate: '360',
-            loop: true,
-            duration: 10000,
-            easing: 'linear'
+        let toolTipDraw = Anime({
+            opacity: 1,
+            targets: '#tool-tip-box',
+            strokeDashoffset: [Anime.setDashoffset, 0],
+            easing: 'easeInOutSine',
+            duration: 500,
+            direction: 'alternate',
+            loop: false,
+            autoplay: false
         });
 
-        let rotateInner = Anime({
-            targets: '#inner',
-            rotate: '360',
-            loop: true,
-            duration: 15000,
-            direction: 'reverse',
-            easing: 'linear'
+        let hideInnerCircle = Anime({
+            opacity: 1,
+            strokeDashoffset: [0, Anime.setDashoffset],
+            targets: '#inner-circle',
+            easing: 'linear',
+            direction: 'alternate',
+            duration: 2000,
+            loop: false,
+        });
+
+        let hideOuterCircle = Anime({
+            opacity: 1,
+            strokeDashoffset: [0, Anime.setDashoffset],
+            targets: '#outer-circle',
+            easing: 'linear',
+            direction: 'alternate',
+            duration: 1800,
+            loop: false,
         });
     }
 };
-// });

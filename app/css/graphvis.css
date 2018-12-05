@@ -355,6 +355,7 @@ svg {
 
 #radio-selectors{
     text-align: center;
+    z-index: 11;
 }
 .btn {
     font-size: 12px;
@@ -418,4 +419,8 @@ input[type="radio"].toggle:checked + label:after {
     position: fixed;
     bottom: -5.75rem;
     left: -6rem;
+}
+
+#random-graph-box {
+
 }

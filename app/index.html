@@ -171,23 +171,14 @@
     </div>
 
     <div id="random-graph-dialog">
-        <svg width="500" height="400" id="random-graph-svg">
-            <path filter="url(#shadow)" class="shadow future" id="random-graph-box" d="
-                      M100,4
-                      h350 a20,20 0 0 1 20,20
-                      v250 a20,20 0 0 1 -20,20
-                      h-350 a20,20 0 0 1 -20,-20
-                      v-250 a20,20 0 0 1 20,-20 z"
-                  fill="none" stroke="black" stroke-width="1">
-            </path>
-        </svg>
-        <input type="range" min="1" max="26" value="13" class="slider" id="vertex-number-slider">
-        <p class="ui-text random-text">Total Vertices: <span id="vertex-number"></span></p>
-
-        <input type="range" min="1" max="100" value="50" class="slider" id="edge-density-slider">
-        <p class="ui-text random-text">Edge Density: <span id="edge-density"></span></p>
 
         <div id="radio-selectors">
+            <input type="range" min="1" max="26" value="13" class="slider" id="vertex-number-slider">
+            <p class="ui-text random-text">Total Vertices: <span id="vertex-number"></span></p>
+
+            <input type="range" min="1" max="100" value="50" class="slider" id="edge-density-slider">
+            <p class="ui-text random-text">Edge Density: <span id="edge-density"></span></p>
+
             <input id="directed-on" class="toggle toggle-left" name="directed" value="true" type="radio">
             <label for="directed-on" class="btn ui-text">Directed</label>
             <input id="directed-off" class="toggle toggle-right" name="directed" value="false" type="radio" checked>
@@ -201,6 +192,16 @@
         </div>
 
         <br>
+        <svg width="500" height="400" id="random-graph-svg">
+            <path filter="url(#shadow)" class="shadow future" id="random-graph-box" d="
+                      M100,4
+                      h350 a20,20 0 0 1 20,20
+                      v250 a20,20 0 0 1 -20,20
+                      h-350 a20,20 0 0 1 -20,-20
+                      v-250 a20,20 0 0 1 20,-20 z"
+                  fill="none" stroke="black" stroke-width="1">
+            </path>
+        </svg>
         <button class="select-graph-type-button ui-text" id="generate-random-graph">Generate</button>
     </div>
     <!-- Graph Canvas div -->
