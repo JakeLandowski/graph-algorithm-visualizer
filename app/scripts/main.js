@@ -24,8 +24,6 @@ let eduModeActive = false;
 let randomDialogActive = false;
 let elementIds = ['addButton','addEdgeButton','deleteButton'];
 let functionArray = ['createMode','edgeMode','eraseMode'];
-let graph;
-newGraph({undirected: true});
 let newBtn = document.getElementsByClassName('newButton');
 let saveBtn  = document.getElementsByClassName('saveButton');
 let loadBtn  = document.getElementsByClassName('loadButton');
@@ -40,6 +38,8 @@ let randomProperties = {
     directed:"undirected",
     weighted:"weighted"
 };
+
+let graph = newGraph({undirected: true});
 
 addFunctionality();
 setHighlights();
@@ -59,8 +59,6 @@ for(let i = 0; i<eduMode.length; i++) {
 
             eduModeActive = false;
         } else {
-            primary = darkGray;
-            secondary = lightGray;
             document.getElementById('pagestyle').setAttribute('href', 'css/graphedu.css');
             for(let j = 0; j<ui.length; j++) {
                 ui[j].style.stroke = darkGray;
@@ -150,12 +148,16 @@ document.getElementById('create-dialog').onclick = function() {
 
 
 directed.onclick = function () {
-    graph = newGraph({undirected: false});
+    graph.setConfig({undirected: false});
+    RenderingEngine().clear();
+    graph.clear();
     document.getElementById('create-dialog').style.display = "none";
 };
 
 undirected.onclick = function () {
-    graph = newGraph({undirected: true});
+    graph.setConfig({undirected: true});
+    RenderingEngine().clear();
+    graph.clear();
     document.getElementById('create-dialog').style.display = "none";
 };
 
@@ -170,10 +172,13 @@ for(let i = 0; i<loadBtn.length; i++) {
 createRandomGraph.addEventListener('click',function() {
     randomProperties.directed = document.querySelector('input[name="directed"]:checked').value;
     randomProperties.weighted = document.querySelector('input[name="weighted"]:checked').value;
-    newGraph({
+    
+    graph.setConfig({
         directed:randomProperties.directed,
         weighted:randomProperties.weighted
     });
+    RenderingEngine().clear();
+    graph.clear();
 
     graph.randomize(
         randomProperties.vertexNum,
@@ -193,8 +198,8 @@ function addFunctionality() {
 }
 function newGraph(config={}) {
     document.getElementById("main").innerHTML = "";
-    new RenderingEngine().clear();
-    graph = new Graph(document.getElementById('main'), config);
+    RenderingEngine().clear();
+    return new Graph(document.getElementById('main'), config);
 }
 
 function initResize()
@@ -203,9 +208,6 @@ function initResize()
     {
         event.preventDefault();
         graph.resize();
-        // this.engine.resize();
-        // this.model.resize(this.engine.canvas.width, this.engine.canvas.height);
-
     }, 400));
 }
 
@@ -221,10 +223,10 @@ function initUndoRedo()
         { 
             if(key === 90)
             {
-                if(event.shiftKey) graph.redo(); //this.onRedo.notify();
-                else               graph.undo(); //this.onUndo.notify();
+                if(event.shiftKey) graph.redo(); 
+                else               graph.undo(); 
             }
-            else if(key === 89) graph.redo(); //this.onRedo.notify();
+            else if(key === 89) graph.redo();
         }
     });
 }

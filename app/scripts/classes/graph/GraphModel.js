@@ -92,7 +92,6 @@ GraphModel.prototype =
 
             const x = (rowIndex + 1) * grid.cellWidth; // need to figure out how to constrain to smaller 
             const y = (randIndex + 1) * grid.cellHeight; // square in center of canvas
-            console.log();
 
             this.dispatch(this.userCommands,
             { 

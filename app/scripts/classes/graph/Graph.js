@@ -15,41 +15,17 @@ import { rand, throttle } from '../../utils/Utilities.js';
 
 const Graph = function(container, config={})
 {
-    let primaryColor = "#262626";
-    let secondaryColor = "#9d9b98";
-    let background = "#fff";
+    this.primaryColor = "#262626";
+    this.secondaryColor = "#9d9b98";
+    this.background = "#fff";
 
     if(!container.clientWidth || !container.clientHeight) 
         throw new TypeError('Need to provide a containing element for Graph to render in.');
     
     this.container = container;
-    
-    this.config = 
-    {  
-        backgroundColor:        config.backgroundColor        !== undefined ? [config.backgroundColor]        : [background],
-        undirected:             config.undirected             !== undefined ? config.undirected               : true,
-        weighted:               config.weighted               !== undefined ? config.weighted                 : false,
-        vertexSize:             config.vertexSize             !== undefined ? config.vertexSize               : 25,
-        vertexOutlineSize:      config.vertexOutlineSize      !== undefined ? config.vertexOutlineSize        : 1,
-        edgeWidth:              config.edgeWidth              !== undefined ? config.edgeWidth                : 2,
-        edgeBoxSize:            config.edgeBoxSize            !== undefined ? config.edgeBoxSize              : 15,
-        edgeCurveOffset:        config.edgeCurveOffset        !== undefined ? config.edgeCurveOffset          : 100,
-        vertexOutlineColor:     config.vertexOutlineColor     !== undefined ? [config.vertexOutlineColor]     : [primaryColor], 
-        vertexTextColor:        config.vertexTextColor        !== undefined ? [config.vertexTextColor]        : [primaryColor],
-        vertexHoverColor:       config.vertexHoverColor       !== undefined ? [config.vertexHoverColor]       : [secondaryColor],
-        vertexSelectColor:      config.vertexSelectColor      !== undefined ? [config.vertexSelectColor]      : [secondaryColor],
-        edgeLineColor:          config.edgeLineColor          !== undefined ? [config.edgeLineColor]          : [primaryColor],
-        edgeBoxOutlineColor:    config.edgeBoxOutlineColor    !== undefined ? [config.edgeBoxOutlineColor]    : ['transparent'],
-        edgeBoxBackgroundColor: config.edgeBoxBackgroundColor !== undefined ? [config.edgeBoxBackgroundColor] : ['transparent'],
-        edgeTextColor:          config.edgeTextColor          !== undefined ? [config.edgeTextColor]          : [primaryColor],
-        edgeArrowColor:         config.edgeArrowColor         !== undefined ? [config.edgeArrowColor]         : [primaryColor],
-        edgeHoverColor:         config.edgeHoverColor         !== undefined ? [config.edgeHoverColor]         : [secondaryColor],
-        trackingEdgeColor:      config.trackingEdgeColor      !== undefined ? [config.trackingEdgeColor]      : [secondaryColor],
-    }; // these are arrays because it makes the colors pointers that cascade down and canvas render automatically extacts the values
-        //from the array so if you decide to change the color you will need to access the array [0] and change that color
-
-    this.model = new GraphModel(container.clientWidth, container.clientHeight, this.config);
-    this.view  = new GraphView(container, this.model, this.config);
+    this.setConfig(config);
+    this.initModel();
+    this.view = new GraphView(container, this.model, this.config);
 
     // this.view.onUndo.attach('undo', function(params) { this.undo(); }.bind(this));
     // this.view.onRedo.attach('redo', function(params) { this.redo(); }.bind(this));
@@ -366,6 +342,47 @@ Graph.prototype =
     resizeModel(params)
     {
         this.model.resize(params.width, params.height);   
+    },
+
+    initModel()
+    {
+        this.model = new GraphModel(this.container.clientWidth, this.container.clientHeight, this.config);
+    },
+
+    clear()
+    {
+        this.view.destroyHandlers();
+        this.initModel();
+        this.view.setConfig(this.config);
+        this.view.setModel(this.model);
+        this.view.initHandlers();
+    },
+
+    setConfig(config)
+    {
+        this.config = 
+        {  
+            backgroundColor:        config.backgroundColor        !== undefined ? [config.backgroundColor]        : [this.background],
+            undirected:             config.undirected             !== undefined ? config.undirected               : true,
+            weighted:               config.weighted               !== undefined ? config.weighted                 : false,
+            vertexSize:             config.vertexSize             !== undefined ? config.vertexSize               : 25,
+            vertexOutlineSize:      config.vertexOutlineSize      !== undefined ? config.vertexOutlineSize        : 1,
+            edgeWidth:              config.edgeWidth              !== undefined ? config.edgeWidth                : 2,
+            edgeBoxSize:            config.edgeBoxSize            !== undefined ? config.edgeBoxSize              : 15,
+            edgeCurveOffset:        config.edgeCurveOffset        !== undefined ? config.edgeCurveOffset          : 100,
+            vertexOutlineColor:     config.vertexOutlineColor     !== undefined ? [config.vertexOutlineColor]     : [this.primaryColor], 
+            vertexTextColor:        config.vertexTextColor        !== undefined ? [config.vertexTextColor]        : [this.primaryColor],
+            vertexHoverColor:       config.vertexHoverColor       !== undefined ? [config.vertexHoverColor]       : [this.secondaryColor],
+            vertexSelectColor:      config.vertexSelectColor      !== undefined ? [config.vertexSelectColor]      : [this.secondaryColor],
+            edgeLineColor:          config.edgeLineColor          !== undefined ? [config.edgeLineColor]          : [this.primaryColor],
+            edgeBoxOutlineColor:    config.edgeBoxOutlineColor    !== undefined ? [config.edgeBoxOutlineColor]    : ['transparent'],
+            edgeBoxBackgroundColor: config.edgeBoxBackgroundColor !== undefined ? [config.edgeBoxBackgroundColor] : ['transparent'],
+            edgeTextColor:          config.edgeTextColor          !== undefined ? [config.edgeTextColor]          : [this.primaryColor],
+            edgeArrowColor:         config.edgeArrowColor         !== undefined ? [config.edgeArrowColor]         : [this.primaryColor],
+            edgeHoverColor:         config.edgeHoverColor         !== undefined ? [config.edgeHoverColor]         : [this.secondaryColor],
+            trackingEdgeColor:      config.trackingEdgeColor      !== undefined ? [config.trackingEdgeColor]      : [this.secondaryColor],
+        }; // these are arrays because it makes the colors pointers that cascade down and canvas render automatically extacts the values
+            //from the array so if you decide to change the color you will need to access the array [0] and change that color
     }
 };
 

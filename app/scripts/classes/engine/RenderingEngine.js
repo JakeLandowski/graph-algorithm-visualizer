@@ -39,7 +39,7 @@ RenderingEngine.prototype =
     requestAnimationFrame: window.requestAnimationFrame.bind(window) || 
                             function(callback){ window.setTimeout(callback, 16) },
 
-    setConfig(config)
+    setConfig(config) // this might be holding graph in memory?? 
     {
         this.config = 
         {
