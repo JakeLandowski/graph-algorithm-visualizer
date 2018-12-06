@@ -66,14 +66,21 @@ GraphModel.prototype =
 {
     randomize(numVertices, edgeDensity)
     {
+        console.log(numVertices);
+        console.log(edgeDensity);
         this.createRandomVertices(numVertices); 
+        this.createRandomEdges(edgeDensity);
     },
 
-    createRandomVertices(numVertices)
+    createRandomVertices(numVertices=13)
     {
-        numVertices = numVertices < 0 ? 0 : 
-            (numVertices > this.symbols.length ? this.symbols.length : numVertices);
-        
+        const drawDelay = 25;
+
+        if(numVertices < 0) 
+            numVertices = 0;
+        else if(numVertices > this.symbols.length) 
+            numVertices = this.symbols.length;
+
         const grid = new SpacialIndex('randomize', this.width, this.height, numVertices);
         let unMarked, randIndex, randomPoint;
 
@@ -99,8 +106,35 @@ GraphModel.prototype =
                     undo: 'removeVertex'
                 });
 
-            }, rowIndex * 25);
+            }, rowIndex * drawDelay);
         });
+    },
+
+    createRandomEdges(edgeDensity=50)
+    {
+        setTimeout(function()
+        {
+            this.adjList.forEachVertex(function(vertex)
+            {
+                this.adjList.forEachVertex(function(otherVertex) 
+                {
+                    if(rand(1, 100) <= edgeDensity)
+                    {
+                        this.dispatch(this.userCommands,
+                        {
+                            type: 'addEdge',
+                            data: 
+                            {
+                                from:   vertex.data, 
+                                to:     otherVertex.data,
+                                weight: rand(1, 20)     
+                            },
+                            undo: 'removeEdge'
+                        });
+                    }
+                }.bind(this)); 
+            }.bind(this));
+        }.bind(this), 500);
     },
 
     markColumn(grid, columnIndex)
@@ -350,7 +384,7 @@ GraphModel.prototype =
         const to     = args.to;
         const weight = args.weight;  
 
-        if(!this.adjList.edgeExists(from, to))
+        if(!this.adjList.edgeExists(from, to) && from !== to)
         {
             const edge = this.edgeFactory.create(args.from, args.to, this.config.edgeBoxSize, weight);
             

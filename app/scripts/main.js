@@ -172,14 +172,17 @@ for(let i = 0; i<loadBtn.length; i++) {
 createRandomGraph.addEventListener('click',function() {
     randomProperties.directed = document.querySelector('input[name="directed"]:checked').value;
     randomProperties.weighted = document.querySelector('input[name="weighted"]:checked').value;
+    randomProperties.edgeDensity = document.getElementById('edge-density-slider').value;
+    randomProperties.vertexNum = document.getElementById('vertex-number-slider').value;
     
+
     graph.setConfig({
         directed:randomProperties.directed,
         weighted:randomProperties.weighted
     });
     RenderingEngine().clear();
     graph.clear();
-
+    console.log(randomProperties.vertexNum);
     graph.randomize(
         randomProperties.vertexNum,
         randomProperties.edgeDensity);

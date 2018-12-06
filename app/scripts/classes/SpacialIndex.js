@@ -87,7 +87,10 @@ SpacialIndex.prototype =
     {
         if(this._validIndex(rowIndex, this.index.length))
         {
-            this.index[rowIndex].forEach(cell => action(cell));
+            this.index[rowIndex].forEach(function(cell) 
+            {
+                 action(cell);
+            });
         }   
     },
 
@@ -101,7 +104,7 @@ SpacialIndex.prototype =
     {
         if(this._validIndex(colIndex, this.index[0].length))
         {
-            this.forEachRow(row => 
+            this.forEachRow(function(row) 
             {
                 action(row[colIndex]);
             });
@@ -110,7 +113,10 @@ SpacialIndex.prototype =
 
     forEachRow(action)
     {
-        this.index.forEach((row, index) => action(row, index));
+        this.index.forEach(function(row, index)
+        {
+            action(row, index);
+        }); 
     },
 
     randomPointFromCell(row, col)

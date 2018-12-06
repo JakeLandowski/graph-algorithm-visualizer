@@ -38,9 +38,9 @@ const Graph = function(container, config={})
 
 Graph.prototype = 
 {
-    randomize()
+    randomize(numVertices, edgeDensity)
     {
-        this.model.randomize();
+        this.model.randomize(numVertices, edgeDensity);
     },
 
     //=========== Handlers ===========//
