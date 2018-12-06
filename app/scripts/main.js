@@ -182,7 +182,7 @@ createRandomGraph.addEventListener('click',function() {
     });
     RenderingEngine().clear();
     graph.clear();
-    console.log(randomProperties.vertexNum);
+    
     graph.randomize(
         randomProperties.vertexNum,
         randomProperties.edgeDensity);
