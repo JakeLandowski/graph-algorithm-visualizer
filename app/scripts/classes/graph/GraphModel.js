@@ -64,48 +64,57 @@ const GraphModel = function(width, height, config, cellRatio=5)
 
 GraphModel.prototype = 
 {
-    randomize()
+    randomize(numVertices, edgeDensity)
     {
-        const grid = new SpacialIndex('randomize', this.width, this.height, 8);
-        grid.index[0][0].marked = true;
+        this.createRandomVertices(numVertices); 
+    },
+
+    createRandomVertices(numVertices)
+    {
+        numVertices = numVertices < 0 ? 0 : 
+            (numVertices > this.symbols.length ? this.symbols.length : numVertices);
         
+        const grid = new SpacialIndex('randomize', this.width, this.height, numVertices);
+        let unMarked, randIndex, randomPoint;
+
         grid.forEachRow((row, rowIndex) => 
         {
-            const unMarkedCellIndicies = row.reduce((arr, cell, index) => 
+            setTimeout(() => 
             {
-                if(!cell.marked) 
-                {
-                    arr.push(index);
-                }
+                unMarked = this.unMarkedCellIndiciesFrom(row);
+                randIndex = unMarked[rand(0, unMarked.length-1)];
+                randomPoint = grid.randomPointFromCell(rowIndex, randIndex);
+                
+                this.markColumn(grid, randIndex);
+                this.dispatch(this.userCommands,
+                { 
+                    type: 'addVertex',
+                    data: 
+                    {
+                        symbol:   this.peekSymbol(),
+                        x:        randomPoint.x,
+                        y:        randomPoint.y,
+                        numEdges: 0
+                    },
+                    undo: 'removeVertex'
+                });
 
-                return arr;
-            }, []);
-
-            const randIndex = unMarkedCellIndicies[rand(0, unMarkedCellIndicies.length-1)];
-            const chosenCell = row[randIndex];
-            chosenCell.vertex = true;
-            
-            grid.forEachCellInCol(randIndex, cell => 
-            {
-                cell.marked = true;
-            });
-
-            const x = (rowIndex + 1) * grid.cellWidth; // need to figure out how to constrain to smaller 
-            const y = (randIndex + 1) * grid.cellHeight; // square in center of canvas
-
-            this.dispatch(this.userCommands,
-            { 
-                type: 'addVertex',
-                data: 
-                {
-                    symbol:   this.peekSymbol(),
-                    x:        x,
-                    y:        y,
-                    numEdges: 0
-                },
-                undo: 'removeVertex'
-            });
+            }, rowIndex * 25);
         });
+    },
+
+    markColumn(grid, columnIndex)
+    {
+        grid.forEachCellInCol(columnIndex, cell => cell.marked = true);
+    },
+
+    unMarkedCellIndiciesFrom(row)
+    {
+        return row.reduce((arr, cell, index) => 
+        {
+            if(!cell.marked) arr.push(index);
+            return arr;
+        }, []);
     },
 
 //====================== Command Handling ===========================//

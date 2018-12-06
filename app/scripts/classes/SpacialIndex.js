@@ -11,7 +11,7 @@
 
 'use strict';
 
-import { isUndefined } from '../utils/Utilities.js';
+import { isUndefined, rand } from '../utils/Utilities.js';
 
 /**
  * Class to manage a logical 2D grid of cells for
@@ -27,9 +27,9 @@ import { isUndefined } from '../utils/Utilities.js';
 const SpacialIndex = function(label, width, height, cellRatio)
 {
     this.cellsLabel = label + '_cells';
-    this.cellWidth  = width/cellRatio;
-    this.cellHeight = height/cellRatio;
-    this.cellRatio  = cellRatio;
+    this.cellRatio  = cellRatio < 0 ? 0 : cellRatio;
+    this.cellWidth  = width/this.cellRatio;
+    this.cellHeight = height/this.cellRatio;
     this._initIndex();
 };
 
@@ -111,6 +111,14 @@ SpacialIndex.prototype =
     forEachRow(action)
     {
         this.index.forEach((row, index) => action(row, index));
+    },
+
+    randomPointFromCell(row, col)
+    {
+        return {
+            x: row * this.cellWidth  + rand(row, this.cellWidth),
+            y: col * this.cellHeight + rand(row, this.cellHeight)
+        }
     },
 
     /**
