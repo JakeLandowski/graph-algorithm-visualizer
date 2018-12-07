@@ -66,85 +66,114 @@ GraphModel.prototype =
 {
     randomize(numVertices, edgeDensity)
     {
-        console.log(numVertices);
-        console.log(edgeDensity);
-        this.createRandomVertices(numVertices); 
-        this.createRandomEdges(edgeDensity);
-    },
-
-    createRandomVertices(numVertices=13)
-    {
-        const drawDelay = 25;
-
         if(numVertices < 0) 
             numVertices = 0;
         else if(numVertices > this.symbols.length) 
             numVertices = this.symbols.length;
 
+        const drawDelay = 35;
+        let totalDelay = (numVertices - 1) * drawDelay;
+        
+        this.createRandomVertices(numVertices, drawDelay);
+
+        setTimeout(function()
+        {
+            this.createRandomEdges(edgeDensity, drawDelay);
+        }.bind(this), totalDelay); 
+        
+    },
+
+    createRandomVertices(numVertices=13, drawDelay=25)
+    {
         const grid = new SpacialIndex('randomize', this.width, this.height, numVertices);
         let unMarked, randIndex, randomPoint;
 
-        grid.forEachRow((row, rowIndex) => 
+        grid.forEachRow(function(row, rowIndex)
         {
-            setTimeout(() => 
+            setTimeout(function()
             {
                 unMarked = this.unMarkedCellIndiciesFrom(row);
                 randIndex = unMarked[rand(0, unMarked.length-1)];
                 randomPoint = grid.randomPointFromCell(rowIndex, randIndex);
                 
                 this.markColumn(grid, randIndex);
-                this.dispatch(this.userCommands,
-                { 
-                    type: 'addVertex',
-                    data: 
-                    {
-                        symbol:   this.peekSymbol(),
-                        x:        randomPoint.x,
-                        y:        randomPoint.y,
-                        numEdges: 0
-                    },
-                    undo: 'removeVertex'
-                });
+                this.dispatchAddVertex(this.userCommands, randomPoint.x, randomPoint.y);
 
-            }, rowIndex * drawDelay);
+            }.bind(this), rowIndex * drawDelay);
+        }.bind(this));
+    },
+
+    createRandomEdges(edgeDensity=50, drawDelay=25)
+    {
+        let outerCounter = 0;
+        let innerCounter;
+
+        this.adjList.forEachVertex(function(fromVertex)
+        {
+            setTimeout(function()
+            {
+                innerCounter = 0;
+                this.adjList.forEachVertex(function(toVertex)
+                {
+                    setTimeout(function()
+                    {
+                        if(rand(1, 100) <= edgeDensity)
+                        {
+                            this.dispatchAddEdge(this.userCommands, fromVertex.data, toVertex.data);
+                        }
+                    }.bind(this), drawDelay * innerCounter);
+                    
+                    innerCounter++;
+                    
+                }.bind(this)); 
+            }.bind(this), drawDelay * outerCounter);
+
+            outerCounter++;
+        }.bind(this));
+    },
+
+    dispatchAddVertex(log, x, y)
+    {
+        this.dispatch(log,
+        { 
+            type: 'addVertex',
+            data: 
+            {
+                symbol:   this.peekSymbol(),
+                x:        x,
+                y:        y,
+                numEdges: 0
+            },
+            undo: 'removeVertex'
         });
     },
 
-    createRandomEdges(edgeDensity=50)
+    dispatchAddEdge(log, from, to)
     {
-        setTimeout(function()
+        this.dispatch(log,
         {
-            this.adjList.forEachVertex(function(vertex)
+            type: 'addEdge',
+            data: 
             {
-                this.adjList.forEachVertex(function(otherVertex) 
-                {
-                    if(rand(1, 100) <= edgeDensity)
-                    {
-                        this.dispatch(this.userCommands,
-                        {
-                            type: 'addEdge',
-                            data: 
-                            {
-                                from:   vertex.data, 
-                                to:     otherVertex.data,
-                                weight: rand(1, 20)     
-                            },
-                            undo: 'removeEdge'
-                        });
-                    }
-                }.bind(this)); 
-            }.bind(this));
-        }.bind(this), 500);
+                from:   from, 
+                to:     to,
+                weight: rand(1, 20)     
+            },
+            undo: 'removeEdge'
+        });
     },
 
     markColumn(grid, columnIndex)
     {
-        grid.forEachCellInCol(columnIndex, cell => cell.marked = true);
+        grid.forEachCellInCol(columnIndex, function(cell)
+        {
+            cell.marked = true;
+        });
     },
 
     unMarkedCellIndiciesFrom(row)
     {
-        return row.reduce((arr, cell, index) => 
+        return row.reduce(function(arr, cell, index) 
         {
             if(!cell.marked) arr.push(index);
             return arr;
