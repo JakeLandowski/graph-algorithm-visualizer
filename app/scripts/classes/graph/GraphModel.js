@@ -85,7 +85,7 @@ GraphModel.prototype =
 
     createRandomVertices(numVertices=13, drawDelay=25)
     {
-        const grid = new SpacialIndex('randomize', this.width, this.height, numVertices);
+        const grid = new SpacialIndex('randomize', this.width-250, this.height-100, numVertices, 200, 50);
         let unMarked, randIndex, randomPoint;
 
         grid.forEachRow(function(row, rowIndex)

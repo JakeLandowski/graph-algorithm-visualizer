@@ -23,9 +23,13 @@ import { isUndefined, rand } from '../utils/Utilities.js';
  * @param {number} cellWidth - width of each cell 
  * @param {number} cellHeight - height of each cell
  * @param {number} cellRatio - number of cells per row/column
+ * @param {number} cornerX - x coordinate of upper left corner
+ * @param {number} cornerY - y coordinate of upper left corner
  */
-const SpacialIndex = function(label, width, height, cellRatio)
+const SpacialIndex = function(label, width, height, cellRatio, cornerX=0, cornerY=0)
 {
+    this.cornerX = cornerX;
+    this.cornerY = cornerY;
     this.cellsLabel = label + '_cells';
     this.cellRatio  = cellRatio < 0 ? 0 : cellRatio;
     this.cellWidth  = width/this.cellRatio;
@@ -122,8 +126,8 @@ SpacialIndex.prototype =
     randomPointFromCell(row, col)
     {
         return {
-            x: row * this.cellWidth  + rand(row, this.cellWidth),
-            y: col * this.cellHeight + rand(row, this.cellHeight)
+            x: row * this.cellWidth  + rand(row, this.cellWidth) + this.cornerX,
+            y: col * this.cellHeight + rand(row, this.cellHeight) + this.cornerY
         }
     },
 
@@ -227,12 +231,12 @@ SpacialIndex.prototype =
 
     _cellRow(x)
     {
-        return Math.floor(x / this.cellWidth);
+        return Math.floor((x + this.cornerX) / this.cellWidth);
     },
 
     _cellCol(y)
     {
-        return Math.floor(y / this.cellHeight);
+        return Math.floor((y + this.cornerY) / this.cellHeight);
     },
 
     _injectCellsArray(entity)

@@ -175,11 +175,11 @@ createRandomGraph.addEventListener('click',function() {
     randomProperties.edgeDensity = document.getElementById('edge-density-slider').value;
     randomProperties.vertexNum = document.getElementById('vertex-number-slider').value;
     
-
     graph.setConfig({
         directed:randomProperties.directed,
         weighted:randomProperties.weighted
     });
+
     RenderingEngine().clear();
     graph.clear();
     
@@ -187,7 +187,6 @@ createRandomGraph.addEventListener('click',function() {
         randomProperties.vertexNum,
         randomProperties.edgeDensity);
 });
-
 
 function addFunctionality() {
     let elements;
@@ -199,6 +198,7 @@ function addFunctionality() {
         })}
     }
 }
+
 function newGraph(config={}) {
     document.getElementById("main").innerHTML = "";
     RenderingEngine().clear();
