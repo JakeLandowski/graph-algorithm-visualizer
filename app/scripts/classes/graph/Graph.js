@@ -236,11 +236,12 @@ Graph.prototype =
 
     initAlwaysOnFeatures()
     {
-        this.enableHover();
+        this.view.onCanvasMouseMove.attach('hoverEntity', throttle(this.hoverEntity.bind(this), this.hoverThrottleDelay));
         this.view.onEdgeFormSubmitted.attach('editEdgeWeight', this.editEdgeWeight.bind(this));
         this.view.onEdgeCurveChanged.attach('edgeSpatialCurve', this.edgeSpatialCurve.bind(this));
         this.view.onCanvasResize.attach('resizeModel', this.resizeModel.bind(this));
     },
+
 
     createMode()
     {
@@ -267,11 +268,6 @@ Graph.prototype =
         
         this.mouseEventsLogged.push('removeEntity');
         this.view.onCanvasMouseClick.attach('removeEntity', this.removeEntity.bind(this));
-    },
-
-    enableHover()
-    {
-        this.view.onCanvasMouseMove.attach('hoverEntity', throttle(this.hoverEntity.bind(this), this.hoverThrottleDelay));
     },
 
     trackEdgeToCursor(x, y)
@@ -351,11 +347,15 @@ Graph.prototype =
 
     clear()
     {
+        // this.model.clearGraph();
         this.view.destroyHandlers();
+        this.clearMouseEvents();
         this.initModel();
         this.view.setConfig(this.config);
         this.view.setModel(this.model);
+        this.view.initShapeMaps();
         this.view.initHandlers();
+        this.createMode();
     },
 
     setConfig(config)

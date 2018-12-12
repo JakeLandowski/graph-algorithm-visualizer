@@ -106,7 +106,7 @@ GraphModel.prototype =
     createRandomEdges(edgeDensity=50, drawDelay=25)
     {
         let outerCounter = 0;
-        let innerCounter;
+        let innerCounter, from, to;
 
         this.adjList.forEachVertex(function(fromVertex)
         {
@@ -117,7 +117,12 @@ GraphModel.prototype =
                 {
                     setTimeout(function()
                     {
-                        if(rand(1, 100) <= edgeDensity)
+                        from = fromVertex.data;
+                        to = toVertex.data;
+
+                        if(rand(1, 100) <= edgeDensity && !
+                            this.adjList.edgeExists() && 
+                            fromVertex.data !== toVertex.data)
                         {
                             this.dispatchAddEdge(this.userCommands, fromVertex.data, toVertex.data);
                         }
@@ -239,7 +244,6 @@ GraphModel.prototype =
         {  
             if(this[command.type])
             {
-                console.log(command);
                 this[command.type](command.data);
             }
 
@@ -415,7 +419,8 @@ GraphModel.prototype =
 
         if(!this.adjList.edgeExists(from, to) && from !== to)
         {
-            const edge = this.edgeFactory.create(args.from, args.to, this.config.edgeBoxSize, weight);
+            const boxSize = this.config.weighted ? this.config.edgeBoxSize : 0;
+            const edge = this.edgeFactory.create(args.from, args.to, boxSize, weight);
             
             this.adjList.insertEdge(edge);
             this.edgeSpacialIndex.add(edge);

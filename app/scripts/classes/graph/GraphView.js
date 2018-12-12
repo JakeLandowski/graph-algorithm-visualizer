@@ -27,8 +27,7 @@ const GraphView = function(container, model, config)
     this.TRACKING_LAYER    = 0;
 
     // For mapping data in model to their view shape equivalent
-    this.vertexMap = Object.create(null);
-    this.edgeMap   = Object.create(null);
+    this.initShapeMaps();
 
     this.onCanvasResize      = new Event(this);
     this.onCanvasMouseClick  = new Event(this);
@@ -215,18 +214,20 @@ GraphView.prototype =
         const edgeCenterX = directedAndOtherEdge ? edge.line.curveCenterX : params.center.x;
         const edgeCenterY = directedAndOtherEdge ? edge.line.curveCenterY : params.center.y;
 
+        const weighted = this.config.weighted;
+
         edge.box = this.engine.createCircle(edgeCenterX, edgeCenterY,
         this.config.edgeBoxSize, this.WEIGHT_BOX_LAYER,
         {
-            strokeStyle: this.config.edgeBoxOutlineColor,
-            fillStyle:   this.config.backgroundColor,
+            strokeStyle: weighted ? this.config.edgeBoxOutlineColor : 'transparent',
+            fillStyle:   weighted ? this.config.backgroundColor : 'transparent',
         });
 
         edge.text = this.engine.createText(params.weight, edgeCenterX,
         edgeCenterY, this.WEIGHT_TEXT_LAYER,
         {
-            fillStyle:   this.config.edgeTextColor,
-            font:        '16px monospace'
+            fillStyle: weighted ? this.config.edgeTextColor : 'transparent',
+            font: '16px monospace'
         });
 
         if(!this.config.undirected)
@@ -492,6 +493,12 @@ GraphView.prototype =
     setConfig(config)
     {
         this.config = config;
+    },
+
+    initShapeMaps()
+    {
+        this.vertexMap = Object.create(null);
+        this.edgeMap   = Object.create(null);
     }
 };
 

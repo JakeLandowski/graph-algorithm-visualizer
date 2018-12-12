@@ -35,8 +35,8 @@ let createRandomGraph = document.getElementById('generate-random-graph');
 let randomProperties = {
     vertexNum:13,
     edgeDensity:50,
-    directed:"undirected",
-    weighted:"weighted"
+    directed: false,
+    weighted: true
 };
 
 let graph = newGraph({undirected: true});
@@ -170,19 +170,19 @@ for(let i = 0; i<loadBtn.length; i++) {
 }
 
 createRandomGraph.addEventListener('click',function() {
-    randomProperties.directed = document.querySelector('input[name="directed"]:checked').value;
-    randomProperties.weighted = document.querySelector('input[name="weighted"]:checked').value;
+    randomProperties.directed = document.querySelector('input[name="directed"]:checked').value === 'true';
+    randomProperties.weighted = document.querySelector('input[name="weighted"]:checked').value === 'true';
     randomProperties.edgeDensity = document.getElementById('edge-density-slider').value;
     randomProperties.vertexNum = document.getElementById('vertex-number-slider').value;
     
     graph.setConfig({
-        directed:randomProperties.directed,
+        undirected: !randomProperties.directed,
         weighted:randomProperties.weighted
     });
 
     RenderingEngine().clear();
     graph.clear();
-    
+
     graph.randomize(
         randomProperties.vertexNum,
         randomProperties.edgeDensity);
