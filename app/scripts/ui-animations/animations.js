@@ -40,9 +40,15 @@ export default {
 
         menuButton.onclick = function () {
             if (menuShown) {
+                if(randomDialogShown) {
+                    showRandomGraph();
+                }
+
                 hideMenu();
                 menuShown = false;
             } else {
+                document.getElementById('menuoptions').style.display = 'block';
+                document.getElementById('menuButtons').style.display = 'block';
                 showMenu();
                 menuShown = true;
             }
@@ -85,18 +91,24 @@ export default {
         function addRandomGraphDialogFunctionality() {
             for(let i = 0; i<randomBtn.length; i++) {
                 randomBtn[i].addEventListener('click', function () {
-                    if (randomDialogShown) {
-                        randomDialogSvg.reverse();
-                        randomDialogSvg.play();
-                        showDialog('#random-graph-dialog',0);
-                    } else {
-                        randomDialogSvg.reset();
-                        randomDialogSvg.play();
-                        showDialog('#random-graph-dialog',1);
-                    }
-                    randomDialogShown = !randomDialogShown;
+                    showRandomGraph();
                 });
             }
+        }
+
+        function showRandomGraph() {
+            if (randomDialogShown) {
+                document.getElementById('random-graph-dialog').style.display = "none";
+                randomDialogSvg.reverse();
+                randomDialogSvg.play();
+                showDialog('#random-graph-dialog',0);
+            } else {
+                document.getElementById('random-graph-dialog').style.display = "block";
+                randomDialogSvg.reset();
+                randomDialogSvg.play();
+                showDialog('#random-graph-dialog',1);
+            }
+            randomDialogShown = !randomDialogShown;
         }
 
         function rotateTools(target,duration,delay) {
@@ -147,13 +159,13 @@ export default {
 
         function showMenu() {
             for (let i = 0; i < buttons.length; i++) {
-                rotateTools(buttons[i],900,menuDelay);
-                menuDelay += 100;
+                rotateTools(buttons[i],700,menuDelay);
+                menuDelay += 80;
             }
 
             for (let i = 0; i < tools.length; i++) {
-                rotateTools(tools[i],800,toolDelay);
-                toolDelay += 90;
+                rotateTools(tools[i],600,toolDelay);
+                toolDelay += 70;
             }
 
             hideInnerCircle.reverse();
@@ -192,7 +204,7 @@ export default {
             targets: '#inner-circle',
             easing: 'linear',
             direction: 'alternate',
-            duration: 2000,
+            duration: 1500,
             loop: false,
         });
 
@@ -202,7 +214,7 @@ export default {
             targets: '#outer-circle',
             easing: 'linear',
             direction: 'alternate',
-            duration: 1800,
+            duration: 1300,
             loop: false,
         });
     }

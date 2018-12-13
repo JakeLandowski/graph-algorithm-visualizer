@@ -13,7 +13,6 @@
 
 <body>
     <div id="create-dialog">
-
         <button class="select-graph-type-button shadow" id="undirected"><span class="ui-text">Undirected</span></button>
         <button class="select-graph-type-button shadow" id="directed"><span class="ui-text">Directed</span></button>
     </div>
@@ -51,33 +50,35 @@
             ></path>
         </svg>
 
-        <!-- New Graph Button -->
-        <svg class="toolMenu" width="700" height="700">
-            <circle id="newGraphButton" filter="url(#shadow)" class="future newButton ui menuCircleButton allButtons"
-                    cx="587" cy="390" r="30" stroke-width="1"></circle>
-            <text class="future newButton ui-text" x="568" y="395">New</text>
-        </svg>
+        <div id="menuButtons">
+            <!-- New Graph Button -->
+            <svg class="toolMenu" width="700" height="700">
+                <circle id="newGraphButton" filter="url(#shadow)" class="future newButton ui menuCircleButton allButtons"
+                        cx="587" cy="390" r="30" stroke-width="1"></circle>
+                <text class="future newButton ui-text" x="568" y="395">New</text>
+            </svg>
 
-        <!-- Add Mode Button -->
-        <svg class="toolMenu" width="700" height="700">
-            <circle id="addModeButton" filter="url(#shadow)" class="future addButton ui menuCircleButton allButtons"
-                    cx="553" cy="480" r="30" stroke-width="1"></circle>
-            <text class="future addButton ui-text" x="536" y="485">Add</text>
-        </svg>
+            <!-- Add Mode Button -->
+            <svg class="toolMenu" width="700" height="700">
+                <circle id="addModeButton" filter="url(#shadow)" class="future addButton ui menuCircleButton allButtons"
+                        cx="553" cy="480" r="30" stroke-width="1"></circle>
+                <text class="future addButton ui-text" x="536" y="485">Add</text>
+            </svg>
 
-        <!-- Delete Mode Button -->
-        <svg class="toolMenu" width="700" height="700">
-            <circle id="deleteModeButton" filter="url(#shadow)" class="future deleteButton ui menuCircleButton allButtons"
-                    cx="480" cy="553" r="30" stroke-width="1"></circle>
-            <text class="future deleteButton ui-text" x="465.5" y="558">Del</text>
-        </svg>
+            <!-- Delete Mode Button -->
+            <svg class="toolMenu" width="700" height="700">
+                <circle id="deleteModeButton" filter="url(#shadow)" class="future deleteButton ui menuCircleButton allButtons"
+                        cx="480" cy="553" r="30" stroke-width="1"></circle>
+                <text class="future deleteButton ui-text" x="465.5" y="558">Del</text>
+            </svg>
 
-        <!-- Redo Button -->
-        <svg class="toolMenu" width="700" height="700">
-            <circle id="randomModeButton" filter="url(#shadow)" class="future randomButton ui menuCircleButton allButtons"
-                    cx="386" cy="590" r="30" stroke-width="1"></circle>
-            <text class="future randomButton ui-text" x="368" y="594">Rnd</text>
-        </svg>
+            <!-- Redo Button -->
+            <svg class="toolMenu" width="700" height="700">
+                <circle id="randomModeButton" filter="url(#shadow)" class="future randomButton ui menuCircleButton allButtons"
+                        cx="386" cy="590" r="30" stroke-width="1"></circle>
+                <text class="future randomButton ui-text" x="368" y="594">Rnd</text>
+            </svg>
+        </div>
     </div>
 
     <div id="menuoptions" class="ui-component noselect">
@@ -95,11 +96,11 @@
             <text class="future loadButton ui-text" x="403" y="430">Load</text>
         </svg>
 
-        <!-- EDU Mode Button -->
+        <!-- Weight Mode Button -->
         <svg width="600" height="600" class="buttons">
-            <circle id="eduModeButton" filter="url(#shadow)" class="future eduButton ui menuCircleButton allButtons"
-                  stroke-width="1" cx="350" cy="465" r="30"></circle>
-            <text class="future eduButton ui-text" x="334" y="470">Edu</text>
+            <circle id="weightModeButton" filter="url(#shadow)" class="future weightButton ui menuCircleButton allButtons"
+                  stroke-width="1" cx="357" cy="465" r="30"></circle>
+            <text class="future weightButton ui-text" x="334" y="470">Wght</text>
         </svg>
     </div>
 
@@ -142,41 +143,12 @@
         </svg>
     </div>
 
-    <div id="random-graph" style="display: none;">
-        <svg width="300" height="500" id="random-graph-selector">
-            <path filter="url(#shadow)" class="shadow future" id="random-graph-button"
-                  d="
-                  M100,100
-                  h100 a20,20 0 0 1 20,20
-                  v300 a20,20 0 0 1 -20,20
-                  h-100 a20,20 0 0 1 -20,-20
-                  v-300 a20,20 0 0 1 20,-20 z">
-            </path>
-
-            <path filter="url(#shadow)" class="shadow future random-gen" id="random-graph-button"
-                  d="
-                  M120,375
-                  h60 a20,20 0 0 1 20,20
-                  v10 a20,20 0 0 1 -20,20
-                  h-60 a20,20 0 0 1 -20,-20
-                  v-10 a20,20 0 0 1 20,-20 z">
-            </path>
-            <text class="future ui-text random-graph-text random-gen" x="120" y="403" font-size="12">Generate</text>
-            <text class="future ui-text random-graph-text" x="90" y="150" font-size="14">Vertex Density</text>
-            <div class="slidecontainer">
-                <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
-            </div>
-            <text class="future ui-text random-graph-text" x="97" y="200" font-size="14">Edge Density</text>
-        </svg>
-    </div>
-
     <div id="random-graph-dialog">
-
         <div id="radio-selectors">
-            <input type="range" min="1" max="26" value="13" class="slider" id="vertex-number-slider">
+            <input type="range" min="1" max="26" value="7" class="slider" id="vertex-number-slider">
             <p class="ui-text random-text">Total Vertices: <span id="vertex-number"></span></p>
 
-            <input type="range" min="1" max="100" value="50" class="slider" id="edge-density-slider">
+            <input type="range" min="1" max="100" value="30" class="slider" id="edge-density-slider">
             <p class="ui-text random-text">Edge Density: <span id="edge-density"></span></p>
 
             <input id="directed-on" class="toggle toggle-left" name="directed" value="true" type="radio">

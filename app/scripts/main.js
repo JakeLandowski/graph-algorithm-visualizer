@@ -16,14 +16,12 @@ import RenderingEngine from "./classes/engine/RenderingEngine.js";
 
 Animations.start();
 
-let eduMode = document.getElementsByClassName('eduButton');
+let weightModeActive = false;
 let primary = "#262626";
 let secondary = "#9d9b98";
-let white = "#fff";
-let eduModeActive = false;
-let randomDialogActive = false;
 let elementIds = ['addButton','addEdgeButton','deleteButton'];
 let functionArray = ['createMode','edgeMode','eraseMode'];
+let wghtBtn = document.getElementsByClassName('weightButton');
 let newBtn = document.getElementsByClassName('newButton');
 let saveBtn  = document.getElementsByClassName('saveButton');
 let loadBtn  = document.getElementsByClassName('loadButton');
@@ -46,34 +44,24 @@ setHighlights();
 initResize();
 initUndoRedo();
 
-for(let i = 0; i<eduMode.length; i++) {
-    eduMode[i].onclick = function () {
-        let ui = document.getElementsByClassName('ui');
-        if(eduModeActive){
-            swapColors(graph,primary,secondary,darkGray);
-            window.localStorage.setItem('eduModeOn','false');
-            document.getElementById('pagestyle').setAttribute('href', 'css/graphvis.css');
-            for(let j = 0; j<ui.length; j++) {
-                ui[j].style.stroke = primary;
-            }
-
-            eduModeActive = false;
+for(let i = 0; i<wghtBtn.length; i++) {
+    wghtBtn[i].onclick = function () {
+        if(weightModeActive){
+            graph.setConfig({   weighted: false,
+                                undirected: graph.config.undirected});
+            weightModeActive = false;
         } else {
-            document.getElementById('pagestyle').setAttribute('href', 'css/graphedu.css');
-            for(let j = 0; j<ui.length; j++) {
-                ui[j].style.stroke = darkGray;
-            }
-            swapColors(graph,darkGray,lightGray,white);
-            window.localStorage.setItem('eduModeOn','true');
-            eduModeActive = true;
+            graph.setConfig({weighted: true,
+                undirected: graph.config.undirected});
+            weightModeActive = true;
         }
     };
 }
 
 function setHighlights() {
     let elements = [
-        'newButton', 'addButton', 'loadButton', 'eduButton', 'randomButton', 'deleteButton', 'saveButton'];
-    let elementIds = ['newGraphButton', 'addModeButton', 'loadGraphButton', 'eduModeButton', 'randomModeButton',
+        'newButton', 'addButton', 'loadButton', 'weightButton', 'randomButton', 'deleteButton', 'saveButton'];
+    let elementIds = ['newGraphButton', 'addModeButton', 'loadGraphButton', 'weightModeButton', 'randomModeButton',
         'deleteModeButton', 'saveGraphButton'];
 
     let arrayOfElements;
