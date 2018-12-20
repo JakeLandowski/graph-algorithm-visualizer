@@ -46,15 +46,9 @@ initUndoRedo();
 
 for(let i = 0; i<wghtBtn.length; i++) {
     wghtBtn[i].onclick = function () {
-        if(weightModeActive){
-            graph.setConfig({   weighted: false,
-                                undirected: graph.config.undirected});
-            weightModeActive = false;
-        } else {
-            graph.setConfig({weighted: true,
-                undirected: graph.config.undirected});
-            weightModeActive = true;
-        }
+
+        graph.setConfig({   weighted: !graph.config.weighted,
+            undirected: graph.config.undirected});
     };
 }
 

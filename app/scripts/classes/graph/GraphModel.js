@@ -18,7 +18,7 @@ import { rand } from '../../utils/Utilities.js';
 
 const GraphModel = function(width, height, config, cellRatio=5)
 {
-    this.config    = config;
+    this.config = config;
     this.cellRatio = cellRatio;
     this.setDimensions(width, height);
 
@@ -85,7 +85,7 @@ GraphModel.prototype =
 
     createRandomVertices(numVertices=13, drawDelay=25)
     {
-        const grid = new SpacialIndex('randomize', this.width-250, this.height-100, numVertices, 200, 50);
+        const grid = new SpacialIndex('randomize', this.width * 0.7, this.height * 0.85, numVertices, this.width * 0.25, this.height * 0.1);
         let unMarked, randIndex, randomPoint;
 
         grid.forEachRow(function(row, rowIndex)
@@ -726,6 +726,7 @@ GraphModel.prototype =
      */
     updateEdgeSpatial(edge)
     {
+        edge.setBounds();
         this.edgeSpacialIndex.update(edge);
     },
 
@@ -800,7 +801,25 @@ GraphModel.prototype =
     hasSymbols()
     {
         return this.symbols.length > 0;
-    }
+    },
+
+    shrinkEdgeBoxes()
+    {
+        this.adjList.forEachEdge(function(edge)
+        {
+            edge.boxSize = 0;
+            this.updateEdgeSpatial(edge);
+        }.bind(this));
+    },
+
+    expandEdgeBoxes()
+    {
+        this.adjList.forEachEdge(function(edge)
+        {
+            edge.boxSize = this.config.edgeBoxSize;
+            this.updateEdgeSpatial(edge);
+        }.bind(this));
+    },
 };
 
 export default GraphModel;

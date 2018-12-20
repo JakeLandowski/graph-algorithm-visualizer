@@ -14,9 +14,9 @@ import { appendHtml } from '../../utils/Utilities.js';
 
 const GraphView = function(container, model, config)
 {
+    this.config = config;
     this.container = container;
     this.setModel(model);
-    this.setConfig(config);
     this.engine = new RenderingEngine(config);
 
     this.VERTEX_LAYER      = 4;
@@ -214,19 +214,17 @@ GraphView.prototype =
         const edgeCenterX = directedAndOtherEdge ? edge.line.curveCenterX : params.center.x;
         const edgeCenterY = directedAndOtherEdge ? edge.line.curveCenterY : params.center.y;
 
-        const weighted = this.config.weighted;
-
         edge.box = this.engine.createCircle(edgeCenterX, edgeCenterY,
         this.config.edgeBoxSize, this.WEIGHT_BOX_LAYER,
         {
-            strokeStyle: weighted ? this.config.edgeBoxOutlineColor : 'transparent',
-            fillStyle:   weighted ? this.config.backgroundColor : 'transparent',
+            strokeStyle: this.config.edgeBoxOutlineColor,
+            fillStyle:   this.config.edgeBoxBackgroundColor,
         });
 
         edge.text = this.engine.createText(params.weight, edgeCenterX,
         edgeCenterY, this.WEIGHT_TEXT_LAYER,
         {
-            fillStyle: weighted ? this.config.edgeTextColor : 'transparent',
+            fillStyle: this.config.edgeTextColor,
             font: '16px monospace'
         });
 
@@ -488,11 +486,6 @@ GraphView.prototype =
     setModel(model)
     {
         this.model = model;
-    },
-
-    setConfig(config)
-    {
-        this.config = config;
     },
 
     initShapeMaps()
