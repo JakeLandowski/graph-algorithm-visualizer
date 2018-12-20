@@ -18,7 +18,7 @@ import { rand } from '../../utils/Utilities.js';
 
 const GraphModel = function(width, height, config, cellRatio=5)
 {
-    this.config = config;
+    this.setConfig(config);
     this.cellRatio = cellRatio;
     this.setDimensions(width, height);
 
@@ -820,6 +820,11 @@ GraphModel.prototype =
             this.updateEdgeSpatial(edge);
         }.bind(this));
     },
+
+    setConfig(config)
+    {
+        this.config = config;
+    }
 };
 
 export default GraphModel;

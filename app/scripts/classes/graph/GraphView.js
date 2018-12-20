@@ -14,7 +14,7 @@ import { appendHtml } from '../../utils/Utilities.js';
 
 const GraphView = function(container, model, config)
 {
-    this.config = config;
+    this.setConfig(config);
     this.container = container;
     this.setModel(model);
     this.engine = new RenderingEngine(config);
@@ -486,6 +486,11 @@ GraphView.prototype =
     setModel(model)
     {
         this.model = model;
+    },
+
+    setConfig(config)
+    {
+        this.config = config;
     },
 
     initShapeMaps()
